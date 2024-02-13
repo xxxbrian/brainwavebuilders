@@ -2,7 +2,14 @@
 
 ## Setting up for development
 
-This project uses [pre-commit](https://pre-commit.com/#install). Please install it prior to development. Then, run `pre-commit install` to install git hooks (or if you are using `make`, do `make pre-commit`).
+This project uses [pre-commit](https://pre-commit.com/#install). Please install it prior to development. Then run:
+
+```shell
+pre-commit install
+pre-commit install --hook-type commit-msg
+```
+
+to install git hooks. (or if you are using `make`, do `make pre-commit`).
 
 Code is ran in Docker and Docker Compose. If you haven't already, please [install](https://docs.docker.com/compose/install/) it as well.
 
