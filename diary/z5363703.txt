@@ -1,0 +1,9 @@
+Week1:
+Group formed and named Brainwave Builders
+I am selected as Scrum Master.
+Sohee selected as Product Owner.
+I created the Jira Site.
+We decided on the Learning Management System topic.
+Decided to use typescript for both backend and frontend.
+We discussed about the use of trpc and t3.
+Some milestones have been set (MVP by Wk5, finish most of the project by end of flex week 7).
