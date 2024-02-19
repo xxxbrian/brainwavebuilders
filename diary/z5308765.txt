@@ -1,0 +1,17 @@
+Ethan Reinhard COMP3900 Diary
+
+======================================================================
+Week 1
+- Decided on group name.
+- Decided on Learning Management System for project
+- Decided on typescript for frontend and backend
+- Decided on roles - I am working on Frontend/Backend/Testing
+- Missed first meeting Saturday 17/02/24 7pm.
+- Scheduled weekly meetings for Thursdays 9:30pm.
+- Assigned Milestones - Not completely clear on these, will ask in Week 2 meeting.
+
+======================================================================
+Week 2
+
+
+======================================================================
