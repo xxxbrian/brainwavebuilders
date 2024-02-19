@@ -1,0 +1,9 @@
+Week1:
+Group formed and named Brainwave Builders, I attend the weekly meeting
+During this meeting,
+1. We decided on the Learning Management System topic.
+2. We decided to use Typescript for both backend and frontend.
+3. Use REACT and tailwind as the frontend tech stack.
+4. I will do both backend and frontend
+5. We discussed about the use T3 App to set up our project.
+6. Some milestones have been set (MVP by end of WK4, finish most of the project by end of flex week 7).
