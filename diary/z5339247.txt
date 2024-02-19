@@ -1,0 +1,23 @@
+Week1:
+
+Group Formation and Naming:
+    We settled on the name "Brainwave Builders" for our group, which was confirmed during our online chat sessions.
+Role Assignments:
+    Each member's role was determined, with myself contributing to both backend and frontend development.
+    Specific roles such as Scrum Master and Product Owner were assigned to Cicy and Sohee, respectively.
+Meeting Schedule:
+    We agreed upon our weekly meeting schedule to ensure regular progress checks and coordination.
+Technology Stack Discussion:
+    During our group meeting, we delved into discussions regarding the use of strongly typed languages like TypeScript and Go, compared to dynamically typed languages like Python, for our project.
+    We evaluated their respective maintenance complexities and selected our tech stack accordingly.
+Tech Stack Selection:
+    We confirmed the use of a full-stack TypeScript setup, incorporating technologies such as Next.js, Prisma, React, MySQL, and tRPC for our project.
+    This decision aligns with the group's consensus to utilize TypeScript for both backend and frontend development.
+Project Setup:
+    Utilizing the T3-App, I deployed our entire project's full-stack environment.
+    This setup includes TypeScript, Next.js, Prisma, Tailwind CSS, tRPC, and NextAuth.js, following the group's decision to use these technologies.
+Infrastructure Preparation:
+    I deployed 6 local VM servers and modified BGP routing announcements to assign both IPv4 and IPv6 public addresses and network routes.
+    Docker environments were installed on these servers to support our group's future needs.
+Configuration:
+    Configurations were made for strict TypeScript checking and other setup items, ensuring a robust development environment.
