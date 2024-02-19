@@ -1,0 +1,23 @@
+==
+Week 1
+
+- Setup the environment in-person for Cicy
+- Decide on the roles and tech stack
+- Decide on the weekly meeting schedule
+- Github repository setup including branch protections and squash & merge strategy
+- Planned and prepared existing infrastructure [*1] for this project.
+    - Will be using proton as prod database & neutron as staging database.
+    - Will be deploying the service on neutron, adding configuration
+- Setup pre-commit hooks
+- Setup CI that checks the naming of CI
+- Setup Python VSCode typechecking preferences
+- WIP: Setup branch deployment and blue-green deployment
+    - Nginx configuration generation
+
+For context:
+I host a few websites and have some existing infrastructure setup, including:
+- prod (primary): proton.universe.yyjlincoln.com
+    - prod mySQL database
+- staging (secondary): neutron.universe.yyjlincoln.com
+    - staging mySQL database
+- local dev: higgs.universe.yyjlincoln.com
