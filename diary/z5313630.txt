@@ -1,1 +1,20 @@
+Week 1:
+- Formed our project group and selected a project within the P4~P12 range, focusing on web development and software engineering.
+- Chose LMS due to Lincoln's expertise in similar projects.
+- Assigned roles: Cicy as Scrum Master and myself as Product Owner.
+- I organized our first meeting agenda and created a Google Drive with meeting minutes.
+- To prepare as Product Owner, I also outlined product specs and a timeline based on the Project Assignment and Assessment Timeline.
 
+During the meeting held on 17/2/2024: 
+- Delegated roles and responsibilities: 
+  - Backend: Lincoln, Brian, Steve, Sohee, Ethan, Cicy
+  - Frontend: Lincoln, Brian, Steve, Ethan
+  - Design: Sohee, Lincoln
+  - Documentation & Report: Cicy
+  - Testing (end to end, unit): Ethan, Cicy
+- Opted for TypeScript for both backend and frontend development.
+- Considering t3-app for our technology stack.
+- Adopted Agile methodology for development.
+- Set tentative timeline with the aim to complete the beta version of the web platform by week 4, followed by iterative improvements.
+
+We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) per week 
