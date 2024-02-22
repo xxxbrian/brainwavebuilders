@@ -12,6 +12,33 @@ Week 1
 
 ======================================================================
 Week 2
+Lab
+- Discussed whether livestreaming/audio is required - decided not a priority due to difficulty
+- discussed required team meeting times, created lettucemeets to decide
+- Discussed goals to achieve before Thursday meeting
+	- User stories
+	- feature priority
+	- meeting times allocated
 
+- worked on user stories and feature priority
+
+Whole team meeting
+- Finalised meeting times (mine):
+	- Frontend - Monday 10-11pm (commencing wk3)
+	- Backend  - Monday 11-12pm (commencing wk4)
+	- Testing  - Monday 9:30-10pm (commencing wk4)
+- Dicussed and outlined priorities of features on a team scale
+- Decision on how we start using Jira as a tool
+- went through scope definition
+- Defined elements of MVP
+- Assigned tasks for Project Proposal - I was assigned User Requirements alongside Steve
+
+======================================================================
+Week 3
+Frontend
+
+Lab
+
+Whole team meeting
 
 ======================================================================
