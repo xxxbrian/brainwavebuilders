@@ -1,1 +1,43 @@
-# TODO
+services:
+  client:
+    image: node:20
+    ports:
+      - 8039:3000
+    volumes:
+      - .:/app
+    working_dir: /app/client
+    environment:
+      BACKEND_URL: backend:3000
+    entrypoint: ["bash", "-c", "yarn && yarn dev"]
+
+  backend:
+    image: node:18
+    ports:
+      - 8139:3000
+    environment:
+      DATABASE_URL: "mysql://root@db/brainwaves"
+    volumes:
+      - .:/app
+    working_dir: /app/server
+    entrypoint:
+      [
+        "../.dev/wait-for-it.sh",
+        "db:3306",
+        "--",
+        "bash",
+        "-c",
+        "yarn && yarn dev",
+      ]
+
+  db:
+    ports:
+      - 8239:3306
+    image: "${DOCKER_ARCH_PREFIX:-arm64v8/}mysql:8.0"
+    volumes:
+      - db:/var/lib/mysql
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "true"
+      MYSQL_DATABASE: brainwaves
+
+volumes:
+  db: {}

@@ -1,26 +1,23 @@
-.PHONY: default
+.PHONY: default clean install up down destroy pre-commit all
+
 all:
 	@echo please specify a target
 
-.PHONY: clean
-clean:
-
-.PHONY: install
-install:
-
-.PHONY: up
 up:
 	docker-compose up -d
 
-.PHONY: down
 down:
 	docker-compose down --remove-orphans
 
-.PHONY: destroy
 destroy:
 	docker-compose down --volumes --remove-orphans
 
-.PHONY: pre-commit
 pre-commit:
 	pre-commit install
 	pre-commit install --hook-type commit-msg
+
+db-diff:
+	docker compose exec backend bash -c 'yarn && yarn prisma migrate dev --name "migration" --create-only'
+
+db-apply:
+	docker compose exec backend bash -c 'yarn && yarn prisma migrate dev'
