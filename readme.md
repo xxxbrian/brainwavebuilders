@@ -29,9 +29,12 @@ This will launch docker compose in daemon mode and run your app at:
 
 | Service          | Port |
 | ---------------- | ---- |
-| client           | 8039 |
-| backend          | 8139 |
-| database (mysql) | 8239 |
+| main app (nginx) | 3900 |
+| client           | 3901 |
+| backend          | 3902 |
+| database (mysql) | 3903 |
+
+> Note: nginx is used as a reverse proxy to both client and backend. Use [localhost:3900](http://localhost:3900) in your browser to access the app.
 
 To shutdown, do:
 

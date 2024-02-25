@@ -9,6 +9,7 @@ const sio = new Server(server, {
     origin: "*",
     methods: ["GET", "POST"],
   },
+  path: "/api",
 });
 
 sio.on("connection", (socket: Socket) => {

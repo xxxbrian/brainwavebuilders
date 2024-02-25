@@ -11,7 +11,7 @@ export default function Home() {
       socket.disconnect();
       setConnectionStatus("Disconnected");
     } else {
-      const newSocket = sio("http://localhost:8139");
+      const newSocket = sio("", { path: "/api" });
       setSocket(newSocket);
       newSocket.on("connect", () => {
         setConnectionStatus("Connected");
