@@ -7,3 +7,10 @@ We decided on the Learning Management System topic.
 Decided to use typescript for both backend and frontend.
 We discussed about the use of trpc and t3.
 Some milestones have been set (MVP by Wk5, finish most of the project by end of flex week 7).
+
+Week2:
+All group meetings were set up.
+I made a calendar to book everyone's meeting time.
+Sprint 1 goals and objectives were made.
+I configured Jira to include everything we had planned for.
+Technical Stack was decided as a group.
