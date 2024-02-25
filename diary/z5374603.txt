@@ -1,3 +1,7 @@
+Steve Yang COMP3900 Diary
+
+======================================================================
+
 Week1:
 Group formed and named Brainwave Builders, I attend the weekly meeting
 During this meeting,
@@ -7,3 +11,18 @@ During this meeting,
 4. I will do both backend and frontend
 5. We discussed about the use T3 App to set up our project.
 6. Some milestones have been set (MVP by end of WK4, finish most of the project by end of flex week 7).
+
+======================================================================
+
+week2:
+1. Attend group weekly meeting - decide to have small group meeting later, where I will attend frontend
+and backend group meeting next week.
+- Frontend - Monday 10-11pm (weekly)
+- Backend  - Monday 11-12pm (weekly)
+2. Discussed the classroom feature, and I suggest to do only live chats feature as MVP. Will do live streaming
+if we do have time to.
+3. Worked on project proposal, I and Ethan take the part of user stories and sprints.
+4. Discussed the priorities of each part on team scale.
+5. Discussed about using tRPC and sockitIO. Decide to use SocketIO and using scripts to turn API from yaml to code,
+
+======================================================================
