@@ -1,5 +1,5 @@
 ==
-Week 1
+# Week 1
 
 - Setup the environment in-person for Cicy
 - Decide on the roles and tech stack
@@ -21,3 +21,22 @@ I host a few websites and have some existing infrastructure setup, including:
 - staging (secondary): neutron.universe.yyjlincoln.com
     - staging mySQL database
 - local dev: higgs.universe.yyjlincoln.com
+
+==
+# Week 2
+
+Week 2 focused primarily on project setup. We organised team meetings, which
+consists of WTMs (Whole Team Meetings) and Department Meetings and delegated
+duties.
+
+- Set up frontend and backend projects in a monorepo structure.
+- Set up Prisma database workflow
+- Discussed and started implementation with Brian about the custom RPC approach
+- Set up Docker compose to containerise our app
+- Deployment will be deferred, as the backup plan is to deploy on managed
+infrastructure like Google Cloud or AWS
+- Discussed the suitability of T3-app for the project
+- Decided against tRPC due to its limitations
+- Decided against React full-stack as it's not sufficient for a large-scale
+project like this; A more traditional separate-server approach is more suitable
+over serverless/function-driven approaches.
