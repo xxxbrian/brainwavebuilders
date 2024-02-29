@@ -36,9 +36,21 @@ Whole team meeting
 ======================================================================
 Week 3
 Frontend
+- dicussed design for layout etc
+- discussed layout of code
+- set up environment (docker)
+	- this took a long time for me being on a windows machine
+	eventually got it working by avoiding CRLF line terminators and running on wsl
 
 Lab
+- weekly check in with Xin (i was 10 mins late)
+- ran through feature prioritisation
+- ran through some user story/requirements stuff
+- went through the Jira board and how we want to operate around work costs
+
 
 Whole team meeting
+- flow diagrams for frontend (Cicy and Sohee were life savers in this)
+- prepared for project proposal deadline
 
 ======================================================================
