@@ -23,6 +23,7 @@ and backend group meeting next week.
 if we do have time to.
 3. Worked on project proposal, I and Ethan take the part of user stories and sprints.
 4. Discussed the priorities of each part on team scale.
-5. Discussed about using tRPC and sockitIO. Decide to use SocketIO and using scripts to turn API from yaml to code,
+5. Discussed about using tRPC and sockitIO. Decide to use SocketIO and using scripts to turn API from yaml to code.
+6. Write a draft of TODO List for both frontend and backend.
 
 ======================================================================
