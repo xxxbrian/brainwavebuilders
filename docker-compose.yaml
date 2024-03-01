@@ -45,7 +45,7 @@ services:
   db:
     ports:
       - 3903:3306
-    image: "${DOCKER_ARCH_PREFIX:-arm64v8/}mysql:8.0"
+    image: "mysql:8.0"
     platform: linux/arm64/v8
     volumes:
       - db:/var/lib/mysql
