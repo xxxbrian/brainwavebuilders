@@ -1,7 +1,6 @@
 services:
   nginx:
     image: nginx:latest
-    platform: linux/arm64/v8
     ports:
       - "3900:80"
     volumes:
@@ -12,7 +11,6 @@ services:
 
   client:
     image: node:20
-    platform: linux/arm64/v8
     ports:
       - 3901:3000
     volumes:
@@ -24,7 +22,6 @@ services:
 
   backend:
     image: node:20
-    platform: linux/arm64/v8
     ports:
       - 3902:3000
     environment:
@@ -45,8 +42,7 @@ services:
   db:
     ports:
       - 3903:3306
-    image: "${DOCKER_ARCH_PREFIX:-arm64v8/}mysql:8.0"
-    platform: linux/arm64/v8
+    image: "mysql:8.0"
     volumes:
       - db:/var/lib/mysql
     environment:
