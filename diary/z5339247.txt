@@ -21,3 +21,20 @@ Infrastructure Preparation:
     Docker environments were installed on these servers to support our group's future needs.
 Configuration:
     Configurations were made for strict TypeScript checking and other setup items, ensuring a robust development environment.
+
+Week 2:
+
+Participation in Team Meetings:
+    I actively participated in both frontend and backend team meetings to ensure alignment and progress on our project deliverables.
+
+Discussion on tRPC's Applicability:
+    Engaged in a thorough discussion with Lincoln regarding the applicability of tRPC in our project, weighing its benefits and implementation strategies.
+
+Research on Custom RPC and Code Generation Tools:
+    Collaborated with Lincoln to research custom RPC solutions and the development of tools for automating code generation, aiming to optimize our development process.
+
+Socket.IO Demonstration:
+    Developed a demo for Socket.IO on both frontend and backend, providing a practical example to help our team members understand its implementation and utility in real-time communication.
+
+Deployment of a Local Virtualized Development Environment:
+    I deployed my local virtualized development environment to support a seamless and efficient workflow for our project development tasks, ensuring a robust platform for testing and integration of our tech stack.
