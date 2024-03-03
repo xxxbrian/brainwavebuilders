@@ -38,3 +38,21 @@ Socket.IO Demonstration:
 
 Deployment of a Local Virtualized Development Environment:
     I deployed my local virtualized development environment to support a seamless and efficient workflow for our project development tasks, ensuring a robust platform for testing and integration of our tech stack.
+
+Week 3:
+
+Commit Record Adjustments:
+    Investigated methods to amend commit records in our old private repository that incorrectly referenced pull requests.
+
+Participation in Meetings:
+    Continued active participation in both full group meetings and specific frontend/backend discussions.
+
+Development of a Code Generator:
+    Developed a code generator capable of converting YAML configuration files into TypeScript type declarations.
+    This tool is a preparatory step for our custom RPC implementation, aiming to streamline the development process by automating the generation of boilerplate code.
+
+Proposal Technical Architecture Section:
+    Completed the technical architecture section of our project proposal.
+
+Docker Compose Modifications:
+    Updated our Docker Compose configurations to support both ARM and x86 architectures.
