@@ -40,3 +40,16 @@ infrastructure like Google Cloud or AWS
 - Decided against React full-stack as it's not sufficient for a large-scale
 project like this; A more traditional separate-server approach is more suitable
 over serverless/function-driven approaches.
+
+==
+# Week 3
+
+This week focused primarily on the proposal as it's due on Sunday Week 3.
+
+- Work on designs and mainly the proposal
+- Migrate and setup the repository to Github Classroom
+- Discussed docker compose arch setup
+- Helped Ethan set up his local docker on a Windows-based environment utilising WSL2
+- Added nginx as a reverse proxy
+- Discuss Type Generation with Brain
+- Ran through a Jira setup session with everyone
