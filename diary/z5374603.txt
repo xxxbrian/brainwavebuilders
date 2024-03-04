@@ -27,3 +27,11 @@ if we do have time to.
 6. Write a draft of TODO List for both frontend and backend.
 
 ======================================================================
+
+week3:
+- This week, I Worked mainly on proposal and publish Jira functionalities
+1. I finish the Features & User Stories part in proposal.
+2. I attend frontend meeting and discuss about the tech stack we used for our Frontend. We decided to use Radix as the Design system tool.
+3. I publish a timeline for our proposal on Jira.
+4. I grouped the tasks of the entire project into pages and published small functionalities on Jira.
+5. I attend the group meeting, discussed about the sprints of our project.
