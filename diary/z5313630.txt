@@ -18,3 +18,30 @@ During the meeting held on 17/2/2024:
 - Set tentative timeline with the aim to complete the beta version of the web platform by week 4, followed by iterative improvements.
 
 We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) per week 
+
+꘎♡━━ Week 2 ━━━♡꘎
+
+- I established LettuceMeets for various departments to facilitate departmental meetings starting from week 3.
+- Meeting times were finalized during our Whole Committee Meeting (WCM):
+  - Design: Monday 9-10pm
+  - Frontend: Monday 10-11pm
+  - Backend: Monday 11-12pm
+  - Testing: Monday 9:30-10pm
+- We aim to meet at least once a week, with flexibility for additional meetings as necessary to adhere to the project timeline.
+- Our Scrum Master, Cicy, set up Jira, which we plan to utilize more extensively.
+- We opted for trpc for our tech stack due to its simplicity.
+- As the Product Owner, I formulated project requirements and presented them during our WTM. I also ordered them from most important to least important to priortise which ones we had to complete first for the sprints. 
+- Tasks for the Project Proposal were delegated to ensure completion by Friday, with a draft targeted for Wednesday. I'm in-charge of Background.
+
+꘎♡━━ Week 3 ━━━♡꘎
+
+- This week, our group mainly focused on finalising the proposal for submission on Friday. 
+- I was just supposed to be in-charge of background, but I later received additional tasks on workflow/interface/storyboard as I was part of the Design team with Lincoln. 
+- Lincoln and I held our meeting on Tuesday but we found out that creating the workflow just the two of us didn't make sense as it would be the foundation to our project. Thus, we moved the discussion for workflow to our WCM on Thursday. 
+- Using the finished workflow diagram, Lincoln and I split design tasks amongst us. We decided that it'd be better if I worked on the majority of the Design by myself as I was already done with the Background whilst Lincoln still had to work on the technical aspects of the portfolio. The task designated was: 
+  - Lincoln would design the Register/Login
+  - I would design the rest: Main, Class & Teacher Dashboard, Account Settings, Create/Join Classroom, Announcements, Forums, Calendar, Teacher & Student - Exams/Assignments, Student - Grades, Course Outline, Student & Teacher - Live Lectures and Student Statistics
+- I took inspiration from a lot of other LMS to design the prototype, namely: Coursera, Moodle and Openlearning.
+- I created most of the storyboards and reorganised the workflow for easier interpretation. 
+- Lincoln and Cicy helped me out with writing the descriptions for the storyboard. 
+- Overall, it was an exhausting week with a lot of all nighters, but the good thing is that design is done :) 
