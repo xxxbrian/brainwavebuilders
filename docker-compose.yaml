@@ -49,5 +49,14 @@ services:
       MYSQL_ALLOW_EMPTY_PASSWORD: "true"
       MYSQL_DATABASE: brainwaves
 
+  shell:
+    volumes:
+      - .:/app
+    working_dir: /app
+    command: tail -f /dev/null
+    build:
+      dockerfile: .dev/shell.Dockerfile
+      context: .
+
 volumes:
   db: {}
