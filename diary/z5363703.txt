@@ -21,3 +21,10 @@ We worked through and finalised the flowchart.
 I have updated the entire Jira site assigning all backlogs to the appropriate epic and completed the timeline.
 Worked on parts of the proposal.
 Submitted the proposal.
+
+Week4:
+Successfully closed off sprint 1 and started sprint 2
+Allocated all user stories and tasks for the team
+Tracked the progress of all team members
+Hosted frontend meeting
+Clarified with the mentor on diary entries
