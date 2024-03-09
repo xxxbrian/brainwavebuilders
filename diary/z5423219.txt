@@ -53,3 +53,13 @@ This week focused primarily on the proposal as it's due on Sunday Week 3.
 - Added nginx as a reverse proxy
 - Discuss Type Generation with Brain
 - Ran through a Jira setup session with everyone
+
+==
+# Week 4
+
+This week focused primarily on the interface designs & rpc.
+
+- Taking Brian's advice, reimplementeed the rpc
+- Tested that it works
+- Assisted other team members with their parts, including Steve
+- Added docker setup for python env (for rpc code generation)
