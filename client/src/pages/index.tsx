@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { io as sio, type Socket } from "socket.io-client";
 
+import SideNav from "./Navigation/SideNav.js";
+import TopNav from "./Navigation/TopNav.js";
+
 export default function Home() {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [connectionStatus, setConnectionStatus] = useState("Disconnected");
@@ -30,6 +33,8 @@ export default function Home() {
 
   return (
     <>
+      <SideNav />
+      <TopNav />
       <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
         <div className="flex-shrink-0">
           <h1 className="text-xl font-medium text-black">

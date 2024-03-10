@@ -1,3 +1,123 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.side-nav {
+  height: 100%; /* 100% Full-height */
+  width: 100px; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #fff; /* Black*/
+  border: 1px solid black;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  padding-top: 60px; /* Place content 60px from the top */
+  transition: 0.5s; /* 0.5 second transition effect to slide in the sidebar */
+}
+
+.side-nav-link {
+  padding: 8px 8px 8px 100px;
+  text-decoration: none;
+  font: 20px Arial;
+  color: #ff6b35;
+  display: flex;
+  transition: 0.3s;
+  white-space: nowrap;
+}
+
+.side-nav button {
+  padding: 8px 8px 8px 50px;
+  text-decoration: none;
+  font-size: 25px;
+  color: #ff6b35;
+  display: block;
+  transition: 0.3s;
+}
+
+.side-nav a:hover {
+  color: #f7c59f;
+}
+
+.side-nav-item {
+  display: flex;
+  padding-left: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.side-nav-item img {
+  width: 50px;
+  height: 50px;
+  position: fixed;
+}
+
+.side-nav-logo {
+  height: 70px;
+  padding-left: 30px;
+  padding-right: 15px;
+  padding-top: 0px;
+  padding-bottom: 15px;
+}
+
+.top-nav {
+  height: 130px; /* 100% Full-height */
+  width: 100%; /* 0 width - change this with JavaScript */
+  position: fixed; /* Stay in place */
+  z-index: 1; /* Stay on top */
+  top: 0;
+  left: 0;
+  background-color: #fff; /* Black*/
+  border: 1px solid black;
+  overflow-x: hidden; /* Disable horizontal scroll */
+  overflow-y: hidden;
+  display: flex;
+}
+
+.top-nav-logo {
+  width: 350px;
+  height: 100%;
+  padding-top: 10px;
+  padding-left: 15px;
+  border: 1px solid black;
+}
+
+.top-nav-logo img {
+  margin-top: 10px;
+  height: 70px;
+}
+
+#top-nav-welcome {
+  display: flex;
+  flex-direction: column;
+  width: 50%;
+}
+
+#top-nav-page-type {
+  font: 20px Arial;
+  color: #004e89;
+  display: block;
+  height: 50px;
+  padding-top: 20px;
+  padding-left: 40px;
+}
+
+#top-nav-welcome-msg {
+  font: 40px Arial;
+  color: #004e89;
+  display: block;
+  height: 80px;
+  padding-left: 40px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.top-nav button {
+  width: 200px;
+  height: 50px;
+}
+
+#top-nav-buttons {
+  float: right;
+  vertical-align: middle;
+}
