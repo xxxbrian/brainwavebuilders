@@ -54,3 +54,25 @@ Whole team meeting
 - prepared for project proposal deadline
 
 ======================================================================
+Week 4
+Testing - NA
+Frontend - NA
+Backend - NA
+
+Lab
+- weekly check in
+- dicussion around frontend
+	- shared decisions with team from meeting last week
+	- decided on actions before thursday
+		-
+	- Cicy assigned tasks
+- my tasks by Monday 11/03
+	- Mock navigation panel
+	- mock statistics section (main dashboard)
+	- mock activities section (main dashboard)
+
+
+Notes:
+Sunday 10/03
+	- worked on frontend development, dashboard aspects and navigation
+	- will have to continue works Monday 11/03
