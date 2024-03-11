@@ -297,9 +297,9 @@ class TypescriptService(Service):
         # print('Scan file', file)
 
         regex_func_syntax = re.compile(
-            r'^export\s+(async\s+)?function\s+([a-zA-Z]\w*)\s*\(')
+            r'export\s+(async\s+)?function\s+([a-zA-Z]\w*)\s*\(')
         regex_export_syntax = re.compile(
-            r'^export\s+const\s+([a-zA-Z]\w*)\s*(:[^=]*)?=\s*(async\s+)?\(')
+            r'export\s+const\s+([a-zA-Z]\w*)\s*(:[^=]*)?=\s*(async\s+)?\(')
 
         function_names = []
 
