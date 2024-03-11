@@ -1,5 +1,6 @@
 import os
 import re
+import sys
 import yaml
 from rpctypes import Model, TypeMap, TypeDef, Object, Endpoint
 
@@ -184,7 +185,7 @@ class ClientRequesterCompiler:
     def __init__(self, model: Model, tc: TypescriptTypeCompiler, base_url: str = 'api') -> None:
         self.model = model
         self.tc = tc
-        self.base_url = base_url
+        self.base_url = base_url if base_url[-1] != '/' else base_url[:-1]
 
     def parse_endpoint(self, name: str) -> str:
         request_type_name = self.tc.to_big_camel_case(name + "Request")
@@ -192,7 +193,7 @@ class ClientRequesterCompiler:
 
         rpc_requester = f'''
     async {name}(request: {request_type_name}): Promise<{response_type_name}> {{
-        const response = await fetch('this.base_url/{name}', {{
+        const response = await fetch(`${{this.base_url}}/{name}`, {{
             method: 'POST',
             headers: {{
                 'Content-Type': 'application/json'
@@ -415,14 +416,66 @@ class ServerWiring:
             self.services[srv].compile()
 
 
-with open('def.yml', 'r') as file:
-    yamldict = yaml.safe_load(file)
-    tc = TypescriptTypeCompiler(yamldict)
-    cc = ClientRequesterCompiler(yamldict, tc)
+USAGE = f'''Usage: {sys.argv[0]} <model> <mode> [mode-specific arguments]
 
-    cc.parse('brainwaves')
+<mode> can be one of:
+- client: Generate a TypeScript client
+- ts-server: Generate a typescript express-based server
 
-    # server
-    wire = ServerWiring(yamldict, [TypescriptService(
-        'typescript', '../../server/src', '../../server/src', '.')])
-    wire.compile()
+If <mode> is client, the following arguments are required:
+- <out_dir>: The output directory. The client will be generated in <out_dir>/index.ts
+- <name>: The name of the client
+- <base_url>: The base URL of the server
+
+If <mode> is ts-server, the following arguments are required:
+- <root>: The src/ directory of the server
+- <src_dir>: The source directory in which endpoint implementations are located
+- <out_dir>: The output directory. The server will be generated in <out_dir>/index.ts
+'''
+
+
+def main():
+    if len(sys.argv) < 2:
+        print(USAGE)
+        sys.exit(1)
+
+    with open(sys.argv[1], 'r') as file:
+        model: Model = yaml.safe_load(file)
+
+    if sys.argv[2] == 'client':
+        if len(sys.argv) < 6:
+            print(USAGE)
+            sys.exit(1)
+
+        out_dir = sys.argv[3]
+        name = sys.argv[4]
+        base_url = sys.argv[5]
+
+        tc = TypescriptTypeCompiler(model)
+        cc = ClientRequesterCompiler(model, tc, base_url)
+
+        with open(os.path.join(out_dir, 'index.ts'), 'w') as f:
+            f.write(cc.parse(name))
+        exit(0)
+
+    if sys.argv[2] == 'ts-server':
+        if len(sys.argv) < 6:
+            print(USAGE)
+            sys.exit(1)
+
+        root = sys.argv[3]
+        src_dir = sys.argv[4]
+        out_dir = sys.argv[5]
+
+        wire = ServerWiring(model, [
+            TypescriptService('typescript', root, src_dir, out_dir)
+        ])
+        wire.compile()
+        exit(0)
+
+
+try:
+    main()
+except Exception as e:
+    print(e)
+    sys.exit(1)
