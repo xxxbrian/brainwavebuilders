@@ -1,22 +1,10 @@
 types:
-  hello: string
-  Person:
-    name: string
-    age: number
-    address: any
-
-  Address:
-    main: string
-    state: string | number
-    zip: number
-
-  Labs:
-    students: Map<string, Person[]>
-    amount: number
+  hello: string | Map<string, string>
 
 endpoints:
   ping:
     request:
-      age: number
+      seq: hello
     response:
-      message: string
+      seq: number
+    service: typescript
