@@ -36,4 +36,4 @@ export class BrainwavesClient {
   }
 }
 
-const brainwaves = new BrainwavesClient("");
+export const brainwavesAPI = new BrainwavesClient("");

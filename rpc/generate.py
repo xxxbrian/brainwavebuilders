@@ -225,7 +225,7 @@ export class {self.tc.to_big_camel_case(name)}Client {{
     {endpoints.strip()}
 }}
 
-const {name} = new {self.tc.to_big_camel_case(name)}Client('{self.base_url}');
+export const {name}API = new {self.tc.to_big_camel_case(name)}Client('{self.base_url}');
 '''
 
 
