@@ -21,3 +21,10 @@ db-diff:
 
 db-apply:
 	docker compose exec backend bash -c 'yarn && yarn prisma migrate dev'
+
+update-endpoints-exec:
+	docker compose exec endpoint-gen bash -c 'python3 rpc/generate.py ${@:2}'
+
+update-endpoints:
+	make update-endpoints-exec rpc/model.yml client client/src/backend brainwaves ""
+	make update-endpoints-exec rpc/model.yml ts-server server/src server/src/handlers server/src/apis
