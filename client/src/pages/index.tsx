@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import { io as sio, type Socket } from "socket.io-client";
 
-import SideNav from "./Navigation/SideNav.js";
-import TopNav from "./Navigation/TopNav.js";
+import Nav from "./Navigation/Nav.tsx";
 
 export default function Home() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -33,9 +32,16 @@ export default function Home() {
 
   return (
     <>
-      <SideNav />
-      <TopNav />
-      <div className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4">
+      <Nav
+        displayType="dash"
+        userName="Ethan"
+        courseCode="COMP3900"
+        courseName="Computer Science Project"
+      />
+      <div
+        id="main-content"
+        className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4 mt-24 ml-72"
+      >
         <div className="flex-shrink-0">
           <h1 className="text-xl font-medium text-black">
             Socket.IO NextJS Demo
