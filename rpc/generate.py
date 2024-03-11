@@ -187,7 +187,7 @@ class ClientRequesterCompiler:
     def __init__(self, model: Model, tc: TypescriptTypeCompiler, base_url: str = 'api') -> None:
         self.model = model
         self.tc = tc
-        self.base_url = base_url if base_url[-1] != '/' else base_url[:-1]
+        self.base_url = base_url if not base_url.endswith('/') else base_url[:-1]
 
     def parse_endpoint(self, name: str) -> str:
         request_type_name = self.tc.to_big_camel_case(name + "Request")
