@@ -202,7 +202,7 @@ class ClientRequesterCompiler:
             }},
             body: JSON.stringify(request)
         }});
-        return await response.json();
+        return await response.json() as {response_type_name};
     }}
 '''
         return rpc_requester
