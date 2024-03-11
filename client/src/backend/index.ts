@@ -5,35 +5,38 @@
 // Types defined in the types file
 //////////////////////////////
 
+
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
 
+
 // PingRequest is the request that is sent to the ping endpoint.
 export interface PingRequest {
-  seq: number;
+    seq: number;
 }
 
 // PingResponse is the response that is sent to the ping endpoint.
 export interface PingResponse {
-  seq: number;
+    seq: number;
 }
 
 export class BrainwavesClient {
-  base_url: string;
-  constructor(base_url: string) {
-    this.base_url = base_url;
-  }
-  async ping(request: PingRequest): Promise<PingResponse> {
-    const response = await fetch(`${this.base_url}/ping`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(request),
-    });
-    return (await response.json()) as PingResponse;
-  }
+    base_url: string;
+    constructor(base_url: string) {
+        this.base_url = base_url;
+    }
+    async ping(request: PingRequest): Promise<PingResponse> {
+        const response = await fetch(`${this.base_url}/ping`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as PingResponse;
+    }
 }
 
-export const brainwavesAPI = new BrainwavesClient("");
+export const brainwavesAPI = new BrainwavesClient('api');
