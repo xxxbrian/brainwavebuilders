@@ -432,6 +432,7 @@ If <mode> is ts-server, the following arguments are required:
 - <root>: The src/ directory of the server
 - <src_dir>: The source directory in which endpoint implementations are located
 - <out_dir>: The output directory. The server will be generated in <out_dir>/index.ts
+- <base>: The base URL of the server
 '''
 
 
@@ -460,16 +461,17 @@ def main():
         exit(0)
 
     if sys.argv[2] == 'ts-server':
-        if len(sys.argv) < 6:
+        if len(sys.argv) < 7:
             print(USAGE)
             sys.exit(1)
 
         root = sys.argv[3]
         src_dir = sys.argv[4]
         out_dir = sys.argv[5]
+        base = sys.argv[6]
 
         wire = ServerWiring(model, [
-            TypescriptService('typescript', root, src_dir, out_dir)
+            TypescriptService('typescript', root, src_dir, out_dir, base)
         ])
         wire.compile()
         exit(0)

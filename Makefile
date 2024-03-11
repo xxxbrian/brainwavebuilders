@@ -24,4 +24,4 @@ db-apply:
 
 update-endpoints:
 	docker compose exec endpoint-gen bash -c 'python3 rpc/generate.py rpc/model.yml client client/src/backend brainwaves api'
-	docker compose exec endpoint-gen bash -c 'python3 rpc/generate.py rpc/model.yml ts-server server/src server/src/handlers server/src/apis'
+	docker compose exec endpoint-gen bash -c 'python3 rpc/generate.py rpc/model.yml ts-server server/src server/src/handlers server/src/apis /api'
