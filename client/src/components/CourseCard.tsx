@@ -1,10 +1,11 @@
 import React from "react";
 import { Card, Text, Box } from "@radix-ui/themes";
 import Image from "next/image";
+import type { StaticImageData } from "next/image";
 
-type CourseCardProps = {
-  headerImgSrc: string;
-  organizationLogoSrc: string;
+export type CourseCardProps = {
+  headerImgSrc: StaticImageData;
+  organizationLogoSrc: StaticImageData;
   organizationName: string;
   courseName: string;
   description: string;
@@ -36,18 +37,20 @@ const CourseCard: React.FC<CourseCardProps> = ({
       w-[240px]
       h-[294px]"
     >
-      {/* Header Image */}
-      <Image
-        src={headerImgSrc}
-        alt="Course"
-        width={128}
-        height={64}
-        className="w-full rounded-t-lg object-cover"
-      />
       {/* Content */}
-      <Box className="p-4">
+      <Box className="p-3">
+        {/* Header Image */}
+        <Image
+          src={headerImgSrc}
+          alt="Course"
+          className="rounded-t-lg object-cover"
+          style={{
+            width: "223px",
+            height: "133px",
+          }}
+        />
         {/* Logo and Organization Name */}
-        <div className="flex items-center space-x-3 mb-4">
+        <div className="flex items-center space-x-3 mb-2">
           {/* Logo */}
           <Image
             src={organizationLogoSrc}
@@ -57,7 +60,7 @@ const CourseCard: React.FC<CourseCardProps> = ({
             className="rounded-t-lg object-cover"
           />
           {/* Organization Name */}
-          <Text className="text-lg font-medium text-gray-600">
+          <Text trim="both" className="text-lg font-medium text-gray-600">
             {organizationName}
           </Text>
         </div>
@@ -65,16 +68,20 @@ const CourseCard: React.FC<CourseCardProps> = ({
         <Box>
           {/* Course Name */}
           <div>
-            <Text className="text-based font-bold ">{courseName}</Text>
+            <Text trim="both" className="text-based font-bold ">
+              {courseName}
+            </Text>
           </div>
           {/* Description */}
           <div>
-            <Text className="text-sm text-gray-600 ">{description}</Text>
+            <Text trim="both" className="text-sm line-clamp-2 text-gray-600 ">
+              {description}
+            </Text>
           </div>
         </Box>
         {/* Course Code */}
-        <Box>
-          <Text className="text-xl font-medium text-gray-600">
+        <Box className="flex flex-col">
+          <Text trim="both" className="text-xl font-medium text-gray-600">
             {courseCode}
           </Text>
         </Box>
@@ -84,4 +91,3 @@ const CourseCard: React.FC<CourseCardProps> = ({
 };
 
 export default CourseCard;
-export type { CourseCardProps };
