@@ -1,15 +1,22 @@
-
 types:
-  - Person:
-    - name: string
-    - age: number
-    - address: any
-  - Address:
-    - main: string
-    - state: string
-    - zip: number
-  - Labs:
-    - students: Person[]
-    - amount: number
+  hello: string
+  Person:
+    name: string
+    age: number
+    address: any
 
-api:
+  Address:
+    main: string
+    state: string | number
+    zip: number
+
+  Labs:
+    students: Map<string, Person[]>
+    amount: number
+
+endpoints:
+  ping:
+    request:
+      age: number
+    response:
+      message: string
