@@ -1,0 +1,15 @@
+
+types:
+  - Person:
+    - name: string
+    - age: number
+    - address: any
+  - Address:
+    - main: string
+    - state: string
+    - zip: number
+  - Labs:
+    - students: Person[]
+    - amount: number
+
+api:
