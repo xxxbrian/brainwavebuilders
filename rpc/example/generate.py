@@ -1,5 +1,4 @@
-# https://gist.github.com/xxxbrian/65a75ddc5a9b7796ba7317d032d458ff
-
+import os
 import re
 import yaml
 from rpctypes import Model, TypeMap, TypeDef, Object, Endpoint
@@ -32,7 +31,7 @@ class ModelCheckerContext:
         self.warnings.append(warning)
 
 
-class TypeCompiler:
+class TypescriptTypeCompiler:
     model: Model
 
     def __init__(self, model: Model) -> None:
@@ -180,9 +179,9 @@ class TypeCompiler:
 
 class ClientRequesterCompiler:
     model: Model
-    tc: TypeCompiler
+    tc: TypescriptTypeCompiler
 
-    def __init__(self, model: Model, tc: TypeCompiler, base_url: str = 'api') -> None:
+    def __init__(self, model: Model, tc: TypescriptTypeCompiler, base_url: str = 'api') -> None:
         self.model = model
         self.tc = tc
         self.base_url = base_url
@@ -228,10 +227,192 @@ const {name} = new {self.tc.to_big_camel_case(name)}Client('{self.base_url}');
 '''
 
 
+# Abstract service class.
+class Service:
+    name: str
+    model: Model
+
+    def __init__(self, name: str) -> None:
+        self.name = name
+
+    def load_model(self, model: Model):
+        self.model = model
+
+    def get_name(self) -> str:
+        return self.name
+
+    def reset(self):
+        raise NotImplementedError()
+
+    def add_endpoint(self, name: str, endpoint: Endpoint):
+        raise NotImplementedError()
+
+    def compile(self):
+        raise NotImplementedError()
+
+
+class TypescriptService(Service):
+    buf: str
+    tc: TypescriptTypeCompiler
+    functions: t.Dict[str, str]
+
+    root: str
+    src_dir: str
+    out_dir: str
+
+    base: str
+
+    def __init__(self, name: str, root: str, src_dir: str, out_dir: str, base: str = '') -> None:
+        '''
+        Look for functions in the src, and output files to out.
+        When importing, omit the root and replace with @.
+        '''
+
+        self.root = os.path.abspath(root)
+        self.src_dir = os.path.abspath(src_dir)
+        self.out_dir = os.path.abspath(out_dir)
+        self.base = base
+
+        super().__init__(name)
+        self.buf = ''
+
+    def calculate_import_path(self, path: str) -> str:
+        root_path = self.root if self.root[-1] == '/' else self.root + '/'
+
+        if path.startswith(root_path):
+            return '@/' + path[len(root_path):]
+
+    def parse_functions_from_file(self, file: str):
+        with open(file, 'r') as f:
+            content = f.read()
+        # print('Scan file', file)
+
+        regex_func_syntax = re.compile(
+            r'^export\s+(async\s+)?function\s+([a-zA-Z]\w*)\s*\(')
+        regex_export_syntax = re.compile(
+            r'^export\s+const\s+([a-zA-Z]\w*)\s*(:[^=]*)?=\s*(async\s+)?\(')
+
+        function_names = []
+
+        # Find all matches
+        for m in regex_func_syntax.finditer(content):
+            function_names.append(m.group(2))
+        for m in regex_export_syntax.finditer(content):
+            function_names.append(m.group(1))
+
+        return function_names
+
+    def scan_functions(self):
+        def scan(dir):
+            for root, dirs, files in os.walk(dir):
+                for file in files:
+                    if not file.endswith('.ts') and not file.endswith('.tsx'):
+                        continue
+
+                    funs = self.parse_functions_from_file(
+                        os.path.join(root, file))
+
+                    for fun in funs:
+                        if fun in self.functions:
+                            raise ValueError(
+                                f"Duplicate definition of {fun} found in {self.functions[fun]} and {os.path.join(root, file)}.")
+
+                        self.functions[fun] = self.calculate_import_path(
+                            os.path.join(root, file)
+                        )
+
+        scan(self.src_dir)
+
+    def load_model(self, model: Model):
+        self.tc = TypescriptTypeCompiler(model)
+        return super().load_model(model)
+
+    def reset(self):
+        self.buf = ''
+        self.functions = {}
+        self.scan_functions()
+
+    def add_endpoint(self, name: str, endpoint: Endpoint):
+        if name not in self.functions:
+            raise ValueError(
+                f'Cannot find an implementation for {name}. Make sure that this \
+function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
+functions: {", ".join([n for n in self.functions.keys()])}).')
+
+        self.buf += f'''
+// {name} is the endpoint handler for the {name} endpoint.
+// It wraps around the function at {self.functions[name]}.
+app.post('{self.base}/{name}', async (req, res) => {{
+    const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
+    const response: {self.tc.to_big_camel_case(name + "Response")} = await {self.functions[name]}(request);
+    res.json(response);
+}});
+'''
+
+    def calculate_imports(self):
+        files_map = {}
+        out = ""
+        for fun, file in self.functions.items():
+            if file not in files_map:
+                files_map[file] = []
+            files_map[file].append(fun)
+
+        for file, funs in files_map.items():
+            out += f'import {{ {", ".join(funs)} }} from "{file}";\n'
+
+        return out
+
+    def compile(self):
+        out = '// Generated by the RPC compiler. DO NOT EDIT.\n\n'
+        # Imports
+        out += self.calculate_imports()
+        out += self.tc.parse()
+        out += self.buf
+
+        if not os.path.exists(self.out_dir):
+            raise ValueError(
+                f"Output directory {self.out_dir} does not exist.")
+
+        with open(os.path.join(self.out_dir, 'index.ts'), 'w') as f:
+            f.write(out)
+
+
+class ServerWiring:
+    model: Model
+    services: t.Dict[str, Service]
+
+    def __init__(self, model: Model, services: t.List[Service]) -> None:
+        self.model = model
+        self.services = {service.get_name(): service for service in services}
+
+        for service in services:
+            service.load_model(model)
+
+    def compile(self):
+        for srv in self.services.values():
+            srv.reset()
+
+        used_service = set()
+
+        for name, endpoint in self.model['endpoints'].items():
+            if endpoint['service'] not in self.services:
+                raise ValueError(f"Service {endpoint['service']} not found")
+
+            used_service.add(endpoint['service'])
+            self.services[endpoint['service']].add_endpoint(name, endpoint)
+
+        for srv in used_service:
+            self.services[srv].compile()
+
+
 with open('def.yml', 'r') as file:
     yamldict = yaml.safe_load(file)
-    tc = TypeCompiler(yamldict)
+    tc = TypescriptTypeCompiler(yamldict)
     cc = ClientRequesterCompiler(yamldict, tc)
 
-    # print(tc.parse())
-    print(cc.parse('brainwaves'))
+    cc.parse('brainwaves')
+
+    # server
+    wire = ServerWiring(yamldict, [TypescriptService(
+        'typescript', '../../server/src', '../../server/src', '.')])
+    wire.compile()

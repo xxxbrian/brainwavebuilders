@@ -10,6 +10,7 @@ TypeDef = t.Union[Object, Primitive]
 class Endpoint(t.TypedDict):
     request: Object
     response: Object
+    service: str
 
 
 class Model(t.TypedDict):
