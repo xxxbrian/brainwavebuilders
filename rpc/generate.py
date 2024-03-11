@@ -134,6 +134,8 @@ class TypescriptTypeCompiler:
             return f"export type {name} = {self.parse_type_ref(definition)};"
         elif isinstance(definition, dict):
             return self.parse_root_object(name, definition)
+        else:
+            raise TypeError(f"Invalid type definition for {name}: {definition} is unexpected.")
 
     def to_big_camel_case(self, name: str) -> str:
         return name[0].upper() + name[1:]

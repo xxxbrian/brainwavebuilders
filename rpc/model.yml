@@ -1,10 +1,10 @@
 types:
-  hello: string | Map<string, string>
+  test:
 
 endpoints:
   ping:
     request:
-      seq: hello
+      seq: number
     response:
       seq: number
     service: typescript
