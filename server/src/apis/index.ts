@@ -26,7 +26,7 @@ export interface PingResponse {
 
 // ping is the endpoint handler for the ping endpoint.
 // It wraps around the function at @/handlers/ping.
-app.post('/ping', async (req, res) => {
+app.post('/api/ping', async (req, res) => {
     const request: PingRequest = req.body;
     const response: PingResponse = await ping(request);
     res.json(response);
