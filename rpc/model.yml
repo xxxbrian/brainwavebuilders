@@ -1,0 +1,9 @@
+types:
+
+endpoints:
+  ping:
+    request:
+      seq: number
+    response:
+      seq: number
+    service: typescript
