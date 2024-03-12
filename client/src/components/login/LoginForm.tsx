@@ -10,7 +10,6 @@ import {
 } from "@radix-ui/themes";
 import React, { useCallback } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
   email: string;
   onChangeEmail: (email: string) => void;
