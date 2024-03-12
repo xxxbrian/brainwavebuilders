@@ -1,4 +1,3 @@
-import type { SetPageState } from "@/pages/login";
 import {
   Box,
   Button,
@@ -9,14 +8,44 @@ import {
   Text,
   TextField,
 } from "@radix-ui/themes";
-import React from "react";
+import React, { useCallback } from "react";
 
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {
-  setPageState: SetPageState;
+  email: string;
+  onChangeEmail: (email: string) => void;
+
+  password: string;
+  onChangePassword: (password: string) => void;
+
+  onClickCreateAccount: () => void;
+  onClickForgotPassword: () => void;
+  onClickSignIn: () => void;
 }
 
-export const LoginForm: React.FC<Props> = (Props) => {
+export const LoginForm: React.FC<Props> = ({
+  email,
+  onChangeEmail,
+  password,
+  onChangePassword,
+  onClickCreateAccount,
+  onClickSignIn,
+  onClickForgotPassword,
+}) => {
+  const onChangeEmailInner = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChangeEmail(e.currentTarget.value);
+    },
+    [onChangeEmail],
+  );
+
+  const onChangePasswordInner = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      onChangePassword(e.currentTarget.value);
+    },
+    [onChangePassword],
+  );
+
   return (
     <Card variant="surface" size="4" style={{ width: 400 }}>
       <Box height="7" mb="4">
@@ -30,13 +59,18 @@ export const LoginForm: React.FC<Props> = (Props) => {
           <Text as="div" size="2" weight="medium" mb="2">
             Email address
           </Text>
-          <TextField.Input variant="surface" placeholder="Enter your email" />
+          <TextField.Input
+            variant="surface"
+            placeholder="Enter your email"
+            value={email}
+            onChange={onChangeEmailInner}
+          />
         </label>
       </Box>
 
       <Box mb="5" position="relative">
         <Box position="absolute" top="0" right="0" style={{ marginTop: -2 }}>
-          <Link href="#card" size="2">
+          <Link href="#card" size="2" onClick={onClickForgotPassword}>
             Forgot password?
           </Link>
         </Box>
@@ -49,20 +83,19 @@ export const LoginForm: React.FC<Props> = (Props) => {
             variant="surface"
             placeholder="Password"
             type="Enter your password"
+            value={password}
+            onChange={onChangePasswordInner}
           />
         </label>
       </Box>
 
       <Flex mt="6" justify="end" gap="3">
-        <Button
-          variant="soft"
-          onClick={() => {
-            Props.setPageState("register");
-          }}
-        >
+        <Button variant="soft" onClick={onClickCreateAccount}>
           Create an account
         </Button>
-        <Button variant="solid">Sign in</Button>
+        <Button variant="solid" onClick={onClickSignIn}>
+          Sign in
+        </Button>
       </Flex>
     </Card>
   );

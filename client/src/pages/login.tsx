@@ -12,8 +12,7 @@ interface Props {}
 
 export const Login: React.FC<Props> = () => {
   const [featured, setFeatured] = useState<Featured | null>(null);
-  // if userinfo not null, means user is logged in
-  const [userInfo, setUserInfo] = useState<User | null>(null);
+
   // page state: logedin, sigin or signup
   const [pageState, setPageState] = useState<PageState>("login");
   const backend = useBackend();
@@ -22,17 +21,6 @@ export const Login: React.FC<Props> = () => {
     const inner = async () => {
       const { featured } = await backend.getFeatured({});
       setFeatured(featured);
-      // if local storage has token and email, then get user info
-      const token: string | null = localStorage.getItem("token");
-      const email: string | null = localStorage.getItem("email");
-      if (token && email) {
-        const { user } = await backend.getUserInfo({
-          email,
-          token,
-        });
-        setUserInfo(user);
-        setPageState("loggedin");
-      }
     };
 
     void inner();
@@ -45,9 +33,18 @@ export const Login: React.FC<Props> = () => {
         backgroundImage: `url(${featured?.background})`,
       }}
     >
-      {pageState === "login" && <LoginForm setPageState={setPageState} />}
+      <LoginForm
+        password="123"
+        email="123"
+        onChangeEmail={() => {}}
+        onChangePassword={() => {}}
+        onClickCreateAccount={() => {}}
+        onClickForgotPassword={() => {}}
+        onClickSignIn={() => {}}
+      />
+      {/* {pageState === "login" && <LoginForm setPageState={setPageState} />}
       {pageState === "register" && <RegisterForm setPageState={setPageState} />}
-      {pageState === "loggedin" && <LoginForm setPageState={setPageState} />}
+      {pageState === "loggedin" && <LoginForm setPageState={setPageState} />} */}
       {/* <LoginForm /> */}
       {/* <SignupForm /> */}
       {/* <SigninForm /> */}
