@@ -19,7 +19,13 @@ export default function Nav({
         userImg={userImg}
         userName={userName}
       />
-      <SideNav displayType={displayType} />
+      <SideNav
+        displayType={displayType}
+        courseName={courseName}
+        courseCode={courseCode}
+        userImg={userImg}
+        userName={userName}
+      />
     </>
   );
 }
