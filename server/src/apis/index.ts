@@ -2,32 +2,132 @@
 
 
 import { app } from "@/globals";
-import { ping } from "@/handlers/ping";
+import { login } from "@/handlers/login";
+import { sendVerification } from "@/handlers/sendVerification";
+import { register } from "@/handlers/register";
+import { checkEmail } from "@/handlers/checkEmail";
+import { getFeatured } from "@/handlers/getFeatured";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
 
+export interface User {
+    email: string;
+    firstName: string;
+    lastName: string;
+}
 
+export interface Token {
+    token: string;
+    expires: number;
+}
+
+export interface Error {
+    message: string;
+}
+
+export interface Featured {
+    background: string;
+    title: string;
+    description: string;
+}
 
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
 
 
-// PingRequest is the request that is sent to the ping endpoint.
-export interface PingRequest {
-    seq: number;
+// CheckEmailRequest is the request that is sent to the checkEmail endpoint.
+export interface CheckEmailRequest {
+    email: string;
 }
 
-// PingResponse is the response that is sent to the ping endpoint.
-export interface PingResponse {
-    seq: number;
+// CheckEmailResponse is the response that is sent to the checkEmail endpoint.
+export interface CheckEmailResponse {
+    taken: boolean;
 }
 
-// ping is the endpoint handler for the ping endpoint.
-// It wraps around the function at @/handlers/ping.
-app.post('/api/ping', async (req, res) => {
-    const request: PingRequest = req.body;
-    const response: PingResponse = await ping(request);
+// SendVerificationRequest is the request that is sent to the sendVerification endpoint.
+export interface SendVerificationRequest {
+    email: string;
+    firstName: string;
+    lastName: string;
+}
+
+// SendVerificationResponse is the response that is sent to the sendVerification endpoint.
+export interface SendVerificationResponse {
+    sent: boolean;
+}
+
+// RegisterRequest is the request that is sent to the register endpoint.
+export interface RegisterRequest {
+    email: string;
+    password: string;
+}
+
+// RegisterResponse is the response that is sent to the register endpoint.
+export interface RegisterResponse {
+    user: User;
+    token: Token;
+}
+
+// LoginRequest is the request that is sent to the login endpoint.
+export interface LoginRequest {
+    email: string;
+    password: string;
+}
+
+// LoginResponse is the response that is sent to the login endpoint.
+export interface LoginResponse {
+    user: User;
+    token: Token;
+}
+
+// GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
+export interface GetFeaturedRequest {
+
+}
+
+// GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
+export interface GetFeaturedResponse {
+    featured: Featured;
+}
+// checkEmail is the endpoint handler for the checkEmail endpoint.
+// It wraps around the function at @/handlers/checkEmail.
+app.post('/api/checkEmail', async (req, res) => {
+    const request: CheckEmailRequest = req.body;
+    const response: CheckEmailResponse = await checkEmail(request);
+    res.json(response);
+});
+
+// sendVerification is the endpoint handler for the sendVerification endpoint.
+// It wraps around the function at @/handlers/sendVerification.
+app.post('/api/sendVerification', async (req, res) => {
+    const request: SendVerificationRequest = req.body;
+    const response: SendVerificationResponse = await sendVerification(request);
+    res.json(response);
+});
+
+// register is the endpoint handler for the register endpoint.
+// It wraps around the function at @/handlers/register.
+app.post('/api/register', async (req, res) => {
+    const request: RegisterRequest = req.body;
+    const response: RegisterResponse = await register(request);
+    res.json(response);
+});
+
+// login is the endpoint handler for the login endpoint.
+// It wraps around the function at @/handlers/login.
+app.post('/api/login', async (req, res) => {
+    const request: LoginRequest = req.body;
+    const response: LoginResponse = await login(request);
+    res.json(response);
+});
+
+// getFeatured is the endpoint handler for the getFeatured endpoint.
+// It wraps around the function at @/handlers/getFeatured.
+app.post('/api/getFeatured', async (req, res) => {
+    const request: GetFeaturedRequest = req.body;
+    const response: GetFeaturedResponse = await getFeatured(request);
     res.json(response);
 });

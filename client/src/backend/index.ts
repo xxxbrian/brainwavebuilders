@@ -5,21 +5,86 @@
 // Types defined in the types file
 //////////////////////////////
 
+export interface User {
+    email: string;
+    firstName: string;
+    lastName: string;
+}
 
+export interface Token {
+    token: string;
+    expires: number;
+}
+
+export interface Error {
+    message: string;
+}
+
+export interface Featured {
+    background: string;
+    title: string;
+    description: string;
+}
 
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
 
 
-// PingRequest is the request that is sent to the ping endpoint.
-export interface PingRequest {
-    seq: number;
+// CheckEmailRequest is the request that is sent to the checkEmail endpoint.
+export interface CheckEmailRequest {
+    email: string;
 }
 
-// PingResponse is the response that is sent to the ping endpoint.
-export interface PingResponse {
-    seq: number;
+// CheckEmailResponse is the response that is sent to the checkEmail endpoint.
+export interface CheckEmailResponse {
+    taken: boolean;
+}
+
+// SendVerificationRequest is the request that is sent to the sendVerification endpoint.
+export interface SendVerificationRequest {
+    email: string;
+    firstName: string;
+    lastName: string;
+}
+
+// SendVerificationResponse is the response that is sent to the sendVerification endpoint.
+export interface SendVerificationResponse {
+    sent: boolean;
+}
+
+// RegisterRequest is the request that is sent to the register endpoint.
+export interface RegisterRequest {
+    email: string;
+    password: string;
+}
+
+// RegisterResponse is the response that is sent to the register endpoint.
+export interface RegisterResponse {
+    user: User;
+    token: Token;
+}
+
+// LoginRequest is the request that is sent to the login endpoint.
+export interface LoginRequest {
+    email: string;
+    password: string;
+}
+
+// LoginResponse is the response that is sent to the login endpoint.
+export interface LoginResponse {
+    user: User;
+    token: Token;
+}
+
+// GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
+export interface GetFeaturedRequest {
+
+}
+
+// GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
+export interface GetFeaturedResponse {
+    featured: Featured;
 }
 
 export class BrainwavesClient {
@@ -27,15 +92,67 @@ export class BrainwavesClient {
     constructor(base_url: string) {
         this.base_url = base_url;
     }
-    async ping(request: PingRequest): Promise<PingResponse> {
-        const response = await fetch(`${this.base_url}/ping`, {
+    async checkEmail(request: CheckEmailRequest): Promise<CheckEmailResponse> {
+        const response = await fetch(`${this.base_url}/checkEmail`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as PingResponse;
+        return await response.json() as CheckEmailResponse;
+    }
+
+
+
+    async sendVerification(request: SendVerificationRequest): Promise<SendVerificationResponse> {
+        const response = await fetch(`${this.base_url}/sendVerification`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as SendVerificationResponse;
+    }
+
+
+
+    async register(request: RegisterRequest): Promise<RegisterResponse> {
+        const response = await fetch(`${this.base_url}/register`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as RegisterResponse;
+    }
+
+
+
+    async login(request: LoginRequest): Promise<LoginResponse> {
+        const response = await fetch(`${this.base_url}/login`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as LoginResponse;
+    }
+
+
+
+    async getFeatured(request: GetFeaturedRequest): Promise<GetFeaturedResponse> {
+        const response = await fetch(`${this.base_url}/getFeatured`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as GetFeaturedResponse;
     }
 }
 

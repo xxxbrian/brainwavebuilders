@@ -11,6 +11,11 @@ types:
   Error:
     message: string
 
+  Featured:
+    background: string
+    title: string
+    description: string
+
 endpoints:
   checkEmail:
     request:
@@ -44,4 +49,10 @@ endpoints:
     response:
       user: User
       token: Token
+    service: typescript
+
+  getFeatured:
+    request:
+    response:
+      featured: Featured
     service: typescript

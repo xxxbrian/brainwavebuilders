@@ -52,26 +52,12 @@ export default function Register() {
 
   const backend = useBackend();
   const createAccount = useCallback(async () => {
-    // TODO: Wait for backend implementation
-    console.log("createAccount", { firstName, lastName, email, password });
-    const { seq } = await backend.ping({
-      seq: 1,
-    });
-    if (seq === 2) {
-      setWaitingForVerification(true);
-    }
-  }, [backend, firstName, lastName, email, password]);
+    // noop
+  }, []);
 
-  const verficationCodeConfirm = useCallback(async () => {
-    // TODO: Wait for backend implementation
-    console.log("verficationCodeConfirm", { verficationCode });
-    const { seq } = await backend.ping({
-      seq: 1,
-    });
-    if (seq === 2) {
-      router.push("/signin").catch(console.error);
-    }
-  }, [backend, verficationCode, router]);
+  const verificationCodeConfirm = useCallback(async () => {
+    // noop
+  }, []);
 
   return (
     <Theme appearance={appearance} accentColor="orange">
@@ -185,7 +171,7 @@ export default function Register() {
             )}
             <Flex mt="6" justify="end" gap="3">
               {waitingForVerification ? (
-                <Button variant="solid" onClick={verficationCodeConfirm}>
+                <Button variant="solid" onClick={verificationCodeConfirm}>
                   Confirm
                 </Button>
               ) : (
