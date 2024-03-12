@@ -11,26 +11,165 @@ import typing as t
 
 TypescriptMap: TypeMap = {
     "string": "string",
-    "number": "number",
+    "int": "number",
+    "float": "number",
     "boolean": "boolean",
     "any": "any",
 }
 
+PythonMap: TypeMap = {
+    "string": "str",
+    "int": "int",
+    "float": "float",
+    "boolean": "bool",
+    "any": "t.Any",
+}
 
-class ModelCheckerContext:
-    errors: list[str]
-    warnings: list[str]
 
-    def __init__(self) -> None:
-        self.errors = []
-        self.warnings = []
+class PythonTypeCompiler:
+    model: Model
 
-    def add_error(self, error: str):
-        self.errors.append(error)
+    def __init__(self, model: Model) -> None:
+        self.model = model
 
-    def add_warning(self, warning: str):
-        self.warnings.append(warning)
+    def parse_type_name(self, name: str) -> str:
+        if name in PythonMap:
+            return PythonMap[name]
+        if name in self.model["types"]:
+            return f'\'{name}\''
+        raise TypeError(f"Type {name} not found")
 
+    def is_array(self, type_ref: str) -> tuple[bool, str]:
+        arr_regex = re.compile(r"^(.+)\[\]$")
+        mat = arr_regex.match(type_ref)
+
+        if mat:
+            return (True, mat.group(1))
+
+        return (False, type_ref)
+
+    def make_array(self, type_ref: str):
+        return f"t.Array[{type_ref}]"
+
+    def is_map(self, type_ref: str) -> tuple[bool, str, str]:
+        obj_regex = re.compile(r"^Map<(.+),\s*(.+)>$")
+        mat = obj_regex.match(type_ref)
+
+        if mat:
+            return (True, mat.group(1), mat.group(2))
+        return (False, type_ref, type_ref)
+
+    def make_map(self, key: str, value: str):
+        return f"t.Dict[{key}, {value}]"
+
+    def is_union(self, type_ref: str) -> tuple[bool, str, str]:
+        obj_regex = re.compile(r"^(.*)\s*\|\s*(.*)$")
+        mat = obj_regex.match(type_ref)
+
+        if mat:
+            return (True, mat.group(1), mat.group(2))
+        return (False, type_ref, type_ref)
+
+    def make_union(self, type_ref1: str, type_ref2: str):
+        return f"t.Union[{type_ref1}, {type_ref2}]"
+
+    def parse_type_ref(self, name: str) -> str:
+        name = name.strip()
+
+        is_arr, rest = self.is_array(name)
+
+        if is_arr:
+            return self.make_array(self.parse_type_ref(rest))
+
+        is_map, key, value = self.is_map(rest)
+
+        if is_map:
+            return self.make_map(self.parse_type_ref(key), self.parse_type_ref(value))
+
+        is_union, u1, u2 = self.is_union(rest)
+
+        if is_union:
+            return self.make_union(self.parse_type_ref(u1), self.parse_type_ref(u2))
+
+        if self.is_valid_identifier(name):
+            return self.parse_type_name(name)
+
+        # If it's definitely not an array
+        raise TypeError(f'Unrecognised syntax: {name}')
+
+    def is_valid_identifier(self, identifier: str) -> bool:
+        identifier_regex = re.compile(r"^[a-zA-Z_]\w*$")
+
+        if not identifier_regex.match(identifier):
+            return False
+        return True
+
+    def parse_field(self, key: str, value: TypeDef) -> str:
+        return f"{key}: {self.parse_type_ref(value)}"
+
+    def parse_root_object(self, name: str, definition: Object) -> str:
+        if definition is None:
+            definition = {}
+
+        fields = [self.parse_field(key, value)
+                  for key, value in definition.items()]
+        return f"class {name}(t.TypedDict):\n    " + "\n    ".join(fields) + "\n"
+
+    def parse_root(self, name: str, definition: TypeDef):
+        if not self.is_valid_identifier(name):
+            raise TypeError(f"Invalid identifier {name}")
+
+        if isinstance(definition, str):
+            return f"{name}={self.parse_type_ref(definition)}"
+        elif isinstance(definition, dict):
+            return self.parse_root_object(name, definition)
+        else:
+            raise TypeError(
+                f"Invalid type definition for {name}: {definition} is unexpected.")
+
+    def to_big_camel_case(self, name: str) -> str:
+        return name[0].upper() + name[1:]
+
+    def parse(self):
+        if self.model["types"] is None:
+            self.model['types'] = {}
+
+        types_def = '\n\n'.join([self.parse_root(key, value)
+                                 for key, value in self.model["types"].items()])
+
+        # Now, parse the types for the endpoints
+        endpoints = self.model["endpoints"]
+
+        endpoint_types_def = ''
+
+        for name, endpoint in endpoints.items():
+            request = self.parse_root_object(
+                self.to_big_camel_case(name + "Request"), endpoint["request"])
+
+            response = self.parse_root_object(
+                self.to_big_camel_case(name + "Response"), endpoint["response"])
+
+            endpoint_types_def += f'''
+# {self.to_big_camel_case(name)}Request is the request that is sent to the {name} endpoint.
+{request}
+
+# {self.to_big_camel_case(name)}Response is the response that is sent to the {name} endpoint.
+{response}
+'''
+
+        return f'''import typing as t
+
+##############################
+# Types defined in the types file
+##############################
+
+{types_def}
+
+##############################
+# Endpoint Requests/Responses
+##############################
+
+{endpoint_types_def}'''
 
 class TypescriptTypeCompiler:
     model: Model
@@ -135,7 +274,8 @@ class TypescriptTypeCompiler:
         elif isinstance(definition, dict):
             return self.parse_root_object(name, definition)
         else:
-            raise TypeError(f"Invalid type definition for {name}: {definition} is unexpected.")
+            raise TypeError(
+                f"Invalid type definition for {name}: {definition} is unexpected.")
 
     def to_big_camel_case(self, name: str) -> str:
         return name[0].upper() + name[1:]
@@ -167,18 +307,17 @@ class TypescriptTypeCompiler:
 {response}
 '''
 
-        return f'''//////////////////////////////
+        return f'''##############################
 // Types defined in the types file
-//////////////////////////////
+##############################
 
 {types_def}
 
-//////////////////////////////
+##############################
 // Endpoint Requests/Responses
-//////////////////////////////
+##############################
 
 {endpoint_types_def}'''
-
 
 class ClientRequesterCompiler:
     model: Model
@@ -187,7 +326,8 @@ class ClientRequesterCompiler:
     def __init__(self, model: Model, tc: TypescriptTypeCompiler, base_url: str = 'api') -> None:
         self.model = model
         self.tc = tc
-        self.base_url = base_url if not base_url.endswith('/') else base_url[:-1]
+        self.base_url = base_url if not base_url.endswith(
+            '/') else base_url[:-1]
 
     def parse_endpoint(self, name: str) -> str:
         request_type_name = self.tc.to_big_camel_case(name + "Request")
@@ -228,7 +368,6 @@ export class {self.tc.to_big_camel_case(name)}Client {{
 export const {name}API = new {self.tc.to_big_camel_case(name)}Client('{self.base_url}');
 '''
 
-
 # Abstract service class.
 class Service:
     name: str
@@ -252,6 +391,149 @@ class Service:
     def compile(self):
         raise NotImplementedError()
 
+class TypescriptService(Service):
+    buf: str
+    tc: TypescriptTypeCompiler
+    functions: t.Dict[str, str]
+
+    root: str
+    src_dir: str
+    out_dir: str
+
+    base: str
+
+    def __init__(self, name: str, root: str, src_dir: str, out_dir: str, base: str = '') -> None:
+        '''
+        Look for functions in the src, and output files to out.
+        When importing, omit the root and replace with @.
+        '''
+
+        self.root = os.path.abspath(root)
+        self.src_dir = os.path.abspath(src_dir)
+        self.out_dir = os.path.abspath(out_dir)
+        self.base = base
+
+        super().__init__(name)
+        self.buf = ''
+
+    def calculate_import_path(self, path: str) -> str:
+        root_path = self.root if self.root[-1] == '/' else self.root + '/'
+
+        if path.startswith(root_path):
+            path = '@/' + path[len(root_path):]
+
+        if path.endswith('.ts'):
+            path = path[:-3]
+        elif path.endswith('.tsx'):
+            path = path[:-4]
+
+        return path
+
+    def parse_functions_from_file(self, file: str):
+        with open(file, 'r') as f:
+            content = f.read()
+        # print('Scan file', file)
+
+        regex_func_syntax = re.compile(
+            r'export\s+(async\s+)?function\s+([a-zA-Z]\w*)\s*\(')
+        regex_export_syntax = re.compile(
+            r'export\s+const\s+([a-zA-Z]\w*)\s*(:[^=]*)?=\s*(async\s+)?\(')
+
+        function_names = []
+
+        # Find all matches
+        for m in regex_func_syntax.finditer(content):
+            function_names.append(m.group(2))
+        for m in regex_export_syntax.finditer(content):
+            function_names.append(m.group(1))
+
+        return function_names
+
+    def scan_functions(self):
+        def scan(dir):
+            for root, dirs, files in os.walk(dir):
+                for file in files:
+                    if not file.endswith('.ts') and not file.endswith('.tsx'):
+                        continue
+
+                    funs = self.parse_functions_from_file(
+                        os.path.join(root, file))
+
+                    for fun in funs:
+                        if fun in self.functions:
+                            raise ValueError(
+                                f"Duplicate definition of {fun} found in {self.functions[fun]} and {os.path.join(root, file)}.")
+
+                        self.functions[fun] = self.calculate_import_path(
+                            os.path.join(root, file)
+                        )
+
+        scan(self.src_dir)
+
+    def load_model(self, model: Model):
+        self.tc = TypescriptTypeCompiler(model)
+        return super().load_model(model)
+
+    def reset(self):
+        self.buf = ''
+        self.functions = {}
+        self.scan_functions()
+
+    def add_endpoint(self, name: str, endpoint: Endpoint):
+        if name not in self.functions:
+            raise ValueError(
+                f'''Cannot find an implementation for {name}. Make sure that this \
+function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
+functions: {", ".join([n for n in self.functions.keys()])}).
+
+To implement one, do:
+
+export const {name} = async (request: {self.tc.to_big_camel_case(name + "Request")}): Promise<{self.tc.to_big_camel_case(name + "Response")}> => {{
+    // Implement the function here.
+}};
+
+in one of the .ts/.tsx files in {self.src_dir}.
+''')
+
+        self.buf += f'''
+// {name} is the endpoint handler for the {name} endpoint.
+// It wraps around the function at {self.functions[name]}.
+app.post('{self.base}/{name}', async (req, res) => {{
+    const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
+    const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(request);
+    res.json(response);
+}});
+'''
+
+    def calculate_imports(self):
+        files_map = {}
+        out = ""
+        for fun, file in self.functions.items():
+            if file not in files_map:
+                files_map[file] = []
+            files_map[file].append(fun)
+
+        for file, funs in files_map.items():
+            out += f'import {{ {", ".join(funs)} }} from "{file}";\n'
+
+        return out
+
+    def compile(self):
+        out = '// Generated by the RPC compiler. DO NOT EDIT.\n\n'
+        # Imports
+        out += '''
+import { app } from "@/globals";
+'''
+        out += self.calculate_imports()
+        out += self.tc.parse()
+        out += self.buf
+
+        if not os.path.exists(self.out_dir):
+            raise ValueError(
+                f"Output directory {self.out_dir} does not exist.")
+
+        with open(os.path.join(self.out_dir, 'index.ts'), 'w') as f:
+            f.write(out)
 
 class TypescriptService(Service):
     buf: str
@@ -483,6 +765,25 @@ def main():
             TypescriptService('typescript', root, src_dir, out_dir, base)
         ])
         wire.compile()
+        exit(0)
+
+    if sys.argv[2] == 'py-server':
+        # if len(sys.argv) < 7:
+        #     print(USAGE)
+        #     sys.exit(1)
+
+        # root = sys.argv[3]
+        # src_dir = sys.argv[4]
+        # out_dir = sys.argv[5]
+        # base = sys.argv[6]
+
+        w = PythonTypeCompiler(model)
+        print(w.parse())
+
+        # wire = ServerWiring(model, [
+        #     TypescriptService('typescript', root, src_dir, out_dir, base)
+        # ])
+        # wire.compile()
         exit(0)
 
 
