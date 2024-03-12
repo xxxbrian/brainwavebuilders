@@ -344,9 +344,18 @@ class TypescriptService(Service):
     def add_endpoint(self, name: str, endpoint: Endpoint):
         if name not in self.functions:
             raise ValueError(
-                f'Cannot find an implementation for {name}. Make sure that this \
+                f'''Cannot find an implementation for {name}. Make sure that this \
 function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
-functions: {", ".join([n for n in self.functions.keys()])}).')
+functions: {", ".join([n for n in self.functions.keys()])}).
+
+To implement one, do:
+
+export const {name} = async (request: {self.tc.to_big_camel_case(name + "Request")}): Promise<{self.tc.to_big_camel_case(name + "Response")}> => {{
+    // Implement the function here.
+}};
+
+in one of the .ts/.tsx files in {self.src_dir}.
+''')
 
         self.buf += f'''
 // {name} is the endpoint handler for the {name} endpoint.
