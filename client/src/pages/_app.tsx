@@ -11,7 +11,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   return (
     <Theme appearance={appearance} accentColor="orange">
-      <div className="w-screen h-screen overflow-y-scroll overflow-x-hidden">
+      <div className="w-screen h-screen">
         <Component {...pageProps} />
       </div>
     </Theme>
