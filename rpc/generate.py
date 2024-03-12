@@ -343,22 +343,48 @@ class TypescriptService(Service):
         self.functions = {}
         self.scan_functions()
 
-    def add_endpoint(self, name: str, endpoint: Endpoint):
-        if name not in self.functions:
-            raise ValueError(
-                f'Cannot find an implementation for {name}. Make sure that this \
-function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
-functions: {", ".join([n for n in self.functions.keys()])}).')
+    def generate_implementation_stub(self, name: str, endpoint: Endpoint):
+        request_type_name = self.tc.to_big_camel_case(
+            name + "Request")
+        response_type_name = self.tc.to_big_camel_case(
+            name + "Response")
 
-        self.buf += f'''
-// {name} is the endpoint handler for the {name} endpoint.
+        return f'''import {{ {request_type_name}, {response_type_name} }} from "{self.calculate_import_path(self.out_dir)}";
+// {name} implements the {name} endpoint.
+// This code has been automatically generated.
+// You can move this function to other files within the {self.src_dir} directory,
+// as long as the signature remains the same and the function is exported.
+export const {name} = async (request: {request_type_name}): Promise<{response_type_name}> => {{
+    throw new Error('Not implemented');
+}}'''
+
+    def generate_endpoint_connector(self, name: str, endpoint: Endpoint):
+        return f'''// {name} is the endpoint handler for the {name} endpoint.
 // It wraps around the function at {self.functions[name]}.
 app.post('{self.base}/{name}', async (req, res) => {{
     const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
     const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(request);
     res.json(response);
-}});
-'''
+}});'''
+
+    def error_no_implementation(self, name: str):
+        return f'Cannot find an implementation for {name}. Make sure that this \
+function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
+functions: {", ".join([n for n in self.functions.keys()])}).'
+
+    def add_endpoint(self, name: str, endpoint: Endpoint):
+        if name not in self.functions:
+            print(self.error_no_implementation(name), file=sys.stderr)
+
+            impl_stub_out = os.path.join(self.src_dir, f'{name}.ts')
+
+            with open(impl_stub_out, 'a') as f:
+                f.write(self.generate_implementation_stub(name, endpoint))
+                self.functions[name] = self.calculate_import_path(
+                    impl_stub_out)
+            print(f'Generated stub for {name} at {impl_stub_out}')
+
+        self.buf += self.generate_endpoint_connector(name, endpoint) + '\n\n'
 
     def calculate_imports(self):
         files_map = {}
@@ -482,5 +508,6 @@ def main():
 try:
     main()
 except Exception as e:
+    raise
     print(e)
     sys.exit(1)
