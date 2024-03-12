@@ -76,7 +76,7 @@ const JoinCoursePopup: React.FC = () => {
             {/* Close Button */}
             <Dialog.Close asChild>
               <button
-                className="text-orange-500 hover:text-orange-600 transform hover:scale-110 text-[16px]"
+                className="text-orange-500 hover:text-orange-600 transform hover:scale-110 text-2xl"
                 style={{ transition: "transform 0.2s" }}
               >
                 ×
