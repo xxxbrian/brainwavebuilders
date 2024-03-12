@@ -14,7 +14,24 @@ datasource db {
 }
 
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String
+  id        String   @id @default(uuid())
+  email     String   @unique
+  firstName String
+  lastName  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Token {
+  id     String @id @default(uuid())
+  userID String
+  token  String @unique
+}
+
+model EmailVerification {
+  id           String   @id @default(uuid())
+  userID       String
+  verification String   @unique
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime @updatedAt
 }

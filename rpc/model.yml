@@ -1,9 +1,47 @@
 types:
+  User:
+    email: string
+    firstName: string
+    lastName: string
+
+  Token:
+    token: string
+    expires: int
+
+  Error:
+    message: string
 
 endpoints:
-  ping:
+  checkEmail:
     request:
-      seq: number
+      email: string
     response:
-      seq: number
+      taken: boolean
+    service: typescript
+
+  sendVerification:
+    request:
+      email: string
+      firstName: string
+      lastName: string
+    response:
+      sent: boolean
+    service: typescript
+
+  register:
+    request:
+      email: string
+      password: string
+    response:
+      user: User
+      token: Token
+    service: typescript
+
+  login:
+    request:
+      email: string
+      password: string
+    response:
+      user: User
+      token: Token
     service: typescript

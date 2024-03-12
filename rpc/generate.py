@@ -1,17 +1,19 @@
+import typing as t
 import os
 import re
 import sys
 import yaml
 from rpctypes import Model, TypeMap, TypeDef, Object, Endpoint
+from rich.console import Console
 
-import typing as t
+console = Console()
 
 # Basic TypeScript types
 
-
 TypescriptMap: TypeMap = {
     "string": "string",
-    "number": "number",
+    "int": "number",
+    "float": "number",
     "boolean": "boolean",
     "any": "any",
 }
@@ -135,7 +137,8 @@ class TypescriptTypeCompiler:
         elif isinstance(definition, dict):
             return self.parse_root_object(name, definition)
         else:
-            raise TypeError(f"Invalid type definition for {name}: {definition} is unexpected.")
+            raise TypeError(
+                f"Invalid type definition for {name}: {definition} is unexpected.")
 
     def to_big_camel_case(self, name: str) -> str:
         return name[0].upper() + name[1:]
@@ -187,7 +190,8 @@ class ClientRequesterCompiler:
     def __init__(self, model: Model, tc: TypescriptTypeCompiler, base_url: str = 'api') -> None:
         self.model = model
         self.tc = tc
-        self.base_url = base_url if not base_url.endswith('/') else base_url[:-1]
+        self.base_url = base_url if not base_url.endswith(
+            '/') else base_url[:-1]
 
     def parse_endpoint(self, name: str) -> str:
         request_type_name = self.tc.to_big_camel_case(name + "Request")
@@ -294,7 +298,6 @@ class TypescriptService(Service):
     def parse_functions_from_file(self, file: str):
         with open(file, 'r') as f:
             content = f.read()
-        # print('Scan file', file)
 
         regex_func_syntax = re.compile(
             r'export\s+(async\s+)?function\s+([a-zA-Z]\w*)\s*\(')
@@ -341,27 +344,59 @@ class TypescriptService(Service):
         self.functions = {}
         self.scan_functions()
 
-    def add_endpoint(self, name: str, endpoint: Endpoint):
-        if name not in self.functions:
-            raise ValueError(
-                f'Cannot find an implementation for {name}. Make sure that this \
-function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
-functions: {", ".join([n for n in self.functions.keys()])}).')
+    def generate_implementation_stub(self, name: str, endpoint: Endpoint):
+        request_type_name = self.tc.to_big_camel_case(
+            name + "Request")
+        response_type_name = self.tc.to_big_camel_case(
+            name + "Response")
 
-        self.buf += f'''
-// {name} is the endpoint handler for the {name} endpoint.
+        return f'''import {{ {request_type_name}, {response_type_name} }} from "{self.calculate_import_path(self.out_dir)}";
+
+// {name} implements the {name} endpoint.
+// This code has been automatically generated.
+// You can move this function to other files within the {self.src_dir} directory,
+// as long as the signature remains the same and the function is exported.
+export const {name} = async (request: {request_type_name}): Promise<{response_type_name}> => {{
+    throw new Error('Not implemented');
+}}'''
+
+    def generate_endpoint_connector(self, name: str, endpoint: Endpoint):
+        return f'''// {name} is the endpoint handler for the {name} endpoint.
 // It wraps around the function at {self.functions[name]}.
 app.post('{self.base}/{name}', async (req, res) => {{
     const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
     const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(request);
     res.json(response);
-}});
-'''
+}});'''
+
+    def error_no_implementation(self, name: str):
+        return f'Cannot find an implementation for {name}. Make sure that this \
+function is defined in one of the .ts/.tsx files in {self.src_dir} (available \
+functions: {", ".join([n for n in self.functions.keys()])}).'
+
+    def add_endpoint(self, name: str, endpoint: Endpoint):
+        if name not in self.functions:
+            # print(self.error_no_implementation(name), file=sys.stderr)
+
+            impl_stub_out = os.path.join(self.src_dir, f'{name}.ts')
+
+            with open(impl_stub_out, 'a') as f:
+                f.write(self.generate_implementation_stub(name, endpoint))
+                self.functions[name] = self.calculate_import_path(
+                    impl_stub_out)
+            console.print(
+                f'Generated stub for {name} at {impl_stub_out}', style="green")
+
+        self.buf += self.generate_endpoint_connector(name, endpoint) + '\n\n'
 
     def calculate_imports(self):
         files_map = {}
         out = ""
         for fun, file in self.functions.items():
+            if fun not in self.model["endpoints"]:
+                console.print(
+                    f"Warning: Unwired handler found '{fun}' (at '{self.functions[fun]}'). Add an endpoint in the model to wire it up.", style="yellow")
+                continue
             if file not in files_map:
                 files_map[file] = []
             files_map[file].append(fun)
@@ -438,7 +473,7 @@ If <mode> is ts-server, the following arguments are required:
 
 def main():
     if len(sys.argv) < 2:
-        print(USAGE)
+        console.print(USAGE, soft_wrap=True)
         sys.exit(1)
 
     with open(sys.argv[1], 'r') as file:
@@ -446,7 +481,7 @@ def main():
 
     if sys.argv[2] == 'client':
         if len(sys.argv) < 6:
-            print(USAGE)
+            console.print(USAGE, soft_wrap=True)
             sys.exit(1)
 
         out_dir = sys.argv[3]
@@ -458,11 +493,14 @@ def main():
 
         with open(os.path.join(out_dir, 'index.ts'), 'w') as f:
             f.write(cc.parse(name))
+        console.print(
+            f'Generated client for {name} at {os.path.join(out_dir, "index.ts")}', style="green"
+        )
         exit(0)
 
     if sys.argv[2] == 'ts-server':
         if len(sys.argv) < 7:
-            print(USAGE)
+            console.print(USAGE, soft_wrap=True)
             sys.exit(1)
 
         root = sys.argv[3]
@@ -474,11 +512,12 @@ def main():
             TypescriptService('typescript', root, src_dir, out_dir, base)
         ])
         wire.compile()
+        console.print(f'Generated ts-server at {out_dir}', style="green")
         exit(0)
 
 
 try:
     main()
 except Exception as e:
-    print(e)
+    console.print(e, style="red")
     sys.exit(1)
