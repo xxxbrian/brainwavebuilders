@@ -1,10 +1,12 @@
+import typing as t
 import os
 import re
 import sys
 import yaml
 from rpctypes import Model, TypeMap, TypeDef, Object, Endpoint
+from rich.console import Console
 
-import typing as t
+console = Console()
 
 # Basic TypeScript types
 
@@ -296,7 +298,6 @@ class TypescriptService(Service):
     def parse_functions_from_file(self, file: str):
         with open(file, 'r') as f:
             content = f.read()
-        # print('Scan file', file)
 
         regex_func_syntax = re.compile(
             r'export\s+(async\s+)?function\s+([a-zA-Z]\w*)\s*\(')
@@ -383,7 +384,8 @@ functions: {", ".join([n for n in self.functions.keys()])}).'
                 f.write(self.generate_implementation_stub(name, endpoint))
                 self.functions[name] = self.calculate_import_path(
                     impl_stub_out)
-            print(f'Generated stub for {name} at {impl_stub_out}')
+            console.print(
+                f'Generated stub for {name} at {impl_stub_out}', style="green")
 
         self.buf += self.generate_endpoint_connector(name, endpoint) + '\n\n'
 
@@ -392,8 +394,8 @@ functions: {", ".join([n for n in self.functions.keys()])}).'
         out = ""
         for fun, file in self.functions.items():
             if fun not in self.model["endpoints"]:
-                print(
-                    f"Warning: Unwired handler found '{fun}'. Add an endpoint in the model to wire it up.")
+                console.print(
+                    f"Warning: Unwired handler found '{fun}' (at '{self.functions[fun]}'). Add an endpoint in the model to wire it up.", style="yellow")
                 continue
             if file not in files_map:
                 files_map[file] = []
@@ -471,7 +473,7 @@ If <mode> is ts-server, the following arguments are required:
 
 def main():
     if len(sys.argv) < 2:
-        print(USAGE)
+        console.print(USAGE, soft_wrap=True)
         sys.exit(1)
 
     with open(sys.argv[1], 'r') as file:
@@ -479,7 +481,7 @@ def main():
 
     if sys.argv[2] == 'client':
         if len(sys.argv) < 6:
-            print(USAGE)
+            console.print(USAGE, soft_wrap=True)
             sys.exit(1)
 
         out_dir = sys.argv[3]
@@ -491,11 +493,14 @@ def main():
 
         with open(os.path.join(out_dir, 'index.ts'), 'w') as f:
             f.write(cc.parse(name))
+        console.print(
+            f'Generated client for {name} at {os.path.join(out_dir, "index.ts")}', style="green"
+        )
         exit(0)
 
     if sys.argv[2] == 'ts-server':
         if len(sys.argv) < 7:
-            print(USAGE)
+            console.print(USAGE, soft_wrap=True)
             sys.exit(1)
 
         root = sys.argv[3]
@@ -507,12 +512,12 @@ def main():
             TypescriptService('typescript', root, src_dir, out_dir, base)
         ])
         wire.compile()
+        console.print(f'Generated ts-server at {out_dir}', style="green")
         exit(0)
 
 
 try:
     main()
 except Exception as e:
-    raise
-    print(e)
+    console.print(e, style="red")
     sys.exit(1)
