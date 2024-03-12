@@ -8,10 +8,10 @@ import typing as t
 
 # Basic TypeScript types
 
-
 TypescriptMap: TypeMap = {
     "string": "string",
-    "number": "number",
+    "int": "number",
+    "float": "number",
     "boolean": "boolean",
     "any": "any",
 }
@@ -135,7 +135,8 @@ class TypescriptTypeCompiler:
         elif isinstance(definition, dict):
             return self.parse_root_object(name, definition)
         else:
-            raise TypeError(f"Invalid type definition for {name}: {definition} is unexpected.")
+            raise TypeError(
+                f"Invalid type definition for {name}: {definition} is unexpected.")
 
     def to_big_camel_case(self, name: str) -> str:
         return name[0].upper() + name[1:]
@@ -187,7 +188,8 @@ class ClientRequesterCompiler:
     def __init__(self, model: Model, tc: TypescriptTypeCompiler, base_url: str = 'api') -> None:
         self.model = model
         self.tc = tc
-        self.base_url = base_url if not base_url.endswith('/') else base_url[:-1]
+        self.base_url = base_url if not base_url.endswith(
+            '/') else base_url[:-1]
 
     def parse_endpoint(self, name: str) -> str:
         request_type_name = self.tc.to_big_camel_case(name + "Request")
