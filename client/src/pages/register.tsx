@@ -13,20 +13,15 @@ import {
  } from '@radix-ui/themes';
 
 import { PanelBackgroundImage } from '@/components/sign/background';
-import { useRouter } from "next/router";
 
-export default function SignIn() {
-  // const backend = useBackend();
-  // const onClickTest = useCallback(async () => {
-  //   const { seq } = await backend.ping({
-  //     seq: 1,
-  //   });
-  //   console.log(seq);
-  // }, [backend]);
-
-  const router = useRouter();
-
-  // Automatically switch between light and dark themes based on user's system preferences
+export default function Register() {
+  const backend = useBackend();
+  const onClickTest = useCallback(async () => {
+    const { seq } = await backend.ping({
+      seq: 1,
+    });
+    console.log(seq);
+  }, [backend]);
   const [appearance, setAppearance] = useState<'light' | 'dark'>('light');
   useEffect(() => {
     const updateAppearance = () => {
@@ -58,8 +53,26 @@ export default function SignIn() {
           <Card variant="surface" size="4" style={{ width: 400 }}>
             <Box height="7" mb="4">
               <Heading as="h3" size="6" mt="-1">
-                Sign in
+                Register
               </Heading>
+            </Box>
+
+            <Box mb="5">
+              <label>
+                <Text as="div" size="2" weight="medium" mb="2">
+                  First name
+                </Text>
+                <TextField.Input variant="surface" placeholder="Enter your first name" />
+              </label>
+            </Box>
+
+            <Box mb="5">
+              <label>
+                <Text as="div" size="2" weight="medium" mb="2">
+                  Last name
+                </Text>
+                <TextField.Input variant="surface" placeholder="Enter your last name" />
+              </label>
             </Box>
 
             <Box mb="5">
@@ -72,12 +85,6 @@ export default function SignIn() {
             </Box>
 
             <Box mb="5" position="relative">
-              <Box position="absolute" top="0" right="0" style={{ marginTop: -2 }}>
-                <Link href="#card" size="2">
-                  Forgot password?
-                </Link>
-              </Box>
-
               <label>
                 <Text as="div" size="2" weight="medium" mb="2">
                   Password
@@ -87,12 +94,7 @@ export default function SignIn() {
             </Box>
 
             <Flex mt="6" justify="end" gap="3">
-              <Button variant="soft" onClick={() => {
-                router.push('/register').catch(console.error);
-              }}>
-                Create an account
-              </Button>
-              <Button variant="solid">Sign in</Button>
+              <Button variant="solid">Create account</Button>
             </Flex>
           </Card>
         </Flex>
