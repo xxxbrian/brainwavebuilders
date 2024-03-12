@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { io as sio, type Socket } from "socket.io-client";
 
-import Nav from "./Navigation/Nav.tsx";
+import Nav from "/src/components/Navigation/Nav.tsx";
+import Stats from "/src/components/Stats.tsx";
+import Activity from "/src/components/Activity.tsx";
 
 export default function Home() {
   const [socket, setSocket] = useState<Socket | null>(null);
@@ -38,6 +40,10 @@ export default function Home() {
         courseCode="COMP3900"
         courseName="Computer Science Project"
       />
+      <div class="flex flex-wrap  mt-24 ml-72">
+        <Stats />
+        <Activity />
+      </div>
       <div
         id="main-content"
         className="p-6 max-w-sm mx-auto bg-white rounded-xl shadow-md flex items-center space-x-4 mt-24 ml-72"
