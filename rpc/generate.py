@@ -112,7 +112,20 @@ class TypescriptTypeCompiler:
             return False
         return True
 
+    def is_optional_field(self, key: str) -> t.Tuple[bool, str]:
+        obj_regex = re.compile(r"^(.+)\?$")
+        mat = obj_regex.match(key)
+
+        if mat:
+            return (True, mat.group(1))
+        return (False, key)
+
     def parse_field(self, key: str, value: TypeDef) -> str:
+        is_optional, key = self.is_optional_field(key)
+
+        if is_optional:
+            return f"{key}?: {self.parse_type_ref(value)};"
+
         return f"{key}: {self.parse_type_ref(value)};"
 
     def parse_object(self, definition: Object) -> str:
