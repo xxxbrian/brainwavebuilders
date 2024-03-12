@@ -11,10 +11,7 @@ export interface User {
     lastName: string;
 }
 
-export interface Token {
-    token: string;
-    expires: number;
-}
+export type Token = string;
 
 export interface Error {
     message: string;
@@ -30,6 +27,16 @@ export interface Featured {
 // Endpoint Requests/Responses
 //////////////////////////////
 
+
+// PingRequest is the request that is sent to the ping endpoint.
+export interface PingRequest {
+    seq: number;
+}
+
+// PingResponse is the response that is sent to the ping endpoint.
+export interface PingResponse {
+    seq: number;
+}
 
 // CheckEmailRequest is the request that is sent to the checkEmail endpoint.
 export interface CheckEmailRequest {
@@ -87,11 +94,35 @@ export interface GetFeaturedResponse {
     featured: Featured;
 }
 
+// GetUserInfoRequest is the request that is sent to the getUserInfo endpoint.
+export interface GetUserInfoRequest {
+    email: string;
+    token: Token;
+}
+
+// GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
+export interface GetUserInfoResponse {
+    user: User;
+}
+
 export class BrainwavesClient {
     base_url: string;
     constructor(base_url: string) {
         this.base_url = base_url;
     }
+    async ping(request: PingRequest): Promise<PingResponse> {
+        const response = await fetch(`${this.base_url}/ping`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as PingResponse;
+    }
+
+
+
     async checkEmail(request: CheckEmailRequest): Promise<CheckEmailResponse> {
         const response = await fetch(`${this.base_url}/checkEmail`, {
             method: 'POST',
@@ -153,6 +184,19 @@ export class BrainwavesClient {
             body: JSON.stringify(request)
         });
         return await response.json() as GetFeaturedResponse;
+    }
+
+
+
+    async getUserInfo(request: GetUserInfoRequest): Promise<GetUserInfoResponse> {
+        const response = await fetch(`${this.base_url}/getUserInfo`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+        return await response.json() as GetUserInfoResponse;
     }
 }
 

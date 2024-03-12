@@ -2,11 +2,13 @@
 
 
 import { app } from "@/globals";
+import { ping } from "@/handlers/ping";
 import { login } from "@/handlers/login";
+import { getFeatured } from "@/handlers/getFeatured";
 import { sendVerification } from "@/handlers/sendVerification";
+import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { checkEmail } from "@/handlers/checkEmail";
-import { getFeatured } from "@/handlers/getFeatured";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -17,10 +19,7 @@ export interface User {
     lastName: string;
 }
 
-export interface Token {
-    token: string;
-    expires: number;
-}
+export type Token = string;
 
 export interface Error {
     message: string;
@@ -36,6 +35,16 @@ export interface Featured {
 // Endpoint Requests/Responses
 //////////////////////////////
 
+
+// PingRequest is the request that is sent to the ping endpoint.
+export interface PingRequest {
+    seq: number;
+}
+
+// PingResponse is the response that is sent to the ping endpoint.
+export interface PingResponse {
+    seq: number;
+}
 
 // CheckEmailRequest is the request that is sent to the checkEmail endpoint.
 export interface CheckEmailRequest {
@@ -92,6 +101,25 @@ export interface GetFeaturedRequest {
 export interface GetFeaturedResponse {
     featured: Featured;
 }
+
+// GetUserInfoRequest is the request that is sent to the getUserInfo endpoint.
+export interface GetUserInfoRequest {
+    email: string;
+    token: Token;
+}
+
+// GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
+export interface GetUserInfoResponse {
+    user: User;
+}
+// ping is the endpoint handler for the ping endpoint.
+// It wraps around the function at @/handlers/ping.
+app.post('/api/ping', async (req, res) => {
+    const request: PingRequest = req.body;
+    const response: PingResponse = await ping(request);
+    res.json(response);
+});
+
 // checkEmail is the endpoint handler for the checkEmail endpoint.
 // It wraps around the function at @/handlers/checkEmail.
 app.post('/api/checkEmail', async (req, res) => {
@@ -129,5 +157,13 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/getFeatured', async (req, res) => {
     const request: GetFeaturedRequest = req.body;
     const response: GetFeaturedResponse = await getFeatured(request);
+    res.json(response);
+});
+
+// getUserInfo is the endpoint handler for the getUserInfo endpoint.
+// It wraps around the function at @/handlers/getUserInfo.
+app.post('/api/getUserInfo', async (req, res) => {
+    const request: GetUserInfoRequest = req.body;
+    const response: GetUserInfoResponse = await getUserInfo(request);
     res.json(response);
 });

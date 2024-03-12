@@ -4,9 +4,7 @@ types:
     firstName: string
     lastName: string
 
-  Token:
-    token: string
-    expires: int
+  Token: string
 
   Error:
     message: string
@@ -17,6 +15,13 @@ types:
     description: string
 
 endpoints:
+  ping:
+    request:
+      seq: int
+    response:
+      seq: int
+    service: typescript
+
   checkEmail:
     request:
       email: string
@@ -55,4 +60,12 @@ endpoints:
     request:
     response:
       featured: Featured
+    service: typescript
+
+  getUserInfo:
+    request:
+      email: string
+      token: Token
+    response:
+      user: User
     service: typescript
