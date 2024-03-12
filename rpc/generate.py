@@ -350,6 +350,7 @@ class TypescriptService(Service):
             name + "Response")
 
         return f'''import {{ {request_type_name}, {response_type_name} }} from "{self.calculate_import_path(self.out_dir)}";
+
 // {name} implements the {name} endpoint.
 // This code has been automatically generated.
 // You can move this function to other files within the {self.src_dir} directory,
@@ -374,7 +375,7 @@ functions: {", ".join([n for n in self.functions.keys()])}).'
 
     def add_endpoint(self, name: str, endpoint: Endpoint):
         if name not in self.functions:
-            print(self.error_no_implementation(name), file=sys.stderr)
+            # print(self.error_no_implementation(name), file=sys.stderr)
 
             impl_stub_out = os.path.join(self.src_dir, f'{name}.ts')
 
@@ -390,6 +391,10 @@ functions: {", ".join([n for n in self.functions.keys()])}).'
         files_map = {}
         out = ""
         for fun, file in self.functions.items():
+            if fun not in self.model["endpoints"]:
+                print(
+                    f"Warning: Unwired handler found '{fun}'. Add an endpoint in the model to wire it up.")
+                continue
             if file not in files_map:
                 files_map[file] = []
             files_map[file].append(fun)
