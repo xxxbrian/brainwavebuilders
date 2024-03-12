@@ -56,3 +56,13 @@ Proposal Technical Architecture Section:
 
 Docker Compose Modifications:
     Updated our Docker Compose configurations to support both ARM and x86 architectures.
+
+Week 4:
+
+RPC:
+    Researching the design of rpc with Lincoln.
+Frontend Dev:
+    Impl Log in & Sign up & Reset
+Backend Dev:
+    Impl Log in & Sign up & Reset
+    Email API deploy, DNS settings
