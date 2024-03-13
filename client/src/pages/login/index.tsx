@@ -30,7 +30,7 @@ export const Login: React.FC<Props> = () => {
     | "reset"
     | "verify-register"
     | "verify-reset"
-  >("login");
+  >("verify-register");
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -184,7 +184,7 @@ export const Login: React.FC<Props> = () => {
         </div>
         <div className="flex flex-col h-full flex-shrink-0 justify-center w-full lg:w-fit flex-1 items-center">
           <Card
-            className="hidden lg:block min-w-[400px] backdrop-blur-sm w-fit"
+            className="hidden lg:block min-w-[400px] backdrop-blur-sm w-min"
             size="4"
           >
             {getForm()}

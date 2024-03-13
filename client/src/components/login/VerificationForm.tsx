@@ -29,7 +29,7 @@ export const VerificationForm: React.FC<Props> = ({
       </div>
 
       <Box mb="5">
-        <Text size="3" weight="medium" mb="2">
+        <Text size="3" weight="medium" mb="2" className="text-wrap break-words">
           We have sent a verification code to <strong>{email}</strong>. Please
           check your email and enter the code below.
         </Text>
