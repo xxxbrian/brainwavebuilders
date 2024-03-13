@@ -1,5 +1,6 @@
 import type { Featured } from "@/backend";
 import { Logo } from "@/components/Logo";
+import { CenteredLoading } from "@/components/loading";
 import { LoginForm } from "@/components/login/LoginForm";
 import { RegisterForm } from "@/components/login/RegisterForm";
 import { ResetForm } from "@/components/login/ResetForm";
@@ -103,6 +104,10 @@ export const Login: React.FC<Props> = () => {
   const onClickVerify = () => {
     // noop
   };
+
+  if (!featured) {
+    return <CenteredLoading />;
+  }
 
   const getForm = () => {
     return (
