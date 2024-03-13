@@ -156,6 +156,22 @@ class TypescriptTypeCompiler:
     def to_big_camel_case(self, name: str) -> str:
         return name[0].upper() + name[1:]
 
+    def generate_api_error(self):
+        return '''export class APIError extends Error {
+    public code?: string;
+    constructor(message: string, code?: string) {
+        super(message);
+        this.code = code;
+    }
+}
+
+// eslint-disable-next-line
+export const isAPIError = (e: any): e is APIError => {
+    // eslint-disable-next-line
+    return e instanceof APIError || !!e._rpc_error;
+}
+'''
+
     def parse(self):
         if self.model["types"] is None:
             self.model['types'] = {}
@@ -193,7 +209,14 @@ class TypescriptTypeCompiler:
 // Endpoint Requests/Responses
 //////////////////////////////
 
-{endpoint_types_def}'''
+{endpoint_types_def}
+
+//////////////////////////////
+// API Errors
+//////////////////////////////
+
+{self.generate_api_error()}
+'''
 
 
 class ClientRequesterCompiler:
@@ -219,7 +242,23 @@ class ClientRequesterCompiler:
             }},
             body: JSON.stringify(request)
         }});
-        return await response.json() as {response_type_name};
+
+        const json = await response.json();
+
+        if (!response.ok) {{
+            if (isAPIError(json)) {{
+                switch (response.status) {{
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }}
+            }}
+
+            throw new Error("RPC Request Failed.");
+        }}
+
+        return json as {response_type_name};
     }}
 '''
         return rpc_requester
@@ -378,8 +417,21 @@ export const {name} = async (request: {request_type_name}): Promise<{response_ty
 // It wraps around the function at {self.functions[name]}.
 app.post('{self.base}/{name}', async (req, res) => {{
     const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
-    const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(request);
-    res.json(response);
+    try {{
+        const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(request);
+        res.json(response);
+    }} catch (e) {{
+        if (e instanceof APIError) {{
+            res.status(400);
+            res.json({{ message: e.message, code: e.code, _rpc_error: true }});
+            return;
+        }} else {{
+            res.status(500);
+            res.json({{ message: "Internal server error", _rpc_error: true }});
+            console.error(`Error occurred while handling request {name} with arguments ${{ JSON.stringify(request) }}: `, e);
+            return;
+        }}
+    }}
 }});'''
 
     def error_no_implementation(self, name: str):
