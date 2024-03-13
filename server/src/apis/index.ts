@@ -112,58 +112,169 @@ export interface GetUserInfoRequest {
 export interface GetUserInfoResponse {
     user: User;
 }
+
+
+//////////////////////////////
+// API Errors
+//////////////////////////////
+
+export class APIError extends Error {
+    public code?: string;
+    constructor(message: string, code?: string) {
+        super(message);
+        this.code = code;
+    }
+}
+
+// eslint-disable-next-line
+export const isAPIError = (e: any): e is APIError => {
+    // eslint-disable-next-line
+    return e instanceof APIError || !!e._rpc_error;
+}
+
 // ping is the endpoint handler for the ping endpoint.
 // It wraps around the function at @/handlers/ping.
 app.post('/api/ping', async (req, res) => {
     const request: PingRequest = req.body;
-    const response: PingResponse = await ping(request);
-    res.json(response);
+    try {
+        const response: PingResponse = await ping(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request ping with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });
 
 // checkEmail is the endpoint handler for the checkEmail endpoint.
 // It wraps around the function at @/handlers/checkEmail.
 app.post('/api/checkEmail', async (req, res) => {
     const request: CheckEmailRequest = req.body;
-    const response: CheckEmailResponse = await checkEmail(request);
-    res.json(response);
+    try {
+        const response: CheckEmailResponse = await checkEmail(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request checkEmail with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });
 
 // sendVerification is the endpoint handler for the sendVerification endpoint.
 // It wraps around the function at @/handlers/sendVerification.
 app.post('/api/sendVerification', async (req, res) => {
     const request: SendVerificationRequest = req.body;
-    const response: SendVerificationResponse = await sendVerification(request);
-    res.json(response);
+    try {
+        const response: SendVerificationResponse = await sendVerification(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request sendVerification with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });
 
 // register is the endpoint handler for the register endpoint.
 // It wraps around the function at @/handlers/register.
 app.post('/api/register', async (req, res) => {
     const request: RegisterRequest = req.body;
-    const response: RegisterResponse = await register(request);
-    res.json(response);
+    try {
+        const response: RegisterResponse = await register(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request register with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });
 
 // login is the endpoint handler for the login endpoint.
 // It wraps around the function at @/handlers/login.
 app.post('/api/login', async (req, res) => {
     const request: LoginRequest = req.body;
-    const response: LoginResponse = await login(request);
-    res.json(response);
+    try {
+        const response: LoginResponse = await login(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request login with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });
 
 // getFeatured is the endpoint handler for the getFeatured endpoint.
 // It wraps around the function at @/handlers/getFeatured.
 app.post('/api/getFeatured', async (req, res) => {
     const request: GetFeaturedRequest = req.body;
-    const response: GetFeaturedResponse = await getFeatured(request);
-    res.json(response);
+    try {
+        const response: GetFeaturedResponse = await getFeatured(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getFeatured with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });
 
 // getUserInfo is the endpoint handler for the getUserInfo endpoint.
 // It wraps around the function at @/handlers/getUserInfo.
 app.post('/api/getUserInfo', async (req, res) => {
     const request: GetUserInfoRequest = req.body;
-    const response: GetUserInfoResponse = await getUserInfo(request);
-    res.json(response);
+    try {
+        const response: GetUserInfoResponse = await getUserInfo(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getUserInfo with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
 });

@@ -105,6 +105,25 @@ export interface GetUserInfoResponse {
     user: User;
 }
 
+
+//////////////////////////////
+// API Errors
+//////////////////////////////
+
+export class APIError extends Error {
+    public code?: string;
+    constructor(message: string, code?: string) {
+        super(message);
+        this.code = code;
+    }
+}
+
+// eslint-disable-next-line
+export const isAPIError = (e: any): e is APIError => {
+    // eslint-disable-next-line
+    return e instanceof APIError || !!e._rpc_error;
+}
+
 export class BrainwavesClient {
     base_url: string;
     constructor(base_url: string) {
@@ -118,7 +137,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as PingResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as PingResponse;
     }
 
 
@@ -131,7 +166,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as CheckEmailResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as CheckEmailResponse;
     }
 
 
@@ -144,7 +195,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as SendVerificationResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as SendVerificationResponse;
     }
 
 
@@ -157,7 +224,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as RegisterResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as RegisterResponse;
     }
 
 
@@ -170,7 +253,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as LoginResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as LoginResponse;
     }
 
 
@@ -183,7 +282,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as GetFeaturedResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetFeaturedResponse;
     }
 
 
@@ -196,7 +311,23 @@ export class BrainwavesClient {
             },
             body: JSON.stringify(request)
         });
-        return await response.json() as GetUserInfoResponse;
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetUserInfoResponse;
     }
 }
 
