@@ -5,8 +5,7 @@ import { RegisterForm } from "@/components/login/RegisterForm";
 import { ResetForm } from "@/components/login/ResetForm";
 import { VerificationForm } from "@/components/login/VerificationForm";
 import { useBackend } from "@/hooks/useBackend";
-import { Card, Text } from "@radix-ui/themes";
-import Image from "next/image";
+import { Card } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 
 interface Props {}
@@ -184,7 +183,10 @@ export const Login: React.FC<Props> = () => {
           </div>
         </div>
         <div className="flex flex-col h-full flex-shrink-0 justify-center w-full lg:w-fit flex-1 items-center">
-          <Card className="hidden lg:block p-4 min-w-[400px] backdrop-blur-sm w-fit">
+          <Card
+            className="hidden lg:block min-w-[400px] backdrop-blur-sm w-fit"
+            size="4"
+          >
             {getForm()}
           </Card>
           <div className="lg:hidden flex justify-center items-center w-full">
