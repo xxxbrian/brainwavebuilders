@@ -35,3 +35,16 @@ week3:
 3. I publish a timeline for our proposal on Jira.
 4. I grouped the tasks of the entire project into pages and published small functionalities on Jira.
 5. I attend the group meeting, discussed about the sprints of our project.
+
+======================================================================
+
+week4:
+- This week, I worked mainly on frontend of main dashboard. I finished frontend features below:
+1. The course card component
+2. A course board (container) component for all kinds of course board
+3. The create course popup window
+4. The join course popup window
+5. Rewrite the top navigation bar for Ethan. Change it to tsx style and make it possible to getting values.
+6. Rewrite the side navigation bar for Ethan. Do the same thing as above
+7. Rewrite the activity and stats components for Ethan. Do the same thing as above
+8. Combine all components together to build a main dashboard page
