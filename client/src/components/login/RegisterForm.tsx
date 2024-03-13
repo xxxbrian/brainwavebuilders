@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Text, TextField } from "@radix-ui/themes";
 import React, { useCallback } from "react";
 
 interface Props {
@@ -62,22 +54,21 @@ export const RegisterForm: React.FC<Props> = ({
     [onChangePassword],
   );
   return (
-    <Card variant="surface" size="4" style={{ width: 400 }}>
-      <Box height="7" mb="4">
-        <Heading as="h3" size="6" mt="-1">
-          Register
-        </Heading>
-      </Box>
+    <div>
+      <div className="text-2xl font-bold mb-4 text-center lg:text-left">
+        Register
+      </div>
 
       <Box mb="5">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             First name
           </Text>
           <TextField.Input
             variant="surface"
             placeholder="Enter your first name"
             value={firstName}
+            size={"3"}
             onChange={onChangeFirstNameInner}
           />
         </label>
@@ -85,13 +76,14 @@ export const RegisterForm: React.FC<Props> = ({
 
       <Box mb="5">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Last name
           </Text>
           <TextField.Input
             variant="surface"
             placeholder="Enter your last name"
             value={lastName}
+            size={"3"}
             onChange={onChangeLastNameInner}
           />
         </label>
@@ -99,13 +91,14 @@ export const RegisterForm: React.FC<Props> = ({
 
       <Box mb="5">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Email address
           </Text>
           <TextField.Input
             variant="surface"
             placeholder="Enter your email"
             value={email}
+            size={"3"}
             onChange={onChangeEmailInner}
           />
         </label>
@@ -113,7 +106,7 @@ export const RegisterForm: React.FC<Props> = ({
 
       <Box mb="5" position="relative">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Password
           </Text>
           <TextField.Input
@@ -121,18 +114,20 @@ export const RegisterForm: React.FC<Props> = ({
             type="password"
             placeholder="Enter your password"
             value={password}
+            size={"3"}
             onChange={onChangePasswordInner}
           />
         </label>
       </Box>
-      <Flex mt="6" justify="end" gap="3">
-        <Button variant="soft" onClick={onClickBack}>
+
+      <Flex mt="6" justify="end" gap="3" className="flex-col md:flex-row">
+        <Button variant="soft" onClick={onClickBack} size={"3"}>
           Back
         </Button>
-        <Button variant="solid" onClick={onClickRegisterConfirm}>
+        <Button variant="solid" onClick={onClickRegisterConfirm} size={"3"}>
           Create
         </Button>
       </Flex>
-    </Card>
+    </div>
   );
 };

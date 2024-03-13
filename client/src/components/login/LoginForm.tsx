@@ -1,13 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Link,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Link, Text, TextField } from "@radix-ui/themes";
 import React, { useCallback } from "react";
 
 interface Props {
@@ -47,7 +38,7 @@ export const LoginForm: React.FC<Props> = ({
 
   return (
     <div>
-      <div className="text-2xl font-bold my-4 text-center lg:text-left">
+      <div className="text-2xl font-bold mb-4 text-center lg:text-left">
         Sign in
       </div>
 
@@ -79,8 +70,8 @@ export const LoginForm: React.FC<Props> = ({
           </Text>
           <TextField.Input
             variant="surface"
-            placeholder="Password"
-            type="Enter your password"
+            type="Password"
+            placeholder="Enter your password"
             value={password}
             size={"3"}
             onChange={onChangePasswordInner}

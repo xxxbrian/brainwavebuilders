@@ -41,21 +41,21 @@ export const ResetForm: React.FC<Props> = ({
     [onChangePassword],
   );
   return (
-    <Card variant="surface" size="4" style={{ width: 400 }}>
-      <Box height="7" mb="4">
-        <Heading as="h3" size="6" mt="-1">
-          Reset password
-        </Heading>
-      </Box>
+    <div>
+      <div className="text-2xl font-bold mb-4 text-center lg:text-left">
+        Reset password
+      </div>
+
       <Box mb="5">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Email address
           </Text>
           <TextField.Input
             variant="surface"
             placeholder="Enter your email"
             value={email}
+            size={"3"}
             onChange={onChangeEmailInner}
           />
         </label>
@@ -63,7 +63,7 @@ export const ResetForm: React.FC<Props> = ({
 
       <Box mb="5" position="relative">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Password
           </Text>
           <TextField.Input
@@ -71,19 +71,20 @@ export const ResetForm: React.FC<Props> = ({
             type="password"
             placeholder="Enter your new password"
             value={password}
+            size={"3"}
             onChange={onChangePasswordInner}
           />
         </label>
       </Box>
 
-      <Flex mt="6" justify="end" gap="3">
-        <Button variant="soft" onClick={onClickBack}>
+      <Flex mt="6" justify="end" gap="3" className="flex-col md:flex-row">
+        <Button variant="soft" onClick={onClickBack} size={"3"}>
           Back
         </Button>
-        <Button variant="solid" onClick={onClickSendResetEmail}>
+        <Button variant="solid" onClick={onClickSendResetEmail} size={"3"}>
           Confirm
         </Button>
       </Flex>
-    </Card>
+    </div>
   );
 };

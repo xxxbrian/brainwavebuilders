@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Text, TextField } from "@radix-ui/themes";
 import React, { useCallback } from "react";
 
 interface Props {
@@ -31,15 +23,13 @@ export const VerificationForm: React.FC<Props> = ({
     [onChangeVerificationCode],
   );
   return (
-    <Card variant="surface" size="4" style={{ width: 400 }}>
-      <Box height="7" mb="4">
-        <Heading as="h3" size="6" mt="-1">
-          Verify your email
-        </Heading>
-      </Box>
+    <div>
+      <div className="text-2xl font-bold mb-4 text-center lg:text-left">
+        Verify your email
+      </div>
 
       <Box mb="5">
-        <Text size="2" weight="medium" mb="2">
+        <Text size="3" weight="medium" mb="2">
           We have sent a verification code to <strong>{email}</strong>. Please
           check your email and enter the code below.
         </Text>
@@ -47,25 +37,26 @@ export const VerificationForm: React.FC<Props> = ({
 
       <Box mb="5">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Verification code
           </Text>
           <TextField.Input
             variant="surface"
             placeholder="Enter the code"
             value={verificationCode}
+            size={"3"}
             onChange={onChangeVerificationCodeInner}
           />
         </label>
       </Box>
       <Flex mt="6" justify="end" gap="3">
-        <Button variant="soft" onClick={onClickBack}>
+        <Button variant="soft" onClick={onClickBack} size="3">
           Back
         </Button>
-        <Button variant="solid" onClick={onClickVerify}>
+        <Button variant="solid" onClick={onClickVerify} size="3">
           Create
         </Button>
       </Flex>
-    </Card>
+    </div>
   );
 };
