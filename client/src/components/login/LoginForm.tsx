@@ -46,20 +46,19 @@ export const LoginForm: React.FC<Props> = ({
   );
 
   return (
-    <Card variant="surface" size="4" style={{ width: 400 }}>
-      <Box height="7" mb="4">
-        <Heading as="h3" size="6" mt="-1">
-          Sign in
-        </Heading>
-      </Box>
+    <div>
+      <div className="text-2xl font-bold my-4 text-center lg:text-left">
+        Sign in
+      </div>
 
       <Box mb="5">
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Email address
           </Text>
           <TextField.Input
             variant="surface"
+            size={"3"}
             placeholder="Enter your email"
             value={email}
             onChange={onChangeEmailInner}
@@ -69,13 +68,13 @@ export const LoginForm: React.FC<Props> = ({
 
       <Box mb="5" position="relative">
         <Box position="absolute" top="0" right="0" style={{ marginTop: -2 }}>
-          <Link href="#card" size="2" onClick={onClickForgotPassword}>
+          <Link href="#card" size="3" onClick={onClickForgotPassword}>
             Forgot password?
           </Link>
         </Box>
 
         <label>
-          <Text as="div" size="2" weight="medium" mb="2">
+          <Text as="div" size="3" weight="medium" mb="2">
             Password
           </Text>
           <TextField.Input
@@ -83,19 +82,20 @@ export const LoginForm: React.FC<Props> = ({
             placeholder="Password"
             type="Enter your password"
             value={password}
+            size={"3"}
             onChange={onChangePasswordInner}
           />
         </label>
       </Box>
 
-      <Flex mt="6" justify="end" gap="3">
-        <Button variant="soft" onClick={onClickCreateAccount}>
+      <Flex mt="6" justify="end" gap="3" className="flex-col md:flex-row">
+        <Button variant="soft" onClick={onClickCreateAccount} size={"3"}>
           Create an account
         </Button>
-        <Button variant="solid" onClick={onClickSignIn}>
+        <Button variant="solid" onClick={onClickSignIn} size={"3"}>
           Sign in
         </Button>
       </Flex>
-    </Card>
+    </div>
   );
 };

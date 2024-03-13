@@ -1,10 +1,12 @@
 import type { Featured } from "@/backend";
+import { Logo } from "@/components/Logo";
 import { LoginForm } from "@/components/login/LoginForm";
 import { RegisterForm } from "@/components/login/RegisterForm";
 import { ResetForm } from "@/components/login/ResetForm";
 import { VerificationForm } from "@/components/login/VerificationForm";
 import { useBackend } from "@/hooks/useBackend";
-import { Text } from "@radix-ui/themes";
+import { Card, Text } from "@radix-ui/themes";
+import Image from "next/image";
 import { useEffect, useState } from "react";
 
 interface Props {}
@@ -34,7 +36,7 @@ export const Login: React.FC<Props> = () => {
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
-  const [verficationCode, setVerificationCode] = useState<string>("");
+  const [verificationCode, setVerificationCode] = useState<string>("");
 
   const onChangeFirstName = (firstName: string) => {
     setFirstName(firstName);
@@ -103,22 +105,10 @@ export const Login: React.FC<Props> = () => {
     // noop
   };
 
-  return (
-    <div
-      className="w-full h-full flex flex-col bg-no-repeat bg-cover"
-      style={{
-        backgroundImage: `url(${featured?.background})`,
-      }}
-    >
-      <div className="mx-16 h-full p-4 flex flex-row justify-around items-center">
-        <Text>
-          <Text size="8" weight="bold" mb="4">
-            {featured?.title}
-          </Text>
-          <Text as="p" size="3" weight="medium" mb="4">
-            {featured?.description}
-          </Text>
-        </Text>
+  const getForm = () => {
+    return (
+      <>
+        {" "}
         {step === "login" && (
           <LoginForm
             password={password}
@@ -157,12 +147,53 @@ export const Login: React.FC<Props> = () => {
         {step.startsWith("verify-") && (
           <VerificationForm
             email={email}
-            verificationCode={verficationCode}
+            verificationCode={verificationCode}
             onChangeVerificationCode={onChangeVerificationCode}
             onClickBack={onClickBack}
             onClickVerify={onClickVerify}
           />
         )}
+      </>
+    );
+  };
+
+  return (
+    <div className="w-full h-full">
+      {/* Background */}
+      {featured?.background && (
+        <div className="-z-10 lg:block hidden">
+          <div className="bg-black opacity-70 w-full h-full absolute top-0 left-0 -z-10"></div>
+          <img
+            src={featured?.background}
+            className="object-cover w-full h-full absolute left-0 top-0 -z-20"
+            alt="background"
+          />
+        </div>
+      )}
+
+      <div className="mx-16 h-full flex flex-row lg:justify-between justify-center object-center lg:space-x-20">
+        <div className="flex-col h-full justify-center ml-10 hidden lg:flex max-w-screen-sm">
+          <div className="space-y-8">
+            <Logo size="medium" variant="white"></Logo>
+            <div className="text-white text-3xl lg:text-4xl xl:text-5xl font-extrabold">
+              “{featured?.title}”
+            </div>
+            <div className="text-white font-bold text-xl">
+              {featured?.description}
+            </div>
+          </div>
+        </div>
+        <div className="flex flex-col h-full flex-shrink-0 justify-center w-full lg:w-fit">
+          <Card className="hidden lg:block p-4 min-w-[400px] backdrop-blur-sm">
+            {getForm()}
+          </Card>
+          <div className="lg:hidden flex justify-center items-center">
+            <div className="flex-1 max-w-96">
+              <Logo size="small" className="mx-auto my-8" variant="color" />
+              {getForm()}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
