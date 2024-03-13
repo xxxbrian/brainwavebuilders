@@ -5,7 +5,7 @@ import { app } from "@/globals";
 import { ping } from "@/handlers/ping";
 import { login } from "@/handlers/login";
 import { getFeatured } from "@/handlers/getFeatured";
-import { sendVerification } from "@/handlers/sendVerification";
+import { confirmEmail } from "@/handlers/confirmEmail";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { checkEmail } from "@/handlers/checkEmail";
@@ -56,26 +56,27 @@ export interface CheckEmailResponse {
     taken: boolean;
 }
 
-// SendVerificationRequest is the request that is sent to the sendVerification endpoint.
-export interface SendVerificationRequest {
-    email: string;
-    firstName: string;
-    lastName: string;
-}
-
-// SendVerificationResponse is the response that is sent to the sendVerification endpoint.
-export interface SendVerificationResponse {
-    sent: boolean;
-}
-
 // RegisterRequest is the request that is sent to the register endpoint.
 export interface RegisterRequest {
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
 }
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
+
+}
+
+// ConfirmEmailRequest is the request that is sent to the confirmEmail endpoint.
+export interface ConfirmEmailRequest {
+    email: string;
+    otp: string;
+}
+
+// ConfirmEmailResponse is the response that is sent to the confirmEmail endpoint.
+export interface ConfirmEmailResponse {
     user: User;
     token: Token;
 }
@@ -174,27 +175,6 @@ app.post('/api/checkEmail', async (req, res) => {
     }
 });
 
-// sendVerification is the endpoint handler for the sendVerification endpoint.
-// It wraps around the function at @/handlers/sendVerification.
-app.post('/api/sendVerification', async (req, res) => {
-    const request: SendVerificationRequest = req.body;
-    try {
-        const response: SendVerificationResponse = await sendVerification(request);
-        res.json(response);
-    } catch (e) {
-        if (e instanceof APIError) {
-            res.status(400);
-            res.json({ message: e.message, code: e.code, _rpc_error: true });
-            return;
-        } else {
-            res.status(500);
-            res.json({ message: "Internal server error", _rpc_error: true });
-            console.error(`Error occurred while handling request sendVerification with arguments ${ JSON.stringify(request) }: `, e);
-            return;
-        }
-    }
-});
-
 // register is the endpoint handler for the register endpoint.
 // It wraps around the function at @/handlers/register.
 app.post('/api/register', async (req, res) => {
@@ -211,6 +191,27 @@ app.post('/api/register', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request register with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// confirmEmail is the endpoint handler for the confirmEmail endpoint.
+// It wraps around the function at @/handlers/confirmEmail.
+app.post('/api/confirmEmail', async (req, res) => {
+    const request: ConfirmEmailRequest = req.body;
+    try {
+        const response: ConfirmEmailResponse = await confirmEmail(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request confirmEmail with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

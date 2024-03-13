@@ -29,19 +29,19 @@ endpoints:
       taken: boolean
     service: typescript
 
-  sendVerification:
-    request:
-      email: string
-      firstName: string
-      lastName: string
-    response:
-      sent: boolean
-    service: typescript
-
   register:
     request:
       email: string
       password: string
+      firstName: string
+      lastName: string
+    response:
+    service: typescript
+
+  confirmEmail:
+    request:
+      email: string
+      otp: string
     response:
       user: User
       token: Token
