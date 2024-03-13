@@ -1,13 +1,12 @@
-import type { User, Featured } from "@/backend";
+import type { Featured } from "@/backend";
 import { LoginForm } from "@/components/login/LoginForm";
 import { RegisterForm } from "@/components/login/RegisterForm";
 import { ResetForm } from "@/components/login/ResetForm";
 import { VerificationForm } from "@/components/login/VerificationForm";
 import { useBackend } from "@/hooks/useBackend";
-import { on } from "events";
+import { Text } from "@radix-ui/themes";
 import { useEffect, useState } from "react";
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface Props {}
 
 export const Login: React.FC<Props> = () => {
@@ -111,50 +110,60 @@ export const Login: React.FC<Props> = () => {
         backgroundImage: `url(${featured?.background})`,
       }}
     >
-      {step === "login" && (
-        <LoginForm
-          password={password}
-          email={email}
-          onChangeEmail={onChangeEmail}
-          onChangePassword={onChangePassword}
-          onClickCreateAccount={onClickCreateAccount}
-          onClickForgotPassword={onClickForgotPassword}
-          onClickSignIn={onClickSignIn}
-        />
-      )}
-      {step === "register" && (
-        <RegisterForm
-          firstName={firstName}
-          lastName={lastName}
-          email={email}
-          password={password}
-          onChangeEmail={onChangeEmail}
-          onChangeFirstName={onChangeFirstName}
-          onChangeLastName={onChangeLastName}
-          onChangePassword={onChangePassword}
-          onClickRegisterConfirm={onClickRegisterConfirm}
-          onClickBack={onClickBack}
-        />
-      )}
-      {step === "reset" && (
-        <ResetForm
-          email={email}
-          password={password}
-          onChangeEmail={onChangeEmail}
-          onChangePassword={onChangePassword}
-          onClickBack={onClickBack}
-          onClickSendResetEmail={onClickSendResetEmail}
-        />
-      )}
-      {step.startsWith("verify-") && (
-        <VerificationForm
-          email={email}
-          verificationCode={verficationCode}
-          onChangeVerificationCode={onChangeVerificationCode}
-          onClickBack={onClickBack}
-          onClickVerify={onClickVerify}
-        />
-      )}
+      <div className="mx-16 h-full p-4 flex flex-row justify-around items-center">
+        <Text>
+          <Text size="8" weight="bold" mb="4">
+            {featured?.title}
+          </Text>
+          <Text as="p" size="3" weight="medium" mb="4">
+            {featured?.description}
+          </Text>
+        </Text>
+        {step === "login" && (
+          <LoginForm
+            password={password}
+            email={email}
+            onChangeEmail={onChangeEmail}
+            onChangePassword={onChangePassword}
+            onClickCreateAccount={onClickCreateAccount}
+            onClickForgotPassword={onClickForgotPassword}
+            onClickSignIn={onClickSignIn}
+          />
+        )}
+        {step === "register" && (
+          <RegisterForm
+            firstName={firstName}
+            lastName={lastName}
+            email={email}
+            password={password}
+            onChangeEmail={onChangeEmail}
+            onChangeFirstName={onChangeFirstName}
+            onChangeLastName={onChangeLastName}
+            onChangePassword={onChangePassword}
+            onClickRegisterConfirm={onClickRegisterConfirm}
+            onClickBack={onClickBack}
+          />
+        )}
+        {step === "reset" && (
+          <ResetForm
+            email={email}
+            password={password}
+            onChangeEmail={onChangeEmail}
+            onChangePassword={onChangePassword}
+            onClickBack={onClickBack}
+            onClickSendResetEmail={onClickSendResetEmail}
+          />
+        )}
+        {step.startsWith("verify-") && (
+          <VerificationForm
+            email={email}
+            verificationCode={verficationCode}
+            onChangeVerificationCode={onChangeVerificationCode}
+            onClickBack={onClickBack}
+            onClickVerify={onClickVerify}
+          />
+        )}
+      </div>
     </div>
   );
 };
