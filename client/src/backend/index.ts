@@ -48,26 +48,27 @@ export interface CheckEmailResponse {
     taken: boolean;
 }
 
-// SendVerificationRequest is the request that is sent to the sendVerification endpoint.
-export interface SendVerificationRequest {
-    email: string;
-    firstName: string;
-    lastName: string;
-}
-
-// SendVerificationResponse is the response that is sent to the sendVerification endpoint.
-export interface SendVerificationResponse {
-    sent: boolean;
-}
-
 // RegisterRequest is the request that is sent to the register endpoint.
 export interface RegisterRequest {
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
 }
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
+
+}
+
+// ConfirmEmailRequest is the request that is sent to the confirmEmail endpoint.
+export interface ConfirmEmailRequest {
+    email: string;
+    otp: string;
+}
+
+// ConfirmEmailResponse is the response that is sent to the confirmEmail endpoint.
+export interface ConfirmEmailResponse {
     user: User;
     token: Token;
 }
@@ -187,35 +188,6 @@ export class BrainwavesClient {
 
 
 
-    async sendVerification(request: SendVerificationRequest): Promise<SendVerificationResponse> {
-        const response = await fetch(`${this.base_url}/sendVerification`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(request)
-        });
-
-        const json = await response.json();
-
-        if (!response.ok) {
-            if (isAPIError(json)) {
-                switch (response.status) {
-                    case 400:
-                        throw new APIError(json.message, json.code);
-                    case 500:
-                        throw new Error(json.message);
-                }
-            }
-
-            throw new Error("RPC Request Failed.");
-        }
-
-        return json as SendVerificationResponse;
-    }
-
-
-
     async register(request: RegisterRequest): Promise<RegisterResponse> {
         const response = await fetch(`${this.base_url}/register`, {
             method: 'POST',
@@ -241,6 +213,35 @@ export class BrainwavesClient {
         }
 
         return json as RegisterResponse;
+    }
+
+
+
+    async confirmEmail(request: ConfirmEmailRequest): Promise<ConfirmEmailResponse> {
+        const response = await fetch(`${this.base_url}/confirmEmail`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as ConfirmEmailResponse;
     }
 
 

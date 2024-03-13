@@ -1,4 +1,4 @@
-import type { Featured } from "@/backend";
+import { isAPIError, type Featured } from "@/backend";
 import { Logo } from "@/components/Logo";
 import { CenteredLoading } from "@/components/loading";
 import { LoginForm } from "@/components/login/LoginForm";
@@ -37,7 +37,8 @@ export const Login: React.FC<Props> = () => {
     | "reset"
     | "verify-register"
     | "verify-reset"
-  >("verify-register");
+  >("login");
+
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
@@ -45,38 +46,38 @@ export const Login: React.FC<Props> = () => {
   const [verificationCode, setVerificationCode] = useState<string>("");
   const [error, setError, errorRef] = useRefState<string>("");
 
-  const onChangeFirstName = (firstName: string) => {
+  const onChangeFirstName = useCallback((firstName: string) => {
     setFirstName(firstName);
-  };
+  }, []);
 
-  const onChangeLastName = (lastName: string) => {
+  const onChangeLastName = useCallback((lastName: string) => {
     setLastName(lastName);
-  };
+  }, []);
 
-  const onChangeEmail = (email: string) => {
+  const onChangeEmail = useCallback((email: string) => {
     setEmail(email);
-  };
+  }, []);
 
-  const onChangePassword = (password: string) => {
+  const onChangePassword = useCallback((password: string) => {
     setPassword(password);
-  };
+  }, []);
 
-  const onChangeVerificationCode = (verificationCode: string) => {
+  const onChangeVerificationCode = useCallback((verificationCode: string) => {
     setVerificationCode(verificationCode);
-  };
+  }, []);
 
-  const onClickCreateAccount = () => {
+  const onClickCreateAccount = useCallback(() => {
     setFirstName("");
     setLastName("");
     setPassword("");
     setStep("register");
-  };
+  }, []);
 
-  const onClickForgotPassword = () => {
+  const onClickForgotPassword = useCallback(() => {
     setStep("reset");
-  };
+  }, []);
 
-  const onClickBack = () => {
+  const onClickBack = useCallback(() => {
     if (step === "register") {
       setPassword("");
       setStep("login");
@@ -94,18 +95,33 @@ export const Login: React.FC<Props> = () => {
       setPassword("");
       setStep("reset");
     }
-  };
+  }, [step]);
 
-  const onClickSignIn = () => {
+  const onClickSignIn = useCallback(() => {
     // noop
-  };
+  }, []);
 
   const onClickRegisterConfirm = useCallback(async () => {
     const { taken } = await backend.checkEmail({ email });
     if (taken) {
       setError(kEmailError);
     }
-  }, [backend, email, setError]);
+
+    try {
+      await backend.register({
+        email,
+        password,
+        firstName,
+        lastName,
+      });
+
+      setStep("verify-register");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [backend, email, firstName, lastName, password, setError]);
 
   useEffect(() => {
     setError("");
@@ -117,13 +133,13 @@ export const Login: React.FC<Props> = () => {
     }
   }, [email, errorRef, setError]);
 
-  const onClickSendResetEmail = () => {
+  const onClickSendResetEmail = useCallback(() => {
     // noop
-  };
+  }, []);
 
-  const onClickVerify = () => {
+  const onClickVerify = useCallback(() => {
     // noop
-  };
+  }, []);
 
   if (!featured) {
     return <CenteredLoading />;
