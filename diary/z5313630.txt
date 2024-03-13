@@ -45,3 +45,10 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
 - I created most of the storyboards and reorganised the workflow for easier interpretation. 
 - Lincoln and Cicy helped me out with writing the descriptions for the storyboard. 
 - Overall, it was an exhausting week with a lot of all nighters, but the good thing is that design is done :) 
+
+꘎♡━━ Week 4 ━━━♡꘎
+- Had our first meeting after submitting proposal. 
+- Redadjusted our sprints and assigned tasks to be ready for start of Sprint 2. 
+- For Sprint 2, I was tasked with refining the UI/UX. 
+- Frontend team has started working on their parts and Backend will start working in Week 5. 
+- No design meeting this week as bulk of design is already finished. 
