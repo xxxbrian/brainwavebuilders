@@ -1,9 +1,17 @@
+import { APIError } from "@/apis";
+
+const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+
 // TODO: Send from template
 export const sendEmail = async (
   address: string,
   subject: string,
   html: string,
 ): Promise<boolean> => {
+  if (!emailRegex.test(address)) {
+    throw new APIError(`${address} is not a valid email address`);
+  }
+
   const form = new FormData();
   form.append("from", "BrainWaveBuilder <noreplay@brainwave.quick.to>");
   form.append("to", address);
