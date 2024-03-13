@@ -7,6 +7,5 @@ import { GetUserInfoRequest, GetUserInfoResponse } from "@/apis";
 export const getUserInfo = async (
   request: GetUserInfoRequest,
 ): Promise<GetUserInfoResponse> => {
-  console.log("getUserInfo", request);
   return { user: { email: request.email, firstName: "John", lastName: "Doe" } };
 };

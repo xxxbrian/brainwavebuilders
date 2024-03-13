@@ -1,4 +1,5 @@
 import { CheckEmailRequest, CheckEmailResponse } from "@/apis";
+import { isEmailTaken } from "@/data/auth";
 
 // checkEmail implements the checkEmail endpoint.
 // This code has been automatically generated.
@@ -7,5 +8,7 @@ import { CheckEmailRequest, CheckEmailResponse } from "@/apis";
 export const checkEmail = async (
   request: CheckEmailRequest,
 ): Promise<CheckEmailResponse> => {
-  throw new Error("Not implemented");
+  return {
+    taken: await isEmailTaken(request.email),
+  };
 };
