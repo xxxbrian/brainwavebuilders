@@ -54,8 +54,7 @@ const JoinCoursePopup: React.FC = () => {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        {/* //TODO Move this button to nav bar */}
-        <button className="rounded-md bg-blue-500 text-white px-4 py-2">
+        <button className="bg-[#004E89] text-white rounded-xl hover:bg-opacity-90 px-4 py-2">
           Join Class
         </button>
       </Dialog.Trigger>

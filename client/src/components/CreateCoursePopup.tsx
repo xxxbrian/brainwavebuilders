@@ -28,8 +28,7 @@ const CreateClassPopup: React.FC = () => {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        {/* //TODO Move this button to nav bar */}
-        <button className="rounded-md bg-blue-500 text-white px-4 py-2">
+        <button className="bg-gray-300 hover:text-white rounded-xl hover:bg-gray-400 px-4 py-2 mr-3">
           Create Class
         </button>
       </Dialog.Trigger>

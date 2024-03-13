@@ -3,7 +3,7 @@ import CourseCard from "./CourseCard";
 import type { CourseCardProps } from "./CourseCard";
 import { Text } from "@radix-ui/themes";
 import Image from "next/image";
-import starImg from "@/assets/Blue Star 90.png";
+import recentIcon from "@/assets/recent.png";
 
 type CourseContainerProps = {
   courses: CourseCardProps[];
@@ -56,7 +56,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ courses }) => {
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center">
           <Image
-            src={starImg}
+            src={recentIcon}
             alt="Star"
             style={{
               width: "32px",
@@ -64,7 +64,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ courses }) => {
             }}
           />
           <Text as="span" className="text-3xl text-blue-800 ml-2">
-            Starred Board
+            Recently Viewed
           </Text>
         </div>
         <div>
