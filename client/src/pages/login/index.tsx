@@ -183,11 +183,11 @@ export const Login: React.FC<Props> = () => {
             </div>
           </div>
         </div>
-        <div className="flex flex-col h-full flex-shrink-0 justify-center w-full lg:w-fit">
-          <Card className="hidden lg:block p-4 min-w-[400px] backdrop-blur-sm">
+        <div className="flex flex-col h-full flex-shrink-0 justify-center w-full lg:w-fit flex-1 items-center">
+          <Card className="hidden lg:block p-4 min-w-[400px] backdrop-blur-sm w-fit">
             {getForm()}
           </Card>
-          <div className="lg:hidden flex justify-center items-center">
+          <div className="lg:hidden flex justify-center items-center w-full">
             <div className="flex-1 max-w-96">
               <Logo size="small" className="mx-auto my-8" variant="color" />
               {getForm()}
