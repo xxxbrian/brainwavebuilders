@@ -76,3 +76,32 @@ Notes:
 Sunday 10/03
 	- worked on frontend development, dashboard aspects and navigation
 	- will have to continue works Monday 11/03
+
+=====================================================================
+Week 5
+Monday
+- completed navigation panels
+-
+
+Tuesday
+- completed actiity section mockup
+- completed statistics section mockup
+
+Wednesday
+- Progressive check A in lab time (did well)
+- cancelled rest of team catch up, give us all a break.
+
+Thursday
+- retroflective A report as a team (Cicy will restructure/format/fill up)
+- reviewed user stories in sprints 3 and 4
+- assigned tasks for sprint 3
+- discussed ways to improve workflow in our sprints
+	- better meeting structure/regularity
+	- start work earlier
+	- better point system for jira tasks
+
+Friday
+- null
+
+Weekend
+- worked on assigned tasks.
