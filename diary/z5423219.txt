@@ -63,3 +63,18 @@ This week focused primarily on the interface designs & rpc.
 - Tested that it works
 - Assisted other team members with their parts, including Steve
 - Added docker setup for python env (for rpc code generation)
+
+==
+# Week 5
+
+This week focused on the login page and sign up page, in preparation for Demo 1.
+
+It also includes helping team members upskill - introducing the concepts of
+reducers (for state management), controlled/uncontrolled forms.
+
+Functionality wise:
+
+- Implement the login page.
+
+Project progressing well as expected. Minor slowdown in implementing the RPC
+itself, but the long-term benefits will sure compensate for this.
