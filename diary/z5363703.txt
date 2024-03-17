@@ -28,3 +28,10 @@ Allocated all user stories and tasks for the team
 Tracked the progress of all team members
 Hosted frontend meeting
 Clarified with the mentor on diary entries
+
+Week5:
+Finished Demo A and retro A on time and quite successfully.
+Allocated all user stories and tasks for the team for sprint 2
+Tracked the progress of all team members
+Hosted weekly meeting
+Started on the assessment system backend
