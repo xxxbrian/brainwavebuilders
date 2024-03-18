@@ -52,3 +52,10 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
 - For Sprint 2, I was tasked with refining the UI/UX. 
 - Frontend team has started working on their parts and Backend will start working in Week 5. 
 - No design meeting this week as bulk of design is already finished. 
+
+꘎♡━━ Week 5 ━━━♡꘎
+- Successfully finished our Retrospective A! Huge shoutout to the team for a successful run of Spring 1 and 2. 
+- Finished updating Sprint 3 by allocating user stories/task.
+  - I'm in charge of writing the backend for the Assessments (i.e creation and marking) and sending invite emails to potential students.
+- Created a group chat for Assessments so that it's easier to track everyone's progress and we don't spam the main group chat.
+- Haven't started coding yet but will start in Week 6. 
