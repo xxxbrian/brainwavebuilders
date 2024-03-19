@@ -18,9 +18,7 @@ export const sendEmail = async (
   form.append("subject", subject);
   form.append("html", html);
 
-  // brainwawe.quick.to is already configured in Mailgun, wait for dns to propagate
-  // const domain_name = "brainwave.quick.to"
-  const domain_name = "sandbox34139a5a5d91481294808a9a3c6f0e52.mailgun.org";
+  const domain_name = "brainwave.quick.to";
   const resp = await fetch(
     `https://api.mailgun.net/v3/${domain_name}/messages`,
     {
@@ -35,5 +33,6 @@ export const sendEmail = async (
       body: form,
     },
   );
+  console.log("Mailgun response", await resp.text());
   return resp.ok;
 };
