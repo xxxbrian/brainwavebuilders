@@ -2,8 +2,7 @@ import React, { useState, useEffect } from "react";
 import CourseCard from "./CourseCard";
 import type { CourseCardProps } from "./CourseCard";
 import { Text } from "@radix-ui/themes";
-import Image from "next/image";
-import starImg from "@/assets/Blue Star 90.png";
+import { FaClockRotateLeft } from "react-icons/fa6";
 
 type CourseContainerProps = {
   courses: CourseCardProps[];
@@ -17,7 +16,13 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ courses }) => {
   useEffect(() => {
     const updateCoursesPerPage = () => {
       setCoursesPerPage(
-        window.innerWidth < 1125 ? 2 : window.innerWidth < 1375 ? 3 : 4,
+        window.innerWidth < 600
+          ? 1
+          : window.innerWidth < 1125
+            ? 2
+            : window.innerWidth < 1375
+              ? 3
+              : 4,
       );
     };
 
@@ -50,21 +55,13 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ courses }) => {
       border-2
       border-blue-200
       rounded-2xl
-      max-w-[1098px]
-      min-w-[600px]"
+      max-w-[1098px]"
     >
       <div className="flex items-center justify-between px-4 py-2">
         <div className="flex items-center">
-          <Image
-            src={starImg}
-            alt="Star"
-            style={{
-              width: "32px",
-              height: "32px",
-            }}
-          />
-          <Text as="span" className="text-3xl text-blue-800 ml-2">
-            Starred Board
+          <FaClockRotateLeft className="text-2xl text-blue-800 mr-3" />
+          <Text as="span" className="text-3xl text-blue-800">
+            Recently Viewed
           </Text>
         </div>
         <div>
