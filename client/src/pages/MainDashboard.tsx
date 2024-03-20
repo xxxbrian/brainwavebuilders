@@ -9,6 +9,9 @@ import SideNav from "../components/SideNav";
 import orgLogo from "@/assets/Blue Star 90.png";
 import headerImg from "@/assets/unsw.png";
 
+import AssessmentResults from "../components/AssessmentResults";
+import type { studentResults } from "@/components/AssessmentResults";
+
 export default function MainDashboard() {
   // Example data representing the hours worked each day
   const activityData: ActivityProps = {
@@ -48,6 +51,28 @@ export default function MainDashboard() {
     userName: "Steve",
   };
 
+  // remove and put in course page when done ========================================================
+  const result: studentResults = {
+    name: "Ethan Reinhard",
+    userName: "z5308765@ad.unsw.edu.au",
+    status: "Submitted On Time",
+    grade: 10,
+    time: "",
+    file: "test",
+  };
+
+  const results: studentResults[] = [
+    result,
+    result,
+    result,
+    result,
+    result,
+    result,
+    result,
+    result,
+    result,
+  ];
+
   return (
     <>
       <div className="flex">
@@ -57,10 +82,11 @@ export default function MainDashboard() {
         <div className="flex flex-col">
           <TopNav {...topNavProps} />
           <div className="flex flex-wrap mt-2 ml-2 space-y-2">
-            <Stats {...statsData} />
+            {/*<Stats {...statsData} />
             <Activity {...activityData} />
             <StarredBoard courses={courses} />
-            <RecentBoard courses={courses} />
+            <RecentBoard courses={courses} />*/}
+            <AssessmentResults assessmentName={"Test"} resultsList={results} />
           </div>
         </div>
       </div>
