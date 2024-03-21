@@ -1,5 +1,6 @@
 import { GetUserInfoRequest, GetUserInfoResponse } from "@/apis";
-import { getUserByToken } from "@/data/auth";
+import { getUserByEmail, getUserByToken } from "@/data/auth";
+import { userDBToAPI } from "@/converts/user";
 
 // getUserInfo implements the getUserInfo endpoint.
 // This code has been automatically generated.
@@ -12,9 +13,9 @@ export const getUserInfo = async (
   if ((await getUserByToken(token)) === null) {
     throw new Error("Invalid token");
   }
-  const user = await getUserByToken(token);
+  const user = await getUserByEmail(email);
   if (user === null) {
     throw new Error("User not found");
   }
-  return { user };
+  return { user: userDBToAPI(user) };
 };
