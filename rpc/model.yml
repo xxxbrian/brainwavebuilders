@@ -71,3 +71,10 @@ endpoints:
     response:
       user: User
     service: typescript
+
+  setUserProfile:
+    request:
+      user: User
+      token: Token
+    response:
+    service: typescript

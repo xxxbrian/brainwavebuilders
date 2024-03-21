@@ -109,6 +109,17 @@ export interface GetUserInfoResponse {
     user: User;
 }
 
+// SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
+export interface SetUserProfileRequest {
+    user: User;
+    token: Token;
+}
+
+// SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
+export interface SetUserProfileResponse {
+    
+}
+
 
 //////////////////////////////
 // API Errors
@@ -332,6 +343,35 @@ export class BrainwavesClient {
         }
 
         return json as GetUserInfoResponse;
+    }
+
+
+
+    async setUserProfile(request: SetUserProfileRequest): Promise<SetUserProfileResponse> {
+        const response = await fetch(`${this.base_url}/setUserProfile`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as SetUserProfileResponse;
     }
 }
 
