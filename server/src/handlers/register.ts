@@ -1,5 +1,6 @@
 import { RegisterRequest, RegisterResponse } from "@/apis";
-import { createUser, generateAndSendOTP } from "@/data/auth";
+import { createUser, generateAndSendOTP, verifyOTP } from "@/data/auth";
+import { verifyEmail } from "./verifyEmail";
 
 // register implements the register endpoint.
 // This code has been automatically generated.
@@ -10,9 +11,10 @@ export const register = async ({
   firstName,
   lastName,
   password,
+  otp,
 }: RegisterRequest): Promise<RegisterResponse> => {
-  await createUser({ email, firstName, lastName, password });
-  await generateAndSendOTP(email);
-
+  if (await verifyOTP(email, otp)) {
+    await createUser({ email, firstName, lastName, password });
+  }
   return {};
 };

@@ -4,8 +4,8 @@
 import { app } from "@/globals";
 import { ping } from "@/handlers/ping";
 import { login } from "@/handlers/login";
+import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
-import { confirmEmail } from "@/handlers/confirmEmail";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { checkEmail } from "@/handlers/checkEmail";
@@ -62,6 +62,7 @@ export interface RegisterRequest {
     password: string;
     firstName: string;
     lastName: string;
+    otp: string;
 }
 
 // RegisterResponse is the response that is sent to the register endpoint.
@@ -69,16 +70,14 @@ export interface RegisterResponse {
 
 }
 
-// ConfirmEmailRequest is the request that is sent to the confirmEmail endpoint.
-export interface ConfirmEmailRequest {
+// VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
+export interface VerifyEmailRequest {
     email: string;
-    otp: string;
 }
 
-// ConfirmEmailResponse is the response that is sent to the confirmEmail endpoint.
-export interface ConfirmEmailResponse {
-    user: User;
-    token: Token;
+// VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
+export interface VerifyEmailResponse {
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -196,12 +195,12 @@ app.post('/api/register', async (req, res) => {
     }
 });
 
-// confirmEmail is the endpoint handler for the confirmEmail endpoint.
-// It wraps around the function at @/handlers/confirmEmail.
-app.post('/api/confirmEmail', async (req, res) => {
-    const request: ConfirmEmailRequest = req.body;
+// verifyEmail is the endpoint handler for the verifyEmail endpoint.
+// It wraps around the function at @/handlers/verifyEmail.
+app.post('/api/verifyEmail', async (req, res) => {
+    const request: VerifyEmailRequest = req.body;
     try {
-        const response: ConfirmEmailResponse = await confirmEmail(request);
+        const response: VerifyEmailResponse = await verifyEmail(request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -211,7 +210,7 @@ app.post('/api/confirmEmail', async (req, res) => {
         } else {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
-            console.error(`Error occurred while handling request confirmEmail with arguments ${ JSON.stringify(request) }: `, e);
+            console.error(`Error occurred while handling request verifyEmail with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

@@ -35,16 +35,14 @@ endpoints:
       password: string
       firstName: string
       lastName: string
+      otp: string
     response:
     service: typescript
 
-  confirmEmail:
+  verifyEmail:
     request:
       email: string
-      otp: string
     response:
-      user: User
-      token: Token
     service: typescript
 
   login:

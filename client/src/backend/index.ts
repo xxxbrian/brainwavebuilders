@@ -54,6 +54,7 @@ export interface RegisterRequest {
     password: string;
     firstName: string;
     lastName: string;
+    otp: string;
 }
 
 // RegisterResponse is the response that is sent to the register endpoint.
@@ -61,16 +62,14 @@ export interface RegisterResponse {
 
 }
 
-// ConfirmEmailRequest is the request that is sent to the confirmEmail endpoint.
-export interface ConfirmEmailRequest {
+// VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
+export interface VerifyEmailRequest {
     email: string;
-    otp: string;
 }
 
-// ConfirmEmailResponse is the response that is sent to the confirmEmail endpoint.
-export interface ConfirmEmailResponse {
-    user: User;
-    token: Token;
+// VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
+export interface VerifyEmailResponse {
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -217,8 +216,8 @@ export class BrainwavesClient {
 
 
 
-    async confirmEmail(request: ConfirmEmailRequest): Promise<ConfirmEmailResponse> {
-        const response = await fetch(`${this.base_url}/confirmEmail`, {
+    async verifyEmail(request: VerifyEmailRequest): Promise<VerifyEmailResponse> {
+        const response = await fetch(`${this.base_url}/verifyEmail`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -241,7 +240,7 @@ export class BrainwavesClient {
             throw new Error("RPC Request Failed.");
         }
 
-        return json as ConfirmEmailResponse;
+        return json as VerifyEmailResponse;
     }
 
 

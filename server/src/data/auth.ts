@@ -20,6 +20,9 @@ export const isEmailTaken = async (email: string): Promise<boolean> => {
 };
 
 export const generateAndSendOTP = async (email: string): Promise<string> => {
+  if (await isEmailTaken(email)) {
+    throw new APIError("Email already taken");
+  }
   const subject = "Verify your email address";
   const code = makeID(6);
 
@@ -30,8 +33,42 @@ export const generateAndSendOTP = async (email: string): Promise<string> => {
       `;
   console.log("Sending email to", email);
   await sendEmail(email, subject, html);
-
+  await db.emailVerification.create({
+    data: {
+      email,
+      verification: code,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+    },
+  });
   return code;
+};
+
+export const verifyOTP = async (
+  email: string,
+  code: string,
+): Promise<boolean> => {
+  const verification = await db.emailVerification.findFirst({
+    where: {
+      email,
+      verification: code,
+      expiresAt: {
+        gte: new Date(),
+      },
+    },
+  });
+
+  if (!verification) {
+    throw new APIError("Invalid verification code");
+  }
+
+  await db.emailVerification.delete({
+    where: {
+      id: verification.id,
+    },
+  });
+
+  return true;
 };
 
 // TODO: Implement a real password hashing function
@@ -63,11 +100,63 @@ export const createUser = async (req: CreateUserRequest): Promise<User> => {
       firstName,
       lastName,
       password: hashPassword(password),
-      emailVerified: false,
       createdAt: new Date(),
       updatedAt: new Date(),
     },
   });
 
   return user;
+};
+
+export const checkPassword = async (
+  email: string,
+  password: string,
+): Promise<User> => {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new APIError("Invalid email or password");
+  }
+
+  if (user.password !== hashPassword(password)) {
+    throw new APIError("Invalid email or password");
+  }
+
+  return user;
+};
+
+export const generateToken = async (user: User): Promise<string> => {
+  const token = makeID(32);
+  try {
+    await db.token.create({
+      data: {
+        userID: user.id,
+        token,
+        expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+      },
+    });
+  } catch (e) {
+    console.error("Error creating token", e);
+    throw new APIError("Error creating token");
+  }
+  return token;
+};
+
+export const getUserByToken = async (token: string): Promise<User | null> => {
+  try {
+    const tokenRecord = await db.token.findUnique({
+      where: {
+        token: token,
+      },
+      include: {
+        user: true,
+      },
+    });
+
+    if (tokenRecord && tokenRecord.expiresAt > new Date()) {
+      return tokenRecord.user;
+    }
+  } catch (e) {
+    console.error("Error getting user by token", e);
+  }
+  return null;
 };

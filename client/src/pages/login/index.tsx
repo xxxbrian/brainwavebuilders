@@ -8,6 +8,7 @@ import { VerificationForm } from "@/components/login/VerificationForm";
 import { useBackend } from "@/hooks/useBackend";
 import { useRefState } from "@/hooks/useRefState";
 import { Callout, Card } from "@radix-ui/themes";
+import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
 
@@ -28,6 +29,8 @@ export const Login: React.FC<Props> = () => {
 
     void inner();
   }, [backend]);
+
+  const router = useRouter();
 
   // step: "loggedin" | "login" | "register" | "reset"
   const [step, setStep] = useState<
@@ -97,9 +100,19 @@ export const Login: React.FC<Props> = () => {
     }
   }, [step]);
 
-  const onClickSignIn = useCallback(() => {
-    // noop
-  }, []);
+  const onClickSignIn = useCallback(async () => {
+    try {
+      const { user, token } = await backend.login({ email, password });
+      console.log(user);
+      localStorage.setItem("token", token);
+      // TODO: better redirect
+      await router.push("/");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [backend, email, password, router, setError]);
 
   const onClickRegisterConfirm = useCallback(async () => {
     const { taken } = await backend.checkEmail({ email });
@@ -108,12 +121,7 @@ export const Login: React.FC<Props> = () => {
     }
 
     try {
-      await backend.register({
-        email,
-        password,
-        firstName,
-        lastName,
-      });
+      await backend.verifyEmail({ email });
 
       setStep("verify-register");
     } catch (e) {
@@ -121,7 +129,7 @@ export const Login: React.FC<Props> = () => {
         setError(e.message);
       }
     }
-  }, [backend, email, firstName, lastName, password, setError]);
+  }, [backend, email, setError]);
 
   useEffect(() => {
     setError("");
@@ -137,9 +145,30 @@ export const Login: React.FC<Props> = () => {
     // noop
   }, []);
 
-  const onClickVerify = useCallback(() => {
-    // noop
-  }, []);
+  const onClickVerify = useCallback(async () => {
+    try {
+      await backend.register({
+        email,
+        firstName,
+        lastName,
+        password,
+        otp: verificationCode,
+      });
+      setStep("login");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [
+    backend,
+    email,
+    firstName,
+    lastName,
+    password,
+    setError,
+    verificationCode,
+  ]);
 
   if (!featured) {
     return <CenteredLoading />;
