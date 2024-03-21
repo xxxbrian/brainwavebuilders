@@ -3,6 +3,10 @@ types:
     email: string
     firstName: string
     lastName: string
+    avatar?: string
+    gender?: string
+    title?: string
+    bio?: string
 
   Token: string
 

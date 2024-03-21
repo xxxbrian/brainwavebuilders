@@ -17,6 +17,10 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
+    avatar?: string;
+    gender?: string;
+    title?: string;
+    bio?: string;
 }
 
 export type Token = string;
@@ -67,7 +71,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-
+    
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -77,7 +81,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-
+    
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -94,7 +98,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-
+    
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -278,3 +282,4 @@ app.post('/api/getUserInfo', async (req, res) => {
         }
     }
 });
+
