@@ -1,4 +1,5 @@
 import { GetUserInfoRequest, GetUserInfoResponse } from "@/apis";
+import { getUserByToken } from "@/data/auth";
 
 // getUserInfo implements the getUserInfo endpoint.
 // This code has been automatically generated.
@@ -7,6 +8,13 @@ import { GetUserInfoRequest, GetUserInfoResponse } from "@/apis";
 export const getUserInfo = async (
   request: GetUserInfoRequest,
 ): Promise<GetUserInfoResponse> => {
-  console.log("getUserInfo", request);
-  return { user: { email: request.email, firstName: "John", lastName: "Doe" } };
+  let { email, token } = request;
+  if ((await getUserByToken(token)) === null) {
+    throw new Error("Invalid token");
+  }
+  const user = await getUserByToken(token);
+  if (user === null) {
+    throw new Error("User not found");
+  }
+  return { user };
 };

@@ -1,4 +1,4 @@
-import type { Featured } from "@/backend";
+import { isAPIError, type Featured } from "@/backend";
 import { Logo } from "@/components/Logo";
 import { CenteredLoading } from "@/components/loading";
 import { LoginForm } from "@/components/login/LoginForm";
@@ -6,13 +6,20 @@ import { RegisterForm } from "@/components/login/RegisterForm";
 import { ResetForm } from "@/components/login/ResetForm";
 import { VerificationForm } from "@/components/login/VerificationForm";
 import { useBackend } from "@/hooks/useBackend";
-import { Card } from "@radix-ui/themes";
-import { useEffect, useState } from "react";
+import { useRefState } from "@/hooks/useRefState";
+import { Callout, Card } from "@radix-ui/themes";
+import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
+import { VscError } from "react-icons/vsc";
 
 interface Props {}
 
+const kEmailError =
+  "There is already an account associated with this email. Please sign in or use a different email.";
+
 export const Login: React.FC<Props> = () => {
   const [featured, setFeatured] = useState<Featured | null>(null);
+
   const backend = useBackend();
   useEffect(() => {
     const inner = async () => {
@@ -23,6 +30,8 @@ export const Login: React.FC<Props> = () => {
     void inner();
   }, [backend]);
 
+  const router = useRouter();
+
   // step: "loggedin" | "login" | "register" | "reset"
   const [step, setStep] = useState<
     | "loggedin"
@@ -31,45 +40,47 @@ export const Login: React.FC<Props> = () => {
     | "reset"
     | "verify-register"
     | "verify-reset"
-  >("verify-register");
+  >("login");
+
   const [firstName, setFirstName] = useState<string>("");
   const [lastName, setLastName] = useState<string>("");
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [verificationCode, setVerificationCode] = useState<string>("");
+  const [error, setError, errorRef] = useRefState<string>("");
 
-  const onChangeFirstName = (firstName: string) => {
+  const onChangeFirstName = useCallback((firstName: string) => {
     setFirstName(firstName);
-  };
+  }, []);
 
-  const onChangeLastName = (lastName: string) => {
+  const onChangeLastName = useCallback((lastName: string) => {
     setLastName(lastName);
-  };
+  }, []);
 
-  const onChangeEmail = (email: string) => {
+  const onChangeEmail = useCallback((email: string) => {
     setEmail(email);
-  };
+  }, []);
 
-  const onChangePassword = (password: string) => {
+  const onChangePassword = useCallback((password: string) => {
     setPassword(password);
-  };
+  }, []);
 
-  const onChangeVerificationCode = (verificationCode: string) => {
+  const onChangeVerificationCode = useCallback((verificationCode: string) => {
     setVerificationCode(verificationCode);
-  };
+  }, []);
 
-  const onClickCreateAccount = () => {
+  const onClickCreateAccount = useCallback(() => {
     setFirstName("");
     setLastName("");
     setPassword("");
     setStep("register");
-  };
+  }, []);
 
-  const onClickForgotPassword = () => {
+  const onClickForgotPassword = useCallback(() => {
     setStep("reset");
-  };
+  }, []);
 
-  const onClickBack = () => {
+  const onClickBack = useCallback(() => {
     if (step === "register") {
       setPassword("");
       setStep("login");
@@ -87,23 +98,77 @@ export const Login: React.FC<Props> = () => {
       setPassword("");
       setStep("reset");
     }
-  };
+  }, [step]);
 
-  const onClickSignIn = () => {
-    // noop
-  };
+  const onClickSignIn = useCallback(async () => {
+    try {
+      const { user, token } = await backend.login({ email, password });
+      console.log(user);
+      localStorage.setItem("token", token);
+      // TODO: better redirect
+      await router.push("/");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [backend, email, password, router, setError]);
 
-  const onClickRegisterConfirm = () => {
-    // noop
-  };
+  const onClickRegisterConfirm = useCallback(async () => {
+    const { taken } = await backend.checkEmail({ email });
+    if (taken) {
+      setError(kEmailError);
+    }
 
-  const onClickSendResetEmail = () => {
-    // noop
-  };
+    try {
+      await backend.verifyEmail({ email });
 
-  const onClickVerify = () => {
+      setStep("verify-register");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [backend, email, setError]);
+
+  useEffect(() => {
+    setError("");
+  }, [setError, step]);
+
+  useEffect(() => {
+    if (errorRef.current === kEmailError) {
+      setError("");
+    }
+  }, [email, errorRef, setError]);
+
+  const onClickSendResetEmail = useCallback(() => {
     // noop
-  };
+  }, []);
+
+  const onClickVerify = useCallback(async () => {
+    try {
+      await backend.register({
+        email,
+        firstName,
+        lastName,
+        password,
+        otp: verificationCode,
+      });
+      setStep("login");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [
+    backend,
+    email,
+    firstName,
+    lastName,
+    password,
+    setError,
+    verificationCode,
+  ]);
 
   if (!featured) {
     return <CenteredLoading />;
@@ -112,7 +177,15 @@ export const Login: React.FC<Props> = () => {
   const getForm = () => {
     return (
       <>
-        {" "}
+        {error && (
+          <Callout.Root className="my-4" color="red">
+            <Callout.Icon>
+              <VscError color="red"></VscError>
+            </Callout.Icon>
+            <Callout.Text>{error}</Callout.Text>
+          </Callout.Root>
+        )}
+
         {step === "login" && (
           <LoginForm
             password={password}
