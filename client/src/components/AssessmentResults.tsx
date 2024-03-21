@@ -15,7 +15,12 @@ type AssessmentResultsProps = {
   resultsList: StudentResults[];
 };
 
-function SearchHandler() {}
+function filterResults(allResults) {
+  let input = document.getElementById("resultSearch").value;
+  return allResults.filter((res) =>
+    res.name.toLowerCase().includes(input.toLowerCase()),
+  );
+}
 
 const AssessmentResults: React.FC<AssessmentResultsProps> = ({
   assessmentName,
@@ -26,11 +31,37 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
     "Username",
     "Status",
     "Grade",
-    "Edit",
+    //"Edit",
     "Submitted Time",
     "Feedback",
     "Submission",
   ];
+
+  const [subResultsList, setSubResultsList] = useState(resultsList);
+
+  const masterResultsList = resultsList;
+
+  function SearchHandler() {
+    let input = document.getElementById("resultSearch").value;
+    let newSubResultsList = [];
+    if (input != "") {
+      newSubResultsList = filterResults(masterResultsList);
+    } else {
+      newSubResultsList = masterResultsList;
+    }
+    setSubResultsList(newSubResultsList);
+  }
+
+  function ResetSearchHandler() {
+    setSubResultsList(masterResultsList);
+    document.getElementById("resultSearch").value = "";
+  }
+
+  function GradeEditHandler() {}
+
+  function FeedbackHandler() {}
+
+  function FileCheckHandler() {}
 
   return (
     <>
@@ -56,15 +87,21 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
         <div className="flex p-3">
           {/*Search Box*/}
           <input
-            name="resultSearch"
+            id="resultSearch"
             placeholder="Search"
-            className="border border-blue-400 rounded-lg"
+            className="border border-blue-400 rounded-lg p-1"
           />
           <button
             onClick={SearchHandler}
             className="border border-black bg-gray-100 rounded-full ml-5 px-3 hover:bg-gray-200 text-black"
           >
             Search
+          </button>
+          <button
+            onClick={ResetSearchHandler}
+            className="border border-black bg-gray-100 rounded-full ml-5 px-3 hover:bg-gray-200 text-black"
+          >
+            Reset
           </button>
         </div>
 
@@ -82,7 +119,7 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
               </tr>
             </thead>
             <tbody>
-              {resultsList.map((result, index) => (
+              {subResultsList.map((result, index) => (
                 <tr>
                   <td className="border border-blue-400 text-center">
                     <Text as="span" className="text-sm text-black p-3">
@@ -101,16 +138,19 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
                   </td>
                   <td className="border border-blue-400 text-center">
                     {/* change to a link - popup for grade adjustment*/}
-                    <Text as="span" className="text-sm text-black p-3">
+                    <a
+                      onClick={GradeEditHandler}
+                      className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
+                    >
                       {result.grade + "%"}
-                    </Text>
+                    </a>
                   </td>
-                  <td className="border border-blue-400 text-center">
-                    {/* change to a link - popup for submission editing (do we need this?)*/}
-                    <Text as="span" className="text-sm text-black p-3">
+                  {/*<td className="border border-blue-400 text-center">
+                    {/* change to a link - popup for submission editing (do we need this?)
+                    <a  className="text-sm text-black p-3">
                       {"Edit"}
                     </Text>
-                  </td>
+                  </td>*/}
                   <td className="border border-blue-400 text-center">
                     <Text as="span" className="text-sm text-black p-3">
                       {result.time}
@@ -118,15 +158,21 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
                   </td>
                   <td className="border border-blue-400 text-center">
                     {/* change to a link - link to feedback popup*/}
-                    <Text as="span" className="text-sm text-black p-3">
+                    <a
+                      onClick={FeedbackHandler}
+                      className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
+                    >
                       {"Feedback"}
-                    </Text>
+                    </a>
                   </td>
                   <td className="border border-blue-400 text-center">
                     {/* change to a link - link to file download*/}
-                    <Text as="span" className="text-sm text-black p-3">
-                      {result.file}
-                    </Text>
+                    <a
+                      onClick={FileCheckHandler}
+                      className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
+                    >
+                      File
+                    </a>
                   </td>
                 </tr>
               ))}

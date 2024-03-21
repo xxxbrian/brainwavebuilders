@@ -9,8 +9,11 @@ import SideNav from "../components/SideNav";
 import orgLogo from "@/assets/Blue Star 90.png";
 import headerImg from "@/assets/unsw.png";
 
+// move to course page when ready =====================================================================
 import AssessmentResults from "../components/AssessmentResults";
 import type { studentResults } from "@/components/AssessmentResults";
+import Assessments from "../components/Assessments";
+import type { Assessment } from "@components/Assessments";
 
 export default function MainDashboard() {
   // Example data representing the hours worked each day
@@ -52,7 +55,7 @@ export default function MainDashboard() {
   };
 
   // remove and put in course page when done ========================================================
-  const result: studentResults = {
+  const result1: studentResults = {
     name: "Ethan Reinhard",
     userName: "z5308765@ad.unsw.edu.au",
     status: "Submitted On Time",
@@ -60,18 +63,46 @@ export default function MainDashboard() {
     time: "",
     file: "test",
   };
+  const result2: studentResults = {
+    name: "Bob Dummy",
+    userName: "z5308765@ad.unsw.edu.au",
+    status: "Submitted On Time",
+    grade: 99,
+    time: "",
+    file: "test",
+  };
 
   const results: studentResults[] = [
-    result,
-    result,
-    result,
-    result,
-    result,
-    result,
-    result,
-    result,
-    result,
+    result1,
+    result1,
+    result2,
+    result1,
+    result2,
+    result1,
+    result1,
+    result2,
+    result1,
   ];
+
+  const ass1: Assessment = {
+    name: "string",
+    startDate: "19/03/24",
+    endDate: "25/03/24",
+    completed: "No",
+    type: "Assignment",
+    id: "test_ass",
+    submissions: "91/100",
+  };
+  const ass2: Assessment = {
+    name: "test",
+    startDate: "19/03/24",
+    endDate: "25/03/24",
+    completed: "No",
+    type: "Assignment",
+    id: "test_ass",
+    submissions: "91/100",
+  };
+  const assList: Assessment[] = [ass1, ass2, ass1, ass1, ass2];
 
   return (
     <>
@@ -85,8 +116,9 @@ export default function MainDashboard() {
             {/*<Stats {...statsData} />
             <Activity {...activityData} />
             <StarredBoard courses={courses} />
-            <RecentBoard courses={courses} />*/}
-            <AssessmentResults assessmentName={"Test"} resultsList={results} />
+            <RecentBoard courses={courses} />
+            <AssessmentResults assessmentName={"Test"} resultsList={results} />*/}
+            <Assessments assessmentList={assList} />
           </div>
         </div>
       </div>
