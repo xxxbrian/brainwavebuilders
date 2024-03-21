@@ -67,5 +67,15 @@ services:
       dockerfile: .dev/endpoint-gen.Dockerfile
     command: tail -f /dev/null
 
+  phpmyadmin:
+    image: phpmyadmin
+    ports:
+      - 3939:80
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: ""
+      PMA_USER: root
+      PMA_PASSWORD: ""
+
 volumes:
   db: {}
