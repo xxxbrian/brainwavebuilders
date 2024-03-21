@@ -9,6 +9,10 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
+    avatar?: string;
+    gender?: string;
+    title?: string;
+    bio?: string;
 }
 
 export type Token = string;
@@ -59,7 +63,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-
+    
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -69,7 +73,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-
+    
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -86,7 +90,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-
+    
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -103,6 +107,17 @@ export interface GetUserInfoRequest {
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
     user: User;
+}
+
+// SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
+export interface SetUserProfileRequest {
+    user: User;
+    token: Token;
+}
+
+// SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
+export interface SetUserProfileResponse {
+    
 }
 
 
@@ -328,6 +343,35 @@ export class BrainwavesClient {
         }
 
         return json as GetUserInfoResponse;
+    }
+
+
+
+    async setUserProfile(request: SetUserProfileRequest): Promise<SetUserProfileResponse> {
+        const response = await fetch(`${this.base_url}/setUserProfile`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as SetUserProfileResponse;
     }
 }
 

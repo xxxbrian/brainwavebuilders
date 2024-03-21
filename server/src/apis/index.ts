@@ -6,6 +6,7 @@ import { ping } from "@/handlers/ping";
 import { login } from "@/handlers/login";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
+import { setUserProfile } from "@/handlers/setUserProfile";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { checkEmail } from "@/handlers/checkEmail";
@@ -17,6 +18,10 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
+    avatar?: string;
+    gender?: string;
+    title?: string;
+    bio?: string;
 }
 
 export type Token = string;
@@ -67,7 +72,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-
+    
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -77,7 +82,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-
+    
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -94,7 +99,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-
+    
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -111,6 +116,17 @@ export interface GetUserInfoRequest {
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
     user: User;
+}
+
+// SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
+export interface SetUserProfileRequest {
+    user: User;
+    token: Token;
+}
+
+// SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
+export interface SetUserProfileResponse {
+    
 }
 
 
@@ -278,3 +294,25 @@ app.post('/api/getUserInfo', async (req, res) => {
         }
     }
 });
+
+// setUserProfile is the endpoint handler for the setUserProfile endpoint.
+// It wraps around the function at @/handlers/setUserProfile.
+app.post('/api/setUserProfile', async (req, res) => {
+    const request: SetUserProfileRequest = req.body;
+    try {
+        const response: SetUserProfileResponse = await setUserProfile(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request setUserProfile with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+

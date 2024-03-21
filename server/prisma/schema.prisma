@@ -22,6 +22,11 @@ model User {
   updatedAt DateTime @updatedAt
   password  String
   tokens    Token[]
+  avatar    String?
+  gender    String?
+  title     String?
+  bio       String?
+  role      String   @default("user")
 }
 
 model Token {

@@ -3,6 +3,10 @@ types:
     email: string
     firstName: string
     lastName: string
+    avatar?: string
+    gender?: string
+    title?: string
+    bio?: string
 
   Token: string
 
@@ -66,4 +70,11 @@ endpoints:
       token: Token
     response:
       user: User
+    service: typescript
+
+  setUserProfile:
+    request:
+      user: User
+      token: Token
+    response:
     service: typescript
