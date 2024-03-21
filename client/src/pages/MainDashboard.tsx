@@ -49,21 +49,19 @@ export default function MainDashboard() {
   };
 
   return (
-    <>
-      <div className="flex">
-        <div className="lg:block">
-          <SideNav displayType={topNavProps.displayType} />
-        </div>
-        <div className="flex-grow">
-          <TopNav {...topNavProps} />
-          <div className="flex flex-wrap mt-2 ml-2 space-y-2">
-            <Stats {...statsData} />
-            <Activity {...activityData} />
-            <StarredBoard courses={courses} />
-            <RecentBoard courses={courses} />
-          </div>
+    <div className="flex max-w-[1140px]">
+      <div className="lg:block">
+        <SideNav displayType={topNavProps.displayType} />
+      </div>
+      <div className="flex-grow">
+        <TopNav {...topNavProps} />
+        <div className="flex flex-wrap mt-2 ml-2 space-y-2">
+          <Stats {...statsData} />
+          <Activity {...activityData} />
+          <StarredBoard courses={courses} />
+          <RecentBoard courses={courses} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
