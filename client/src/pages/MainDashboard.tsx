@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import Stats from "../components/dashboard/Stats";
 import Activity, { type ActivityProps } from "../components/dashboard/Activity";
 import StarredBoard from "../components/dashboard/StarredBoard";
