@@ -118,6 +118,7 @@ export const Login: React.FC<Props> = () => {
     const { taken } = await backend.checkEmail({ email });
     if (taken) {
       setError(kEmailError);
+      return;
     }
 
     try {
