@@ -3,8 +3,9 @@ import Image from "next/image";
 import defaultAvatar from "@/assets/Default_Avatar.jpg";
 import CreateClassPopup from "./CreateCoursePopup";
 import JoinCoursePopup from "./JoinCoursePopup";
-import notifications from "@/assets/Notifications.png";
+import { IoMdNotificationsOutline } from "react-icons/io";
 import courseLogo from "@/assets/Course_Logo.png";
+import SideNav from "./SideNav";
 
 // Declare and export the TopNavProps type
 export type TopNavProps = {
@@ -40,11 +41,11 @@ function TopNavCourse(courseCode?: string, courseName?: string) {
             className="m-3 ml-5 w-8 h-8"
           />
           <h2 className="text-2xl text-black">
-            {courseCode == "" ? "Error" : courseCode}
+            {courseCode === "" ? "Error" : courseCode}
           </h2>
           <h2 className="text-2xl px-3 text-black"> : </h2>
           <h2 className="text-2xl text-black">
-            {courseCode == "" ? "Course Details Not Found" : courseName}
+            {courseCode === "" ? "Course Details Not Found" : courseName}
           </h2>
         </div>
       </div>
@@ -54,38 +55,34 @@ function TopNavCourse(courseCode?: string, courseName?: string) {
 
 export default function TopNav(props: TopNavProps) {
   return (
-    <>
-      <nav className="border-b bg-white-0 w-full flex justify-between max-w-[1195px] max-h-[75px]">
+    <div className="border-b bg-white w-full align-middle flex justify-between max-w-[1195px] h-[75px]">
+      {/* Menu Button for small screens */}
+      <div className="lg:hidden">
+        <SideNav displayType={props.displayType} />
+      </div>
+      <div className="hidden lg:flex items-center">
+        {props.displayType === "dash"
+          ? TopNavDashboard(props.userName)
+          : TopNavCourse(props.courseCode, props.courseName)}
+      </div>
+      <div className="flex items-center">
+        {/* Buttons */}
         <div className="flex">
-          <div>
-            {props.displayType == "dash"
-              ? TopNavDashboard(props.userName)
-              : TopNavCourse(props.courseCode, props.courseName)}
-          </div>
+          <CreateClassPopup />
+          <JoinCoursePopup />
         </div>
-        <div className="flex items-center">
-          {/* Buttons */}
-          <div className="flex">
-            <CreateClassPopup />
-            <JoinCoursePopup />
-          </div>
-          {/* Notifications and avatar */}
-          <a href="#" className="hover:opacity-50">
-            <Image
-              src={notifications}
-              alt="notifications"
-              className="w-12 mx-5"
-            />
-          </a>
-          <a href="#" className="hover:opacity-50">
-            <Image
-              src={props.userImg ?? defaultAvatar}
-              alt="Avatar"
-              className="w-12 mx-5 rounded-full"
-            />
-          </a>
-        </div>
-      </nav>
-    </>
+        {/* Notifications and avatar */}
+        <a href="#" className="hover:opacity-50">
+          <IoMdNotificationsOutline className=" text-red-500 text-4xl ml-4" />
+        </a>
+        <a href="#" className="hover:opacity-50">
+          <Image
+            src={props.userImg ?? defaultAvatar}
+            alt="Avatar"
+            className="w-12 mx-5 rounded-full"
+          />
+        </a>
+      </div>
+    </div>
   );
 }

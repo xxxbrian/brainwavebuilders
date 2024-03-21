@@ -1,11 +1,11 @@
 import React from "react";
-import Stats from "../components/Stats";
-import Activity, { type ActivityProps } from "../components/Activity";
-import StarredBoard from "../components/StarredBoard";
-import RecentBoard from "../components/RecentBoard";
-import type { CourseCardProps } from "@/components/CourseCard";
-import TopNav, { type TopNavProps } from "../components/TopNav";
-import SideNav from "../components/SideNav";
+import Stats from "../components/dashboard/Stats";
+import Activity, { type ActivityProps } from "../components/dashboard/Activity";
+import StarredBoard from "../components/dashboard/StarredBoard";
+import RecentBoard from "../components/dashboard/RecentBoard";
+import type { CourseCardProps } from "@/components/dashboard/CourseCard";
+import TopNav, { type TopNavProps } from "../components/dashboard/TopNav";
+import SideNav from "../components/dashboard/SideNav";
 import orgLogo from "@/assets/Blue Star 90.png";
 import headerImg from "@/assets/unsw.png";
 
@@ -49,21 +49,19 @@ export default function MainDashboard() {
   };
 
   return (
-    <>
-      <div className="flex">
-        <div className="min-w-[256px]">
-          <SideNav displayType={topNavProps.displayType} />
-        </div>
-        <div className="flex flex-col">
-          <TopNav {...topNavProps} />
-          <div className="flex flex-wrap mt-2 ml-2 space-y-2">
-            <Stats {...statsData} />
-            <Activity {...activityData} />
-            <StarredBoard courses={courses} />
-            <RecentBoard courses={courses} />
-          </div>
+    <div className="flex max-w-[1140px]">
+      <div className="lg:block">
+        <SideNav displayType={topNavProps.displayType} />
+      </div>
+      <div className="flex-grow">
+        <TopNav {...topNavProps} />
+        <div className="flex flex-wrap mt-2 ml-2 space-y-2">
+          <Stats {...statsData} />
+          <Activity {...activityData} />
+          <StarredBoard courses={courses} />
+          <RecentBoard courses={courses} />
         </div>
       </div>
-    </>
+    </div>
   );
 }

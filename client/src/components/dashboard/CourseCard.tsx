@@ -73,14 +73,18 @@ const CourseCard: React.FC<CourseCardProps> = ({
             </Text>
           </div>
           {/* Description */}
-          <div>
-            <Text trim="both" className="text-sm line-clamp-2 text-gray-600 ">
+          <div className="mt-3">
+            <Text
+              trim="both"
+              className="text-sm line-clamp-2 text-gray-600"
+              style={{ lineHeight: "1" }}
+            >
               {description}
             </Text>
           </div>
         </Box>
         {/* Course Code */}
-        <Box className="flex flex-col">
+        <Box className="mt-3">
           <Text trim="both" className="text-xl font-medium text-gray-600">
             {courseCode}
           </Text>

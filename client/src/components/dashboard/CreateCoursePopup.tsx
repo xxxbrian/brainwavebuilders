@@ -35,15 +35,13 @@ const CreateClassPopup: React.FC = () => {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
         <Dialog.Content
-          className="fixed top-1/2 left-1/2 bg-white p-6 rounded-3xl shadow-lg"
+          className="fixed top-1/2 left-1/2 bg-white px-10 py-6 rounded-3xl shadow-lg"
           style={{
-            width: "700px",
-            height: "424px",
             transform: "translate(-50%, -50%)",
           }}
         >
           <Dialog.Title className="flex justify-between items-start">
-            <span className="font-bold text-[40px] leading-[48px] tracking-normal text-blue-500">
+            <span className="font-bold text-[40px] text-blue-500">
               Create Class
             </span>
             {/* Close Button */}
@@ -70,10 +68,9 @@ const CreateClassPopup: React.FC = () => {
                 id="courseName"
                 value={courseName}
                 onChange={handleCourseNameChange}
-                className="mt-1 block rounded-md border-gray-400 border-2 p-2 text-md"
+                className="mt-1 w-full block rounded-md border-gray-400 border-2 p-2 text-md min-w-[450px]"
                 placeholder="Enter course name"
                 required
-                style={{ width: "626px", height: "44px" }}
               />
             </div>
             <div className="mb-4">
@@ -89,16 +86,16 @@ const CreateClassPopup: React.FC = () => {
                 value={courseDescription}
                 onChange={handleCourseDescriptionChange}
                 rows={4}
-                className="mt-1 block rounded-md border-gray-400 border-2 p-2 text-md"
+                className="mt-1 block rounded-md border-gray-400 border-2 p-2 text-md w-full"
                 placeholder="Enter course description"
                 required
-                style={{ width: "626px", height: "121px" }}
+                style={{ height: "121px" }}
               ></textarea>
             </div>
             <div className="flex justify-end mt-4">
               <button
                 type="submit"
-                className="items-center justify-center rounded-md bg-[#004E89] text-lg font-bold text-white hover:bg-opacity-90 mr-6 mt-2"
+                className="items-center justify-center rounded-md bg-[#004E89] text-lg font-bold text-white hover:bg-opacity-90 mt-2"
                 style={{ width: "156px", height: "44px" }}
               >
                 Create Class

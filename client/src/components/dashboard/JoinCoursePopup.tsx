@@ -61,10 +61,8 @@ const JoinCoursePopup: React.FC = () => {
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
         <Dialog.Content
-          className="fixed top-1/2 left-1/2 bg-white p-6 rounded-3xl shadow-lg"
+          className="fixed top-1/2 left-1/2 bg-white px-10 py-6 rounded-3xl shadow-lg"
           style={{
-            width: "700px",
-            height: "424px",
             transform: "translate(-50%, -50%)",
           }}
         >
