@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import defaultAvatar from "@/assets/Default_Avatar.jpg";
+import { RxAvatar } from "react-icons/rx";
 import CreateClassPopup from "./CreateCoursePopup";
 import JoinCoursePopup from "./JoinCoursePopup";
 import { IoMdNotificationsOutline } from "react-icons/io";
@@ -75,12 +75,12 @@ export default function TopNav(props: TopNavProps) {
         <a href="#" className="hover:opacity-50">
           <IoMdNotificationsOutline className=" text-red-500 text-4xl ml-4" />
         </a>
-        <a href="#" className="hover:opacity-50">
-          <Image
-            src={props.userImg ?? defaultAvatar}
-            alt="Avatar"
-            className="w-12 mx-5 rounded-full"
-          />
+        <a href="/profile" className="hover:opacity-50">
+          {props.userImg ? (
+            <img src={props.userImg} alt="Avatar" className="object-cover" />
+          ) : (
+            <RxAvatar className="h-12 w-12 text-zinc-500 ml-2 mr-2" />
+          )}
         </a>
       </div>
     </div>
