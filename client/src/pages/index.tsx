@@ -1,6 +1,6 @@
 import React from "react";
 
-import MainDashboard from "./MainDashboard";
+import MainDashboard from "./dashboard";
 
 export default function Home() {
   return (

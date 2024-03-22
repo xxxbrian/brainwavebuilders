@@ -1,15 +1,17 @@
 import React from "react";
-import Stats from "../components/dashboard/Stats";
-import Activity, { type ActivityProps } from "../components/dashboard/Activity";
-import StarredBoard from "../components/dashboard/StarredBoard";
-import RecentBoard from "../components/dashboard/RecentBoard";
+import Stats from "../../components/dashboard/Stats";
+import Activity, {
+  type ActivityProps,
+} from "../../components/dashboard/Activity";
+import StarredBoard from "../../components/dashboard/StarredBoard";
+import RecentBoard from "../../components/dashboard/RecentBoard";
 import type { CourseCardProps } from "@/components/dashboard/CourseCard";
-import TopNav, { type TopNavProps } from "../components/dashboard/TopNav";
-import SideNav from "../components/dashboard/SideNav";
+import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
+import SideNav from "../../components/dashboard/SideNav";
 import orgLogo from "@/assets/Blue Star 90.png";
 import headerImg from "@/assets/unsw.png";
 
-export default function MainDashboard() {
+export const Dashboard: React.FC = () => {
   // Example data representing the hours worked each day
   const activityData: ActivityProps = {
     Mon: 12,
@@ -64,4 +66,6 @@ export default function MainDashboard() {
       </div>
     </div>
   );
-}
+};
+
+export default Dashboard;
