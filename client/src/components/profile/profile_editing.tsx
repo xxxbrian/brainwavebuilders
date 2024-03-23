@@ -298,6 +298,38 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     );
   };
 
+  const passwordInputForm = (
+    id: string,
+    label: string,
+    value: string,
+    onChange: (value: string) => void,
+  ) => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    return (
+      <div className="relative">
+        <label htmlFor={id} className="block text-xl font-medium">
+          {label}
+        </label>
+        <input
+          type={showPassword ? "text" : "password"}
+          id={id}
+          name={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 focus:border-2"
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-11 text-3xl text-gray-400"
+        >
+          {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+        </button>
+      </div>
+    );
+  };
+
   const onClickSaveSecurity = () => {
     // If password not strong enough
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -566,28 +598,46 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
               </div>
 
               <div className="md:col-span-2 relative max-w-[600px]">
-                <PasswordInput
+                {/* <PasswordInput
                   id="current-password"
                   label="Current Password"
                   value={currentPassword}
                   onChange={setCurrentPassword}
-                />
+                /> */}
+                {passwordInputForm(
+                  "current-password",
+                  "Current Password",
+                  currentPassword,
+                  setCurrentPassword,
+                )}
               </div>
               <div className="md:col-span-2 relative max-w-[600px]">
-                <PasswordInput
+                {/* <PasswordInput
                   id="new-password"
                   label="New Password"
                   value={newPassword}
                   onChange={setNewPassword}
-                />
+                /> */}
+                {passwordInputForm(
+                  "new-password",
+                  "New Password",
+                  newPassword,
+                  setNewPassword,
+                )}
               </div>
               <div className="md:col-span-2 relative max-w-[600px]">
-                <PasswordInput
+                {/* <PasswordInput
                   id="confirm-password"
                   label="Confirm your new password"
                   value={confirmPassword}
                   onChange={setConfirmPassword}
-                />
+                /> */}
+                {passwordInputForm(
+                  "confirm-password",
+                  "Confirm your new password",
+                  confirmPassword,
+                  setConfirmPassword,
+                )}
               </div>
               <div className="md:col-span-2 flex justify-end">
                 <button
