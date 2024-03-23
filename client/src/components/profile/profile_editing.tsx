@@ -107,6 +107,138 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     // TODO
   };
 
+  interface TextInputProps {
+    id: string;
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+    type?: React.HTMLInputTypeAttribute;
+  }
+
+  const TextInput: React.FC<TextInputProps> = ({
+    id,
+    label,
+    value,
+    onChange,
+    type = "text",
+  }) => (
+    <div>
+      <label htmlFor={id} className="block text-xl font-medium">
+        {label}
+      </label>
+      <input
+        type={type}
+        id={id}
+        name={id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-2 focus:outline-none focus:border-blue-500 focus:border-2"
+      />
+    </div>
+  );
+
+  interface SelectInputProps {
+    id: string;
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+    options: { value: string; label: string }[];
+  }
+
+  const SelectInput: React.FC<SelectInputProps> = ({
+    id,
+    label,
+    value,
+    onChange,
+    options,
+  }) => (
+    <div>
+      <label htmlFor={id} className="block text-xl font-medium">
+        {label}
+      </label>
+      <select
+        id={id}
+        name={id}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        className="mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 focus:border-2"
+      >
+        {options.map((option) => (
+          <option key={option.value} value={option.value}>
+            {option.label}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+
+  interface SwitchInputProps {
+    id: string;
+    label: string;
+    checked: boolean;
+    onChange: (checked: boolean) => void;
+  }
+
+  const SwitchInput: React.FC<SwitchInputProps> = ({
+    id,
+    label,
+    checked,
+    onChange,
+  }) => (
+    <div className="flex items-center">
+      <Switch.Root
+        id={id}
+        checked={checked}
+        onCheckedChange={onChange}
+        className="w-[42px] h-[25px] bg-blackA6 rounded-full relative bg-zinc-300 data-[state=checked]:bg-[#004E89] cursor-default"
+      >
+        <Switch.Thumb className="block w-[20px] h-[20px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+      </Switch.Root>
+      <label htmlFor={id} className="text-xl ml-2">
+        {label}
+      </label>
+    </div>
+  );
+
+  interface PasswordInputProps {
+    id: string;
+    label: string;
+    value: string;
+    onChange: (value: string) => void;
+  }
+
+  const PasswordInput: React.FC<PasswordInputProps> = ({
+    id,
+    label,
+    value,
+    onChange,
+  }) => {
+    const [showPassword, setShowPassword] = useState(false);
+
+    return (
+      <div className="relative">
+        <label htmlFor={id} className="block text-xl font-medium">
+          {label}
+        </label>
+        <input
+          type={showPassword ? "text" : "password"}
+          id={id}
+          name={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 focus:border-2"
+        />
+        <button
+          type="button"
+          onClick={() => setShowPassword(!showPassword)}
+          className="absolute right-3 top-11 text-3xl text-gray-400"
+        >
+          {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
+        </button>
+      </div>
+    );
+  };
+
   const onClickSaveSecurity = () => {
     // If password not strong enough
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
