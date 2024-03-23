@@ -113,6 +113,37 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     );
   };
 
+  const textInputForm = (
+    id: string,
+    label: string,
+    value: string,
+    onChange: (value: string) => void,
+    type: React.HTMLInputTypeAttribute = "text",
+  ) => {
+    const isTextarea = type === "textarea";
+    const InputOrTextarea = isTextarea ? "textarea" : "input";
+
+    return (
+      <div>
+        <label htmlFor={id} className="block text-xl font-medium">
+          {label}
+        </label>
+        <InputOrTextarea
+          type={type}
+          id={id}
+          name={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className={
+            type === "textarea"
+              ? "mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-2 h-32 focus:outline-none focus:border-blue-500 focus:border-2"
+              : "mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-2 focus:outline-none focus:border-blue-500 focus:border-2"
+          }
+        />
+      </div>
+    );
+  };
+
   interface SelectInputProps {
     id: string;
     label: string;
@@ -298,18 +329,27 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
           {/* List of personal info */}
           <div className="w-full">
             <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <TextInput
+              {/* <TextInput
                 id="firstName"
                 label="First Name"
                 value={firstName}
                 onChange={setFirstName}
               />
-              <TextInput
+               */}
+              {textInputForm(
+                "firstName",
+                "First Name",
+                firstName,
+                setFirstName,
+              )}
+              {/* <TextInput
                 id="lastName"
                 label="Last Name"
                 value={lastName}
                 onChange={setLastName}
               />
+               */}
+              {textInputForm("lastName", "Last Name", lastName, setLastName)}
               <SelectInput
                 id="title"
                 label="Title"
@@ -336,13 +376,14 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 ]}
               />
               <div className="md:col-span-2">
-                <TextInput
+                {/* <TextInput
                   id="bio"
                   label="Bio"
                   value={bio}
                   onChange={setBio}
                   type="textarea"
-                />
+                /> */}
+                {textInputForm("bio", "Bio", bio, setBio, "textarea")}
               </div>
 
               <div className="md:col-span-2 flex justify-end">
