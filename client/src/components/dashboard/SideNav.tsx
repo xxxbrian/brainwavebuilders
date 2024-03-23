@@ -14,7 +14,7 @@ import Image from "next/image";
 import logoImg from "@/assets/Logo.jpg";
 
 const navItems = [
-  { key: "home", href: "/Dashboard", Icon: IoHome, label: "Home" },
+  { key: "home", href: "/dashboard", Icon: IoHome, label: "Home" },
   {
     key: "calendar",
     href: "/Calendar",
