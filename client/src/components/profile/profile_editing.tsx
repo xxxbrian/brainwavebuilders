@@ -236,6 +236,29 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     </div>
   );
 
+  const switchInputForm = (
+    id: string,
+    label: string,
+    checked: boolean,
+    onChange: (checked: boolean) => void,
+  ) => {
+    return (
+      <div className="flex items-center">
+        <Switch.Root
+          id={id}
+          checked={checked}
+          onCheckedChange={onChange}
+          className="w-[42px] h-[25px] bg-blackA6 rounded-full relative bg-zinc-300 data-[state=checked]:bg-[#004E89] cursor-default"
+        >
+          <Switch.Thumb className="block w-[20px] h-[20px] bg-white rounded-full transition-transform duration-100 translate-x-0.5 will-change-transform data-[state=checked]:translate-x-[19px]" />
+        </Switch.Root>
+        <label htmlFor={id} className="text-xl ml-2">
+          {label}
+        </label>
+      </div>
+    );
+  };
+
   interface PasswordInputProps {
     id: string;
     label: string;
@@ -483,20 +506,32 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 },
               ])}
               <div className="flex items-center md:col-span-2">
-                <SwitchInput
+                {/* <SwitchInput
                   id="notification"
                   label="Receive notifications for announcements"
                   checked={notification}
                   onChange={setNotification}
-                />
+                /> */}
+                {switchInputForm(
+                  "notification",
+                  "Receive notifications for announcements",
+                  notification,
+                  setNotification,
+                )}
               </div>
               <div className="flex items-center md:col-span-2">
-                <SwitchInput
+                {/* <SwitchInput
                   id="recommendation"
                   label="Get recommendations for courses"
                   checked={recommendation}
                   onChange={setRecommendation}
-                />
+                /> */}
+                {switchInputForm(
+                  "recommendation",
+                  "Get recommendations for courses",
+                  recommendation,
+                  setRecommendation,
+                )}
               </div>
 
               <div className="md:col-span-2 flex justify-end">
@@ -516,12 +551,18 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
           <div className="w-full">
             <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="flex items-center md:col-span-2">
-                <SwitchInput
+                {/* <SwitchInput
                   id="auth"
                   label="Enable or disable two factor authentication"
                   checked={auth}
                   onChange={setAuth}
-                />
+                /> */}
+                {switchInputForm(
+                  "auth",
+                  "Enable or disable two factor authentication",
+                  auth,
+                  setAuth,
+                )}
               </div>
 
               <div className="md:col-span-2 relative max-w-[600px]">
