@@ -147,7 +147,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     );
   };
 
-  const passwordInputForm = (
+  const PasswordInputForm = (
     id: string,
     label: string,
     value: string,
@@ -347,7 +347,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
               </div>
 
               <div className="md:col-span-2 relative max-w-[600px]">
-                {passwordInputForm(
+                {PasswordInputForm(
                   "current-password",
                   "Current Password",
                   currentPassword,
@@ -355,7 +355,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 )}
               </div>
               <div className="md:col-span-2 relative max-w-[600px]">
-                {passwordInputForm(
+                {PasswordInputForm(
                   "new-password",
                   "New Password",
                   newPassword,
@@ -363,7 +363,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 )}
               </div>
               <div className="md:col-span-2 relative max-w-[600px]">
-                {passwordInputForm(
+                {PasswordInputForm(
                   "confirm-password",
                   "Confirm your new password",
                   confirmPassword,
