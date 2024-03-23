@@ -179,6 +179,18 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     );
   };
 
+  const saveButton = (onClick: () => void) => {
+    return (
+      <button
+        type="button"
+        onClick={onClick}
+        className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90 self-end"
+      >
+        Save
+      </button>
+    );
+  };
+
   const onClickSaveSecurity = () => {
     // If password not strong enough
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
@@ -287,13 +299,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
               </div>
 
               <div className="md:col-span-2 flex justify-end">
-                <button
-                  type="button"
-                  onClick={onClickSaveProfile}
-                  className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90 self-end"
-                >
-                  Save
-                </button>
+                {saveButton(onClickSaveProfile)}
               </div>
             </form>
           </div>
@@ -333,13 +339,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
               </div>
 
               <div className="md:col-span-2 flex justify-end">
-                <button
-                  type="button"
-                  onClick={onClickSavePreferences}
-                  className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90 self-end"
-                >
-                  Save
-                </button>
+                {saveButton(onClickSavePreferences)}
               </div>
             </form>
           </div>
@@ -382,13 +382,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 )}
               </div>
               <div className="md:col-span-2 flex justify-end">
-                <button
-                  type="button"
-                  onClick={onClickSaveSecurity}
-                  className="mt-4 bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90 self-end"
-                >
-                  Save
-                </button>
+                {saveButton(onClickSaveSecurity)}
               </div>
             </form>
           </div>
