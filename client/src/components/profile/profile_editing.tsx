@@ -216,33 +216,22 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     <>
       <Tabs.Root defaultValue="editProfile">
         <Tabs.List className="flex space-x-10 pt-5 pl-3 border-b">
-          <Tabs.Trigger
-            value="editProfile"
-            className="px-4 py-2 text-xl font-medium text-blue-800
+          {[
+            { value: "editProfile", label: "Edit Profile" },
+            { value: "preferences", label: "Preferences" },
+            { value: "security", label: "Security" },
+          ].map((tab) => (
+            <Tabs.Trigger
+              key={tab.value}
+              value={tab.value}
+              className="px-4 py-2 text-xl font-medium text-blue-800
                       focus:outline-none
                       hover:border-b-blue-500 hover:text-blue-500
                       [&[data-state='active']]:border-b-2 [&[data-state='active']]:border-blue-500 [&[data-state='active']]:text-blue-500"
-          >
-            Edit Profile
-          </Tabs.Trigger>
-          <Tabs.Trigger
-            value="preferences"
-            className="px-4 py-2 text-xl font-medium text-blue-800
-                      focus:outline-none
-                      hover:border-b-blue-500 hover:text-blue-500
-                      [&[data-state='active']]:border-b-2 [&[data-state='active']]:border-blue-500 [&[data-state='active']]:text-blue-500"
-          >
-            Preferences
-          </Tabs.Trigger>
-          <Tabs.Trigger
-            value="security"
-            className="px-4 py-2 text-xl font-medium text-blue-800
-                      focus:outline-none
-                      hover:border-b-blue-500 hover:text-blue-500
-                      [&[data-state='active']]:border-b-2 [&[data-state='active']]:border-blue-500 [&[data-state='active']]:text-blue-500"
-          >
-            Security
-          </Tabs.Trigger>
+            >
+              {tab.label}
+            </Tabs.Trigger>
+          ))}
         </Tabs.List>
 
         <Tabs.Content value="editProfile" className="p-6 space-y-8">
