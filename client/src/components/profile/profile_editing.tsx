@@ -179,6 +179,35 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     </div>
   );
 
+  const selectInputForm = (
+    id: string,
+    label: string,
+    value: string,
+    onChange: (value: string) => void,
+    options: { value: string; label: string }[],
+  ) => {
+    return (
+      <div>
+        <label htmlFor={id} className="block text-xl font-medium">
+          {label}
+        </label>
+        <select
+          id={id}
+          name={id}
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          className="mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 focus:border-2"
+        >
+          {options.map((option) => (
+            <option key={option.value} value={option.value}>
+              {option.label}
+            </option>
+          ))}
+        </select>
+      </div>
+    );
+  };
+
   interface SwitchInputProps {
     id: string;
     label: string;
@@ -350,7 +379,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
               />
                */}
               {textInputForm("lastName", "Last Name", lastName, setLastName)}
-              <SelectInput
+              {/* <SelectInput
                 id="title"
                 label="Title"
                 value={title}
@@ -362,8 +391,15 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                   { value: "Dr", label: "Dr" },
                   { value: "Prof", label: "Prof" },
                 ]}
-              />
-              <SelectInput
+              /> */}
+              {selectInputForm("title", "Title", title, setTitle, [
+                { value: "", label: "Select a title" },
+                { value: "Mr", label: "Mr" },
+                { value: "Ms", label: "Ms" },
+                { value: "Dr", label: "Dr" },
+                { value: "Prof", label: "Prof" },
+              ])}
+              {/* <SelectInput
                 id="gender"
                 label="Gender"
                 value={gender}
@@ -374,7 +410,13 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                   { value: "male", label: "Male" },
                   { value: "non-binary", label: "Non-binary" },
                 ]}
-              />
+              /> */}
+              {selectInputForm("gender", "Gender", gender, setGender, [
+                { value: "", label: "Select gender" },
+                { value: "female", label: "Female" },
+                { value: "male", label: "Male" },
+                { value: "non-binary", label: "Non-binary" },
+              ])}
               <div className="md:col-span-2">
                 {/* <TextInput
                   id="bio"
@@ -402,7 +444,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
         <Tabs.Content value="preferences" className="p-6 space-y-8">
           <div className="w-full">
             <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <SelectInput
+              {/* <SelectInput
                 id="lang"
                 label="Preferred language"
                 value={lang}
@@ -413,8 +455,14 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                   { value: "Mandarin", label: "Mandarin" },
                   { value: "Korean", label: "Korean" },
                 ]}
-              />
-              <SelectInput
+              /> */}
+              {selectInputForm("lang", "Preferred language", lang, setLang, [
+                { value: "", label: "Select your preferred language" },
+                { value: "English", label: "English" },
+                { value: "Mandarin", label: "Mandarin" },
+                { value: "Korean", label: "Korean" },
+              ])}
+              {/* <SelectInput
                 id="timezone"
                 label="Time Zone"
                 value={timezone}
@@ -426,7 +474,14 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                     label: "Australian Eastern Standard Time (AEST)",
                   },
                 ]}
-              />
+              /> */}
+              {selectInputForm("timezone", "Time Zone", timezone, setTimezone, [
+                { value: "", label: "Select Time Zone" },
+                {
+                  value: "AEST",
+                  label: "Australian Eastern Standard Time (AEST)",
+                },
+              ])}
               <div className="flex items-center md:col-span-2">
                 <SwitchInput
                   id="notification"
