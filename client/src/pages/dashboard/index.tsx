@@ -8,7 +8,7 @@ import RecentBoard from "../../components/dashboard/RecentBoard";
 import type { CourseCardProps } from "@/components/dashboard/CourseCard";
 import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
 import SideNav from "../../components/dashboard/SideNav";
-import orgLogo from "@/assets/Blue Star 90.png";
+import orgLogo from "@/assets/unsw.png";
 import headerImg from "@/assets/unsw.png";
 
 export const Dashboard: React.FC = () => {

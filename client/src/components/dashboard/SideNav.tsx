@@ -11,7 +11,7 @@ import { IoHome, IoCalendarOutline, IoSettingsOutline } from "react-icons/io5";
 import { BiTask, BiVideoRecording } from "react-icons/bi";
 import { TfiAnnouncement, TfiMedallAlt } from "react-icons/tfi";
 import Image from "next/image";
-import logoImg from "@/assets/Logo.jpg";
+import logoImg from "@/assets/logo-big.svg";
 
 const navItems = [
   { key: "home", href: "/dashboard", Icon: IoHome, label: "Home" },
