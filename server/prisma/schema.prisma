@@ -27,6 +27,9 @@ model User {
   title     String?
   bio       String?
   role      String   @default("user")
+  coursesTeaching Course[]    @relation("InstructorCourses")
+  coursesTaking   Course[]    @relation("CourseStudents")
+  submissions     Submission[]
 }
 
 model Token {
@@ -43,4 +46,47 @@ model EmailVerification {
   verification String
   createdAt    DateTime @default(now())
   expiresAt    DateTime @updatedAt
+}
+
+model Course {
+  id           String      @id @default(uuid())
+  code         String      @unique
+  title        String
+  description  String
+  instructorId String
+  instructor   User        @relation(name: "InstructorCourses", fields: [instructorId], references: [id])
+  assessments  Assessment[]
+  students     User[]      @relation("CourseStudents")
+}
+
+model Assessment {
+  id           String     @id @default(uuid())
+  title        String
+  courseCode   String
+  dueDate      DateTime
+  course       Course     @relation(fields: [courseCode], references: [code])
+  type         String     // "assignment", "exam", etc.
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  Assignment   Assignment[]
+}
+
+model Assignment {
+  id           String     @id
+  instructions String
+  assessmentId String
+  assessment   Assessment @relation(fields: [assessmentId], references: [id])
+  submissions  Submission[]
+}
+
+model Submission {
+  id           String   @id @default(uuid())
+  assignmentId String
+  studentId    String
+  fileUrl      String
+  grade        Int?
+  feedback     String?
+  submittedAt  DateTime @default(now())
+  assignment   Assignment @relation(fields: [assignmentId], references: [id])
+  student      User       @relation(fields: [studentId], references: [id])
 }
