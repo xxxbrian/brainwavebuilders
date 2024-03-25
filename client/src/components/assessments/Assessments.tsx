@@ -2,9 +2,13 @@ import React, { useState, useEffect } from "react";
 import { Card, Typography, Text } from "@radix-ui/themes";
 
 import CreateAssessmentPopup from "./CreateAssignmentPopup";
+import EditAssignmentPopup from "./EditAssignmentPopup";
+import CreateExamPopup from "./CreateExamPopup";
+import EditExamPopup from "./EditExamPopup";
 
 export type Assessment = {
   name: string;
+  description: string;
   startDate: string;
   endDate: string;
   completed: int;
@@ -12,6 +16,20 @@ export type Assessment = {
   id: string;
   submissions: string;
 };
+
+export type Assignment = {
+  name: string;
+  description: string;
+  startDate: string;
+  endDate: string;
+  completed: int;
+  id: string;
+  submissions: string;
+};
+
+export type Exam = {};
+
+export type ExamQuestion = {};
 
 type AssessmentsProps = {
   assessmentList: Assessment[];
@@ -94,12 +112,7 @@ const Assessments: React.FC<AssessmentsProps> = ({ assessmentList }) => {
             Reset
           </button>
           <CreateAssessmentPopup />
-          <button
-            onClick={NewExamHandler}
-            className="border border-black bg-orange-100 rounded-full ml-5 px-3 hover:bg-orange-200 text-black w-40"
-          >
-            New Exam
-          </button>
+          <CreateExamPopup />
         </div>
 
         <Card className="h-full w-full overflow-auto">
@@ -149,13 +162,18 @@ const Assessments: React.FC<AssessmentsProps> = ({ assessmentList }) => {
                     </Text>
                   </td>
                   <td className="border border-blue-400 text-center">
-                    {/* change to a link - popup for grade adjustment*/}
+                    {/* change to a link - popup for grade adjustment
                     <a
-                      onClick={EditHandler}
+                      onClick={() => console.log(ass)}
                       className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
                     >
                       Edit
-                    </a>
+                    </a>*/}
+                    {ass.type == "assignment" ? (
+                      <EditAssignmentPopup ass={ass} />
+                    ) : (
+                      <EditExamPopup ass={ass} />
+                    )}
                   </td>
                 </tr>
               ))}

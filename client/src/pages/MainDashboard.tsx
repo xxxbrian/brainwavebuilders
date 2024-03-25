@@ -10,10 +10,10 @@ import orgLogo from "@/assets/Blue Star 90.png";
 import headerImg from "@/assets/unsw.png";
 
 // move to course page when ready =====================================================================
-import AssessmentResults from "../components/AssessmentResults";
-import type { studentResults } from "@/components/AssessmentResults";
-import Assessments from "../components/Assessments";
-import type { Assessment } from "@components/Assessments";
+import AssessmentResults from "../components/assessments/AssessmentResults";
+import type { studentResults } from "@/components/assessments/AssessmentResults";
+import Assessments from "../components/assessments/Assessments";
+import type { Assessment } from "@components/assessments/Assessments";
 
 export default function MainDashboard() {
   // Example data representing the hours worked each day
@@ -86,8 +86,9 @@ export default function MainDashboard() {
 
   const ass1: Assessment = {
     name: "string",
-    startDate: "19/03/24",
-    endDate: "25/03/24",
+    description: "testingtesintesnignsine",
+    startDate: "2024-03-25",
+    endDate: "2024-04-05",
     completed: "No",
     type: "Assignment",
     id: "test_ass",
@@ -95,8 +96,9 @@ export default function MainDashboard() {
   };
   const ass2: Assessment = {
     name: "test",
-    startDate: "19/03/24",
-    endDate: "25/03/24",
+    description: "testnjnvsnsie\nafns rvkjnsnfonfin",
+    startDate: "2024-03-25",
+    endDate: "2024-03-31",
     completed: "No",
     type: "Assignment",
     id: "test_ass",
@@ -116,8 +118,8 @@ export default function MainDashboard() {
             {/*<Stats {...statsData} />
             <Activity {...activityData} />
             <StarredBoard courses={courses} />
-            <RecentBoard courses={courses} />
-            <AssessmentResults assessmentName={"Test"} resultsList={results} />*/}
+            <RecentBoard courses={courses} />*/}
+            {/*<AssessmentResults assessmentName={"Test"} resultsList={results} />*/}
             <Assessments assessmentList={assList} />
           </div>
         </div>

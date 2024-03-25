@@ -2,10 +2,14 @@ import React, { useState } from "react";
 import type { ChangeEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
-const CreateAssignmentPopup: React.FC = () => {
-  const [assessmentName, setAssessmentName] = useState("");
-  const [assessmentDescription, setAssessmentDescription] = useState("");
-  const [assessmentDue, setAssessmentDue] = useState("");
+import { Assessment } from "./Assessments";
+
+const EditAssignmentPopup: React.FC<Assessment> = ({ ass }) => {
+  const [assessmentName, setAssessmentName] = useState(ass.name);
+  const [assessmentDescription, setAssessmentDescription] = useState(
+    ass.description,
+  );
+  const [assessmentDue, setAssessmentDue] = useState(ass.endDate);
 
   const handleAssessmentNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setAssessmentName(e.target.value);
@@ -24,19 +28,14 @@ const CreateAssignmentPopup: React.FC = () => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Send data to backend
-
-    // Reset form fields after submission
-    setAssessmentName("");
-    setAssessmentDescription("");
-    setAssessmentDue("");
   };
 
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="border border-black bg-orange-100 hover:text-white rounded-full hover:bg-orange-600 px-4 py-2 ml-5">
-          New Assignment
-        </button>
+        <a className="text-blue-400 hover:text-blue-100 text-sm hover:cursor-pointer">
+          Edit
+        </a>
       </Dialog.Trigger>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
@@ -50,7 +49,7 @@ const CreateAssignmentPopup: React.FC = () => {
         >
           <Dialog.Title className="flex justify-between items-start font-sans">
             <span className="font-bold text-[40px] leading-[48px] tracking-normal text-blue-500">
-              Create Assignment
+              Edit Assignment
             </span>
             {/* Close Button */}
             <Dialog.Close asChild>
@@ -125,7 +124,7 @@ const CreateAssignmentPopup: React.FC = () => {
                 className="items-center justify-center rounded-md bg-[#004E89] text-lg font-bold text-white hover:bg-opacity-90 mr-6 mt-2"
                 style={{ width: "156px", height: "44px" }}
               >
-                Create Assignment
+                Confirm Changes
               </button>
             </div>
           </form>
@@ -135,4 +134,4 @@ const CreateAssignmentPopup: React.FC = () => {
   );
 };
 
-export default CreateAssignmentPopup;
+export default EditAssignmentPopup;
