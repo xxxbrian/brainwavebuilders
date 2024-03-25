@@ -66,3 +66,19 @@ Frontend Dev:
 Backend Dev:
     Impl Log in & Sign up & Reset
     Email API deploy, DNS settings
+
+Week 5:
+
+Continued working on the complete login functionality (both frontend and backend):
+    - Implemented email sending, registration process, verification code, etc., APIs on the backend, and connected them to the database.
+    - Implemented login/register/verification events on the frontend that connect with the backend.
+
+Switched the email API to production deployment.
+Rebased a commit containing an error in the main branch of GitHub.
+Participation in Meetings.
+
+Week 6:
+
+Refactored the frontend profile settings code.
+Added a phpmyadmin image to docker compose for debugging the database during development.
+Start writing the front-end business logic part of the profile setting.
