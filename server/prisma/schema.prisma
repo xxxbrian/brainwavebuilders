@@ -72,7 +72,7 @@ model Assessment {
 }
 
 model Assignment {
-  id           String     @id
+  id           String     @id @default(uuid())
   instructions String
   assessmentId String
   assessment   Assessment @relation(fields: [assessmentId], references: [id])
