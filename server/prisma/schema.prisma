@@ -92,6 +92,7 @@ model Submission {
   submittedAt   DateTime?
   fileUrl       String?
   answers       Json?     // For exam submissions: student's answers
+  grade         Int?
   assessment    Assessment @relation(fields: [assessmentId], references: [id])
   student       User      @relation(fields: [studentId], references: [id])
 }
