@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import { Card, Typography, Text } from "@radix-ui/themes";
 
+import EditGradePopup from "./EditGradePopup";
+import EditFeedbackPopup from "./EditFeedbackPopup";
+import FileCheck from "./FileCheck";
+
 export type studentResults = {
   name: string;
   userName: string;
   status: string;
   grade: int;
+  feedback: string;
   time: string;
   file: string;
 };
@@ -137,42 +142,28 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
                     </Text>
                   </td>
                   <td className="border border-blue-400 text-center">
-                    {/* change to a link - popup for grade adjustment*/}
-                    <a
-                      onClick={GradeEditHandler}
-                      className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
-                    >
-                      {result.grade + "%"}
-                    </a>
+                    <EditGradePopup res={result} />
                   </td>
-                  {/*<td className="border border-blue-400 text-center">
-                    {/* change to a link - popup for submission editing (do we need this?)
-                    <a  className="text-sm text-black p-3">
-                      {"Edit"}
-                    </Text>
-                  </td>*/}
                   <td className="border border-blue-400 text-center">
                     <Text as="span" className="text-sm text-black p-3">
                       {result.time}
                     </Text>
                   </td>
                   <td className="border border-blue-400 text-center">
-                    {/* change to a link - link to feedback popup*/}
-                    <a
-                      onClick={FeedbackHandler}
-                      className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
-                    >
-                      {"Feedback"}
-                    </a>
+                    <EditFeedbackPopup
+                      res={result}
+                      assessmentName={assessmentName}
+                    />
                   </td>
                   <td className="border border-blue-400 text-center">
-                    {/* change to a link - link to file download*/}
+                    {/* change to a link - link to file download
                     <a
                       onClick={FileCheckHandler}
                       className="text-sm text-blue-800 hover:text-blue-400 p-3 hover:cursor-pointer"
                     >
                       File
-                    </a>
+                    </a>*/}
+                    <FileCheck res={result} assessmentName={assessmentName} />
                   </td>
                 </tr>
               ))}

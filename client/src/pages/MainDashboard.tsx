@@ -60,7 +60,8 @@ export default function MainDashboard() {
     userName: "z5308765@ad.unsw.edu.au",
     status: "Submitted On Time",
     grade: 10,
-    time: "",
+    feedback: "testestestset",
+    time: "test",
     file: "test",
   };
   const result2: studentResults = {
@@ -68,7 +69,8 @@ export default function MainDashboard() {
     userName: "z5308765@ad.unsw.edu.au",
     status: "Submitted On Time",
     grade: 99,
-    time: "",
+    feedback: "testestestset",
+    time: "test",
     file: "test",
   };
 
@@ -90,7 +92,7 @@ export default function MainDashboard() {
     startDate: "2024-03-25",
     endDate: "2024-04-05",
     completed: "No",
-    type: "Assignment",
+    type: "assignment",
     id: "test_ass",
     submissions: "91/100",
   };
@@ -100,7 +102,7 @@ export default function MainDashboard() {
     startDate: "2024-03-25",
     endDate: "2024-03-31",
     completed: "No",
-    type: "Assignment",
+    type: "assignment",
     id: "test_ass",
     submissions: "91/100",
   };
@@ -119,8 +121,8 @@ export default function MainDashboard() {
             <Activity {...activityData} />
             <StarredBoard courses={courses} />
             <RecentBoard courses={courses} />*/}
-            {/*<AssessmentResults assessmentName={"Test"} resultsList={results} />*/}
-            <Assessments assessmentList={assList} />
+            <AssessmentResults assessmentName={"Test"} resultsList={results} />
+            {/*<Assessments assessmentList={assList} />*/}
           </div>
         </div>
       </div>
