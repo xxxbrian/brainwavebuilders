@@ -55,38 +55,44 @@ model Course {
   description  String
   instructorId String
   instructor   User        @relation(name: "InstructorCourses", fields: [instructorId], references: [id])
-  assessments  Assessment[]
   students     User[]      @relation("CourseStudents")
+  assessments  Assessment[]
 }
 
 model Assessment {
-  id           String     @id @default(uuid())
-  title        String
-  courseCode   String
-  dueDate      DateTime
-  course       Course     @relation(fields: [courseCode], references: [code])
-  type         String     // "assignment", "exam", etc.
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  Assignment   Assignment[]
+  id            String     @id @default(uuid())
+  title         String
+  description   String?
+  courseCode    String
+  startDate     DateTime?
+  dueDate       DateTime?
+  duration      Int?
+  type          String     // "assignment" or "exam"
+  course        Course     @relation(fields: [courseCode], references: [code])
+  questions     Question[] // Only for exams
+  submissions   Submission[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
 }
 
-model Assignment {
-  id           String     @id @default(uuid())
-  instructions String
-  assessmentId String
-  assessment   Assessment @relation(fields: [assessmentId], references: [id])
-  submissions  Submission[]
+model Question {
+  id            String     @id @default(uuid())
+  assessmentId  String
+  title         String
+  type          String     // "MCQ" or "short_answer"
+  options       Json?      // For MCQs: store options and correct answer
+  points        Int        // Points/weighting for this question
+  assessment    Assessment @relation(fields: [assessmentId], references: [id])
 }
 
 model Submission {
-  id           String   @id @default(uuid())
-  assignmentId String
-  studentId    String
-  fileUrl      String
-  grade        Int?
-  feedback     String?
-  submittedAt  DateTime @default(now())
-  assignment   Assignment @relation(fields: [assignmentId], references: [id])
-  student      User       @relation(fields: [studentId], references: [id])
+  id            String    @id @default(uuid())
+  assessmentId  String
+  studentId     String
+  submittedAt   DateTime?
+  fileUrl       String?
+  answers       Json?     // For exam submissions: student's answers
+  grade         Int?
+  assessment    Assessment @relation(fields: [assessmentId], references: [id])
+  student       User      @relation(fields: [studentId], references: [id])
 }
