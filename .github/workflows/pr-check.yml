@@ -8,7 +8,7 @@ on:
 
 jobs:
   pr-check-title:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - uses: actions/checkout@v1
       - name: PR Title Checker
