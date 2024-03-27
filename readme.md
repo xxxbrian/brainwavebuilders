@@ -1,5 +1,7 @@
 # README
 
+[![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)
+
 ## Setting up for development
 
 This project uses [pre-commit](https://pre-commit.com/#install). Please install it prior to development. Then run:
