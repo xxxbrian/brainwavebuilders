@@ -100,7 +100,7 @@ export interface GetFeaturedResponse {
 
 // GetUserInfoRequest is the request that is sent to the getUserInfo endpoint.
 export interface GetUserInfoRequest {
-    email: string;
+    email?: string;
     token: Token;
 }
 

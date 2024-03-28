@@ -10,12 +10,16 @@ export const getUserInfo = async (
   request: GetUserInfoRequest,
 ): Promise<GetUserInfoResponse> => {
   let { email, token } = request;
-  if ((await getUserByToken(token)) === null) {
+  let asker = await getUserByToken(token);
+  if (asker === null) {
     throw new Error("Invalid token");
   }
-  const user = await getUserByEmail(email);
-  if (user === null) {
-    throw new Error("User not found");
+  if (email) {
+    const user = await getUserByEmail(email);
+    if (user === null) {
+      throw new Error("User not found");
+    }
+    return { user: userDBToAPI(user) };
   }
-  return { user: userDBToAPI(user) };
+  return { user: userDBToAPI(asker) };
 };
