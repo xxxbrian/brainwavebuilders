@@ -6,39 +6,71 @@ import React, { useState } from "react";
 import { IoMdPerson } from "react-icons/io";
 
 export type ProfileProps = {
-  avatar?: string;
+  onClickProfileSave: () => Promise<void>;
+  avatar?: string | undefined;
+  onChangeAvatar: (avatar: string) => void;
   firstName: string;
+  onChangeFirstName: (firstName: string) => void;
   lastName: string;
-  title?: string;
-  gender?: string;
-  bio?: string;
+  onChangeLastName: (lastName: string) => void;
+  title?: string | undefined;
+  onChangeTitle: (title: string) => void;
+  gender?: string | undefined;
+  onChangeGender: (title: string) => void;
+  bio?: string | undefined;
+  onChangeBio: (bio: string) => void;
 };
 
 export type PreferenceProps = {
-  lang?: string;
-  timezone?: string;
+  onClickPreferenceSave: () => Promise<void>;
+  lang: string;
+  onChangeLang: (lang: string) => void;
+  timezone: string;
+  onChangeTimezone: (timezone: string) => void;
   notification: boolean;
+  onChangeNotification: (notification: boolean) => void;
   recommendation: boolean;
+  onChangeRecommendation: (recommendation: boolean) => void;
 };
 
 export type SecurityProps = {
+  onClickSecuritySave: () => Promise<void>;
   two_factor_auth: boolean;
+  onChangeTwoFactorAuth: (two_factor_auth: boolean) => void;
 };
 
-type EditingProps = ProfileProps & PreferenceProps & SecurityProps;
+export type EditingProps = ProfileProps & PreferenceProps & SecurityProps;
 
-const ProfileEditing: React.FC<EditingProps> = (props) => {
-  const [firstName, setFirstName] = useState(props.firstName);
-  const [lastName, setLastName] = useState(props.lastName);
-  const [title, setTitle] = useState(props.title ?? "");
-  const [gender, setGender] = useState(props.gender ?? "");
-  const [bio, setBio] = useState(props.bio ?? "");
-  const [avatar, setAvatar] = useState(props.avatar);
-  const [lang, setLang] = useState(props.lang ?? "");
-  const [timezone, setTimezone] = useState(props.timezone ?? "");
-  const [notification, setNotification] = useState(props.notification);
-  const [recommendation, setRecommendation] = useState(props.recommendation);
-  const [auth, setAuth] = useState(props.two_factor_auth);
+const ProfileEditing: React.FC<EditingProps> = ({
+  // ProfileProps
+  onClickProfileSave,
+  avatar,
+  onChangeAvatar,
+  firstName,
+  onChangeFirstName,
+  lastName,
+  onChangeLastName,
+  title,
+  onChangeTitle,
+  gender,
+  onChangeGender,
+  bio,
+  onChangeBio,
+  // PreferenceProps
+  onClickPreferenceSave,
+  lang,
+  onChangeLang,
+  timezone,
+  onChangeTimezone,
+  notification,
+  onChangeNotification,
+  recommendation,
+  onChangeRecommendation,
+  // SecurityProps
+  onClickSecuritySave,
+  two_factor_auth,
+  onChangeTwoFactorAuth,
+}) => {
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -50,24 +82,17 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     if (event.target.files?.[0]) {
       const fileReader = new FileReader();
       fileReader.onload = (e) => {
-        setAvatar(e.target!.result as string);
+        // setAvatar(e.target!.result as string);
+        onChangeAvatar(e.target!.result as string);
       };
       fileReader.readAsDataURL(event.target.files[0]);
     }
   };
 
-  const onClickSaveProfile = () => {
-    // TODO
-  };
-
-  const onClickSavePreferences = () => {
-    // TODO
-  };
-
   const textInputForm = (
     id: string,
     label: string,
-    value: string,
+    value: string | undefined,
     onChange: (value: string) => void,
     type: React.HTMLInputTypeAttribute = "text",
   ) => {
@@ -98,7 +123,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
   const selectInputForm = (
     id: string,
     label: string,
-    value: string,
+    value: string | undefined,
     onChange: (value: string) => void,
     options: { value: string; label: string }[],
   ) => {
@@ -153,6 +178,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     value: string,
     onChange: (value: string) => void,
   ) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
     const [showPassword, setShowPassword] = useState(false);
 
     return (
@@ -179,7 +205,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     );
   };
 
-  const saveButton = (onClick: () => void) => {
+  const saveButton = (onClick: () => Promise<void>) => {
     return (
       <button
         type="button"
@@ -191,7 +217,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     );
   };
 
-  const onClickSaveSecurity = () => {
+  const onClickSecuritySaveWrapper = async () => {
     // If password not strong enough
     const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
     if (!passwordRegex.test(newPassword)) {
@@ -209,7 +235,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
     }
     setCurrentPassword("");
     setNewPassword("");
-    // TODO
+    await onClickSecuritySave();
   };
 
   return (
@@ -267,28 +293,33 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 "firstName",
                 "First Name",
                 firstName,
-                setFirstName,
+                onChangeFirstName,
               )}
-              {textInputForm("lastName", "Last Name", lastName, setLastName)}
-              {selectInputForm("title", "Title", title, setTitle, [
+              {textInputForm(
+                "lastName",
+                "Last Name",
+                lastName,
+                onChangeLastName,
+              )}
+              {selectInputForm("title", "Title", title, onChangeTitle, [
                 { value: "", label: "Select a title" },
                 { value: "Mr", label: "Mr" },
                 { value: "Ms", label: "Ms" },
                 { value: "Dr", label: "Dr" },
                 { value: "Prof", label: "Prof" },
               ])}
-              {selectInputForm("gender", "Gender", gender, setGender, [
+              {selectInputForm("gender", "Gender", gender, onChangeGender, [
                 { value: "", label: "Select gender" },
                 { value: "female", label: "Female" },
                 { value: "male", label: "Male" },
                 { value: "non-binary", label: "Non-binary" },
               ])}
               <div className="md:col-span-2">
-                {textInputForm("bio", "Bio", bio, setBio, "textarea")}
+                {textInputForm("bio", "Bio", bio, onChangeBio, "textarea")}
               </div>
 
               <div className="md:col-span-2 flex justify-end">
-                {saveButton(onClickSaveProfile)}
+                {saveButton(onClickProfileSave)}
               </div>
             </form>
           </div>
@@ -297,25 +328,37 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
         <Tabs.Content value="preferences" className="p-6 space-y-8">
           <div className="w-full">
             <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {selectInputForm("lang", "Preferred language", lang, setLang, [
-                { value: "", label: "Select your preferred language" },
-                { value: "English", label: "English" },
-                { value: "Mandarin", label: "Mandarin" },
-                { value: "Korean", label: "Korean" },
-              ])}
-              {selectInputForm("timezone", "Time Zone", timezone, setTimezone, [
-                { value: "", label: "Select Time Zone" },
-                {
-                  value: "AEST",
-                  label: "Australian Eastern Standard Time (AEST)",
-                },
-              ])}
+              {selectInputForm(
+                "lang",
+                "Preferred language",
+                lang,
+                onChangeLang,
+                [
+                  { value: "", label: "Select your preferred language" },
+                  { value: "English", label: "English" },
+                  { value: "Mandarin", label: "Mandarin" },
+                  { value: "Korean", label: "Korean" },
+                ],
+              )}
+              {selectInputForm(
+                "timezone",
+                "Time Zone",
+                timezone,
+                onChangeTimezone,
+                [
+                  { value: "", label: "Select Time Zone" },
+                  {
+                    value: "AEST",
+                    label: "Australian Eastern Standard Time (AEST)",
+                  },
+                ],
+              )}
               <div className="flex items-center md:col-span-2">
                 {switchInputForm(
                   "notification",
                   "Receive notifications for announcements",
                   notification,
-                  setNotification,
+                  onChangeNotification,
                 )}
               </div>
               <div className="flex items-center md:col-span-2">
@@ -323,12 +366,12 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                   "recommendation",
                   "Get recommendations for courses",
                   recommendation,
-                  setRecommendation,
+                  onChangeRecommendation,
                 )}
               </div>
 
               <div className="md:col-span-2 flex justify-end">
-                {saveButton(onClickSavePreferences)}
+                {saveButton(onClickPreferenceSave)}
               </div>
             </form>
           </div>
@@ -341,8 +384,8 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 {switchInputForm(
                   "auth",
                   "Enable or disable two factor authentication",
-                  auth,
-                  setAuth,
+                  two_factor_auth,
+                  onChangeTwoFactorAuth,
                 )}
               </div>
 
@@ -371,7 +414,7 @@ const ProfileEditing: React.FC<EditingProps> = (props) => {
                 )}
               </div>
               <div className="md:col-span-2 flex justify-end">
-                {saveButton(onClickSaveSecurity)}
+                {saveButton(onClickSecuritySaveWrapper)}
               </div>
             </form>
           </div>
