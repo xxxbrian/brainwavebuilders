@@ -67,10 +67,12 @@ export default function TopNav(props: TopNavProps) {
       </div>
       <div className="flex items-center">
         {/* Buttons */}
-        <div className="flex">
-          <CreateClassPopup />
-          <JoinCoursePopup />
-        </div>
+        {props.displayType !== "course" && (
+          <div className="flex">
+            <CreateClassPopup />
+            <JoinCoursePopup />
+          </div>
+        )}
         {/* Notifications and avatar */}
         <a href="#" className="hover:opacity-50">
           <IoMdNotificationsOutline className=" text-red-500 text-4xl ml-4" />
