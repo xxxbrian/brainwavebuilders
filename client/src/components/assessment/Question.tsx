@@ -2,7 +2,6 @@ import React from "react";
 import { GoTriangleUp } from "react-icons/go";
 import { GoTriangleDown } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
-import { BsList } from "react-icons/bs";
 
 type QuestionProps = {
   title: string;
@@ -49,15 +48,14 @@ const QuestionComponent: React.FC<QuestionProps> = ({
     onAnswerChange(value);
   };
 
-  const handleMarkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newMark = Number(e.target.value);
+  const handleMarkChange = (newMark: number) => {
     if (newMark >= 0) {
       onMarkChange(newMark);
     }
   };
 
   return (
-    <div className="flex flex-col p-4 ml-8 mr-8 border-2 border-blue-500 space-y-4 rounded-xl">
+    <div className="flex flex-col p-4 border-2 border-blue-500 space-y-4 rounded-xl">
       <div className="flex justify-between items-center">
         <label htmlFor="title" className="text-md font-medium mr-2">
           Question
@@ -85,7 +83,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
           className="p-2 border border-blue-300 rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Sample Answer"
           value={answer}
-          onChange={() => handleAnswerChange}
+          onChange={(e) => handleAnswerChange(e.target.value)}
           rows={3}
         />
       ) : (
@@ -121,24 +119,22 @@ const QuestionComponent: React.FC<QuestionProps> = ({
               id="mark"
               type="text"
               value={mark}
-              onChange={handleMarkChange}
+              onChange={(e) => {
+                handleMarkChange(Number(e.target.value));
+              }}
               className="p-2 border w-20 border-blue-300 rounded-md focus:outline-none focus:border-blue-500"
             />
             <div className="absolute top-0 right-0 flex flex-col h-full">
               <button
                 type="button"
-                onClick={() =>
-                  handleMarkChange({ target: { value: mark + 1 } })
-                }
+                onClick={() => handleMarkChange(mark + 1)}
                 className="p-1 text-blue-500 h-2/5 text-lg"
               >
                 <GoTriangleUp />
               </button>
               <button
                 type="button"
-                onClick={() =>
-                  handleMarkChange({ target: { value: mark - 1 } })
-                }
+                onClick={() => handleMarkChange(mark - 1)}
                 className="p-1 text-blue-500 h-1/2 text-lg"
               >
                 <GoTriangleDown />
