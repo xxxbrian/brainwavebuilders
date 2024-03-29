@@ -19,6 +19,7 @@ TypescriptMap: TypeMap = {
     "float": "number",
     "boolean": "boolean",
     "any": "any",
+    "null": "null",
 }
 
 
@@ -92,7 +93,7 @@ class TypescriptTypeCompilerV2:
         for tree in self.trees:
             check_type(tree)
 
-        all_types = set([t for t in self.names + self.buildin_types if self.is_valid_identifier(t)])
+        all_types = set([t for t in self.names + list(TypescriptMap.keys()) if self.is_valid_identifier(t)])
         type_not_defined = [type_name for type_name in type_defined if type_name not in all_types]
         if type_not_defined:
             raise ValueError(f"Types not defined: {', '.join(type_not_defined)}")
@@ -112,20 +113,18 @@ class TypescriptTypeCompilerV2:
         return True
 
     def parse_field(self, key: str, value: TypeDef) -> str:
-        return f"{key}: {self.simple_format(value)};"
+        return f"{key}: {self.format(value)};"
 
     def parse_root_object(self, name: str, definition: Object) -> str:
         if definition is None:
             definition = {}
-        # TODO: Waiting for tstype-py to generate formatted type definition from json
         fields = [self.parse_field(key, value)
                   for key, value in definition.items()]
         return f"export interface {name} {{\n    " + "\n    ".join(fields) + "\n}"
 
     def parse_root(self, name: str, definition: TypeDef):
         if isinstance(definition, str):
-            # TODO: Waiting for tstype-py to generate formatted type definition from json
-            return f"export type {name} = {self.simple_format(definition)};"
+            return f"export type {name} = {self.format(definition)};"
         elif isinstance(definition, dict):
             return self.parse_root_object(name, definition)
         else:
@@ -155,6 +154,37 @@ export const isAPIError = (e: any): e is APIError => {
         content = content.replace(',', ', ')
         content = content.replace('|', ' | ')
         return content
+
+    # func: str -> str
+    @staticmethod
+    def transform_basic_in_tree(d: dict | list, func: t.Callable):
+        if isinstance(d, dict):
+            for key in list(d.keys()):
+                if key == 'Basic':
+                    d[key] = func(d[key])
+                else:
+                    TypescriptTypeCompilerV2.transform_basic_in_tree(d[key], func)
+        elif isinstance(d, list):
+            for item in d:
+                TypescriptTypeCompilerV2.transform_basic_in_tree(item, func)
+        return d
+
+    def format(self, content: str) -> str:
+        try:
+            tree = json.loads(tstype.parse_type_definition(content))
+            tree = TypescriptTypeCompilerV2.transform_basic_in_tree(
+                tree,
+                lambda x: TypescriptMap[x] if x in TypescriptMap.keys() else x
+            )
+            return self.simple_format(tstype.build_type_definition(json.dumps(tree)))
+        except Exception as e:
+            code = Markdown(f"""
+```ts
+{content}
+```
+""")
+            console.print(code)
+            raise ValueError(f"^Format Failed: {e}")
 
     def parse(self):
         if self.model["types"] is None:

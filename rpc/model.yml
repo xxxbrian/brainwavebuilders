@@ -21,9 +21,9 @@ types:
 endpoints:
   ping:
     request:
-      seq: number
+      seq: int
     response:
-      seq: number
+      seq: int
     service: typescript
 
   checkEmail:
