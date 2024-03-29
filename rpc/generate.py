@@ -5,6 +5,9 @@ import sys
 import yaml
 from rpctypes import Model, TypeMap, TypeDef, Object, Endpoint
 from rich.console import Console
+import tstype_py as tstype
+import json
+from rich.markdown import Markdown
 
 console = Console()
 
@@ -33,6 +36,177 @@ class ModelCheckerContext:
     def add_warning(self, warning: str):
         self.warnings.append(warning)
 
+class TypescriptTypeCompilerV2:
+    model: Model
+    buildin_types: list[str] = ["string", "number", "boolean", "any", "null"]
+
+    def __init__(self, model: Model) -> None:
+        self.model = model
+        self.types: list[str] = []
+        self.names: list[str] = []
+        self.trees: list[dict] = []
+
+    def add_type(self, name: str, content: TypeDef, check_only: bool = False):
+        if content is None:
+            return
+        if isinstance(content, dict):
+            for key, value in content.items():
+                self.add_type(key, value, True)
+        else:
+            try:
+                self.trees.append(json.loads(tstype.parse_type_definition(content)))
+            except Exception as e:
+                code = Markdown(f"""
+```ts
+{name}: {content}
+```
+""")
+                console.print(code)
+                raise ValueError(f"^Syntax Error: {e}")
+            self.types.append(content)
+
+        if not check_only:
+            if not self.is_valid_identifier(name):
+                raise ValueError(f"Invalid identifier {name}")
+            self.names.append(name)
+        else:
+            if not self.is_valid_optional_identifier(name):
+                raise ValueError(f"Invalid identifier {name}")
+
+    def check_types(self):
+        type_defined = set()
+        def check_type(tree):
+            t = list(tree.keys())[0]
+            if t == 'Basic':
+                type_defined.add(tree['Basic'])
+                return
+            if t == 'Array':
+                check_type(tree['Array'])
+            if t == 'Map':
+                check_type(tree['Map'][0])
+                check_type(tree['Map'][1])
+            if t == 'Union':
+                for sub_tree in tree['Union']:
+                    check_type(sub_tree)
+
+        for tree in self.trees:
+            check_type(tree)
+
+        all_types = set([t for t in self.names + self.buildin_types if self.is_valid_identifier(t)])
+        type_not_defined = [type_name for type_name in type_defined if type_name not in all_types]
+        if type_not_defined:
+            raise ValueError(f"Types not defined: {', '.join(type_not_defined)}")
+
+    def is_valid_identifier(self, identifier: str) -> bool:
+        identifier_regex = re.compile(r"^[a-zA-Z_]\w*$")
+
+        if not identifier_regex.match(identifier):
+            return False
+        return True
+
+    def is_valid_optional_identifier(self, identifier: str) -> bool:
+        identifier_regex = re.compile(r"^[a-zA-Z_]\w*[a-zA-Z0-9\?]$")
+
+        if not identifier_regex.match(identifier):
+            return False
+        return True
+
+    def parse_field(self, key: str, value: TypeDef) -> str:
+        return f"{key}: {value};"
+
+    def parse_root_object(self, name: str, definition: Object) -> str:
+        if definition is None:
+            definition = {}
+        # TODO: Waiting for tstype-py to generate formatted type definition from json
+        fields = [self.parse_field(key, value)
+                  for key, value in definition.items()]
+        return f"export interface {name} {{\n    " + "\n    ".join(fields) + "\n}"
+
+    def parse_root(self, name: str, definition: TypeDef):
+        if isinstance(definition, str):
+            # TODO: Waiting for tstype-py to generate formatted type definition from json
+            return f"export type {name} = {definition};"
+        elif isinstance(definition, dict):
+            return self.parse_root_object(name, definition)
+        else:
+            raise TypeError(
+                f"Invalid type definition for {name}: {definition} is unexpected.")
+
+    def to_big_camel_case(self, name: str) -> str:
+        return name[0].upper() + name[1:]
+
+    def generate_api_error(self):
+        return '''export class APIError extends Error {
+    public code?: string;
+    constructor(message: string, code?: string) {
+        super(message);
+        this.code = code;
+    }
+}
+
+// eslint-disable-next-line
+export const isAPIError = (e: any): e is APIError => {
+    // eslint-disable-next-line
+    return e instanceof APIError || !!e._rpc_error;
+}
+'''
+
+    def parse(self):
+        if self.model["types"] is None:
+            self.model['types'] = {}
+        for key, value in self.model["types"].items():
+            self.add_type(key, value)
+        for endpoints in self.model["endpoints"].values():
+            if endpoints["request"] is None:
+                continue
+            for key, value in endpoints["request"].items():
+                self.add_type(key, value, True)
+            if endpoints["response"] is None:
+                continue
+            for key, value in endpoints["response"].items():
+                self.add_type(key, value, True)
+        self.check_types()
+        types_def = '\n\n'.join([self.parse_root(key, value)
+                                    for key, value in self.model["types"].items()])
+
+        # Now, parse the types for the endpoints
+        endpoints = self.model["endpoints"]
+
+        endpoint_types_def = ''
+
+        for name, endpoint in endpoints.items():
+            request = self.parse_root_object(
+                self.to_big_camel_case(name + "Request"), endpoint["request"])
+
+            response = self.parse_root_object(
+                self.to_big_camel_case(name + "Response"), endpoint["response"])
+
+            endpoint_types_def += f'''
+// {self.to_big_camel_case(name)}Request is the request that is sent to the {name} endpoint.
+{request}
+
+// {self.to_big_camel_case(name)}Response is the response that is sent to the {name} endpoint.
+{response}
+'''
+
+        return f'''//////////////////////////////
+// Types defined in the types file
+//////////////////////////////
+
+{types_def}
+
+//////////////////////////////
+// Endpoint Requests/Responses
+//////////////////////////////
+
+{endpoint_types_def}
+
+//////////////////////////////
+// API Errors
+//////////////////////////////
+
+{self.generate_api_error()}
+'''
 
 class TypescriptTypeCompiler:
     model: Model
@@ -218,6 +392,7 @@ export const isAPIError = (e: any): e is APIError => {
 {self.generate_api_error()}
 '''
 
+TypescriptTypeCompiler = TypescriptTypeCompilerV2
 
 class ClientRequesterCompiler:
     model: Model
