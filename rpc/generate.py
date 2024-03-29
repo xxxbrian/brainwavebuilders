@@ -112,7 +112,7 @@ class TypescriptTypeCompilerV2:
         return True
 
     def parse_field(self, key: str, value: TypeDef) -> str:
-        return f"{key}: {value};"
+        return f"{key}: {self.simple_format(value)};"
 
     def parse_root_object(self, name: str, definition: Object) -> str:
         if definition is None:
@@ -125,7 +125,7 @@ class TypescriptTypeCompilerV2:
     def parse_root(self, name: str, definition: TypeDef):
         if isinstance(definition, str):
             # TODO: Waiting for tstype-py to generate formatted type definition from json
-            return f"export type {name} = {definition};"
+            return f"export type {name} = {self.simple_format(definition)};"
         elif isinstance(definition, dict):
             return self.parse_root_object(name, definition)
         else:
@@ -150,6 +150,11 @@ export const isAPIError = (e: any): e is APIError => {
     return e instanceof APIError || !!e._rpc_error;
 }
 '''
+    def simple_format(self, content: str) -> str:
+        content = content.replace(' ', '')
+        content = content.replace(',', ', ')
+        content = content.replace('|', ' | ')
+        return content
 
     def parse(self):
         if self.model["types"] is None:
