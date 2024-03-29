@@ -55,7 +55,7 @@ function TopNavCourse(courseCode?: string, courseName?: string) {
 
 export default function TopNav(props: TopNavProps) {
   return (
-    <div className="border-b bg-white w-full align-middle flex justify-between max-w-[1195px] h-[75px]">
+    <div className="border-b bg-white w-full align-middle flex justify-between h-[75px]">
       {/* Menu Button for small screens */}
       <div className="lg:hidden">
         <SideNav displayType={props.displayType} />

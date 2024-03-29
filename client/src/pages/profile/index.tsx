@@ -141,7 +141,7 @@ export const Profile: React.FC = () => {
   }, [backend, token, userInfo]);
 
   return (
-    <div className="flex max-w-[1140px]">
+    <div className="flex">
       <div className="lg:block">
         <SideNav displayType={topNavProps.displayType} />
       </div>
