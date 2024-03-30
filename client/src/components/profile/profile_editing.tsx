@@ -260,167 +260,167 @@ const ProfileEditing: React.FC<EditingProps> = ({
           ))}
         </Tabs.List>
         <div className="flex flex-col m-auto max-w-[1000px]">
-          <Tabs.Content value="editProfile" className="p-6 space-y-8">
-            {/* Avatar */}
-            <div className="w-full flex-col flex items-center">
-              <div className="relative w-32 h-32 rounded-full flex justify-center overflow-hidden">
-                {avatar ? (
-                  <img src={avatar} alt="Avatar" className="object-cover" />
-                ) : (
-                  <IoMdPerson className="h-full w-full  text-zinc-500 bg-zinc-300" />
-                )}
-                <button
-                  className="absolute bottom-0 text-white transform translate-x w-full text-sm bg-zinc-500 opacity-90"
-                  onClick={() =>
-                    document.getElementById("avatarInput")!.click()
-                  }
-                >
-                  Edit
-                </button>
-                {/* Hide below input use button to click below input */}
-                <input
-                  id="avatarInput"
-                  type="file"
-                  accept=".jpg, .jpeg, .png"
-                  onChange={handleAvatarChange}
-                  style={{ display: "none" }}
-                />
+        <Tabs.Content value="editProfile" className="p-6 space-y-8">
+          {/* Avatar */}
+          <div className="w-full flex-col flex items-center">
+            <div className="relative w-32 h-32 rounded-full flex justify-center overflow-hidden">
+              {avatar ? (
+                <img src={avatar} alt="Avatar" className="object-cover" />
+              ) : (
+                <IoMdPerson className="h-full w-full  text-zinc-500 bg-zinc-300" />
+              )}
+              <button
+                className="absolute bottom-0 text-white transform translate-x w-full text-sm bg-zinc-500 opacity-90"
+                onClick={() =>
+                  document.getElementById("avatarInput")!.click()
+                }
+              >
+                Edit
+              </button>
+              {/* Hide below input use button to click below input */}
+              <input
+                id="avatarInput"
+                type="file"
+                accept=".jpg, .jpeg, .png"
+                onChange={handleAvatarChange}
+                style={{ display: "none" }}
+              />
+            </div>
+          </div>
+
+          {/* List of personal info */}
+          <div className="w-full">
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {textInputForm(
+                "firstName",
+                "First Name",
+                firstName,
+                onChangeFirstName,
+              )}
+              {textInputForm(
+                "lastName",
+                "Last Name",
+                lastName,
+                onChangeLastName,
+              )}
+              {selectInputForm("title", "Title", title, onChangeTitle, [
+                { value: "", label: "Select a title" },
+                { value: "Mr", label: "Mr" },
+                { value: "Ms", label: "Ms" },
+                { value: "Dr", label: "Dr" },
+                { value: "Prof", label: "Prof" },
+              ])}
+              {selectInputForm("gender", "Gender", gender, onChangeGender, [
+                { value: "", label: "Select gender" },
+                { value: "female", label: "Female" },
+                { value: "male", label: "Male" },
+                { value: "non-binary", label: "Non-binary" },
+              ])}
+              <div className="md:col-span-2">
+                {textInputForm("bio", "Bio", bio, onChangeBio, "textarea")}
               </div>
-            </div>
 
-            {/* List of personal info */}
-            <div className="w-full">
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {textInputForm(
-                  "firstName",
-                  "First Name",
-                  firstName,
-                  onChangeFirstName,
+              <div className="md:col-span-2 flex justify-end">
+                {saveButton(onClickProfileSave)}
+              </div>
+            </form>
+          </div>
+        </Tabs.Content>
+
+        <Tabs.Content value="preferences" className="p-6 space-y-8">
+          <div className="w-full">
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {selectInputForm(
+                "lang",
+                "Preferred language",
+                lang,
+                onChangeLang,
+                [
+                  { value: "", label: "Select your preferred language" },
+                  { value: "English", label: "English" },
+                  { value: "Mandarin", label: "Mandarin" },
+                  { value: "Korean", label: "Korean" },
+                ],
+              )}
+              {selectInputForm(
+                "timezone",
+                "Time Zone",
+                timezone,
+                onChangeTimezone,
+                [
+                  { value: "", label: "Select Time Zone" },
+                  {
+                    value: "AEST",
+                    label: "Australian Eastern Standard Time (AEST)",
+                  },
+                ],
+              )}
+              <div className="flex items-center md:col-span-2">
+                {switchInputForm(
+                  "notification",
+                  "Receive notifications for announcements",
+                  notification,
+                  onChangeNotification,
                 )}
-                {textInputForm(
-                  "lastName",
-                  "Last Name",
-                  lastName,
-                  onChangeLastName,
+              </div>
+              <div className="flex items-center md:col-span-2">
+                {switchInputForm(
+                  "recommendation",
+                  "Get recommendations for courses",
+                  recommendation,
+                  onChangeRecommendation,
                 )}
-                {selectInputForm("title", "Title", title, onChangeTitle, [
-                  { value: "", label: "Select a title" },
-                  { value: "Mr", label: "Mr" },
-                  { value: "Ms", label: "Ms" },
-                  { value: "Dr", label: "Dr" },
-                  { value: "Prof", label: "Prof" },
-                ])}
-                {selectInputForm("gender", "Gender", gender, onChangeGender, [
-                  { value: "", label: "Select gender" },
-                  { value: "female", label: "Female" },
-                  { value: "male", label: "Male" },
-                  { value: "non-binary", label: "Non-binary" },
-                ])}
-                <div className="md:col-span-2">
-                  {textInputForm("bio", "Bio", bio, onChangeBio, "textarea")}
-                </div>
+              </div>
 
-                <div className="md:col-span-2 flex justify-end">
-                  {saveButton(onClickProfileSave)}
-                </div>
-              </form>
-            </div>
-          </Tabs.Content>
+              <div className="md:col-span-2 flex justify-end">
+                {saveButton(onClickPreferenceSave)}
+              </div>
+            </form>
+          </div>
+        </Tabs.Content>
 
-          <Tabs.Content value="preferences" className="p-6 space-y-8">
-            <div className="w-full">
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {selectInputForm(
-                  "lang",
-                  "Preferred language",
-                  lang,
-                  onChangeLang,
-                  [
-                    { value: "", label: "Select your preferred language" },
-                    { value: "English", label: "English" },
-                    { value: "Mandarin", label: "Mandarin" },
-                    { value: "Korean", label: "Korean" },
-                  ],
+        <Tabs.Content value="security" className="p-6 space-y-8">
+          <div className="w-full">
+            <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="flex items-center md:col-span-2">
+                {switchInputForm(
+                  "auth",
+                  "Enable or disable two factor authentication",
+                  two_factor_auth,
+                  onChangeTwoFactorAuth,
                 )}
-                {selectInputForm(
-                  "timezone",
-                  "Time Zone",
-                  timezone,
-                  onChangeTimezone,
-                  [
-                    { value: "", label: "Select Time Zone" },
-                    {
-                      value: "AEST",
-                      label: "Australian Eastern Standard Time (AEST)",
-                    },
-                  ],
+              </div>
+
+              <div className="md:col-span-2 relative max-w-[600px]">
+                {PasswordInputForm(
+                  "current-password",
+                  "Current Password",
+                  currentPassword,
+                  setCurrentPassword,
                 )}
-                <div className="flex items-center md:col-span-2">
-                  {switchInputForm(
-                    "notification",
-                    "Receive notifications for announcements",
-                    notification,
-                    onChangeNotification,
-                  )}
-                </div>
-                <div className="flex items-center md:col-span-2">
-                  {switchInputForm(
-                    "recommendation",
-                    "Get recommendations for courses",
-                    recommendation,
-                    onChangeRecommendation,
-                  )}
-                </div>
-
-                <div className="md:col-span-2 flex justify-end">
-                  {saveButton(onClickPreferenceSave)}
-                </div>
-              </form>
-            </div>
-          </Tabs.Content>
-
-          <Tabs.Content value="security" className="p-6 space-y-8">
-            <div className="w-full">
-              <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="flex items-center md:col-span-2">
-                  {switchInputForm(
-                    "auth",
-                    "Enable or disable two factor authentication",
-                    two_factor_auth,
-                    onChangeTwoFactorAuth,
-                  )}
-                </div>
-
-                <div className="md:col-span-2 relative max-w-[600px]">
-                  {PasswordInputForm(
-                    "current-password",
-                    "Current Password",
-                    currentPassword,
-                    setCurrentPassword,
-                  )}
-                </div>
-                <div className="md:col-span-2 relative max-w-[600px]">
-                  {PasswordInputForm(
-                    "new-password",
-                    "New Password",
-                    newPassword,
-                    setNewPassword,
-                  )}
-                </div>
-                <div className="md:col-span-2 relative max-w-[600px]">
-                  {PasswordInputForm(
-                    "confirm-password",
-                    "Confirm your new password",
-                    confirmPassword,
-                    setConfirmPassword,
-                  )}
-                </div>
-                <div className="md:col-span-2 flex justify-end">
-                  {saveButton(onClickSecuritySaveWrapper)}
-                </div>
-              </form>
-            </div>
-          </Tabs.Content>
+              </div>
+              <div className="md:col-span-2 relative max-w-[600px]">
+                {PasswordInputForm(
+                  "new-password",
+                  "New Password",
+                  newPassword,
+                  setNewPassword,
+                )}
+              </div>
+              <div className="md:col-span-2 relative max-w-[600px]">
+                {PasswordInputForm(
+                  "confirm-password",
+                  "Confirm your new password",
+                  confirmPassword,
+                  setConfirmPassword,
+                )}
+              </div>
+              <div className="md:col-span-2 flex justify-end">
+                {saveButton(onClickSecuritySaveWrapper)}
+              </div>
+            </form>
+          </div>
+        </Tabs.Content>
         </div>
       </Tabs.Root>
 

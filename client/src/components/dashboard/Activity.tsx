@@ -34,7 +34,7 @@ export default function Activity(props: ActivityProps) {
   return (
     <div className="flex flex-col ml-1 font-bold">
       <h3 className="ml-3 text-2xl">Activity</h3>
-      <div className="flex border border-[#004E89] rounded-lg mt-2 px-5">
+      <div className="flex border border-[#004E89] rounded-lg mt-4 px-5">
         {Object.entries(barHeights).map(([day, height]) => (
           <div
             key={day}

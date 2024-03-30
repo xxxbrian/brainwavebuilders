@@ -57,7 +57,7 @@ export const Dashboard: React.FC = () => {
       </div>
       <div className="flex-grow">
         <TopNav {...topNavProps} />
-        <div className="flex flex-wrap space-y-4 pt-4 m-auto max-w-[1200px]">
+        <div className="flex flex-wrap pt-4 m-auto max-w-[1200px]">
           <Stats {...statsData} />
           <Activity {...activityData} />
           <StarredBoard courses={courses} />

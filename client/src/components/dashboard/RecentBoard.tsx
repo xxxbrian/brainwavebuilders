@@ -55,6 +55,7 @@ const CourseContainer: React.FC<CourseContainerProps> = ({ courses }) => {
       border-2
       border-blue-200
       rounded-2xl
+      mt-4
       max-w-[1098px]"
     >
       <div className="flex items-center justify-between px-4 py-2">
