@@ -259,7 +259,7 @@ const ProfileEditing: React.FC<EditingProps> = ({
             </Tabs.Trigger>
           ))}
         </Tabs.List>
-
+        <div className="flex flex-col m-auto max-w-[1000px]">
         <Tabs.Content value="editProfile" className="p-6 space-y-8">
           {/* Avatar */}
           <div className="w-full flex-col flex items-center">
@@ -271,7 +271,9 @@ const ProfileEditing: React.FC<EditingProps> = ({
               )}
               <button
                 className="absolute bottom-0 text-white transform translate-x w-full text-sm bg-zinc-500 opacity-90"
-                onClick={() => document.getElementById("avatarInput")!.click()}
+                onClick={() =>
+                  document.getElementById("avatarInput")!.click()
+                }
               >
                 Edit
               </button>
@@ -419,6 +421,7 @@ const ProfileEditing: React.FC<EditingProps> = ({
             </form>
           </div>
         </Tabs.Content>
+        </div>
       </Tabs.Root>
 
       <ErrorDialog

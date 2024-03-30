@@ -6,6 +6,7 @@ import JoinCoursePopup from "./JoinCoursePopup";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import courseLogo from "@/assets/Course_Logo.png";
 import SideNav from "./SideNav";
+import { SlHome } from "react-icons/sl";
 
 // Declare and export the TopNavProps type
 export type TopNavProps = {
@@ -55,7 +56,7 @@ function TopNavCourse(courseCode?: string, courseName?: string) {
 
 export default function TopNav(props: TopNavProps) {
   return (
-    <div className="border-b bg-white w-full align-middle flex justify-between max-w-[1195px] h-[75px]">
+    <div className="border-b bg-white w-full align-middle flex justify-between h-[75px]">
       {/* Menu Button for small screens */}
       <div className="lg:hidden">
         <SideNav displayType={props.displayType} />
@@ -67,13 +68,21 @@ export default function TopNav(props: TopNavProps) {
       </div>
       <div className="flex items-center">
         {/* Buttons */}
-        <div className="flex">
-          <CreateClassPopup />
-          <JoinCoursePopup />
-        </div>
+        {props.displayType !== "course" && (
+          <div className="flex">
+            <CreateClassPopup />
+            <JoinCoursePopup />
+          </div>
+        )}
+        {/* Home */}
+        {props.displayType === "course" && (
+          <a href="/dashboard" className="hover:opacity-50">
+            <SlHome className="text-orange-400 text-3xl ml-4" />
+          </a>
+        )}
         {/* Notifications and avatar */}
         <a href="#" className="hover:opacity-50">
-          <IoMdNotificationsOutline className=" text-red-500 text-4xl ml-4" />
+          <IoMdNotificationsOutline className="text-red-500 text-4xl ml-4" />
         </a>
         <a href="/profile" className="hover:opacity-50">
           {props.userImg ? (

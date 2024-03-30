@@ -51,13 +51,13 @@ export const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex max-w-[1140px]">
+    <div className="flex">
       <div className="lg:block">
         <SideNav displayType={topNavProps.displayType} />
       </div>
       <div className="flex-grow">
         <TopNav {...topNavProps} />
-        <div className="flex flex-wrap mt-2 ml-2 space-y-2">
+        <div className="flex flex-wrap pt-4 m-auto max-w-[1200px]">
           <Stats {...statsData} />
           <Activity {...activityData} />
           <StarredBoard courses={courses} />
