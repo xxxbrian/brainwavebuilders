@@ -10,6 +10,7 @@ import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
 import SideNav from "../../components/dashboard/SideNav";
 import orgLogo from "@/assets/unsw.png";
 import headerImg from "@/assets/unsw.png";
+import { PageFrame } from "@/components/structural/PageFrame";
 
 export const Dashboard: React.FC = () => {
   // Example data representing the hours worked each day
@@ -51,20 +52,21 @@ export const Dashboard: React.FC = () => {
   };
 
   return (
-    <div className="flex">
-      <div className="lg:block">
-        <SideNav displayType={topNavProps.displayType} />
-      </div>
-      <div className="flex-grow">
-        <TopNav {...topNavProps} />
-        <div className="flex flex-wrap pt-4 m-auto max-w-[1200px]">
-          <Stats {...statsData} />
-          <Activity {...activityData} />
-          <StarredBoard courses={courses} />
-          <RecentBoard courses={courses} />
+    <PageFrame title="Dashboard">
+      <div className="flex">
+        <div className="flex-1">
+          <TopNav {...topNavProps} />
+          <div className="flex flex-col flex-wrap pt-4 m-auto">
+            <div className="flex">
+              <Stats {...statsData} />
+              <Activity {...activityData} />
+            </div>
+            <StarredBoard courses={courses} />
+            <RecentBoard courses={courses} />
+          </div>
         </div>
       </div>
-    </div>
+    </PageFrame>
   );
 };
 

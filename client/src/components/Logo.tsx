@@ -4,6 +4,7 @@ import logoColor from "@/assets/logo-color.svg";
 import { StaticImageData } from "next/image";
 
 const sizes = {
+  xs: "40px",
   small: "50px",
   medium: "100px",
   large: "200px",

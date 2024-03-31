@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { ChangeEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
-const CreateClassPopup: React.FC = () => {
+export const CreateClassButton: React.FC = () => {
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
 
@@ -108,4 +108,4 @@ const CreateClassPopup: React.FC = () => {
   );
 };
 
-export default CreateClassPopup;
+export default CreateClassButton;

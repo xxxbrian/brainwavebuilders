@@ -1,7 +1,7 @@
 import React from "react";
 import Image from "next/image";
 import { RxAvatar } from "react-icons/rx";
-import CreateClassPopup from "./CreateCoursePopup";
+import CreateClassButton from "./CreateCoursePopup";
 import JoinCoursePopup from "./JoinCoursePopup";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import courseLogo from "@/assets/Course_Logo.png";
@@ -59,7 +59,7 @@ export default function TopNav(props: TopNavProps) {
     <div className="border-b bg-white w-full align-middle flex justify-between h-[75px]">
       {/* Menu Button for small screens */}
       <div className="lg:hidden">
-        <SideNav displayType={props.displayType} />
+        <SideNav displayType={props.displayType} isOpen />
       </div>
       <div className="hidden lg:flex items-center">
         {props.displayType === "dash"
@@ -70,7 +70,7 @@ export default function TopNav(props: TopNavProps) {
         {/* Buttons */}
         {props.displayType !== "course" && (
           <div className="flex">
-            <CreateClassPopup />
+            <CreateClassButton />
             <JoinCoursePopup />
           </div>
         )}
