@@ -68,3 +68,16 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
   - Created Submission Model: For managing student submissions, including file URLs, grades, feedback, and timestamps, linked to students and assignments.
   - Refined Schema Relationships: Fixed one-to-many and many-to-many relationships, ensuring accurate model associations and foreign key integrity.
 - Have started working on the APIs/endpoints of assignment submission. Hopefully should finish all assessment related APIs/endpoints by this week.
+
+꘎♡━━ Week 7 ━━━♡꘎
+- This week, I mainly worked on the creation, submission, and detailed fetching of assessments, alongside necessary architectural enhancements to our model definitions, data layers, and API handlers.
+- Here are the key features implemented:
+  - createAssessment: Allows instructors to create new assessments, specifying details such as title, description, course association, duration, and type.
+  - submitAnswers: Enables students to submit their answers for a specific assessment, which could be either for assignments or exams.
+  - fetchAssessmentDetails: Facilitates retrieval of detailed information about an assessment, including associated questions and submissions.
+- Here are the architectural enhancements.
+  - Model Updates (model.yml): Revised our model definitions to better represent the relationships between assessments, questions, and submissions.
+  - Data Layer Enhancements: Developed new data layer functions to serve as the foundational operations for creating assessments, submitting answers, and fetching assessment details.
+  - Converter Functions: Introduced converter functions to translate database models to API response formats.
+  - API Handlers: Implemented new API handlers that utilise our data layer functions and converter functions to process incoming requests and prepare appropriate responses.
+- Next week, we'll be working no merging the frontend and backend.
