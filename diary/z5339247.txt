@@ -82,3 +82,14 @@ Week 6:
 Refactored the frontend profile settings code.
 Added a phpmyadmin image to docker compose for debugging the database during development.
 Start writing the front-end business logic part of the profile setting.
+
+Week 7:
+
+Finished front-end business logic part of the profile setting.
+Updated RPC, based on Rust:
+    Added handling for complex types.
+    Release the tstype-py in PYPI.
+Participation in Meetings.
+
+
+
