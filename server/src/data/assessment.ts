@@ -5,6 +5,7 @@ import {
   CreateAssessmentRequest,
   SubmitAnswersRequest,
   SubmitAssignmentRequest,
+  CreateQuestionRequest,
   FetchAssessmentDetailsRequest,
 } from "@/apis";
 
@@ -122,5 +123,34 @@ export const fetchAssessmentDetails = async (
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");
+  }
+};
+
+export const createQuestion = async (
+  data: CreateQuestionRequest,
+): Promise<Question> => {
+  try {
+    const assessmentExists = await db.assessment.findUnique({
+      where: { id: data.assessmentId },
+    });
+
+    if (!assessmentExists) {
+      throw new APIError("Assessment not found", "ASSESSMENT_NOT_FOUND");
+    }
+
+    const question = await db.question.create({
+      data: {
+        assessmentId: data.assessmentId,
+        title: data.title,
+        type: data.type,
+        options: data.options ? JSON.parse(data.options) : undefined,
+        points: data.points,
+      },
+    });
+
+    return question;
+  } catch (error) {
+    console.error("Failed to create question:", error);
+    throw new APIError("Failed to create question", "CREATION_FAILED");
   }
 };
