@@ -36,6 +36,8 @@ export interface Assessment {
     dueDate?: string;
     duration?: number;
     type: string;
+    questions: Question[];
+    submissions: Submission[];
 }
 
 export interface Question {
@@ -93,7 +95,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-    
+
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -103,7 +105,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-    
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -120,7 +122,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-    
+
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -147,7 +149,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-    
+
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -186,8 +188,6 @@ export interface FetchAssessmentDetailsRequest {
 // FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
-    questions: Question[];
-    submissions: Submission[];
 }
 
 

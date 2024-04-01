@@ -27,6 +27,8 @@ types:
     dueDate?: string
     duration?: int
     type: string
+    questions: Question[]
+    submissions: Submission[]
 
   Question:
     id: string
@@ -133,6 +135,4 @@ endpoints:
       assessmentId: string
     response:
       assessment: Assessment
-      questions: Question[]
-      submissions: Submission[]
     service: typescript
