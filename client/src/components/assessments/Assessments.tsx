@@ -115,9 +115,9 @@ const Assessments: React.FC<AssessmentsProps> = ({ assessmentList }) => {
           <CreateExamPopup />
         </div>
 
-        <Card className="h-full w-full overflow-auto">
-          <table className="w-full min-w-max table-auto text-left">
-            <thead className="border border-blue-400 bg-blue-400">
+        <div className="h-[350px] w-full overflow-y-scroll m-3">
+          <table className="w-full min-w-max table-auto text-left h-full">
+            <thead className="border border-blue-400 bg-blue-400 sticky top-0">
               <tr>
                 {HEADERS.map((head, index) => (
                   <th className="border p-3 text-center">
@@ -179,7 +179,7 @@ const Assessments: React.FC<AssessmentsProps> = ({ assessmentList }) => {
               ))}
             </tbody>
           </table>
-        </Card>
+        </div>
       </div>
     </>
   );
