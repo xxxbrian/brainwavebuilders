@@ -22,9 +22,15 @@ type AssessmentResultsProps = {
 
 function filterResults(allResults) {
   let input = document.getElementById("resultSearch").value;
-  return allResults.filter((res) =>
-    res.name.toLowerCase().includes(input.toLowerCase()),
-  );
+  if (isNaN(input.charAt(0))) {
+    return allResults.filter((res) =>
+      res.name.toLowerCase().includes(input.toLowerCase()),
+    );
+  } else {
+    return allResults.filter((res) =>
+      res.time.toLowerCase().includes(input.toLowerCase()),
+    );
+  }
 }
 
 const AssessmentResults: React.FC<AssessmentResultsProps> = ({
@@ -79,7 +85,8 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
         rounded-2xl
         max-w-[1098px]
         min-w-[600px]
-        h-fit"
+        h-fit
+        max-h-[600px]"
       >
         <div className="flex items-center justify-between px-4 py-2">
           <div className="flex items-center">
@@ -110,9 +117,9 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
           </button>
         </div>
 
-        <Card className="h-full w-full overflow-auto">
-          <table className="w-full min-w-max table-auto text-left">
-            <thead className="border border-blue-400 bg-blue-400">
+        <div className="h-[350px] w-full overflow-y-scroll m-3">
+          <table className="w-full min-w-max table-auto text-left h-full">
+            <thead className="border border-blue-400 bg-blue-400 sticky top-0">
               <tr>
                 {RESULTS_HEAD.map((head, index) => (
                   <th className="border p-3 text-center">
@@ -169,7 +176,7 @@ const AssessmentResults: React.FC<AssessmentResultsProps> = ({
               ))}
             </tbody>
           </table>
-        </Card>
+        </div>
       </div>
     </>
   );
