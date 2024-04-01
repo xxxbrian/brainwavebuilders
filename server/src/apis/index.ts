@@ -2,14 +2,17 @@
 
 
 import { app } from "@/globals";
-import { ping } from "@/handlers/ping";
-import { login } from "@/handlers/login";
-import { verifyEmail } from "@/handlers/verifyEmail";
-import { getFeatured } from "@/handlers/getFeatured";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { register } from "@/handlers/register";
 import { checkEmail } from "@/handlers/checkEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { login } from "@/handlers/login";
+import { ping } from "@/handlers/ping";
+import { register } from "@/handlers/register";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { verifyEmail } from "@/handlers/verifyEmail";
+import { createAssessment } from "@/handlers/createAssessment";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -34,6 +37,36 @@ export interface Featured {
     background: string;
     title: string;
     description: string;
+}
+
+export interface Assessment {
+    id: string;
+    title: string;
+    description?: string;
+    courseCode: string;
+    startDate?: string;
+    dueDate?: string;
+    duration?: number;
+    type: string;
+}
+
+export interface Question {
+    id: string;
+    assessmentId: string;
+    title: string;
+    type: string;
+    options?: string;
+    points: number;
+}
+
+export interface Submission {
+    id: string;
+    assessmentId: string;
+    studentId: string;
+    submittedAt?: string;
+    fileUrl?: string;
+    answers?: string;
+    grade?: number;
 }
 
 //////////////////////////////
@@ -127,6 +160,46 @@ export interface SetUserProfileRequest {
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
     
+}
+
+// CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
+export interface CreateAssessmentRequest {
+    title: string;
+    description?: string;
+    courseCode: string;
+    startDate?: string;
+    dueDate?: string;
+    duration?: number;
+    type: string;
+}
+
+// CreateAssessmentResponse is the response that is sent to the createAssessment endpoint.
+export interface CreateAssessmentResponse {
+    assessment: Assessment;
+}
+
+// SubmitAnswersRequest is the request that is sent to the submitAnswers endpoint.
+export interface SubmitAnswersRequest {
+    assessmentId: string;
+    studentId: string;
+    answers: string;
+}
+
+// SubmitAnswersResponse is the response that is sent to the submitAnswers endpoint.
+export interface SubmitAnswersResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
+export interface FetchAssessmentDetailsRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
+export interface FetchAssessmentDetailsResponse {
+    assessment: Assessment;
+    questions: Question[];
+    submissions: Submission[];
 }
 
 
@@ -311,6 +384,69 @@ app.post('/api/setUserProfile', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request setUserProfile with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createAssessment is the endpoint handler for the createAssessment endpoint.
+// It wraps around the function at @/handlers/createAssessment.
+app.post('/api/createAssessment', async (req, res) => {
+    const request: CreateAssessmentRequest = req.body;
+    try {
+        const response: CreateAssessmentResponse = await createAssessment(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createAssessment with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// submitAnswers is the endpoint handler for the submitAnswers endpoint.
+// It wraps around the function at @/handlers/submitAnswers.
+app.post('/api/submitAnswers', async (req, res) => {
+    const request: SubmitAnswersRequest = req.body;
+    try {
+        const response: SubmitAnswersResponse = await submitAnswers(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request submitAnswers with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchAssessmentDetails is the endpoint handler for the fetchAssessmentDetails endpoint.
+// It wraps around the function at @/handlers/fetchAssessmentDetails.
+app.post('/api/fetchAssessmentDetails', async (req, res) => {
+    const request: FetchAssessmentDetailsRequest = req.body;
+    try {
+        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchAssessmentDetails with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
