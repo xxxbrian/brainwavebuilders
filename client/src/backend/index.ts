@@ -180,6 +180,18 @@ export interface SubmitAnswersResponse {
     submission: Submission;
 }
 
+// SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentRequest {
+    assessmentId: string;
+    studentId: string;
+    fileUrl: string;
+}
+
+// SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentResponse {
+    submission: Submission;
+}
+
 // FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsRequest {
     assessmentId: string;
@@ -500,6 +512,35 @@ export class BrainwavesClient {
         }
 
         return json as SubmitAnswersResponse;
+    }
+
+
+
+    async submitAssignment(request: SubmitAssignmentRequest): Promise<SubmitAssignmentResponse> {
+        const response = await fetch(`${this.base_url}/submitAssignment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as SubmitAssignmentResponse;
     }
 
 

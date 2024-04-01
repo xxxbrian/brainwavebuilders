@@ -13,6 +13,7 @@ import { register } from "@/handlers/register";
 import { setUserProfile } from "@/handlers/setUserProfile";
 import { submitAnswers } from "@/handlers/submitAnswers";
 import { verifyEmail } from "@/handlers/verifyEmail";
+import { submitAssignment } from "@/handlers/submitAssignment";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -189,6 +190,18 @@ export interface SubmitAnswersRequest {
 
 // SubmitAnswersResponse is the response that is sent to the submitAnswers endpoint.
 export interface SubmitAnswersResponse {
+    submission: Submission;
+}
+
+// SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentRequest {
+    assessmentId: string;
+    studentId: string;
+    fileUrl: string;
+}
+
+// SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentResponse {
     submission: Submission;
 }
 
@@ -426,6 +439,27 @@ app.post('/api/submitAnswers', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request submitAnswers with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// submitAssignment is the endpoint handler for the submitAssignment endpoint.
+// It wraps around the function at @/handlers/submitAssignment.
+app.post('/api/submitAssignment', async (req, res) => {
+    const request: SubmitAssignmentRequest = req.body;
+    try {
+        const response: SubmitAssignmentResponse = await submitAssignment(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request submitAssignment with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

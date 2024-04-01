@@ -130,6 +130,15 @@ endpoints:
       submission: Submission
     service: typescript
 
+  submitAssignment:
+    request:
+      assessmentId: string
+      studentId: string
+      fileUrl: string
+    response:
+      submission: Submission
+    service: typescript
+
   fetchAssessmentDetails:
     request:
       assessmentId: string

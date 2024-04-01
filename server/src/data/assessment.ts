@@ -4,6 +4,7 @@ import { APIError } from "@/apis";
 import {
   CreateAssessmentRequest,
   SubmitAnswersRequest,
+  SubmitAssignmentRequest,
   FetchAssessmentDetailsRequest,
 } from "@/apis";
 
@@ -70,6 +71,36 @@ export interface AssessmentDetails extends Assessment {
   questions: Question[];
   submissions: Submission[];
 }
+
+export const submitAssignment = async (
+  data: SubmitAssignmentRequest,
+): Promise<Submission> => {
+  try {
+    const assessment = await db.assessment.findUnique({
+      where: { id: data.assessmentId },
+    });
+    if (!assessment || assessment.type !== "assignment") {
+      throw new APIError(
+        "Invalid assessment type or not found",
+        "INVALID_ASSESSMENT",
+      );
+    }
+
+    const submission = await db.submission.create({
+      data: {
+        assessmentId: data.assessmentId,
+        studentId: data.studentId,
+        fileUrl: data.fileUrl,
+        submittedAt: new Date(),
+      },
+    });
+
+    return submission;
+  } catch (error) {
+    console.error("Failed to submit assignment:", error);
+    throw new APIError("Failed to submit assignment", "SUBMISSION_FAILED");
+  }
+};
 
 export const fetchAssessmentDetails = async (
   data: FetchAssessmentDetailsRequest,
