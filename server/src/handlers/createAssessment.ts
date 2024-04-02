@@ -14,6 +14,8 @@ export const createAssessment = async (
   ctx: any,
   request: CreateAssessmentRequest,
 ): Promise<CreateAssessmentResponse> => {
+  // TODO: Auth
+
   try {
     validateRequest(request);
 

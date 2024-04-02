@@ -113,7 +113,6 @@ endpoints:
   getUserInfo:
     request:
       email?: string
-      token: Token
     response:
       user: User
     service: typescript
@@ -121,7 +120,6 @@ endpoints:
   setUserProfile:
     request:
       user: User
-      token: Token
     response:
     service: typescript
 

@@ -55,9 +55,7 @@ export const Profile: React.FC = () => {
       return;
     }
     const inner = async () => {
-      const { user } = await backend.getUserInfo({
-        token: token ?? "",
-      });
+      const { user } = await backend.getUserInfo({});
       setUserInfo(user);
     };
 
@@ -123,7 +121,6 @@ export const Profile: React.FC = () => {
       try {
         await backend.setUserProfile({
           user: userInfo,
-          token,
         });
       } catch (e) {
         if (isAPIError(e)) {
