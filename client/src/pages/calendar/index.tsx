@@ -15,10 +15,19 @@ export const Calendar: React.FC = () => {
           {
             name: "CS3900 Meeting",
             time: "3 PM - 5 PM",
+            // random in ["lecture", "tutorial", "assignment", "exam"]
+            type:
+              ["lecture", "tutorial", "assignment", "exam"].sort(
+                () => Math.random() - 0.5,
+              )[0] ?? "assignment",
           },
           {
             name: "Assignment 1 Due",
             time: "10 AM - 11 AM",
+            type:
+              ["lecture", "tutorial", "assignment", "exam"].sort(
+                () => Math.random() - 0.5,
+              )[0] ?? "exam",
           },
         ]);
       } else {

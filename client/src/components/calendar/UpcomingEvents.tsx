@@ -1,7 +1,7 @@
 import React from "react";
 
 import { CalendarBoardProps } from "./CalendarBoard";
-import { type Event } from "./CalendarBoard";
+import { getBgColor, getSubjectColor } from "./colorScheme";
 
 export const UpcomingEvents: React.FC<CalendarBoardProps> = ({
   today,
@@ -25,7 +25,12 @@ export const UpcomingEvents: React.FC<CalendarBoardProps> = ({
           >
             <div className="flex justify-between">
               <div className="flex gap-x-2">
-                <div className="w-2 h-2 bg-indigo-700 rounded-full mt-[2px]" />
+                {/* <div className="w-2 h-2 bg-indigo-700 rounded-full mt-[2px]" /> */}
+                <div
+                  className={`w-2 h-2 rounded-full mt-[2px] bg-${getSubjectColor(
+                    event.type,
+                  )}`}
+                />
                 <p className="text-xs font-medium leading-3 text-gray-800">
                   {new Date(date).toLocaleDateString("en-GB", {
                     day: "numeric",
@@ -34,7 +39,12 @@ export const UpcomingEvents: React.FC<CalendarBoardProps> = ({
                   })}
                 </p>
               </div>
-              <p className="p-1 text-xs font-medium leading-3 text-indigo-700 rounded-sm bg-indigo-50">
+              {/* <p className="p-1 text-xs font-medium leading-3 text-indigo-700 rounded-sm bg-indigo-50"> */}
+              <p
+                className={`p-1 text-xs font-medium leading-3 rounded-sm bg-${getBgColor(
+                  event.type,
+                )} text-${getSubjectColor(event.type)}`}
+              >
                 {event.time}
               </p>
             </div>

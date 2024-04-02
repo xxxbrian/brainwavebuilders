@@ -1,8 +1,10 @@
 import React from "react";
+import { getBgColor, getSubjectColor } from "./colorScheme";
 
 export type Event = {
   name: string;
   time: string;
+  type: string;
 };
 
 export interface CalendarBoardProps {
@@ -34,12 +36,20 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
           <div
             className={`absolute flex items-center gap-x-1 2xl:w-[20%] md:w-40 py-3 px-2 ml-[10px] ${
               index == 0 ? "lg:mt-[-115px]" : "lg:mt-[-60px] mt-[-50px]"
-            } rounded bg-blue-50 xl:w-[20%] lg:w-[20%]`}
+            } rounded bg-${getBgColor(event.type)} xl:w-[20%] lg:w-[20%]`}
             key={`${day.getDay()}-${index}`}
           >
-            <div className="lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-blue-700 rounded-full lg:mt-[1px] mt-[-16px]" />
+            <div
+              className={`lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-${getSubjectColor(
+                event.type,
+              )} rounded-full lg:mt-[1px] mt-[-16px]`}
+            />
             <div tabIndex={0} className="ml-1">
-              <p className="text-xs font-medium leading-normal text-blue-700">
+              <p
+                className={`text-xs font-medium leading-normal text-${getSubjectColor(
+                  event.type,
+                )}`}
+              >
                 {event.name} <span className="ml-1">({event.time})</span>
               </p>
             </div>
