@@ -8,6 +8,7 @@ import {
   CreateQuestionRequest,
   FetchAssessmentDetailsRequest,
 } from "@/apis";
+import { hasCourse } from "./course";
 
 // Extend the CreateAssessmentRequest to include an optional array of questions
 interface ExtendedCreateAssessmentRequest extends CreateAssessmentRequest {
@@ -23,11 +24,8 @@ export const createAssessment = async (
   data: ExtendedCreateAssessmentRequest,
 ): Promise<Assessment> => {
   try {
-    const courseExists = await db.course.findUnique({
-      where: {
-        id: data.courseId,
-      },
-    });
+    const courseExists = await hasCourse(data.courseId);
+
     if (!courseExists) {
       throw new APIError("Course not found", "COURSE_NOT_FOUND");
     }

@@ -1,109 +1,98 @@
-import React, { useState } from "react";
+import { useBackend } from "@/hooks/useBackend";
+import { Button, Dialog, TextArea, TextField } from "@radix-ui/themes";
+import { useRouter } from "next/router";
+import React, { useCallback, useState } from "react";
 import type { ChangeEvent } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
 
 export const CreateCourseButton: React.FC = () => {
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
 
-  const handleCourseNameChange = (e: ChangeEvent<HTMLInputElement>) => {
-    setCourseName(e.target.value);
-  };
+  const handleCourseNameChange = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      setCourseName(e.target.value);
+    },
+    [],
+  );
 
-  const handleCourseDescriptionChange = (
-    e: ChangeEvent<HTMLTextAreaElement>,
-  ) => {
-    setCourseDescription(e.target.value);
-  };
+  const handleCourseDescriptionChange = useCallback(
+    (e: ChangeEvent<HTMLTextAreaElement>) => {
+      setCourseDescription(e.target.value);
+    },
+    [],
+  );
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // TODO: Send data to backend
+  const backend = useBackend();
 
-    // Reset form fields after submission
-    setCourseName("");
-    setCourseDescription("");
-  };
+  const router = useRouter();
+
+  const handleSubmit = useCallback(
+    async (e: React.FormEvent) => {
+      e.preventDefault();
+
+      const { course } = await backend.createCourse({
+        name: courseName,
+        description: courseDescription,
+      });
+
+      await router.push(`/course/${course.id}`);
+    },
+    [backend, courseDescription, courseName, router],
+  );
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger asChild>
+      <Dialog.Trigger>
         <button className="bg-gray-300 hover:text-white rounded-xl hover:bg-gray-400 px-4 py-2 flex-shrink-0">
-          Create Class
+          Create Course
         </button>
       </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
-        <Dialog.Content
-          className="fixed top-1/2 left-1/2 bg-white px-10 py-6 rounded-3xl shadow-lg"
-          style={{
-            transform: "translate(-50%, -50%)",
-          }}
-        >
-          <Dialog.Title className="flex justify-between items-start">
-            <span className="font-bold text-[40px] text-blue-500">
-              Create Class
-            </span>
-            {/* Close Button */}
-            <Dialog.Close asChild>
-              <button
-                className="text-orange-500 hover:text-orange-600 transform hover:scale-110 text-2xl"
-                style={{ transition: "transform 0.2s" }}
-              >
-                ×
-              </button>
-            </Dialog.Close>
-          </Dialog.Title>
-          <form onSubmit={handleSubmit}>
-            <div className="mb-4">
-              <label
-                htmlFor="courseName"
-                className="block text-lg font-medium mt-2"
-              >
-                Course Name
-              </label>
-              <input
-                type="text"
-                name="courseName"
-                id="courseName"
+      <Dialog.Content className="fixed bg-white px-10 py-6 rounded-3xl shadow-lg">
+        <Dialog.Title className="flex justify-between items-start">
+          Create Course
+          {/* Close Button */}
+          <Dialog.Close>
+            <button className="">×</button>
+          </Dialog.Close>
+        </Dialog.Title>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label
+              htmlFor="courseName"
+              className="block text-lg font-medium mt-2"
+            >
+              Course Name
+            </label>
+            <TextField.Root>
+              <TextField.Input
                 value={courseName}
                 onChange={handleCourseNameChange}
-                className="mt-1 w-full block rounded-md border-gray-400 border-2 p-2 text-md min-w-[450px]"
                 placeholder="Enter course name"
                 required
               />
-            </div>
-            <div className="mb-4">
-              <label
-                htmlFor="courseDescription"
-                className="block text-lg font-medium mt-2"
-              >
-                Course Description
-              </label>
-              <textarea
-                name="courseDescription"
-                id="courseDescription"
-                value={courseDescription}
-                onChange={handleCourseDescriptionChange}
-                rows={4}
-                className="mt-1 block rounded-md border-gray-400 border-2 p-2 text-md w-full"
-                placeholder="Enter course description"
-                required
-                style={{ height: "121px" }}
-              ></textarea>
-            </div>
-            <div className="flex justify-end mt-4">
-              <button
-                type="submit"
-                className="items-center justify-center rounded-md bg-[#004E89] text-lg font-bold text-white hover:bg-opacity-90 mt-2"
-                style={{ width: "156px", height: "44px" }}
-              >
-                Create Class
-              </button>
-            </div>
-          </form>
-        </Dialog.Content>
-      </Dialog.Portal>
+            </TextField.Root>
+          </div>
+          <div className="mb-4">
+            <label
+              htmlFor="courseDescription"
+              className="block text-lg font-medium mt-2"
+            >
+              Course Description
+            </label>
+            <TextArea
+              value={courseDescription}
+              onChange={handleCourseDescriptionChange}
+              placeholder="Enter course name"
+              required
+            />
+          </div>
+          <div className="flex justify-end mt-4">
+            <Button variant="solid" type="submit" size={"3"}>
+              Create Course
+            </Button>
+          </div>
+        </form>
+      </Dialog.Content>
     </Dialog.Root>
   );
 };

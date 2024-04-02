@@ -5,6 +5,7 @@ import { app } from "@/globals";
 import { ping } from "@/handlers/ping";
 import { submitAssignment } from "@/handlers/submitAssignment";
 import { login } from "@/handlers/login";
+import { getCourses } from "@/handlers/getCourses";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
 import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
@@ -13,6 +14,7 @@ import { createQuestion } from "@/handlers/createQuestion";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
+import { createCourse } from "@/handlers/createCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
@@ -79,7 +81,7 @@ export interface Course {
     id: string;
     name: string;
     code?: string;
-    description: string;
+    description?: string;
     imageURL?: string;
     createdBy: User;
     createdAt: number;
@@ -270,6 +272,29 @@ export interface FetchUserSevenDayActivityRequest {
 // FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
 export interface FetchUserSevenDayActivityResponse {
     activity: UserSevenDayActivity;
+}
+
+// CreateCourseRequest is the request that is sent to the createCourse endpoint.
+export interface CreateCourseRequest {
+    name: string;
+    description: string;
+    code?: string;
+    imageURL?: string;
+}
+
+// CreateCourseResponse is the response that is sent to the createCourse endpoint.
+export interface CreateCourseResponse {
+    course: Course;
+}
+
+// GetCoursesRequest is the request that is sent to the getCourses endpoint.
+export interface GetCoursesRequest {
+    courseIds: string[];
+}
+
+// GetCoursesResponse is the response that is sent to the getCourses endpoint.
+export interface GetCoursesResponse {
+    courses: Course[];
 }
 
 
@@ -616,6 +641,50 @@ app.post('/api/fetchUserSevenDayActivity', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request fetchUserSevenDayActivity with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createCourse is the endpoint handler for the createCourse endpoint.
+// It wraps around the function at @/handlers/createCourse.
+app.post('/api/createCourse', async (req, res) => {
+    const request: CreateCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: CreateCourseResponse = await createCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getCourses is the endpoint handler for the getCourses endpoint.
+// It wraps around the function at @/handlers/getCourses.
+app.post('/api/getCourses', async (req, res) => {
+    const request: GetCoursesRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetCoursesResponse = await getCourses(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getCourses with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

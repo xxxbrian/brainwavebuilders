@@ -63,7 +63,7 @@ export interface Course {
     id: string;
     name: string;
     code?: string;
-    description: string;
+    description?: string;
     imageURL?: string;
     createdBy: User;
     createdAt: number;
@@ -254,6 +254,29 @@ export interface FetchUserSevenDayActivityRequest {
 // FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
 export interface FetchUserSevenDayActivityResponse {
     activity: UserSevenDayActivity;
+}
+
+// CreateCourseRequest is the request that is sent to the createCourse endpoint.
+export interface CreateCourseRequest {
+    name: string;
+    description: string;
+    code?: string;
+    imageURL?: string;
+}
+
+// CreateCourseResponse is the response that is sent to the createCourse endpoint.
+export interface CreateCourseResponse {
+    course: Course;
+}
+
+// GetCoursesRequest is the request that is sent to the getCourses endpoint.
+export interface GetCoursesRequest {
+    courseIds: string[];
+}
+
+// GetCoursesResponse is the response that is sent to the getCourses endpoint.
+export interface GetCoursesResponse {
+    courses: Course[];
 }
 
 
@@ -712,6 +735,64 @@ export class BrainwavesClient {
 
         return json as FetchUserSevenDayActivityResponse;
     }
+
+
+
+    async createCourse(request: CreateCourseRequest): Promise<CreateCourseResponse> {
+        const response = await fetch(`${this.base_url}/createCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as CreateCourseResponse;
+    }
+
+
+
+    async getCourses(request: GetCoursesRequest): Promise<GetCoursesResponse> {
+        const response = await fetch(`${this.base_url}/getCourses`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetCoursesResponse;
+    }
 }
 
-export const brainwavesAPI = new BrainwavesClient('api');
+export const brainwavesAPI = new BrainwavesClient('/api');
