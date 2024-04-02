@@ -15,8 +15,11 @@ export const CalendarBoardMini: React.FC<CalendarBoardProps> = ({
     return [dayOfWeek, totalDays];
   }
 
-  function eventsInDay(day: number) {
-    const todayEvents = events.get(day) ?? [];
+  function eventsInDay(day: Date) {
+    const todayEvents =
+      events.get(
+        `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`,
+      ) ?? [];
     return (
       <>
         {todayEvents.map((event, index) => (
@@ -24,7 +27,7 @@ export const CalendarBoardMini: React.FC<CalendarBoardProps> = ({
             className={`absolute flex items-center w-12 py-[2px] ml-[40px] ${
               index == 0 ? "mt-8" : "mt-4"
             } border-l-4 border-indigo-700 rounded-full bg-indigo-50`}
-            key={`${day}-${index}`}
+            key={`${day.getDay()}-${index}`}
           />
         ))}
       </>
@@ -53,7 +56,7 @@ export const CalendarBoardMini: React.FC<CalendarBoardProps> = ({
                   >
                     <div className="flex justify-center w-full px-2 py-2 cursor-pointer">
                       <p className="text-xs text-gray-600">{day}</p>
-                      {day && eventsInDay(day)}
+                      {day && eventsInDay(new Date(year, month - 1, day))}
                     </div>
                   </td>
                 );

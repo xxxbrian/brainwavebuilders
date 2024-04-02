@@ -7,7 +7,7 @@ export type Event = {
 
 export interface CalendarBoardProps {
   today: Date;
-  events: Map<number, Event[]>;
+  events: Map<string, Event[]>;
 }
 
 export const CalendarBoard: React.FC<CalendarBoardProps> = ({
@@ -23,9 +23,11 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
     return [dayOfWeek, totalDays];
   }
 
-  function eventsInDay(day: number) {
-    const todayEvents = events.get(day) ?? [];
-    console.log(todayEvents);
+  function eventsInDay(day: Date) {
+    const todayEvents =
+      events.get(
+        `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`,
+      ) ?? [];
     return (
       <>
         {todayEvents.map((event, index) => (
@@ -33,7 +35,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
             className={`absolute flex items-center gap-x-1 2xl:w-[20%] md:w-40 py-3 px-2 ml-[10px] ${
               index == 0 ? "lg:mt-[-115px]" : "lg:mt-[-60px] mt-[-50px]"
             } rounded bg-blue-50 xl:w-[20%] lg:w-[20%]`}
-            key={`${day}-${index}`}
+            key={`${day.getDay()}-${index}`}
           >
             <div className="lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-blue-700 rounded-full lg:mt-[1px] mt-[-16px]" />
             <div tabIndex={0} className="ml-1">
@@ -68,7 +70,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
                         {day}
                       </p>
                     )}
-                    {day && eventsInDay(day)}
+                    {day && eventsInDay(new Date(year, month - 1, day))}
                   </td>
                 );
               })}
