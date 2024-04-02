@@ -120,6 +120,7 @@ export const fetchAssessmentDetails = async (
     }
 
     return assessment;
+
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");

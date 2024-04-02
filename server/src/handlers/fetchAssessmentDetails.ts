@@ -19,6 +19,7 @@ export const fetchAssessmentDetails = async (
     const formattedAssessment = formatAssessment(assessment);
 
     return { assessment: formattedAssessment };
+
   } catch (error) {
     console.error("Error in fetchAssessmentDetails handler:", error);
 
