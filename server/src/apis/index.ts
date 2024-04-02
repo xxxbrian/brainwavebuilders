@@ -2,19 +2,21 @@
 
 
 import { app } from "@/globals";
-import { checkEmail } from "@/handlers/checkEmail";
-import { createAssessment } from "@/handlers/createAssessment";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { login } from "@/handlers/login";
 import { ping } from "@/handlers/ping";
-import { register } from "@/handlers/register";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { submitAnswers } from "@/handlers/submitAnswers";
 import { submitAssignment } from "@/handlers/submitAssignment";
+import { login } from "@/handlers/login";
 import { verifyEmail } from "@/handlers/verifyEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { setUserProfile } from "@/handlers/setUserProfile";
 import { createQuestion } from "@/handlers/createQuestion";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { createAssessment } from "@/handlers/createAssessment";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { register } from "@/handlers/register";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -71,6 +73,26 @@ export interface Submission {
     fileUrl?: string;
     answers?: string;
     grade?: number;
+}
+
+export interface Course {
+    id: string;
+    name: string;
+    code?: string;
+    description: string;
+    imageURL?: string;
+    createdBy: User;
+    createdAt: number;
+}
+
+export interface UserStats {
+    coursesInProgress: number;
+    coursesCompleted: number;
+    tasksFinished: number;
+}
+
+export interface UserSevenDayActivity {
+    activities: number[];
 }
 
 //////////////////////////////
@@ -230,6 +252,26 @@ export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
 }
 
+// FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsRequest {
+
+}
+
+// FetchUserStatsResponse is the response that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsResponse {
+    stats: UserStats;
+}
+
+// FetchUserSevenDayActivityRequest is the request that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityRequest {
+
+}
+
+// FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityResponse {
+    activity: UserSevenDayActivity;
+}
+
 
 //////////////////////////////
 // API Errors
@@ -254,7 +296,8 @@ export const isAPIError = (e: any): e is APIError => {
 app.post('/api/ping', async (req, res) => {
     const request: PingRequest = req.body;
     try {
-        const response: PingResponse = await ping(request);
+        const ctx = { req, res };
+        const response: PingResponse = await ping(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -275,7 +318,8 @@ app.post('/api/ping', async (req, res) => {
 app.post('/api/checkEmail', async (req, res) => {
     const request: CheckEmailRequest = req.body;
     try {
-        const response: CheckEmailResponse = await checkEmail(request);
+        const ctx = { req, res };
+        const response: CheckEmailResponse = await checkEmail(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -296,7 +340,8 @@ app.post('/api/checkEmail', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     const request: RegisterRequest = req.body;
     try {
-        const response: RegisterResponse = await register(request);
+        const ctx = { req, res };
+        const response: RegisterResponse = await register(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -317,7 +362,8 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/verifyEmail', async (req, res) => {
     const request: VerifyEmailRequest = req.body;
     try {
-        const response: VerifyEmailResponse = await verifyEmail(request);
+        const ctx = { req, res };
+        const response: VerifyEmailResponse = await verifyEmail(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -338,7 +384,8 @@ app.post('/api/verifyEmail', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     const request: LoginRequest = req.body;
     try {
-        const response: LoginResponse = await login(request);
+        const ctx = { req, res };
+        const response: LoginResponse = await login(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -359,7 +406,8 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/getFeatured', async (req, res) => {
     const request: GetFeaturedRequest = req.body;
     try {
-        const response: GetFeaturedResponse = await getFeatured(request);
+        const ctx = { req, res };
+        const response: GetFeaturedResponse = await getFeatured(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -380,7 +428,8 @@ app.post('/api/getFeatured', async (req, res) => {
 app.post('/api/getUserInfo', async (req, res) => {
     const request: GetUserInfoRequest = req.body;
     try {
-        const response: GetUserInfoResponse = await getUserInfo(request);
+        const ctx = { req, res };
+        const response: GetUserInfoResponse = await getUserInfo(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -401,7 +450,8 @@ app.post('/api/getUserInfo', async (req, res) => {
 app.post('/api/setUserProfile', async (req, res) => {
     const request: SetUserProfileRequest = req.body;
     try {
-        const response: SetUserProfileResponse = await setUserProfile(request);
+        const ctx = { req, res };
+        const response: SetUserProfileResponse = await setUserProfile(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -422,7 +472,8 @@ app.post('/api/setUserProfile', async (req, res) => {
 app.post('/api/createAssessment', async (req, res) => {
     const request: CreateAssessmentRequest = req.body;
     try {
-        const response: CreateAssessmentResponse = await createAssessment(request);
+        const ctx = { req, res };
+        const response: CreateAssessmentResponse = await createAssessment(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -443,7 +494,8 @@ app.post('/api/createAssessment', async (req, res) => {
 app.post('/api/submitAnswers', async (req, res) => {
     const request: SubmitAnswersRequest = req.body;
     try {
-        const response: SubmitAnswersResponse = await submitAnswers(request);
+        const ctx = { req, res };
+        const response: SubmitAnswersResponse = await submitAnswers(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -464,7 +516,8 @@ app.post('/api/submitAnswers', async (req, res) => {
 app.post('/api/submitAssignment', async (req, res) => {
     const request: SubmitAssignmentRequest = req.body;
     try {
-        const response: SubmitAssignmentResponse = await submitAssignment(request);
+        const ctx = { req, res };
+        const response: SubmitAssignmentResponse = await submitAssignment(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -485,7 +538,8 @@ app.post('/api/submitAssignment', async (req, res) => {
 app.post('/api/createQuestion', async (req, res) => {
     const request: CreateQuestionRequest = req.body;
     try {
-        const response: CreateQuestionResponse = await createQuestion(request);
+        const ctx = { req, res };
+        const response: CreateQuestionResponse = await createQuestion(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -506,7 +560,8 @@ app.post('/api/createQuestion', async (req, res) => {
 app.post('/api/fetchAssessmentDetails', async (req, res) => {
     const request: FetchAssessmentDetailsRequest = req.body;
     try {
-        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(request);
+        const ctx = { req, res };
+        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -517,6 +572,50 @@ app.post('/api/fetchAssessmentDetails', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request fetchAssessmentDetails with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchUserStats is the endpoint handler for the fetchUserStats endpoint.
+// It wraps around the function at @/handlers/fetchUserStats.
+app.post('/api/fetchUserStats', async (req, res) => {
+    const request: FetchUserStatsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchUserStatsResponse = await fetchUserStats(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchUserStats with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchUserSevenDayActivity is the endpoint handler for the fetchUserSevenDayActivity endpoint.
+// It wraps around the function at @/handlers/fetchUserSevenDayActivity.
+app.post('/api/fetchUserSevenDayActivity', async (req, res) => {
+    const request: FetchUserSevenDayActivityRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchUserSevenDayActivityResponse = await fetchUserSevenDayActivity(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchUserSevenDayActivity with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

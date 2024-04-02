@@ -59,6 +59,26 @@ export interface Submission {
     grade?: number;
 }
 
+export interface Course {
+    id: string;
+    name: string;
+    code?: string;
+    description: string;
+    imageURL?: string;
+    createdBy: User;
+    createdAt: number;
+}
+
+export interface UserStats {
+    coursesInProgress: number;
+    coursesCompleted: number;
+    tasksFinished: number;
+}
+
+export interface UserSevenDayActivity {
+    activities: number[];
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
@@ -214,6 +234,26 @@ export interface FetchAssessmentDetailsRequest {
 // FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
+}
+
+// FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsRequest {
+
+}
+
+// FetchUserStatsResponse is the response that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsResponse {
+    stats: UserStats;
+}
+
+// FetchUserSevenDayActivityRequest is the request that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityRequest {
+
+}
+
+// FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityResponse {
+    activity: UserSevenDayActivity;
 }
 
 
@@ -613,6 +653,64 @@ export class BrainwavesClient {
         }
 
         return json as FetchAssessmentDetailsResponse;
+    }
+
+
+
+    async fetchUserStats(request: FetchUserStatsRequest): Promise<FetchUserStatsResponse> {
+        const response = await fetch(`${this.base_url}/fetchUserStats`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchUserStatsResponse;
+    }
+
+
+
+    async fetchUserSevenDayActivity(request: FetchUserSevenDayActivityRequest): Promise<FetchUserSevenDayActivityResponse> {
+        const response = await fetch(`${this.base_url}/fetchUserSevenDayActivity`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchUserSevenDayActivityResponse;
     }
 }
 

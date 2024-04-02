@@ -1,41 +1,38 @@
-import React from "react";
+import { UserSevenDayActivity } from "@/backend";
+import { useBackend } from "@/hooks/useBackend";
+import React, { useEffect, useState } from "react";
 
 // Define and export the ActivityProps type
-export type ActivityProps = {
-  Mon: number;
-  Tues: number;
-  Wed: number;
-  Thurs: number;
-  Fri: number;
-  Sat: number;
-  Sun: number;
-  currentDay: string; // Should be one of the weekdays
-};
+
+interface Props {
+  activities?: UserSevenDayActivity;
+}
 
 // The Activity component now takes ActivityProps as props
-export default function Activity(props: ActivityProps) {
-  // Calculate the height for the bars based on the hours
-  const maxHeight = 8; // Maximum height of a bar
-  const barHeights = {
-    Mon: (props.Mon / 12) * maxHeight,
-    Tues: (props.Tues / 12) * maxHeight,
-    Wed: (props.Wed / 12) * maxHeight,
-    Thurs: (props.Thurs / 12) * maxHeight,
-    Fri: (props.Fri / 12) * maxHeight,
-    Sat: (props.Sat / 12) * maxHeight,
-    Sun: (props.Sun / 12) * maxHeight,
+export const UserSevenDayActivitiesDisplay: React.FC<Props> = ({
+  activities,
+}) => {
+  const getHeights = () => {
+    return {
+      Mon: (activities?.activities[0] ?? 0 / 12) * 8,
+      Tues: (activities?.activities[1] ?? 0 / 12) * 8,
+      Wed: (activities?.activities[2] ?? 0 / 12) * 8,
+      Thurs: (activities?.activities[3] ?? 0 / 12) * 8,
+      Fri: (activities?.activities[4] ?? 0 / 12) * 8,
+      Sat: (activities?.activities[5] ?? 0 / 12) * 8,
+      Sun: (activities?.activities[6] ?? 0 / 12) * 8,
+    };
   };
 
   // Function to determine the bar color
   const barColor = (day: string) => {
-    return props.currentDay === day ? "bg-[#004E89]" : "bg-blue-200";
+    return "bg-blue-200";
   };
 
   return (
     <div className="flex flex-col ml-1 font-bold">
-      <h3 className="ml-3 text-2xl">Activity</h3>
-      <div className="flex border border-[#004E89] rounded-lg mt-4 px-5">
-        {Object.entries(barHeights).map(([day, height]) => (
+      <div className="flex mt-4 px-5 h-48">
+        {Object.entries(getHeights()).map(([day, height]) => (
           <div
             key={day}
             className="px-3 py-1.5 flex flex-col mx-auto justify-end"
@@ -50,4 +47,22 @@ export default function Activity(props: ActivityProps) {
       </div>
     </div>
   );
-}
+};
+
+export const StatefulUserSevenDayActivitiesDisplay: React.FC = () => {
+  const [activities, setActivities] = useState<UserSevenDayActivity>();
+
+  const backend = useBackend();
+
+  useEffect(() => {
+    const inner = async () => {
+      // Fetch the user's activities
+      const { activity } = await backend.fetchUserSevenDayActivity({});
+      setActivities(activity);
+    };
+
+    void inner();
+  }, [backend]);
+
+  return <UserSevenDayActivitiesDisplay activities={activities} />;
+};

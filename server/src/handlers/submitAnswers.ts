@@ -9,6 +9,7 @@ import { APIError } from "@/apis";
 // as long as the signature remains the same and the function is exported.
 
 export const submitAnswers = async (
+  ctx: any,
   request: SubmitAnswersRequest,
 ): Promise<SubmitAnswersResponse> => {
   try {

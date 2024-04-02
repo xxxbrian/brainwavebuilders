@@ -37,6 +37,7 @@ class ModelCheckerContext:
     def add_warning(self, warning: str):
         self.warnings.append(warning)
 
+
 class TypescriptTypeCompilerV2:
     model: Model
     buildin_types: list[str] = ["string", "number", "boolean", "any", "null"]
@@ -55,7 +56,8 @@ class TypescriptTypeCompilerV2:
                 self.add_type(key, value, True)
         else:
             try:
-                self.trees.append(json.loads(tstype.parse_type_definition(content)))
+                self.trees.append(json.loads(
+                    tstype.parse_type_definition(content)))
             except Exception as e:
                 code = Markdown(f"""
 ```ts
@@ -76,6 +78,7 @@ class TypescriptTypeCompilerV2:
 
     def check_types(self):
         type_defined = set()
+
         def check_type(tree):
             t = list(tree.keys())[0]
             if t == 'Basic':
@@ -93,10 +96,13 @@ class TypescriptTypeCompilerV2:
         for tree in self.trees:
             check_type(tree)
 
-        all_types = set([t for t in self.names + list(TypescriptMap.keys()) if self.is_valid_identifier(t)])
-        type_not_defined = [type_name for type_name in type_defined if type_name not in all_types]
+        all_types = set(
+            [t for t in self.names + list(TypescriptMap.keys()) if self.is_valid_identifier(t)])
+        type_not_defined = [
+            type_name for type_name in type_defined if type_name not in all_types]
         if type_not_defined:
-            raise ValueError(f"Types not defined: {', '.join(type_not_defined)}")
+            raise ValueError(
+                f"Types not defined: {', '.join(type_not_defined)}")
 
     def is_valid_identifier(self, identifier: str) -> bool:
         identifier_regex = re.compile(r"^[a-zA-Z_]\w*$")
@@ -149,6 +155,7 @@ export const isAPIError = (e: any): e is APIError => {
     return e instanceof APIError || !!e._rpc_error;
 }
 '''
+
     def simple_format(self, content: str) -> str:
         content = content.replace(' ', '')
         content = content.replace(',', ', ')
@@ -163,7 +170,8 @@ export const isAPIError = (e: any): e is APIError => {
                 if key == 'Basic':
                     d[key] = func(d[key])
                 else:
-                    TypescriptTypeCompilerV2.transform_basic_in_tree(d[key], func)
+                    TypescriptTypeCompilerV2.transform_basic_in_tree(
+                        d[key], func)
         elif isinstance(d, list):
             for item in d:
                 TypescriptTypeCompilerV2.transform_basic_in_tree(item, func)
@@ -202,7 +210,7 @@ export const isAPIError = (e: any): e is APIError => {
                 self.add_type(key, value, True)
         self.check_types()
         types_def = '\n\n'.join([self.parse_root(key, value)
-                                    for key, value in self.model["types"].items()])
+                                 for key, value in self.model["types"].items()])
 
         # Now, parse the types for the endpoints
         endpoints = self.model["endpoints"]
@@ -242,6 +250,7 @@ export const isAPIError = (e: any): e is APIError => {
 
 {self.generate_api_error()}
 '''
+
 
 class TypescriptTypeCompiler:
     model: Model
@@ -427,7 +436,9 @@ export const isAPIError = (e: any): e is APIError => {
 {self.generate_api_error()}
 '''
 
+
 TypescriptTypeCompiler = TypescriptTypeCompilerV2
+
 
 class ClientRequesterCompiler:
     model: Model
@@ -618,7 +629,7 @@ class TypescriptService(Service):
 // This code has been automatically generated.
 // You can move this function to other files within the {self.src_dir} directory,
 // as long as the signature remains the same and the function is exported.
-export const {name} = async (request: {request_type_name}): Promise<{response_type_name}> => {{
+export const {name} = async (ctx: any, request: {request_type_name}{', req: Request, res: Response' if endpoint.get("raw") else ""}): Promise<{response_type_name}> => {{
     throw new Error('Not implemented');
 }}'''
 
@@ -628,7 +639,8 @@ export const {name} = async (request: {request_type_name}): Promise<{response_ty
 app.post('{self.base}/{name}', async (req, res) => {{
     const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
     try {{
-        const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(request);
+        const ctx = {{ req, res }};
+        const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(ctx, request);
         res.json(response);
     }} catch (e) {{
         if (e instanceof APIError) {{
