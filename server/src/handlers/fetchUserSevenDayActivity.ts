@@ -8,6 +8,7 @@ import {
 // You can move this function to other files within the /app/server/src/handlers directory,
 // as long as the signature remains the same and the function is exported.
 export const fetchUserSevenDayActivity = async (
+  ctx: {},
   request: FetchUserSevenDayActivityRequest,
 ): Promise<FetchUserSevenDayActivityResponse> => {
   return {

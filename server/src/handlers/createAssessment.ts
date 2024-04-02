@@ -1,4 +1,8 @@
-import { CreateAssessmentRequest, CreateAssessmentResponse, APIError } from "@/apis";
+import {
+  CreateAssessmentRequest,
+  CreateAssessmentResponse,
+  APIError,
+} from "@/apis";
 import { createAssessment as createAssessmentData } from "@/data/assessment";
 import { formatAssessment as formatAssessmentResponse } from "@/converts/assessment";
 
@@ -6,14 +10,16 @@ import { formatAssessment as formatAssessmentResponse } from "@/converts/assessm
 // This code has been automatically generated.
 // You can move this function to other files within the /app/server/src/handlers directory,
 // as long as the signature remains the same and the function is exported.
-export const createAssessment = async (request: CreateAssessmentRequest): Promise<CreateAssessmentResponse> => {
+export const createAssessment = async (
+  ctx: {},
+  request: CreateAssessmentRequest,
+): Promise<CreateAssessmentResponse> => {
   try {
     validateRequest(request);
 
     const assessment = await createAssessmentData(request);
 
     return { assessment: formatAssessmentResponse(assessment) };
-
   } catch (error) {
     console.error("Error in createAssessment handler:", error);
 

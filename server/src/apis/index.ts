@@ -268,7 +268,8 @@ export const isAPIError = (e: any): e is APIError => {
 app.post('/api/ping', async (req, res) => {
     const request: PingRequest = req.body;
     try {
-        const response: PingResponse = await ping(request);
+        const ctx = {};
+        const response: PingResponse = await ping(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -289,7 +290,8 @@ app.post('/api/ping', async (req, res) => {
 app.post('/api/checkEmail', async (req, res) => {
     const request: CheckEmailRequest = req.body;
     try {
-        const response: CheckEmailResponse = await checkEmail(request);
+        const ctx = {};
+        const response: CheckEmailResponse = await checkEmail(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -310,7 +312,8 @@ app.post('/api/checkEmail', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     const request: RegisterRequest = req.body;
     try {
-        const response: RegisterResponse = await register(request);
+        const ctx = {};
+        const response: RegisterResponse = await register(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -331,7 +334,8 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/verifyEmail', async (req, res) => {
     const request: VerifyEmailRequest = req.body;
     try {
-        const response: VerifyEmailResponse = await verifyEmail(request);
+        const ctx = {};
+        const response: VerifyEmailResponse = await verifyEmail(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -352,7 +356,8 @@ app.post('/api/verifyEmail', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     const request: LoginRequest = req.body;
     try {
-        const response: LoginResponse = await login(request);
+        const ctx = {};
+        const response: LoginResponse = await login(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -373,7 +378,8 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/getFeatured', async (req, res) => {
     const request: GetFeaturedRequest = req.body;
     try {
-        const response: GetFeaturedResponse = await getFeatured(request);
+        const ctx = {};
+        const response: GetFeaturedResponse = await getFeatured(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -394,7 +400,8 @@ app.post('/api/getFeatured', async (req, res) => {
 app.post('/api/getUserInfo', async (req, res) => {
     const request: GetUserInfoRequest = req.body;
     try {
-        const response: GetUserInfoResponse = await getUserInfo(request);
+        const ctx = {};
+        const response: GetUserInfoResponse = await getUserInfo(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -415,7 +422,8 @@ app.post('/api/getUserInfo', async (req, res) => {
 app.post('/api/setUserProfile', async (req, res) => {
     const request: SetUserProfileRequest = req.body;
     try {
-        const response: SetUserProfileResponse = await setUserProfile(request);
+        const ctx = {};
+        const response: SetUserProfileResponse = await setUserProfile(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -436,7 +444,8 @@ app.post('/api/setUserProfile', async (req, res) => {
 app.post('/api/createAssessment', async (req, res) => {
     const request: CreateAssessmentRequest = req.body;
     try {
-        const response: CreateAssessmentResponse = await createAssessment(request);
+        const ctx = {};
+        const response: CreateAssessmentResponse = await createAssessment(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -457,7 +466,8 @@ app.post('/api/createAssessment', async (req, res) => {
 app.post('/api/submitAnswers', async (req, res) => {
     const request: SubmitAnswersRequest = req.body;
     try {
-        const response: SubmitAnswersResponse = await submitAnswers(request);
+        const ctx = {};
+        const response: SubmitAnswersResponse = await submitAnswers(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -478,7 +488,8 @@ app.post('/api/submitAnswers', async (req, res) => {
 app.post('/api/fetchAssessmentDetails', async (req, res) => {
     const request: FetchAssessmentDetailsRequest = req.body;
     try {
-        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(request);
+        const ctx = {};
+        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -499,7 +510,8 @@ app.post('/api/fetchAssessmentDetails', async (req, res) => {
 app.post('/api/fetchUserStats', async (req, res) => {
     const request: FetchUserStatsRequest = req.body;
     try {
-        const response: FetchUserStatsResponse = await fetchUserStats(request);
+        const ctx = {};
+        const response: FetchUserStatsResponse = await fetchUserStats(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -520,7 +532,8 @@ app.post('/api/fetchUserStats', async (req, res) => {
 app.post('/api/fetchUserSevenDayActivity', async (req, res) => {
     const request: FetchUserSevenDayActivityRequest = req.body;
     try {
-        const response: FetchUserSevenDayActivityResponse = await fetchUserSevenDayActivity(request);
+        const ctx = {};
+        const response: FetchUserSevenDayActivityResponse = await fetchUserSevenDayActivity(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {

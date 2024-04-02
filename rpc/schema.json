@@ -56,6 +56,14 @@
           "service": {
             "type": "string",
             "enum": ["typescript"]
+          },
+          "raw": {
+            "type": "boolean",
+            "default": true
+          },
+          "public": {
+            "type": "boolean",
+            "default": true
           }
         },
         "required": ["request", "response", "service"]
