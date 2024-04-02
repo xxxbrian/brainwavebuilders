@@ -25,7 +25,7 @@ export const createAssessment = async (
   try {
     const courseExists = await db.course.findUnique({
       where: {
-        code: data.courseCode,
+        code: data.courseId,
       },
     });
     if (!courseExists) {
@@ -38,7 +38,7 @@ export const createAssessment = async (
         data: {
           title: data.title,
           description: data.description,
-          courseCode: data.courseCode,
+          courseId: data.courseId,
           startDate: data.startDate ? new Date(data.startDate) : undefined,
           dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
           duration: data.duration,

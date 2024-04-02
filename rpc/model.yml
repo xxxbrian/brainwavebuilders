@@ -22,7 +22,7 @@ types:
     id: string
     title: string
     description?: string
-    courseCode: string
+    courseId: string
     startDate?: string
     dueDate?: string
     duration?: int
@@ -51,7 +51,7 @@ types:
     id: string
     name: string
     code?: string # NOTE: This is not unique. Do not key to this.
-    description: string
+    description?: string
     imageURL?: string
     createdBy: User
     createdAt: int
@@ -129,7 +129,7 @@ endpoints:
     request:
       title: string
       description?: string
-      courseCode: string
+      courseId: string
       startDate?: string
       dueDate?: string
       duration?: int

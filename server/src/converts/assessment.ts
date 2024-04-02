@@ -26,7 +26,7 @@ export const formatAssessment = (
     id: assessment.id,
     title: assessment.title,
     description: assessment.description ?? undefined,
-    courseCode: assessment.courseCode,
+    courseId: assessment.courseId,
     startDate: assessment.startDate
       ? assessment.startDate.toISOString()
       : undefined,

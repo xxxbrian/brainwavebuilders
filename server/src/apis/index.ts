@@ -47,7 +47,7 @@ export interface Assessment {
     id: string;
     title: string;
     description?: string;
-    courseCode: string;
+    courseId: string;
     startDate?: string;
     dueDate?: string;
     duration?: number;
@@ -192,7 +192,7 @@ export interface SetUserProfileResponse {
 export interface CreateAssessmentRequest {
     title: string;
     description?: string;
-    courseCode: string;
+    courseId: string;
     startDate?: string;
     dueDate?: string;
     duration?: number;
