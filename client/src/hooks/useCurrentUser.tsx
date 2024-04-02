@@ -1,5 +1,5 @@
-import { BrainwavesClient, User, brainwavesAPI } from "@/backend";
-import { UserData } from "@/utils/data";
+import { BrainwavesClient, User } from "@/backend";
+import Cookies from "js-cookie";
 import { createContext, useContext } from "react";
 
 export interface Session {
@@ -25,21 +25,19 @@ export const useSession = (): Session | null => {
 export const createSession = async (
   backend: BrainwavesClient,
 ): Promise<Session | null> => {
-  const token = localStorage.getItem("token");
+  const token = Cookies.get("token");
 
   if (!token) {
     return null;
   }
 
   try {
-    console.log("Getting user info");
-    const { user } = await backend.getUserInfo({
-      token,
-    });
+    // TODO: remove the requirement for providing the token.
+    const { user } = await backend.getUserInfo({ token });
 
     return { user, token };
   } catch {
-    localStorage.removeItem("token");
+    Cookies.remove("token");
     return null;
   }
 };

@@ -5,16 +5,29 @@ import "@radix-ui/themes/styles.css";
 
 import { Theme } from "@radix-ui/themes";
 import { useAppearance } from "@/hooks/useAppearance";
-import { Session, createSession } from "@/hooks/useCurrentUser";
-import { useRouter } from "next/router";
+import { Session, SessionContext, createSession } from "@/hooks/useCurrentUser";
 import Login from "./login";
-import { useEffect, useState } from "react";
-import { User } from "@/backend";
+import { PropsWithChildren, useEffect, useState } from "react";
 import { useBackend } from "@/hooks/useBackend";
+import { CenteredLoading } from "@/components/loading";
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+interface WrapperProps extends PropsWithChildren {
+  session: Session | null;
+}
+
+const AppWrapper: React.FC<WrapperProps> = ({ children, session }) => {
   const appearance = useAppearance();
 
+  return (
+    <SessionContext.Provider value={session}>
+      <Theme appearance={appearance} accentColor="orange">
+        <div className="w-screen h-screen">{children}</div>
+      </Theme>
+    </SessionContext.Provider>
+  );
+};
+
+const MyApp: AppType = ({ Component, pageProps }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoadingSession, setIsLoadingSession] = useState(true);
 
@@ -32,22 +45,26 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     void inner();
   }, [backend]);
 
+  if (isLoadingSession) {
+    return (
+      <AppWrapper session={session}>
+        <CenteredLoading />
+      </AppWrapper>
+    );
+  }
+
   if (!session && !isLoadingSession) {
     return (
-      <Theme appearance={appearance} accentColor="orange">
-        <div className="w-screen h-screen">
-          <Login />
-        </div>
-      </Theme>
+      <AppWrapper session={session}>
+        <Login />
+      </AppWrapper>
     );
   }
 
   return (
-    <Theme appearance={appearance} accentColor="orange">
-      <div className="w-screen h-screen">
-        <Component {...pageProps} />
-      </div>
-    </Theme>
+    <AppWrapper session={session}>
+      <Component {...pageProps} />
+    </AppWrapper>
   );
 };
 

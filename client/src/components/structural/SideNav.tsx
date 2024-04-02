@@ -86,7 +86,7 @@ const NavItemComponent: React.FC<ItemProps> = ({
 
   return (
     <div
-      className={`flex w-full px-4 py-3 hover:bg-gray-100 active:bg-gray-200 select-none cursor-pointer items-center space-x-4 rounded-r-2xl h-12 transition transition-all w-fit ${
+      className={`flex w-full px-4 py-3 hover:bg-gray-100 active:bg-gray-200 select-none cursor-pointer items-center space-x-4 rounded-r-2xl h-12 transition transition-all ${
         isActive ? "bg-blue-100" : ""
       } ${isOpen ? "w-48" : "w-8"} overflow-hidden`}
       onClick={onClickInner}
