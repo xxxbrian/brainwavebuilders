@@ -1,8 +1,8 @@
 import React from "react";
 
-import { CalendarBoardProps } from "./CalendarBoard";
+import { CalendarProps } from "./Calendar";
 
-export const CalendarBoardMini: React.FC<CalendarBoardProps> = ({
+export const CalendarBoardMini: React.FC<CalendarProps> = ({
   today,
   events,
 }) => {

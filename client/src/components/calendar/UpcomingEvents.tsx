@@ -1,12 +1,9 @@
 import React from "react";
 
-import { CalendarBoardProps } from "./CalendarBoard";
+import { CalendarProps } from "./Calendar";
 import { getBgColor, getSubjectColor } from "./colorScheme";
 
-export const UpcomingEvents: React.FC<CalendarBoardProps> = ({
-  today,
-  events,
-}) => {
+export const UpcomingEvents: React.FC<CalendarProps> = ({ today, events }) => {
   // filter events that are after yesterday
   const upcomingEvents = Array.from(events).filter(
     ([date]) => new Date(date) >= today,

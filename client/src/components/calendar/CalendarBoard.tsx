@@ -1,21 +1,8 @@
 import React from "react";
 import { getBgColor, getSubjectColor } from "./colorScheme";
+import { type Event, type CalendarProps } from "./Calendar";
 
-export type Event = {
-  name: string;
-  time: string;
-  type: string;
-};
-
-export interface CalendarBoardProps {
-  today: Date;
-  events: Map<string, Event[]>;
-}
-
-export const CalendarBoard: React.FC<CalendarBoardProps> = ({
-  today,
-  events,
-}) => {
+export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);
     const dayOfWeek = firstDay.getDay();
@@ -26,7 +13,7 @@ export const CalendarBoard: React.FC<CalendarBoardProps> = ({
   }
 
   function eventsInDay(day: Date) {
-    const todayEvents =
+    const todayEvents: Event[] =
       events.get(
         `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`,
       ) ?? [];
