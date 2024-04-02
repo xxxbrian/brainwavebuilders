@@ -1,13 +1,17 @@
 import { type Event, CalendarBoard } from "@/components/calendar/CalendarBoard";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
+import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
+import { getBgColor, getSubjectColor } from "@/components/calendar/colorScheme";
 import React from "react";
 
 export const Calendar: React.FC = () => {
+  const mockTime = new Date("2024-03-01");
   const mockEvents = () => {
-    const events = new Map<number, Event[]>();
+    const events = new Map<string, Event[]>();
     for (let i = 1; i <= 31; i++) {
+      const key = `${mockTime.getFullYear()}-${mockTime.getMonth() + 1}-${i}`;
       if (i % 9 === 0) {
-        events.set(i, [
+        events.set(key, [
           {
             name: "CS3900 Meeting",
             time: "3 PM - 5 PM",
@@ -18,7 +22,7 @@ export const Calendar: React.FC = () => {
           },
         ]);
       } else {
-        events.set(i, []);
+        events.set(key, []);
       }
     }
     return events;
@@ -110,40 +114,33 @@ export const Calendar: React.FC = () => {
                 <p className="mb-4 text-sm font-semibold leading-none text-gray-800">
                   Event Types
                 </p>
-                <div className="flex items-center px-2 py-3 rounded gap-x-1 bg-green-50">
-                  <div className="w-2 h-2 bg-green-700 rounded-full mt-[1px]" />
-                  <div tabIndex={0} className="ml-1">
-                    <p className="text-xs font-medium leading-3 text-green-700">
-                      Lecture
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center px-2 py-3 rounded gap-x-1 bg-[#ECFEFF] mt-3">
-                  <div className="w-2 h-2 bg-[#0E7490] rounded-full mt-[1px]" />
-                  <div tabIndex={0} className="ml-1">
-                    <p className="text-xs font-medium leading-3 text-[#0E7490]">
-                      Tutorial
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center px-2 py-3 my-3 rounded gap-x-1 bg-pink-50">
-                  <div className="w-2 h-2 bg-pink-600 rounded-full mt-[1px]" />
-                  <div tabIndex={0} className="ml-1">
-                    <p className="text-xs font-medium leading-3 text-pink-700">
-                      Assignment
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-center px-2 py-3 rounded gap-x-1 bg-blue-50">
-                  <div className="w-2 h-2 bg-blue-700 rounded-full mt-[1px]" />
-                  <div tabIndex={0} className="ml-1">
-                    <p className="text-xs font-medium leading-3 text-blue-700">
-                      Exam
-                    </p>
-                  </div>
-                </div>
+                {["Lecture", "Tutorial", "Assignment", "Exam"].map(
+                  (type, index) => (
+                    <div
+                      className={`flex items-center px-2 py-3 rounded gap-x-1 bg-${getBgColor(
+                        type.toLowerCase(),
+                      )} ${index === 0 ? "" : "mt-3"}`}
+                      key={type}
+                    >
+                      <div
+                        className={`w-2 h-2 bg-${getSubjectColor(
+                          type.toLowerCase(),
+                        )} rounded-full mt-[1px]`}
+                      />
+                      <div tabIndex={0} className="ml-1">
+                        <p
+                          className={`text-xs font-medium leading-3 text-${getSubjectColor(
+                            type.toLowerCase(),
+                          )}`}
+                        >
+                          {type}
+                        </p>
+                      </div>
+                    </div>
+                  ),
+                )}
               </div>
-              <div className="px-4 py-4 bg-white lg:min-w-[260px] w-full">
+              {/* <div className="px-4 py-4 bg-white lg:min-w-[260px] w-full">
                 <p className="mb-2 text-sm font-semibold text-gray-800">
                   Upcoming Events
                 </p>
@@ -198,15 +195,13 @@ export const Calendar: React.FC = () => {
                     3900 Final Exam
                   </p>
                 </div>
-              </div>
+              </div> */}
+              <UpcomingEvents today={mockTime} events={mockEvents()} />
             </div>
             {/* MAIN PART */}
-            <CalendarBoard today={new Date(2024, 2, 1)} events={mockEvents()} />
+            <CalendarBoard today={mockTime} events={mockEvents()} />
           </div>
-          <CalendarBoardMini
-            today={new Date(2024, 2, 1)}
-            events={mockEvents()}
-          />
+          <CalendarBoardMini today={mockTime} events={mockEvents()} />
         </div>
       </div>
     </>
