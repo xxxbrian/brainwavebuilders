@@ -40,6 +40,7 @@ export const authenticator = (
 
     if (!token) {
       res.status(401).send({ error: "Unauthorized" });
+      return;
     }
 
     const user = await getUserByToken(token);
