@@ -9,8 +9,18 @@ import {
   FetchAssessmentDetailsRequest,
 } from "@/apis";
 
+// Extend the CreateAssessmentRequest to include an optional array of questions
+interface ExtendedCreateAssessmentRequest extends CreateAssessmentRequest {
+  questions?: {
+    title: string;
+    type: string;
+    options?: string;
+    points: number;
+  }[];
+}
+
 export const createAssessment = async (
-  data: CreateAssessmentRequest,
+  data: ExtendedCreateAssessmentRequest,
 ): Promise<Assessment> => {
   try {
     const courseExists = await db.course.findUnique({
@@ -22,16 +32,40 @@ export const createAssessment = async (
       throw new APIError("Course not found", "COURSE_NOT_FOUND");
     }
 
-    const assessment = await db.assessment.create({
-      data: {
-        title: data.title,
-        description: data.description,
-        courseCode: data.courseCode,
-        startDate: data.startDate ? new Date(data.startDate) : undefined,
-        dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
-        duration: data.duration,
-        type: data.type,
-      },
+    // Use a transaction if creating both assessments and questions
+    const assessment = await db.$transaction(async (transactionalDb) => {
+      const createdAssessment = await transactionalDb.assessment.create({
+        data: {
+          title: data.title,
+          description: data.description,
+          courseCode: data.courseCode,
+          startDate: data.startDate ? new Date(data.startDate) : undefined,
+          dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+          duration: data.duration,
+          type: data.type,
+        },
+      });
+
+      // If questions are provided, create them using the transactional client
+      if (data.questions && data.questions.length > 0) {
+        await Promise.all(
+          data.questions.map((question) =>
+            transactionalDb.question.create({
+              data: {
+                assessmentId: createdAssessment.id,
+                title: question.title,
+                type: question.type,
+                options: question.options
+                  ? JSON.parse(question.options)
+                  : undefined,
+                points: question.points,
+              },
+            }),
+          ),
+        );
+      }
+
+      return createdAssessment;
     });
 
     return assessment;
@@ -120,7 +154,6 @@ export const fetchAssessmentDetails = async (
     }
 
     return assessment;
-
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");
