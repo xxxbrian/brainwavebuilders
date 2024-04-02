@@ -1,6 +1,7 @@
 import { UserSevenDayActivity } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import React, { useEffect, useState } from "react";
+import { BarChart, Bar, XAxis, CartesianGrid, Tooltip } from "recharts";
 
 // Define and export the ActivityProps type
 
@@ -9,42 +10,30 @@ interface Props {
 }
 
 // The Activity component now takes ActivityProps as props
-export const UserSevenDayActivitiesDisplay: React.FC<Props> = ({
-  activities,
-}) => {
-  const getHeights = () => {
-    return {
-      Mon: (activities?.activities[0] ?? 0 / 12) * 8,
-      Tues: (activities?.activities[1] ?? 0 / 12) * 8,
-      Wed: (activities?.activities[2] ?? 0 / 12) * 8,
-      Thurs: (activities?.activities[3] ?? 0 / 12) * 8,
-      Fri: (activities?.activities[4] ?? 0 / 12) * 8,
-      Sat: (activities?.activities[5] ?? 0 / 12) * 8,
-      Sun: (activities?.activities[6] ?? 0 / 12) * 8,
-    };
+const UserSevenDayActivitiesDisplay: React.FC<Props> = ({ activities }) => {
+  const getLast7DaysDates = () => {
+    const dates = [];
+    for (let i = 6; i >= 0; i--) {
+      const date = new Date();
+      date.setDate(date.getDate() - i);
+      dates.push(`${date.getDate()}-${date.getMonth() + 1}`);
+    }
+    return dates;
   };
 
-  // Function to determine the bar color
-  const barColor = (day: string) => {
-    return "bg-blue-200";
-  };
+  const data = activities?.activities.map((activity, index) => ({
+    day: getLast7DaysDates()[index],
+    count: activity,
+  }));
 
   return (
     <div className="flex flex-col ml-1 font-bold">
-      <div className="flex mt-4 px-5 h-48">
-        {Object.entries(getHeights()).map(([day, height]) => (
-          <div
-            key={day}
-            className="px-3 py-1.5 flex flex-col mx-auto justify-end"
-          >
-            <div
-              style={{ height: `${height}rem` }}
-              className={`${barColor(day)} w-8 rounded-xl`}
-            ></div>
-            <p className="mx-auto mt-1">{day}</p>
-          </div>
-        ))}
-      </div>
+      <BarChart width={500} height={300} data={data}>
+        <CartesianGrid strokeDasharray="3 3" />
+        <XAxis dataKey="day" />
+        <Tooltip />
+        <Bar dataKey="count" fill="#2755a1" radius={[10, 10, 0, 0]} />
+      </BarChart>
     </div>
   );
 };
