@@ -153,7 +153,6 @@ export interface GetFeaturedResponse {
 // GetUserInfoRequest is the request that is sent to the getUserInfo endpoint.
 export interface GetUserInfoRequest {
     email?: string;
-    token: Token;
 }
 
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
@@ -164,7 +163,6 @@ export interface GetUserInfoResponse {
 // SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
 export interface SetUserProfileRequest {
     user: User;
-    token: Token;
 }
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.

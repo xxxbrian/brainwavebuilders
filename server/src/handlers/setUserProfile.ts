@@ -1,4 +1,5 @@
 import { SetUserProfileRequest, SetUserProfileResponse } from "@/apis";
+import { useCurrentUser } from "@/context/auth";
 import { getUserByToken } from "@/data/auth";
 import { updateUserProfile } from "@/data/profile";
 
@@ -10,15 +11,11 @@ export const setUserProfile = async (
   ctx: any,
   request: SetUserProfileRequest,
 ): Promise<SetUserProfileResponse> => {
-  // TODO: Auth with context instead of token in request
+  let askUser = useCurrentUser(ctx);
 
-  let { user, token } = request;
-  let askUser = await getUserByToken(token);
-  if (askUser === null) {
-    throw new Error("Invalid token");
-  }
-  if (askUser.email !== user.email) {
-    throw new Error("Invalid user");
+  let { user } = request;
+  if (askUser!.email !== user.email) {
+    throw new Error("No permission to update other user's profile");
   }
   await updateUserProfile(user);
   return {};
