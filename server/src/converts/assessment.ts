@@ -9,7 +9,19 @@ import {
   Question as QuestionAPI,
 } from "@/apis";
 
-export const formatAssessment = (assessment: AssessmentDB): AssessmentAPI => {
+import { AssessmentDetails } from "@/data/assessment";
+
+// Adjust the formatAssessment function to check for the presence of questions and submissions
+export const formatAssessment = (
+  assessment: AssessmentDB | AssessmentDetails,
+): AssessmentAPI => {
+  const questions =
+    "questions" in assessment ? assessment.questions.map(formatQuestion) : [];
+  const submissions =
+    "submissions" in assessment
+      ? assessment.submissions.map(formatSubmission)
+      : [];
+
   return {
     id: assessment.id,
     title: assessment.title,
@@ -21,6 +33,8 @@ export const formatAssessment = (assessment: AssessmentDB): AssessmentAPI => {
     dueDate: assessment.dueDate ? assessment.dueDate.toISOString() : undefined,
     duration: assessment.duration ?? undefined,
     type: assessment.type,
+    questions,
+    submissions,
   };
 };
 

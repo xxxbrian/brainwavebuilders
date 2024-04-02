@@ -27,6 +27,8 @@ types:
     dueDate?: string
     duration?: int
     type: string
+    questions: Question[]
+    submissions: Submission[]
 
   Question:
     id: string
@@ -128,11 +130,29 @@ endpoints:
       submission: Submission
     service: typescript
 
+  submitAssignment:
+    request:
+      assessmentId: string
+      studentId: string
+      fileUrl: string
+    response:
+      submission: Submission
+    service: typescript
+
+  createQuestion:
+    request:
+      assessmentId: string
+      title: string
+      type: string
+      options?: string
+      points: int
+    response:
+      question: Question
+    service: typescript
+
   fetchAssessmentDetails:
     request:
       assessmentId: string
     response:
       assessment: Assessment
-      questions: Question[]
-      submissions: Submission[]
     service: typescript

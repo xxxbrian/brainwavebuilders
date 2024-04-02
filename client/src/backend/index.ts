@@ -36,6 +36,8 @@ export interface Assessment {
     dueDate?: string;
     duration?: number;
     type: string;
+    questions: Question[];
+    submissions: Submission[];
 }
 
 export interface Question {
@@ -93,7 +95,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-    
+
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -103,7 +105,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-    
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -120,7 +122,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-    
+
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -147,7 +149,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-    
+
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -178,6 +180,32 @@ export interface SubmitAnswersResponse {
     submission: Submission;
 }
 
+// SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentRequest {
+    assessmentId: string;
+    studentId: string;
+    fileUrl: string;
+}
+
+// SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentResponse {
+    submission: Submission;
+}
+
+// CreateQuestionRequest is the request that is sent to the createQuestion endpoint.
+export interface CreateQuestionRequest {
+    assessmentId: string;
+    title: string;
+    type: string;
+    options?: string;
+    points: number;
+}
+
+// CreateQuestionResponse is the response that is sent to the createQuestion endpoint.
+export interface CreateQuestionResponse {
+    question: Question;
+}
+
 // FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsRequest {
     assessmentId: string;
@@ -186,8 +214,6 @@ export interface FetchAssessmentDetailsRequest {
 // FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
-    questions: Question[];
-    submissions: Submission[];
 }
 
 
@@ -500,6 +526,64 @@ export class BrainwavesClient {
         }
 
         return json as SubmitAnswersResponse;
+    }
+
+
+
+    async submitAssignment(request: SubmitAssignmentRequest): Promise<SubmitAssignmentResponse> {
+        const response = await fetch(`${this.base_url}/submitAssignment`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as SubmitAssignmentResponse;
+    }
+
+
+
+    async createQuestion(request: CreateQuestionRequest): Promise<CreateQuestionResponse> {
+        const response = await fetch(`${this.base_url}/createQuestion`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as CreateQuestionResponse;
     }
 
 

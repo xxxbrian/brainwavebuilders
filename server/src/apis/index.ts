@@ -3,16 +3,18 @@
 
 import { app } from "@/globals";
 import { checkEmail } from "@/handlers/checkEmail";
+import { createAssessment } from "@/handlers/createAssessment";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
 import { getFeatured } from "@/handlers/getFeatured";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { login } from "@/handlers/login";
 import { ping } from "@/handlers/ping";
 import { register } from "@/handlers/register";
 import { setUserProfile } from "@/handlers/setUserProfile";
-import { verifyEmail } from "@/handlers/verifyEmail";
-import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { submitAssignment } from "@/handlers/submitAssignment";
+import { verifyEmail } from "@/handlers/verifyEmail";
+import { createQuestion } from "@/handlers/createQuestion";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -48,6 +50,8 @@ export interface Assessment {
     dueDate?: string;
     duration?: number;
     type: string;
+    questions: Question[];
+    submissions: Submission[];
 }
 
 export interface Question {
@@ -105,7 +109,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-    
+
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -115,7 +119,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-    
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -132,7 +136,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-    
+
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -159,7 +163,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-    
+
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -190,6 +194,32 @@ export interface SubmitAnswersResponse {
     submission: Submission;
 }
 
+// SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentRequest {
+    assessmentId: string;
+    studentId: string;
+    fileUrl: string;
+}
+
+// SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentResponse {
+    submission: Submission;
+}
+
+// CreateQuestionRequest is the request that is sent to the createQuestion endpoint.
+export interface CreateQuestionRequest {
+    assessmentId: string;
+    title: string;
+    type: string;
+    options?: string;
+    points: number;
+}
+
+// CreateQuestionResponse is the response that is sent to the createQuestion endpoint.
+export interface CreateQuestionResponse {
+    question: Question;
+}
+
 // FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsRequest {
     assessmentId: string;
@@ -198,8 +228,6 @@ export interface FetchAssessmentDetailsRequest {
 // FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
-    questions: Question[];
-    submissions: Submission[];
 }
 
 
@@ -431,6 +459,48 @@ app.post('/api/submitAnswers', async (req, res) => {
     }
 });
 
+// submitAssignment is the endpoint handler for the submitAssignment endpoint.
+// It wraps around the function at @/handlers/submitAssignment.
+app.post('/api/submitAssignment', async (req, res) => {
+    const request: SubmitAssignmentRequest = req.body;
+    try {
+        const response: SubmitAssignmentResponse = await submitAssignment(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request submitAssignment with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createQuestion is the endpoint handler for the createQuestion endpoint.
+// It wraps around the function at @/handlers/createQuestion.
+app.post('/api/createQuestion', async (req, res) => {
+    const request: CreateQuestionRequest = req.body;
+    try {
+        const response: CreateQuestionResponse = await createQuestion(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createQuestion with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
 // fetchAssessmentDetails is the endpoint handler for the fetchAssessmentDetails endpoint.
 // It wraps around the function at @/handlers/fetchAssessmentDetails.
 app.post('/api/fetchAssessmentDetails', async (req, res) => {
@@ -451,4 +521,3 @@ app.post('/api/fetchAssessmentDetails', async (req, res) => {
         }
     }
 });
-

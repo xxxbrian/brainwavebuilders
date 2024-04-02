@@ -4,11 +4,7 @@ import {
   APIError,
 } from "@/apis";
 import { fetchAssessmentDetails as fetchDetailsFromDB } from "@/data/assessment";
-import {
-  formatAssessment,
-  formatQuestion,
-  formatSubmission,
-} from "@/converts/assessment";
+import { formatAssessment } from "@/converts/assessment";
 
 // fetchAssessmentDetails implements the fetchAssessmentDetails endpoint.
 // This code has been automatically generated.
@@ -18,18 +14,12 @@ export const fetchAssessmentDetails = async (
   request: FetchAssessmentDetailsRequest,
 ): Promise<FetchAssessmentDetailsResponse> => {
   try {
-    const { assessment, questions, submissions } =
-      await fetchDetailsFromDB(request);
+    const assessment = await fetchDetailsFromDB(request);
 
     const formattedAssessment = formatAssessment(assessment);
-    const formattedQuestions = questions.map(formatQuestion);
-    const formattedSubmissions = submissions.map(formatSubmission);
 
-    return {
-      assessment: formattedAssessment,
-      questions: formattedQuestions,
-      submissions: formattedSubmissions,
-    };
+    return { assessment: formattedAssessment };
+
   } catch (error) {
     console.error("Error in fetchAssessmentDetails handler:", error);
 

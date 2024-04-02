@@ -4,6 +4,8 @@ import { APIError } from "@/apis";
 import {
   CreateAssessmentRequest,
   SubmitAnswersRequest,
+  SubmitAssignmentRequest,
+  CreateQuestionRequest,
   FetchAssessmentDetailsRequest,
 } from "@/apis";
 
@@ -66,13 +68,44 @@ export const submitAnswers = async (
   }
 };
 
-export const fetchAssessmentDetails = async (
-  data: FetchAssessmentDetailsRequest,
-): Promise<{
-  assessment: Assessment;
+export interface AssessmentDetails extends Assessment {
   questions: Question[];
   submissions: Submission[];
-}> => {
+}
+
+export const submitAssignment = async (
+  data: SubmitAssignmentRequest,
+): Promise<Submission> => {
+  try {
+    const assessment = await db.assessment.findUnique({
+      where: { id: data.assessmentId },
+    });
+    if (!assessment || assessment.type !== "assignment") {
+      throw new APIError(
+        "Invalid assessment type or not found",
+        "INVALID_ASSESSMENT",
+      );
+    }
+
+    const submission = await db.submission.create({
+      data: {
+        assessmentId: data.assessmentId,
+        studentId: data.studentId,
+        fileUrl: data.fileUrl,
+        submittedAt: new Date(),
+      },
+    });
+
+    return submission;
+  } catch (error) {
+    console.error("Failed to submit assignment:", error);
+    throw new APIError("Failed to submit assignment", "SUBMISSION_FAILED");
+  }
+};
+
+export const fetchAssessmentDetails = async (
+  data: FetchAssessmentDetailsRequest,
+): Promise<AssessmentDetails> => {
   try {
     const assessment = await db.assessment.findUnique({
       where: { id: data.assessmentId },
@@ -86,13 +119,39 @@ export const fetchAssessmentDetails = async (
       throw new APIError("Assessment not found", "ASSESSMENT_NOT_FOUND");
     }
 
-    return {
-      assessment: assessment,
-      questions: assessment.questions || [],
-      submissions: assessment.submissions || [],
-    };
+    return assessment;
+
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");
+  }
+};
+
+export const createQuestion = async (
+  data: CreateQuestionRequest,
+): Promise<Question> => {
+  try {
+    const assessmentExists = await db.assessment.findUnique({
+      where: { id: data.assessmentId },
+    });
+
+    if (!assessmentExists) {
+      throw new APIError("Assessment not found", "ASSESSMENT_NOT_FOUND");
+    }
+
+    const question = await db.question.create({
+      data: {
+        assessmentId: data.assessmentId,
+        title: data.title,
+        type: data.type,
+        options: data.options ? JSON.parse(data.options) : undefined,
+        points: data.points,
+      },
+    });
+
+    return question;
+  } catch (error) {
+    console.error("Failed to create question:", error);
+    throw new APIError("Failed to create question", "CREATION_FAILED");
   }
 };
