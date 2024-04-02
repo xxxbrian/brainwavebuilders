@@ -268,7 +268,7 @@ export const isAPIError = (e: any): e is APIError => {
 app.post('/api/ping', async (req, res) => {
     const request: PingRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: PingResponse = await ping(ctx, request);
         res.json(response);
     } catch (e) {
@@ -290,7 +290,7 @@ app.post('/api/ping', async (req, res) => {
 app.post('/api/checkEmail', async (req, res) => {
     const request: CheckEmailRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: CheckEmailResponse = await checkEmail(ctx, request);
         res.json(response);
     } catch (e) {
@@ -312,7 +312,7 @@ app.post('/api/checkEmail', async (req, res) => {
 app.post('/api/register', async (req, res) => {
     const request: RegisterRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: RegisterResponse = await register(ctx, request);
         res.json(response);
     } catch (e) {
@@ -334,7 +334,7 @@ app.post('/api/register', async (req, res) => {
 app.post('/api/verifyEmail', async (req, res) => {
     const request: VerifyEmailRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: VerifyEmailResponse = await verifyEmail(ctx, request);
         res.json(response);
     } catch (e) {
@@ -356,7 +356,7 @@ app.post('/api/verifyEmail', async (req, res) => {
 app.post('/api/login', async (req, res) => {
     const request: LoginRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: LoginResponse = await login(ctx, request);
         res.json(response);
     } catch (e) {
@@ -378,7 +378,7 @@ app.post('/api/login', async (req, res) => {
 app.post('/api/getFeatured', async (req, res) => {
     const request: GetFeaturedRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: GetFeaturedResponse = await getFeatured(ctx, request);
         res.json(response);
     } catch (e) {
@@ -400,7 +400,7 @@ app.post('/api/getFeatured', async (req, res) => {
 app.post('/api/getUserInfo', async (req, res) => {
     const request: GetUserInfoRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: GetUserInfoResponse = await getUserInfo(ctx, request);
         res.json(response);
     } catch (e) {
@@ -422,7 +422,7 @@ app.post('/api/getUserInfo', async (req, res) => {
 app.post('/api/setUserProfile', async (req, res) => {
     const request: SetUserProfileRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: SetUserProfileResponse = await setUserProfile(ctx, request);
         res.json(response);
     } catch (e) {
@@ -444,7 +444,7 @@ app.post('/api/setUserProfile', async (req, res) => {
 app.post('/api/createAssessment', async (req, res) => {
     const request: CreateAssessmentRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: CreateAssessmentResponse = await createAssessment(ctx, request);
         res.json(response);
     } catch (e) {
@@ -466,7 +466,7 @@ app.post('/api/createAssessment', async (req, res) => {
 app.post('/api/submitAnswers', async (req, res) => {
     const request: SubmitAnswersRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: SubmitAnswersResponse = await submitAnswers(ctx, request);
         res.json(response);
     } catch (e) {
@@ -488,7 +488,7 @@ app.post('/api/submitAnswers', async (req, res) => {
 app.post('/api/fetchAssessmentDetails', async (req, res) => {
     const request: FetchAssessmentDetailsRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(ctx, request);
         res.json(response);
     } catch (e) {
@@ -510,7 +510,7 @@ app.post('/api/fetchAssessmentDetails', async (req, res) => {
 app.post('/api/fetchUserStats', async (req, res) => {
     const request: FetchUserStatsRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: FetchUserStatsResponse = await fetchUserStats(ctx, request);
         res.json(response);
     } catch (e) {
@@ -532,7 +532,7 @@ app.post('/api/fetchUserStats', async (req, res) => {
 app.post('/api/fetchUserSevenDayActivity', async (req, res) => {
     const request: FetchUserSevenDayActivityRequest = req.body;
     try {
-        const ctx = {};
+        const ctx = { req, res };
         const response: FetchUserSevenDayActivityResponse = await fetchUserSevenDayActivity(ctx, request);
         res.json(response);
     } catch (e) {

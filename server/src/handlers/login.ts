@@ -7,7 +7,7 @@ import { checkPassword, generateToken } from "@/data/auth";
 // You can move this function to other files within the /app/server/src/handlers directory,
 // as long as the signature remains the same and the function is exported.
 export const login = async (
-  ctx: {},
+  ctx: any,
   request: LoginRequest,
 ): Promise<LoginResponse> => {
   const user = await checkPassword(request.email, request.password);

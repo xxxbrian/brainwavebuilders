@@ -7,7 +7,7 @@ import { updateUserProfile } from "@/data/profile";
 // You can move this function to other files within the /app/server/src/handlers directory,
 // as long as the signature remains the same and the function is exported.
 export const setUserProfile = async (
-  ctx: {},
+  ctx: any,
   request: SetUserProfileRequest,
 ): Promise<SetUserProfileResponse> => {
   let { user, token } = request;

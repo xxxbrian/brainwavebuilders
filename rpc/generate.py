@@ -624,13 +624,12 @@ class TypescriptService(Service):
             name + "Response")
 
         return f'''import {{ {request_type_name}, {response_type_name} }} from "{self.calculate_import_path(self.out_dir)}";
-{"import { Request, Response } from 'express';" if endpoint.get("raw") else ""}
 
 // {name} implements the {name} endpoint.
 // This code has been automatically generated.
 // You can move this function to other files within the {self.src_dir} directory,
 // as long as the signature remains the same and the function is exported.
-export const {name} = async (ctx: {{}}, request: {request_type_name}{', req: Request, res: Response' if endpoint.get("raw") else ""}): Promise<{response_type_name}> => {{
+export const {name} = async (ctx: any, request: {request_type_name}{', req: Request, res: Response' if endpoint.get("raw") else ""}): Promise<{response_type_name}> => {{
     throw new Error('Not implemented');
 }}'''
 
@@ -640,8 +639,8 @@ export const {name} = async (ctx: {{}}, request: {request_type_name}{', req: Req
 app.post('{self.base}/{name}', async (req, res) => {{
     const request: {self.tc.to_big_camel_case(name + "Request")} = req.body;
     try {{
-        const ctx = {{}};
-        const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(ctx, request{", req, res" if endpoint.get("raw") else ""});
+        const ctx = {{ req, res }};
+        const response: {self.tc.to_big_camel_case(name + "Response")} = await {name}(ctx, request);
         res.json(response);
     }} catch (e) {{
         if (e instanceof APIError) {{

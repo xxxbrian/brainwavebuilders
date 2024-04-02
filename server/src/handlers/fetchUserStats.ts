@@ -3,7 +3,7 @@ import { FetchUserStatsRequest, FetchUserStatsResponse } from "@/apis";
 // fetchUserStats implements the fetchUserStats endpoint.
 // TODO: Implement this
 export const fetchUserStats = async (
-  ctx: {},
+  ctx: any,
   request: FetchUserStatsRequest,
 ): Promise<FetchUserStatsResponse> => {
   return {

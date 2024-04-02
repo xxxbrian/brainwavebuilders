@@ -11,8 +11,6 @@ class Endpoint(t.TypedDict):
     request: Object
     response: Object
     service: str
-    raw: bool
-    public: bool
 
 
 class Model(t.TypedDict):
