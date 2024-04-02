@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ProfileEditing from "@/components/profile/profile_editing";
-import SideNav from "../../components/structural/SideNav";
 import { User, isAPIError } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import { PageFrame } from "@/components/structural/PageFrame";
