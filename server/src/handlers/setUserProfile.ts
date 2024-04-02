@@ -10,6 +10,8 @@ export const setUserProfile = async (
   ctx: any,
   request: SetUserProfileRequest,
 ): Promise<SetUserProfileResponse> => {
+  // TODO: Auth with context instead of token in request
+
   let { user, token } = request;
   let askUser = await getUserByToken(token);
   if (askUser === null) {
