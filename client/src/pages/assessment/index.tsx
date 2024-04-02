@@ -37,6 +37,7 @@ export const Assessment: React.FC = () => {
     },
   ]);
 
+
   const handleAddQuestion = () => {
     const newQuestion = {
       id: uuidv4(),
@@ -54,7 +55,7 @@ export const Assessment: React.FC = () => {
     newQuestions.splice(index, 1, question);
     setQuestions(newQuestions);
   };
-
+  
   const handleDeleteQuestion = (id: string) => {
     setQuestions(questions.filter((question) => question.id !== id));
   };

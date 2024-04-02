@@ -137,3 +137,23 @@ Weekend
 
 ========================================================================
 Week 7
+
+Monday
+Worked popups for editing assessment results/feedback/getting file downloads
+- Team meeting regarding structure for retro B
+	- need assessment/course interface implemented
+
+Tuesday
+Put together some structure around how submission system will work.
+
+Wednesday
+Team standup for checking in with progress - I have a lot left to do
+
+Thursday
+Thesis took over, couldn't put work into this
+
+Friday
+Thesis still priority one
+
+Weekend
+Worked on Submission system, hoping to be complete frontend side of all assessment interfacing by Monday evening meeting.

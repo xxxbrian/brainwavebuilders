@@ -18,6 +18,33 @@ types:
     title: string
     description: string
 
+  Assessment:
+    id: string
+    title: string
+    description?: string
+    courseCode: string
+    startDate?: string
+    dueDate?: string
+    duration?: int
+    type: string
+
+  Question:
+    id: string
+    assessmentId: string
+    title: string
+    type: string
+    options?: string
+    points: int
+
+  Submission:
+    id: string
+    assessmentId: string
+    studentId: string
+    submittedAt?: string
+    fileUrl?: string
+    answers?: string
+    grade?: int
+
 endpoints:
   ping:
     request:
@@ -77,4 +104,35 @@ endpoints:
       user: User
       token: Token
     response:
+    service: typescript
+
+  createAssessment:
+    request:
+      title: string
+      description?: string
+      courseCode: string
+      startDate?: string
+      dueDate?: string
+      duration?: int
+      type: string
+    response:
+      assessment: Assessment
+    service: typescript
+
+  submitAnswers:
+    request:
+      assessmentId: string
+      studentId: string
+      answers: string
+    response:
+      submission: Submission
+    service: typescript
+
+  fetchAssessmentDetails:
+    request:
+      assessmentId: string
+    response:
+      assessment: Assessment
+      questions: Question[]
+      submissions: Submission[]
     service: typescript
