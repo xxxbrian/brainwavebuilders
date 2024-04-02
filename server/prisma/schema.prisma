@@ -21,18 +21,78 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   password  String
+  tokens    Token[]
+  avatar    String?  @db.LongText
+  gender    String?
+  title     String?
+  bio       String?
+  role      String   @default("user")
+  coursesTeaching Course[]    @relation("InstructorCourses")
+  coursesTaking   Course[]    @relation("CourseStudents")
+  submissions     Submission[]
 }
 
 model Token {
-  id     String @id @default(uuid())
-  userID String
-  token  String @unique
+  id        String   @id @default(uuid())
+  userID    String
+  user      User     @relation(fields: [userID], references: [id])
+  token     String   @unique
+  expiresAt DateTime
 }
 
 model EmailVerification {
   id           String   @id @default(uuid())
-  userID       String
-  verification String   @unique
+  email        String
+  verification String
   createdAt    DateTime @default(now())
   expiresAt    DateTime @updatedAt
+}
+
+model Course {
+  id           String      @id @default(uuid())
+  code         String      @unique
+  title        String
+  description  String
+  instructorId String
+  instructor   User        @relation(name: "InstructorCourses", fields: [instructorId], references: [id])
+  students     User[]      @relation("CourseStudents")
+  assessments  Assessment[]
+}
+
+model Assessment {
+  id            String     @id @default(uuid())
+  title         String
+  description   String?
+  courseCode    String
+  startDate     DateTime?
+  dueDate       DateTime?
+  duration      Int?
+  type          String     // "assignment" or "exam"
+  course        Course     @relation(fields: [courseCode], references: [code])
+  questions     Question[] // Only for exams
+  submissions   Submission[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+}
+
+model Question {
+  id            String     @id @default(uuid())
+  assessmentId  String
+  title         String
+  type          String     // "MCQ" or "short_answer"
+  options       Json?      // For MCQs: store options and correct answer
+  points        Int        // Points/weighting for this question
+  assessment    Assessment @relation(fields: [assessmentId], references: [id])
+}
+
+model Submission {
+  id            String    @id @default(uuid())
+  assessmentId  String
+  studentId     String
+  submittedAt   DateTime?
+  fileUrl       String?
+  answers       Json?     // For exam submissions: student's answers
+  grade         Int?
+  assessment    Assessment @relation(fields: [assessmentId], references: [id])
+  student       User      @relation(fields: [studentId], references: [id])
 }

@@ -2,13 +2,17 @@
 
 
 import { app } from "@/globals";
-import { ping } from "@/handlers/ping";
-import { login } from "@/handlers/login";
-import { getFeatured } from "@/handlers/getFeatured";
-import { sendVerification } from "@/handlers/sendVerification";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { register } from "@/handlers/register";
 import { checkEmail } from "@/handlers/checkEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { login } from "@/handlers/login";
+import { ping } from "@/handlers/ping";
+import { register } from "@/handlers/register";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { verifyEmail } from "@/handlers/verifyEmail";
+import { createAssessment } from "@/handlers/createAssessment";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -17,6 +21,10 @@ export interface User {
     email: string;
     firstName: string;
     lastName: string;
+    avatar?: string;
+    gender?: string;
+    title?: string;
+    bio?: string;
 }
 
 export type Token = string;
@@ -29,6 +37,36 @@ export interface Featured {
     background: string;
     title: string;
     description: string;
+}
+
+export interface Assessment {
+    id: string;
+    title: string;
+    description?: string;
+    courseCode: string;
+    startDate?: string;
+    dueDate?: string;
+    duration?: number;
+    type: string;
+}
+
+export interface Question {
+    id: string;
+    assessmentId: string;
+    title: string;
+    type: string;
+    options?: string;
+    points: number;
+}
+
+export interface Submission {
+    id: string;
+    assessmentId: string;
+    studentId: string;
+    submittedAt?: string;
+    fileUrl?: string;
+    answers?: string;
+    grade?: number;
 }
 
 //////////////////////////////
@@ -56,28 +94,28 @@ export interface CheckEmailResponse {
     taken: boolean;
 }
 
-// SendVerificationRequest is the request that is sent to the sendVerification endpoint.
-export interface SendVerificationRequest {
-    email: string;
-    firstName: string;
-    lastName: string;
-}
-
-// SendVerificationResponse is the response that is sent to the sendVerification endpoint.
-export interface SendVerificationResponse {
-    sent: boolean;
-}
-
 // RegisterRequest is the request that is sent to the register endpoint.
 export interface RegisterRequest {
     email: string;
     password: string;
+    firstName: string;
+    lastName: string;
+    otp: string;
 }
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-    user: User;
-    token: Token;
+    
+}
+
+// VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
+export interface VerifyEmailRequest {
+    email: string;
+}
+
+// VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
+export interface VerifyEmailResponse {
+    
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -94,7 +132,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-
+    
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -104,13 +142,64 @@ export interface GetFeaturedResponse {
 
 // GetUserInfoRequest is the request that is sent to the getUserInfo endpoint.
 export interface GetUserInfoRequest {
-    email: string;
+    email?: string;
     token: Token;
 }
 
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
     user: User;
+}
+
+// SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
+export interface SetUserProfileRequest {
+    user: User;
+    token: Token;
+}
+
+// SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
+export interface SetUserProfileResponse {
+    
+}
+
+// CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
+export interface CreateAssessmentRequest {
+    title: string;
+    description?: string;
+    courseCode: string;
+    startDate?: string;
+    dueDate?: string;
+    duration?: number;
+    type: string;
+}
+
+// CreateAssessmentResponse is the response that is sent to the createAssessment endpoint.
+export interface CreateAssessmentResponse {
+    assessment: Assessment;
+}
+
+// SubmitAnswersRequest is the request that is sent to the submitAnswers endpoint.
+export interface SubmitAnswersRequest {
+    assessmentId: string;
+    studentId: string;
+    answers: string;
+}
+
+// SubmitAnswersResponse is the response that is sent to the submitAnswers endpoint.
+export interface SubmitAnswersResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
+export interface FetchAssessmentDetailsRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
+export interface FetchAssessmentDetailsResponse {
+    assessment: Assessment;
+    questions: Question[];
+    submissions: Submission[];
 }
 
 
@@ -174,27 +263,6 @@ app.post('/api/checkEmail', async (req, res) => {
     }
 });
 
-// sendVerification is the endpoint handler for the sendVerification endpoint.
-// It wraps around the function at @/handlers/sendVerification.
-app.post('/api/sendVerification', async (req, res) => {
-    const request: SendVerificationRequest = req.body;
-    try {
-        const response: SendVerificationResponse = await sendVerification(request);
-        res.json(response);
-    } catch (e) {
-        if (e instanceof APIError) {
-            res.status(400);
-            res.json({ message: e.message, code: e.code, _rpc_error: true });
-            return;
-        } else {
-            res.status(500);
-            res.json({ message: "Internal server error", _rpc_error: true });
-            console.error(`Error occurred while handling request sendVerification with arguments ${ JSON.stringify(request) }: `, e);
-            return;
-        }
-    }
-});
-
 // register is the endpoint handler for the register endpoint.
 // It wraps around the function at @/handlers/register.
 app.post('/api/register', async (req, res) => {
@@ -211,6 +279,27 @@ app.post('/api/register', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request register with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// verifyEmail is the endpoint handler for the verifyEmail endpoint.
+// It wraps around the function at @/handlers/verifyEmail.
+app.post('/api/verifyEmail', async (req, res) => {
+    const request: VerifyEmailRequest = req.body;
+    try {
+        const response: VerifyEmailResponse = await verifyEmail(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request verifyEmail with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
@@ -278,3 +367,88 @@ app.post('/api/getUserInfo', async (req, res) => {
         }
     }
 });
+
+// setUserProfile is the endpoint handler for the setUserProfile endpoint.
+// It wraps around the function at @/handlers/setUserProfile.
+app.post('/api/setUserProfile', async (req, res) => {
+    const request: SetUserProfileRequest = req.body;
+    try {
+        const response: SetUserProfileResponse = await setUserProfile(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request setUserProfile with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createAssessment is the endpoint handler for the createAssessment endpoint.
+// It wraps around the function at @/handlers/createAssessment.
+app.post('/api/createAssessment', async (req, res) => {
+    const request: CreateAssessmentRequest = req.body;
+    try {
+        const response: CreateAssessmentResponse = await createAssessment(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createAssessment with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// submitAnswers is the endpoint handler for the submitAnswers endpoint.
+// It wraps around the function at @/handlers/submitAnswers.
+app.post('/api/submitAnswers', async (req, res) => {
+    const request: SubmitAnswersRequest = req.body;
+    try {
+        const response: SubmitAnswersResponse = await submitAnswers(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request submitAnswers with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchAssessmentDetails is the endpoint handler for the fetchAssessmentDetails endpoint.
+// It wraps around the function at @/handlers/fetchAssessmentDetails.
+app.post('/api/fetchAssessmentDetails', async (req, res) => {
+    const request: FetchAssessmentDetailsRequest = req.body;
+    try {
+        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchAssessmentDetails with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+

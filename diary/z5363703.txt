@@ -35,3 +35,17 @@ Allocated all user stories and tasks for the team for sprint 2
 Tracked the progress of all team members
 Hosted weekly meeting
 Started on the assessment system backend
+
+Week6:
+Finished backend of user profile
+Worked on the backend of assessment system, but waiting on the dependencies from teammates
+Tracked the progress of all team members
+Hosted weekly meeting
+
+Week7:
+Fixed some data structures in the profile-related database.
+Improved the profileinfo api by defining the behaviour when email is not specified.
+Designed assisgment deadline related data structures, waiting for sohee to finish the assisment creation part of the API.
+Tracked the progress of all team members
+Hosted weekly meeting
+Allocated all user stories and tasks for the team

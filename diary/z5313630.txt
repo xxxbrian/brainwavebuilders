@@ -5,8 +5,8 @@ Week 1:
 - I organized our first meeting agenda and created a Google Drive with meeting minutes.
 - To prepare as Product Owner, I also outlined product specs and a timeline based on the Project Assignment and Assessment Timeline.
 
-During the meeting held on 17/2/2024: 
-- Delegated roles and responsibilities: 
+During the meeting held on 17/2/2024:
+- Delegated roles and responsibilities:
   - Backend: Lincoln, Brian, Steve, Sohee, Ethan, Cicy
   - Frontend: Lincoln, Brian, Steve, Ethan
   - Design: Sohee, Lincoln
@@ -17,7 +17,7 @@ During the meeting held on 17/2/2024:
 - Adopted Agile methodology for development.
 - Set tentative timeline with the aim to complete the beta version of the web platform by week 4, followed by iterative improvements.
 
-We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) per week 
+We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) per week
 
 ꘎♡━━ Week 2 ━━━♡꘎
 
@@ -30,25 +30,54 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
 - We aim to meet at least once a week, with flexibility for additional meetings as necessary to adhere to the project timeline.
 - Our Scrum Master, Cicy, set up Jira, which we plan to utilize more extensively.
 - We opted for trpc for our tech stack due to its simplicity.
-- As the Product Owner, I formulated project requirements and presented them during our WTM. I also ordered them from most important to least important to priortise which ones we had to complete first for the sprints. 
+- As the Product Owner, I formulated project requirements and presented them during our WTM. I also ordered them from most important to least important to priortise which ones we had to complete first for the sprints.
 - Tasks for the Project Proposal were delegated to ensure completion by Friday, with a draft targeted for Wednesday. I'm in-charge of Background.
 
 ꘎♡━━ Week 3 ━━━♡꘎
 
-- This week, our group mainly focused on finalising the proposal for submission on Friday. 
-- I was just supposed to be in-charge of background, but I later received additional tasks on workflow/interface/storyboard as I was part of the Design team with Lincoln. 
-- Lincoln and I held our meeting on Tuesday but we found out that creating the workflow just the two of us didn't make sense as it would be the foundation to our project. Thus, we moved the discussion for workflow to our WCM on Thursday. 
-- Using the finished workflow diagram, Lincoln and I split design tasks amongst us. We decided that it'd be better if I worked on the majority of the Design by myself as I was already done with the Background whilst Lincoln still had to work on the technical aspects of the portfolio. The task designated was: 
+- This week, our group mainly focused on finalising the proposal for submission on Friday.
+- I was just supposed to be in-charge of background, but I later received additional tasks on workflow/interface/storyboard as I was part of the Design team with Lincoln.
+- Lincoln and I held our meeting on Tuesday but we found out that creating the workflow just the two of us didn't make sense as it would be the foundation to our project. Thus, we moved the discussion for workflow to our WCM on Thursday.
+- Using the finished workflow diagram, Lincoln and I split design tasks amongst us. We decided that it'd be better if I worked on the majority of the Design by myself as I was already done with the Background whilst Lincoln still had to work on the technical aspects of the portfolio. The task designated was:
   - Lincoln would design the Register/Login
   - I would design the rest: Main, Class & Teacher Dashboard, Account Settings, Create/Join Classroom, Announcements, Forums, Calendar, Teacher & Student - Exams/Assignments, Student - Grades, Course Outline, Student & Teacher - Live Lectures and Student Statistics
 - I took inspiration from a lot of other LMS to design the prototype, namely: Coursera, Moodle and Openlearning.
-- I created most of the storyboards and reorganised the workflow for easier interpretation. 
-- Lincoln and Cicy helped me out with writing the descriptions for the storyboard. 
-- Overall, it was an exhausting week with a lot of all nighters, but the good thing is that design is done :) 
+- I created most of the storyboards and reorganised the workflow for easier interpretation.
+- Lincoln and Cicy helped me out with writing the descriptions for the storyboard.
+- Overall, it was an exhausting week with a lot of all nighters, but the good thing is that design is done :)
 
 ꘎♡━━ Week 4 ━━━♡꘎
-- Had our first meeting after submitting proposal. 
-- Redadjusted our sprints and assigned tasks to be ready for start of Sprint 2. 
-- For Sprint 2, I was tasked with refining the UI/UX. 
-- Frontend team has started working on their parts and Backend will start working in Week 5. 
-- No design meeting this week as bulk of design is already finished. 
+- Had our first meeting after submitting proposal.
+- Redadjusted our sprints and assigned tasks to be ready for start of Sprint 2.
+- For Sprint 2, I was tasked with refining the UI/UX.
+- Frontend team has started working on their parts and Backend will start working in Week 5.
+- No design meeting this week as bulk of design is already finished.
+
+꘎♡━━ Week 5 ━━━♡꘎
+- Successfully finished our Retrospective A! Huge shoutout to the team for a successful run of Spring 1 and 2.
+- Finished updating Sprint 3 by allocating user stories/task.
+  - I'm in charge of writing the backend for the Assessments (i.e creation and marking) and sending invite emails to potential students.
+- Created a group chat for Assessments so that it's easier to track everyone's progress and we don't spam the main group chat.
+- Haven't started coding yet but will start in Week 6.
+
+꘎♡━━ Week 6 ━━━♡꘎
+- Finished adding the database for course and Assessment
+  - Added Course Model: Represents courses with attributes like code, title, description, linked instructors, and enrolled students.
+  - Expanded Assessment Model: Now acts as a parent for assignments and exams, with fields for title, due date, and type, associated with courses.
+  - Introduced Assignment Model: Derived from Assessment for specific assignment details such as instructions, linked to multiple submissions.
+  - Created Submission Model: For managing student submissions, including file URLs, grades, feedback, and timestamps, linked to students and assignments.
+  - Refined Schema Relationships: Fixed one-to-many and many-to-many relationships, ensuring accurate model associations and foreign key integrity.
+- Have started working on the APIs/endpoints of assignment submission. Hopefully should finish all assessment related APIs/endpoints by this week.
+
+꘎♡━━ Week 7 ━━━♡꘎
+- This week, I mainly worked on the creation, submission, and detailed fetching of assessments, alongside necessary architectural enhancements to our model definitions, data layers, and API handlers.
+- Here are the key features implemented:
+  - createAssessment: Allows instructors to create new assessments, specifying details such as title, description, course association, duration, and type.
+  - submitAnswers: Enables students to submit their answers for a specific assessment, which could be either for assignments or exams.
+  - fetchAssessmentDetails: Facilitates retrieval of detailed information about an assessment, including associated questions and submissions.
+- Here are the architectural enhancements.
+  - Model Updates (model.yml): Revised our model definitions to better represent the relationships between assessments, questions, and submissions.
+  - Data Layer Enhancements: Developed new data layer functions to serve as the foundational operations for creating assessments, submitting answers, and fetching assessment details.
+  - Converter Functions: Introduced converter functions to translate database models to API response formats.
+  - API Handlers: Implemented new API handlers that utilise our data layer functions and converter functions to process incoming requests and prepare appropriate responses.
+- Next week, we'll be working no merging the frontend and backend.

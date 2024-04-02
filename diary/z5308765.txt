@@ -105,3 +105,55 @@ Friday
 
 Weekend
 - worked on assigned tasks.
+
+=======================================================================
+Wk 6 - flex week
+
+Monday - Standup
+- discussed progress so far, allocation breakdown.
+- Set goals to work on assessment system frontend for rest of week.
+
+Tuesday
+
+Wednesday
+- Worked on Assessment list/search
+- Assessment Results/Search
+
+Thursday - Team Meeting
+- Got new assignment interface working
+- worked on new exam interface
+- meeting with whole team
+	- discussed the need to define our backend endpoints asap
+	- worked on figuring out needed interfaces
+	- Sohee and I outlined what is needed for assessment interfaces
+	- now need to get rest of assessment frontend done asap
+
+Friday
+- worked on assessment frontend (results/editing/creating)
+
+Weekend
+- Continued work on above assessment items on Sunday.
+- Aiming to have most/all complete early week 7.
+
+========================================================================
+Week 7
+
+Monday
+Worked popups for editing assessment results/feedback/getting file downloads
+- Team meeting regarding structure for retro B
+	- need assessment/course interface implemented
+
+Tuesday
+Put together some structure around how submission system will work.
+
+Wednesday
+Team standup for checking in with progress - I have a lot left to do
+
+Thursday
+Thesis took over, couldn't put work into this
+
+Friday
+Thesis still priority one
+
+Weekend
+Worked on Submission system, hoping to be complete frontend side of all assessment interfacing by Monday evening meeting.

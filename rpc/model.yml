@@ -3,6 +3,10 @@ types:
     email: string
     firstName: string
     lastName: string
+    avatar?: string
+    gender?: string
+    title?: string
+    bio?: string
 
   Token: string
 
@@ -13,6 +17,33 @@ types:
     background: string
     title: string
     description: string
+
+  Assessment:
+    id: string
+    title: string
+    description?: string
+    courseCode: string
+    startDate?: string
+    dueDate?: string
+    duration?: int
+    type: string
+
+  Question:
+    id: string
+    assessmentId: string
+    title: string
+    type: string
+    options?: string
+    points: int
+
+  Submission:
+    id: string
+    assessmentId: string
+    studentId: string
+    submittedAt?: string
+    fileUrl?: string
+    answers?: string
+    grade?: int
 
 endpoints:
   ping:
@@ -29,22 +60,20 @@ endpoints:
       taken: boolean
     service: typescript
 
-  sendVerification:
-    request:
-      email: string
-      firstName: string
-      lastName: string
-    response:
-      sent: boolean
-    service: typescript
-
   register:
     request:
       email: string
       password: string
+      firstName: string
+      lastName: string
+      otp: string
     response:
-      user: User
-      token: Token
+    service: typescript
+
+  verifyEmail:
+    request:
+      email: string
+    response:
     service: typescript
 
   login:
@@ -64,8 +93,46 @@ endpoints:
 
   getUserInfo:
     request:
-      email: string
+      email?: string
       token: Token
     response:
       user: User
+    service: typescript
+
+  setUserProfile:
+    request:
+      user: User
+      token: Token
+    response:
+    service: typescript
+
+  createAssessment:
+    request:
+      title: string
+      description?: string
+      courseCode: string
+      startDate?: string
+      dueDate?: string
+      duration?: int
+      type: string
+    response:
+      assessment: Assessment
+    service: typescript
+
+  submitAnswers:
+    request:
+      assessmentId: string
+      studentId: string
+      answers: string
+    response:
+      submission: Submission
+    service: typescript
+
+  fetchAssessmentDetails:
+    request:
+      assessmentId: string
+    response:
+      assessment: Assessment
+      questions: Question[]
+      submissions: Submission[]
     service: typescript

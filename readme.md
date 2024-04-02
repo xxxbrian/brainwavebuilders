@@ -1,5 +1,7 @@
 # README
 
+[![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)
+
 ## Setting up for development
 
 This project uses [pre-commit](https://pre-commit.com/#install). Please install it prior to development. Then run:
@@ -27,14 +29,17 @@ make up
 
 This will launch docker compose in daemon mode and run your app at:
 
-| Service          | Port |
-| ---------------- | ---- |
-| main app (nginx) | 3900 |
-| client           | 3901 |
-| backend          | 3902 |
-| database (mysql) | 3903 |
+| Service               | Port |
+| --------------------- | ---- |
+| main app (nginx)      | 3900 |
+| client                | 3901 |
+| backend               | 3902 |
+| database (mysql)      | 3903 |
+| database (phpmyadmin) | 3939 |
 
 > Note: nginx is used as a reverse proxy to both client and backend. Use [localhost:3900](http://localhost:3900) in your browser to access the app.
+
+> Note: phpmyadmin is used to access the database. Use [localhost:3939](http://localhost:3939) in your browser to access it.
 
 To shutdown, do:
 

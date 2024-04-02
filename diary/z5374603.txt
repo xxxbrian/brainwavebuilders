@@ -48,3 +48,21 @@ week4:
 6. Rewrite the side navigation bar for Ethan. Do the same thing as above
 7. Rewrite the activity and stats components for Ethan. Do the same thing as above
 8. Combine all components together to build a main dashboard page
+
+======================================================================
+
+week5:
+- This week, I worked mainly on redesign dashboard page as a responsive page
+1. To make our system work perfectly on phone side, I change the original design
+2. Learn RPC so that I can start working on connecting frontend and backend together
+3. will start working on building the responsive page next week and do more components
+
+======================================================================
+
+week6:
+- This week, I worked mainly on frontend of profile editing. I finished features below:
+1. The profile editing page with 3 options
+2. The profile info editing component
+3. The preference editing component
+4. The security editing component
+5. The password frontend check
