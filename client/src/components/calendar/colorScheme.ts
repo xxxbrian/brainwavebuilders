@@ -1,17 +1,17 @@
 export const bgcolors = {
-  lecture: "bg-green-50",
+  lecture: "green-50",
   tutorial: "[#ECFEFF]",
-  assignment: "bg-pink-50",
-  exam: "bg-blue-50",
-  default: "bg-gray-50",
+  assignment: "pink-50",
+  exam: "blue-50",
+  default: "gray-50",
 };
 
 export const subject_colors = {
-  lecture: "bg-green-700",
-  tutorial: "bg-[#0E7490]",
-  assignment: "bg-pink-600",
-  exam: "bg-blue-700",
-  default: "bg-gray-700",
+  lecture: "green-700",
+  tutorial: "[#0E7490]",
+  assignment: "pink-600",
+  exam: "blue-700",
+  default: "gray-700",
 };
 
 export const getBgColor = (type: string): string => {
