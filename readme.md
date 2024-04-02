@@ -57,8 +57,8 @@ make destroy
 
 If you need to change the database, you must:
 
-- Go to [schema.prisma](server/prisma/schema.prisma)
-- Update the schema file to your liking
-- Run `make db-diff`
-- Check the generated SQL at [migrations](server/prisma/migrations/). If it doesn't look right, remove the newly-generated migration and try again.
-- If it looks alright, do `make db-apply` to apply the changes.
+-   Go to [schema.prisma](server/prisma/schema.prisma)
+-   Update the schema file to your liking
+-   Run `make db-diff`
+-   Check the generated SQL at [migrations](server/prisma/migrations/). If it doesn't look right, remove the newly-generated migration and try again.
+-   If it looks alright, do `make db-apply` to apply the changes.

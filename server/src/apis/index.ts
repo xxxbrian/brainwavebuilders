@@ -3,11 +3,13 @@
 
 import { app } from "@/globals";
 import { ping } from "@/handlers/ping";
+import { submitAssignment } from "@/handlers/submitAssignment";
 import { login } from "@/handlers/login";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
 import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
 import { setUserProfile } from "@/handlers/setUserProfile";
+import { createQuestion } from "@/handlers/createQuestion";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
@@ -50,6 +52,8 @@ export interface Assessment {
     dueDate?: string;
     duration?: number;
     type: string;
+    questions: Question[];
+    submissions: Submission[];
 }
 
 export interface Question {
@@ -212,6 +216,32 @@ export interface SubmitAnswersResponse {
     submission: Submission;
 }
 
+// SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentRequest {
+    assessmentId: string;
+    studentId: string;
+    fileUrl: string;
+}
+
+// SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
+export interface SubmitAssignmentResponse {
+    submission: Submission;
+}
+
+// CreateQuestionRequest is the request that is sent to the createQuestion endpoint.
+export interface CreateQuestionRequest {
+    assessmentId: string;
+    title: string;
+    type: string;
+    options?: string;
+    points: number;
+}
+
+// CreateQuestionResponse is the response that is sent to the createQuestion endpoint.
+export interface CreateQuestionResponse {
+    question: Question;
+}
+
 // FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsRequest {
     assessmentId: string;
@@ -220,8 +250,6 @@ export interface FetchAssessmentDetailsRequest {
 // FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
 export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
-    questions: Question[];
-    submissions: Submission[];
 }
 
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
@@ -478,6 +506,50 @@ app.post('/api/submitAnswers', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request submitAnswers with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// submitAssignment is the endpoint handler for the submitAssignment endpoint.
+// It wraps around the function at @/handlers/submitAssignment.
+app.post('/api/submitAssignment', async (req, res) => {
+    const request: SubmitAssignmentRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: SubmitAssignmentResponse = await submitAssignment(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request submitAssignment with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createQuestion is the endpoint handler for the createQuestion endpoint.
+// It wraps around the function at @/handlers/createQuestion.
+app.post('/api/createQuestion', async (req, res) => {
+    const request: CreateQuestionRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: CreateQuestionResponse = await createQuestion(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createQuestion with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

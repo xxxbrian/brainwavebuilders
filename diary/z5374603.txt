@@ -66,3 +66,12 @@ week6:
 3. The preference editing component
 4. The security editing component
 5. The password frontend check
+
+======================================================================
+
+week7
+- This week, I worked mainly on frontend refator and building creating-exam page.
+1. Refactor profile editing page
+2. Make all pages fit to full screen
+3. Build creating SAQ and MCQ component for creating-exam page
+4. Build creating-exam page, implementing editing and adding questions

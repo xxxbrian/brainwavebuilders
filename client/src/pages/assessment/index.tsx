@@ -2,9 +2,10 @@ import React, { useState } from "react";
 import AssessmentInfo from "@/components/assessment/AssessmentInfo";
 import QuestionComponent from "@/components/assessment/Question";
 import { PageFrame } from "@/components/structural/PageFrame";
+import { v4 as uuidv4 } from "uuid";
 
 type Question = {
-  id: number;
+  id: string;
   questionTitle: string;
   questionType: string;
   questionOptions: string[];
@@ -20,7 +21,7 @@ export const Assessment: React.FC = () => {
 
   const [questions, setQuestions] = useState<Question[]>([
     {
-      id: 1,
+      id: uuidv4(),
       questionTitle: "",
       questionType: "short_answer",
       questionOptions: ["", "", ""],
@@ -29,15 +30,9 @@ export const Assessment: React.FC = () => {
     },
   ]);
 
-  const generateId = () => {
-    return questions.length > 0
-      ? Math.max(...questions.map((q) => q.id)) + 1
-      : 1;
-  };
-
   const handleAddQuestion = () => {
     const newQuestion = {
-      id: generateId(),
+      id: uuidv4(),
       questionTitle: "",
       questionType: "short_answer",
       questionOptions: ["", "", ""],
@@ -53,7 +48,7 @@ export const Assessment: React.FC = () => {
     setQuestions(newQuestions);
   };
 
-  const handleDeleteQuestion = (id: number) => {
+  const handleDeleteQuestion = (id: string) => {
     setQuestions(questions.filter((question) => question.id !== id));
   };
 
