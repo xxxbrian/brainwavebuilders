@@ -39,20 +39,38 @@ export const PageFrame: React.FC<Props> = ({
     setIsSideNavOpen((prev) => !prev);
   }, []);
 
+  const [hoverSideNav, setHoverSideNav] = React.useState(false);
+
+  const displaySideNav = hoverSideNav || isSideNavOpen;
+
+  const onHoverSideNav = useCallback(() => {
+    setHoverSideNav(true);
+  }, []);
+
+  const onLeaveSideNav = useCallback(() => {
+    setHoverSideNav(false);
+  }, []);
+
   return (
     <div className={`${className ?? ""}`}>
-      <div className="flex flex-col relative flex-1">
-        <TopNav
-          title={title}
-          onClickMenu={toggleSideNav}
-          isSideMenuActive={isSideNavOpen}
-          left={left}
-          right={right}
-          className="z-10"
+      <div className="flex relative h-screen overflow-hidden">
+        <SideNav
+          isOpen={displaySideNav}
+          className="overflow-y-auto pt-28"
+          onMouseEnter={onHoverSideNav}
+          onMouseLeave={onLeaveSideNav}
         />
-        <div className="flex space-x-4">
-          <SideNav isOpen={isSideNavOpen} displayType=""></SideNav>
-          <div className="px-4 flex-1">{children}</div>
+
+        <div className="flex flex-col space-x-4 relative flex-1 overflow-y-auto">
+          <TopNav
+            title={title}
+            onClickMenu={toggleSideNav}
+            isSideMenuActive={isSideNavOpen}
+            left={left}
+            right={right}
+            className="fixed left-0 right-0 z-40"
+          />
+          <div className="px-4 flex-1 pt-24">{children}</div>
         </div>
       </div>
     </div>

@@ -59,9 +59,10 @@ const navItems = [
 ];
 
 interface Props {
-  displayType: string;
   className?: string;
   isOpen: boolean;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
 }
 
 interface ItemProps {
@@ -85,9 +86,9 @@ const NavItemComponent: React.FC<ItemProps> = ({
 
   return (
     <div
-      className={`flex w-full px-4 py-3 hover:bg-gray-100 active:bg-gray-200 select-none cursor-pointer items-center space-x-4 rounded-r-2xl h-12 transition transition-all ${
+      className={`flex w-full px-4 py-3 hover:bg-gray-100 active:bg-gray-200 select-none cursor-pointer items-center space-x-4 rounded-r-2xl h-12 transition transition-all w-fit ${
         isActive ? "bg-blue-100" : ""
-      }`}
+      } ${isOpen ? "w-48" : "w-8"} overflow-hidden`}
       onClick={onClickInner}
     >
       <Icon />
@@ -96,7 +97,12 @@ const NavItemComponent: React.FC<ItemProps> = ({
   );
 };
 
-export default function SideNav({ isOpen }: Props) {
+export default function SideNav({
+  isOpen,
+  className,
+  onMouseEnter,
+  onMouseLeave,
+}: Props) {
   const router = useRouter();
 
   const onClickNavItem = useCallback(
@@ -113,7 +119,9 @@ export default function SideNav({ isOpen }: Props) {
 
   return (
     <div
-      className={`transition-all flex flex-col items-center py-2 border-r border-gray-200 pr-2 w-fit`}
+      className={`transition-all flex flex-col py-2 border-r border-gray-200 pr-2 h-full ${className}`}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
       {navItems.map((item) => (
         <NavItemComponent

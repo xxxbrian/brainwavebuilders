@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from "react";
+import React, { ForwardedRef, PropsWithChildren } from "react";
 import { Logo } from "../Logo";
 import { AiOutlineMenu } from "react-icons/ai";
 import { User } from "@/backend";
@@ -30,19 +30,16 @@ const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
   );
 };
 
-export const TopNav: React.FC<Props> = ({
-  title,
-  left,
-  right,
-  onClickMenu,
-  isSideMenuActive,
-  className,
-}) => {
+const TopNavForwarded = (
+  { title, left, right, onClickMenu, isSideMenuActive, className }: Props,
+  ref: ForwardedRef<HTMLDivElement>,
+) => {
   const user = useCurrentUser();
 
   return (
     <div
-      className={`border-b py-4 sticky text-center left-0 top-0 w-full backdrop-blur-md bg-white bg-opacity-80 flex px-4 items-center ${className}`}
+      ref={ref}
+      className={`border-b py-4 text-center left-0 top-0 w-full backdrop-blur-md bg-white bg-opacity-80 flex px-4 items-center ${className}`}
     >
       <div className="w-1/4 flex space-x-4 items-center px-4">
         <div className="space-x-6 flex items-center">
@@ -74,3 +71,5 @@ export const TopNav: React.FC<Props> = ({
     </div>
   );
 };
+
+export const TopNav = React.forwardRef<HTMLDivElement, Props>(TopNavForwarded);
