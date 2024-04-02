@@ -45,6 +45,23 @@ types:
     answers?: string
     grade?: int
 
+  Course:
+    id: string
+    name: string
+    code?: string # NOTE: This is not unique. Do not key to this.
+    description: string
+    imageURL?: string
+    createdBy: User
+    createdAt: int
+
+  UserStats:
+    coursesInProgress: int
+    coursesCompleted: int
+    tasksFinished: int
+
+  UserSevenDayActivity:
+    activities: int[]
+
 endpoints:
   ping:
     request:
@@ -135,4 +152,16 @@ endpoints:
       assessment: Assessment
       questions: Question[]
       submissions: Submission[]
+    service: typescript
+
+  fetchUserStats:
+    request:
+    response:
+      stats: UserStats
+    service: typescript
+
+  fetchUserSevenDayActivity:
+    request:
+    response:
+      activity: UserSevenDayActivity
     service: typescript

@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, createContext, useCallback } from "react";
 import { TopNav } from "./TopNav";
-import SideNav from "../dashboard/SideNav";
+import SideNav from "./SideNav";
 
 // export interface PageFrameState {}
 // export interface PageFrameActions {}
@@ -22,9 +22,17 @@ import SideNav from "../dashboard/SideNav";
 interface Props extends PropsWithChildren {
   title: string;
   className?: string;
+  left?: React.ReactNode;
+  right?: React.ReactNode;
 }
 
-export const PageFrame: React.FC<Props> = ({ children, title, className }) => {
+export const PageFrame: React.FC<Props> = ({
+  children,
+  title,
+  className,
+  left,
+  right,
+}) => {
   const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
 
   const toggleSideNav = useCallback(() => {
@@ -38,10 +46,13 @@ export const PageFrame: React.FC<Props> = ({ children, title, className }) => {
           title={title}
           onClickMenu={toggleSideNav}
           isSideMenuActive={isSideNavOpen}
+          left={left}
+          right={right}
+          className="z-10"
         />
         <div className="flex space-x-4">
           <SideNav isOpen={isSideNavOpen} displayType=""></SideNav>
-          <div className="px-4">{children}</div>
+          <div className="px-4 flex-1">{children}</div>
         </div>
       </div>
     </div>

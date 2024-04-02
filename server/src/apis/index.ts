@@ -2,17 +2,19 @@
 
 
 import { app } from "@/globals";
-import { checkEmail } from "@/handlers/checkEmail";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { login } from "@/handlers/login";
 import { ping } from "@/handlers/ping";
-import { register } from "@/handlers/register";
-import { setUserProfile } from "@/handlers/setUserProfile";
+import { login } from "@/handlers/login";
 import { verifyEmail } from "@/handlers/verifyEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { register } from "@/handlers/register";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -69,6 +71,26 @@ export interface Submission {
     grade?: number;
 }
 
+export interface Course {
+    id: string;
+    name: string;
+    code?: string;
+    description: string;
+    imageURL?: string;
+    createdBy: User;
+    createdAt: number;
+}
+
+export interface UserStats {
+    coursesInProgress: number;
+    coursesCompleted: number;
+    tasksFinished: number;
+}
+
+export interface UserSevenDayActivity {
+    activities: number[];
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
@@ -105,7 +127,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-    
+
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -115,7 +137,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-    
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -132,7 +154,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-    
+
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -159,7 +181,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-    
+
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -200,6 +222,26 @@ export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
     questions: Question[];
     submissions: Submission[];
+}
+
+// FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsRequest {
+
+}
+
+// FetchUserStatsResponse is the response that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsResponse {
+    stats: UserStats;
+}
+
+// FetchUserSevenDayActivityRequest is the request that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityRequest {
+
+}
+
+// FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityResponse {
+    activity: UserSevenDayActivity;
 }
 
 
@@ -452,3 +494,44 @@ app.post('/api/fetchAssessmentDetails', async (req, res) => {
     }
 });
 
+// fetchUserStats is the endpoint handler for the fetchUserStats endpoint.
+// It wraps around the function at @/handlers/fetchUserStats.
+app.post('/api/fetchUserStats', async (req, res) => {
+    const request: FetchUserStatsRequest = req.body;
+    try {
+        const response: FetchUserStatsResponse = await fetchUserStats(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchUserStats with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchUserSevenDayActivity is the endpoint handler for the fetchUserSevenDayActivity endpoint.
+// It wraps around the function at @/handlers/fetchUserSevenDayActivity.
+app.post('/api/fetchUserSevenDayActivity', async (req, res) => {
+    const request: FetchUserSevenDayActivityRequest = req.body;
+    try {
+        const response: FetchUserSevenDayActivityResponse = await fetchUserSevenDayActivity(request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchUserSevenDayActivity with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});

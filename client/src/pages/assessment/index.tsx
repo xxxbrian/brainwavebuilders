@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
 import AssessmentInfo from "@/components/assessment/AssessmentInfo";
-import SideNav from "../../components/dashboard/SideNav";
+import SideNav from "../../components/structural/SideNav";
 import QuestionComponent from "@/components/assessment/Question";
 
 type Question = {

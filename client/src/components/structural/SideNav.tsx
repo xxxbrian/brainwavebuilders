@@ -68,9 +68,15 @@ interface ItemProps {
   item: NavItem;
   isActive?: boolean;
   onClick: (item: NavItem) => void;
+  isOpen: boolean;
 }
 
-const NavItemComponent: React.FC<ItemProps> = ({ item, isActive, onClick }) => {
+const NavItemComponent: React.FC<ItemProps> = ({
+  item,
+  isActive,
+  onClick,
+  isOpen,
+}) => {
   const { Icon, label } = item;
 
   const onClickInner = useCallback(() => {
@@ -79,28 +85,18 @@ const NavItemComponent: React.FC<ItemProps> = ({ item, isActive, onClick }) => {
 
   return (
     <div
-      className={`flex w-full px-4 py-3 hover:bg-gray-100 active:bg-gray-200 select-none cursor-pointer items-center space-x-4 rounded-r-md ${isActive ? "bg-blue-100" : ""}`}
+      className={`flex w-full px-4 py-3 hover:bg-gray-100 active:bg-gray-200 select-none cursor-pointer items-center space-x-4 rounded-r-2xl h-12 transition transition-all ${
+        isActive ? "bg-blue-100" : ""
+      }`}
       onClick={onClickInner}
     >
       <Icon />
-      <div className="text-lg">{label}</div>
+      {isOpen && <div className="text-sm">{label}</div>}
     </div>
   );
 };
 
-export default function SideNav({ displayType, className, isOpen }: Props) {
-  const filteredNavItems = navItems.filter((item) => {
-    if (displayType === "course") {
-      return !["home", "calendar", "courses"].includes(item.key);
-    }
-    return (
-      item.key === "home" ||
-      item.key === "calendar" ||
-      item.key === "courses" ||
-      item.key === "settings"
-    ); // Default items
-  });
-
+export default function SideNav({ isOpen }: Props) {
   const router = useRouter();
 
   const onClickNavItem = useCallback(
@@ -115,11 +111,9 @@ export default function SideNav({ displayType, className, isOpen }: Props) {
       router.pathname.toLowerCase().includes(item.href.toLowerCase()),
     )?.key ?? "home";
 
-  if (!isOpen) return null;
-
   return (
     <div
-      className={`transition-all flex flex-col items-center py-2 border-r border-gray-200`}
+      className={`transition-all flex flex-col items-center py-2 border-r border-gray-200 pr-2 w-fit`}
     >
       {navItems.map((item) => (
         <NavItemComponent
@@ -127,6 +121,7 @@ export default function SideNav({ displayType, className, isOpen }: Props) {
           item={item}
           onClick={onClickNavItem}
           isActive={item.key === currentPage}
+          isOpen={isOpen}
         />
       ))}
     </div>

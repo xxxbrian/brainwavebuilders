@@ -1,59 +1,86 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import blueLine from "@/assets/blue_line.png";
+import { UserStats } from "@/backend";
+import { Card } from "@radix-ui/themes";
+import { useBackend } from "@/hooks/useBackend";
 
 // Define and export the StatsProps type
 export type StatsProps = {
-  course_in_progress: number;
-  course_completed: number;
-  task_finished: number;
+  stats?: UserStats;
+  className?: string;
+};
+
+interface StatsCardProps {
+  title: string;
+  value?: number;
+  className?: string;
+}
+
+const StatsCard: React.FC<StatsCardProps> = ({ title, value, className }) => {
+  return (
+    <div className={`w-40 ${className ?? ""}`}>
+      <div className="flex flex-col justify-between w-full h-28 space-y-2 leading-tight border-l-2 border-blue-400 px-4">
+        {value === undefined ? (
+          <div className="text-5xl text-blue-600">-</div>
+        ) : (
+          <div className="text-5xl text-blue-600 font-bold">{value}</div>
+        )}
+        <div className="font-semibold">{title}</div>
+      </div>
+    </div>
+  );
 };
 
 // Update the component to accept StatsProps
-export default function Stats(props: StatsProps) {
+export const UserStatsDisplay: React.FC<StatsProps> = ({
+  stats,
+  className,
+}) => {
   return (
-    <>
-      <div className="flex flex-col font-bold">
-        <h3 className="ml-3 text-2xl">Statistics</h3>
-        <div className="flex flex-wrap mt-3 justify-between">
-          {/* Course in progress */}
-          <div className="flex flex-col m-1 rounded-xl border border-[#004E89] px-1 py-2">
-            <p className="ml-2 text-lg text-blue-800 p-4 w-32">
-              Courses In Progress
-            </p>
-            <div className="flex items-center justify-around">
-              <Image alt="blueLine" src={blueLine} />
-              <h2 className="text-5xl text-orange-400">
-                {props.course_in_progress}
-              </h2>
-            </div>
-          </div>
-          {/* Course completed */}
-          <div className="flex flex-col m-1 rounded-xl border border-[#004E89] px-1 py-2">
-            <p className="ml-2 text-lg text-blue-800 p-4 w-32">
-              Courses Completed
-            </p>
-            <div className="flex items-center justify-around">
-              <Image alt="blueLine" src={blueLine} />
-              <h2 className="text-5xl text-orange-400">
-                {props.course_completed}
-              </h2>
-            </div>
-          </div>
-          {/* Task finished */}
-          <div className="flex flex-col m-1 rounded-xl border border-[#004E89] px-1 py-2">
-            <p className="ml-2 text-lg text-blue-800 p-4 w-32">
-              Tasks Finished
-            </p>
-            <div className="flex items-center justify-around">
-              <Image alt="blueLine" src={blueLine} />
-              <h2 className="text-5xl text-orange-400">
-                {props.task_finished}
-              </h2>
-            </div>
-          </div>
-        </div>
+    <div className={`flex flex-col w-fit ${className}`}>
+      <div className="flex flex-wrap mt-3">
+        <StatsCard
+          title="Courses in progress"
+          value={stats?.coursesInProgress}
+          className="p-2"
+        />
+        <StatsCard
+          title="Courses completed"
+          value={stats?.coursesCompleted}
+          className="p-2"
+        />
+        <StatsCard
+          title="Tasks finished"
+          value={stats?.tasksFinished}
+          className="p-2"
+        />
       </div>
-    </>
+    </div>
   );
+};
+
+interface StatefulUserStatsDisplayProps {
+  className?: string;
 }
+
+export const StatefulUserStatsDisplay: React.FC<
+  StatefulUserStatsDisplayProps
+> = ({ className }) => {
+  const backend = useBackend();
+
+  const [stats, setStats] = useState<UserStats>();
+
+  useEffect(() => {
+    const inner = async () => {
+      const { stats } = await backend.fetchUserStats({});
+      setStats(stats);
+    };
+
+    void inner();
+  }, [backend]);
+
+  return (
+    <UserStatsDisplay stats={stats} className={className}></UserStatsDisplay>
+  );
+};

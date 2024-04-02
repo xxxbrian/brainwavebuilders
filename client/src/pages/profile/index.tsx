@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ProfileEditing from "@/components/profile/profile_editing";
 import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
-import SideNav from "../../components/dashboard/SideNav";
+import SideNav from "../../components/structural/SideNav";
 import { User, isAPIError } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 

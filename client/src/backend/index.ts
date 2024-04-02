@@ -57,6 +57,26 @@ export interface Submission {
     grade?: number;
 }
 
+export interface Course {
+    id: string;
+    name: string;
+    code?: string;
+    description: string;
+    imageURL?: string;
+    createdBy: User;
+    createdAt: number;
+}
+
+export interface UserStats {
+    coursesInProgress: number;
+    coursesCompleted: number;
+    tasksFinished: number;
+}
+
+export interface UserSevenDayActivity {
+    activities: number[];
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
@@ -93,7 +113,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-    
+
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -103,7 +123,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-    
+
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -120,7 +140,7 @@ export interface LoginResponse {
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-    
+
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -147,7 +167,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-    
+
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -188,6 +208,26 @@ export interface FetchAssessmentDetailsResponse {
     assessment: Assessment;
     questions: Question[];
     submissions: Submission[];
+}
+
+// FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsRequest {
+
+}
+
+// FetchUserStatsResponse is the response that is sent to the fetchUserStats endpoint.
+export interface FetchUserStatsResponse {
+    stats: UserStats;
+}
+
+// FetchUserSevenDayActivityRequest is the request that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityRequest {
+
+}
+
+// FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
+export interface FetchUserSevenDayActivityResponse {
+    activity: UserSevenDayActivity;
 }
 
 
@@ -529,6 +569,64 @@ export class BrainwavesClient {
         }
 
         return json as FetchAssessmentDetailsResponse;
+    }
+
+
+
+    async fetchUserStats(request: FetchUserStatsRequest): Promise<FetchUserStatsResponse> {
+        const response = await fetch(`${this.base_url}/fetchUserStats`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchUserStatsResponse;
+    }
+
+
+
+    async fetchUserSevenDayActivity(request: FetchUserSevenDayActivityRequest): Promise<FetchUserSevenDayActivityResponse> {
+        const response = await fetch(`${this.base_url}/fetchUserSevenDayActivity`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchUserSevenDayActivityResponse;
     }
 }
 
