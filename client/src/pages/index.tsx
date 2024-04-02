@@ -1,11 +1,15 @@
 import React from "react";
 
 import MainDashboard from "./dashboard";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import Login from "./login";
 
 export default function Home() {
-  return (
-    <>
-      <MainDashboard />
-    </>
-  );
+  const user = useCurrentUser();
+
+  if (!user) {
+    return <Login />;
+  }
+
+  return <MainDashboard />;
 }

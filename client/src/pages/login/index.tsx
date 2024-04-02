@@ -102,11 +102,19 @@ export const Login: React.FC<Props> = () => {
 
   const onClickSignIn = useCallback(async () => {
     try {
-      const { user, token } = await backend.login({ email, password });
-      console.log(user);
-      localStorage.setItem("token", token);
-      // TODO: better redirect
-      await router.push("/");
+      const { token } = await backend.login({ email, password });
+
+      // Set cookie
+      document.cookie = `token=${token}; path=/; expires=${new Date(
+        Date.now() + 1000 * 60 * 60 * 24 * 7,
+      ).toUTCString()}`;
+
+      if (router.pathname === "/" || router.pathname == "/login") {
+        await router.push("/dashboard");
+        return;
+      }
+
+      router.reload();
     } catch (e) {
       if (isAPIError(e)) {
         setError(e.message);
