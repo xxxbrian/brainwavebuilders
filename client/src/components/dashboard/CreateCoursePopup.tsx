@@ -47,7 +47,7 @@ export const CreateCourseButton: React.FC = () => {
           Create Course
         </button>
       </Dialog.Trigger>
-      <Dialog.Content className="fixed bg-white px-10 py-6 rounded-3xl shadow-lg">
+      <Dialog.Content className="bg-white px-10 py-6 rounded-3xl shadow-lg">
         <Dialog.Title className="flex justify-between items-start">
           Create Course
           {/* Close Button */}
