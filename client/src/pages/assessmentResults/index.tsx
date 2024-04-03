@@ -6,8 +6,8 @@ import EditGradePopup from "../../components/assessment/EditGradePopup";
 import EditFeedbackPopup from "../../components/assessment/EditFeedbackPopup";
 import FileCheck from "../../components/assessment/FileCheck";
 
-import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
-import SideNav from "../../components/dashboard/SideNav";
+import TopNav, { type TopNavProps } from "../../components/structural/TopNav";
+import SideNav from "../../components/structural/SideNav";
 
 import {
   studentResults,

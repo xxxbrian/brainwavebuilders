@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Card, Typography, Text } from "@radix-ui/themes";
-import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
-import SideNav from "../../components/dashboard/SideNav";
+import TopNav, { type TopNavProps } from "../../components/structural/TopNav";
+import SideNav from "../../components/structural/SideNav";
 
 import CreateAssessmentPopup from "../../components/assessment/CreateAssignmentPopup";
 import EditAssignmentPopup from "../../components/assessment/EditAssignmentPopup";
