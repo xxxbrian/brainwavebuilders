@@ -9,7 +9,8 @@ export const UserData: User = {
 export const CourseData: Course = {
   createdAt: new Date().getTime(),
   createdBy: UserData,
-  description: "",
+  description:
+    "Hello world. Hello world Hello world Hello world Hello world Hello world Hello world",
   id: "1",
   name: "COMP1522: Introduction to React",
   code: "COMP1522",
