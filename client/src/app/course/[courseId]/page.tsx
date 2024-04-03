@@ -1,6 +1,6 @@
 "use client";
 
-import { Course } from "@/backend";
+import { APIError, Course } from "@/backend";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { useBackend } from "@/hooks/useBackend";
@@ -58,17 +58,27 @@ export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
       setIsLoading(true);
       setCourse(null);
 
-      const { courses } = await backend.getCourses({ courseIds: [courseId] });
+      try {
+        const { courses } = await backend.getCourses({ courseIds: [courseId] });
+        const course = courses[0];
 
-      const course = courses[0];
+        if (!course) {
+          setError("Course not found");
+          return;
+        }
 
-      if (!course) {
-        setError("Course not found");
-        return;
+        setCourse(course);
+        setIsLoading(false);
+      } catch (e) {
+        if (e instanceof APIError) {
+          setError(e.message);
+        } else {
+          setError("An unexpected error occurred.");
+        }
+
+        setCourse(null);
+        setIsLoading(false);
       }
-
-      setCourse(course);
-      setIsLoading(false);
     };
 
     void inner();
