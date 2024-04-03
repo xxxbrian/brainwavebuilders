@@ -52,7 +52,7 @@ const navItems = [
   },
   {
     key: "settings",
-    href: "/Settings",
+    href: "/profile",
     Icon: IoSettingsOutline,
     label: "Settings",
   },
