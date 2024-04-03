@@ -1,7 +1,7 @@
 import React from "react";
 import { Card, Text, Box } from "@radix-ui/themes";
-import Image from "next/image";
 import { Course } from "@/backend";
+import defaultCourseImg from "@/assets/UNSW.png";
 
 export type CourseCardProps = {
   course: Course;
@@ -9,6 +9,7 @@ export type CourseCardProps = {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const { code, description, imageURL, name } = course;
+  console.log(imageURL);
 
   return (
     <Card
@@ -26,19 +27,19 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       h-[294px]"
     >
       {/* Content */}
-      <Box className="p-3">
+      <Box className="p-2">
         {/* Header Image */}
         <img
-          src={imageURL}
+          src={imageURL ?? defaultCourseImg.src}
           alt="Course"
-          className="rounded-t-lg object-cover"
+          className="rounded-lg object-cover"
           style={{
             width: "223px",
             height: "133px",
           }}
         />
         {/* Course Name and Description */}
-        <Box>
+        <Box className="mt-3">
           {/* Course Name */}
           <div>
             <Text trim="both" className="text-based font-bold ">
@@ -47,17 +48,13 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
           </div>
           {/* Description */}
           <div className="mt-3">
-            <Text
-              trim="both"
-              className="text-sm line-clamp-2 text-gray-600"
-              style={{ lineHeight: "1" }}
-            >
+            <Text trim="both" className="text-sm line-clamp-2 text-gray-600">
               {description}
             </Text>
           </div>
         </Box>
         {/* Course Code */}
-        <Box className="mt-3">
+        <Box className="mt-2">
           <Text trim="both" className="text-xl font-medium text-gray-600">
             {code}
           </Text>
