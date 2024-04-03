@@ -63,14 +63,12 @@ export const CreateCourseButton: React.FC = () => {
             >
               Course Name
             </label>
-            <TextField.Root>
-              <TextField.Input
-                value={courseName}
-                onChange={handleCourseNameChange}
-                placeholder="Enter course name"
-                required
-              />
-            </TextField.Root>
+            <TextField.Root
+              value={courseName}
+              onChange={handleCourseNameChange}
+              placeholder="Enter course name"
+              required
+            />
           </div>
           <div className="mb-4">
             <label

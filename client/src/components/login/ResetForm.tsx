@@ -51,7 +51,7 @@ export const ResetForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Email address
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             placeholder="Enter your email"
             value={email}
@@ -66,7 +66,7 @@ export const ResetForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Password
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             type="password"
             placeholder="Enter your new password"

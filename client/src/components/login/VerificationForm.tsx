@@ -40,7 +40,7 @@ export const VerificationForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Verification code
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             placeholder="Enter the code"
             value={verificationCode}

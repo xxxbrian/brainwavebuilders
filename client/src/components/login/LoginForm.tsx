@@ -47,7 +47,7 @@ export const LoginForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Email address
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             size={"3"}
             placeholder="Enter your email"
@@ -68,9 +68,9 @@ export const LoginForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Password
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
-            type="Password"
+            type="password"
             placeholder="Enter your password"
             value={password}
             size={"3"}
