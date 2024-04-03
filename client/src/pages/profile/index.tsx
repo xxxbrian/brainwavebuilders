@@ -1,6 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ProfileEditing from "@/components/profile/profile_editing";
-import SideNav from "../../components/structural/SideNav";
 import { User, isAPIError } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import { PageFrame } from "@/components/structural/PageFrame";
@@ -55,9 +54,7 @@ export const Profile: React.FC = () => {
       return;
     }
     const inner = async () => {
-      const { user } = await backend.getUserInfo({
-        token: token ?? "",
-      });
+      const { user } = await backend.getUserInfo({});
       setUserInfo(user);
     };
 
@@ -123,7 +120,6 @@ export const Profile: React.FC = () => {
       try {
         await backend.setUserProfile({
           user: userInfo,
-          token,
         });
       } catch (e) {
         if (isAPIError(e)) {

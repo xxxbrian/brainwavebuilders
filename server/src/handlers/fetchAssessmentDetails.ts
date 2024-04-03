@@ -14,6 +14,8 @@ export const fetchAssessmentDetails = async (
   ctx: any,
   request: FetchAssessmentDetailsRequest,
 ): Promise<FetchAssessmentDetailsResponse> => {
+  // TODO: Auth
+
   try {
     const assessment = await fetchDetailsFromDB(request);
 

@@ -12,6 +12,8 @@ export const submitAnswers = async (
   ctx: any,
   request: SubmitAnswersRequest,
 ): Promise<SubmitAnswersResponse> => {
+  // TODO: Auth
+
   try {
     const submission = await submitAnswersData(request);
 

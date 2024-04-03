@@ -16,7 +16,7 @@ interface Props extends PropsWithChildren {
 
 const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
   return (
-    <>
+    <a href="profile">
       {user.avatar ? (
         <img
           src={user.avatar}
@@ -26,7 +26,7 @@ const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
       ) : (
         <RxAvatar className="h-12 w-12 text-zinc-500 ml-2 mr-2" />
       )}
-    </>
+    </a>
   );
 };
 

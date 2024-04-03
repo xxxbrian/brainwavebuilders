@@ -25,7 +25,7 @@ const navItems = [
   { key: "home", href: "/dashboard", Icon: IoHome, label: "Home" },
   {
     key: "calendar",
-    href: "/Calendar",
+    href: "/calendar",
     Icon: IoCalendarOutline,
     label: "Calendar",
   },

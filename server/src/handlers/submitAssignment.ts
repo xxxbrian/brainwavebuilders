@@ -11,6 +11,8 @@ export const submitAssignment = async (
   ctx: any,
   request: SubmitAssignmentRequest,
 ): Promise<SubmitAssignmentResponse> => {
+  // TODO: Auth
+
   try {
     const submission = await submitAssignmentData(request);
 

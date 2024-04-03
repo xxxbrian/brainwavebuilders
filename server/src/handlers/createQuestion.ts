@@ -14,6 +14,8 @@ export const createQuestion = async (
   ctx: any,
   request: CreateQuestionRequest,
 ): Promise<CreateQuestionResponse> => {
+  // TODO: Auth
+
   try {
     const question = await createQuestionData(request);
 
