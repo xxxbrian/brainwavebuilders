@@ -14,21 +14,23 @@ datasource db {
 }
 
 model User {
-    id           String       @id @default(uuid())
-    email        String       @unique
-    firstName    String
-    lastName     String
-    createdAt    DateTime     @default(now())
-    updatedAt    DateTime     @updatedAt
-    password     String
-    tokens       Token[]
-    avatar       String?      @db.LongText
-    gender       String?
-    title        String?
-    bio          String?
-    role         String       @default("user")
-    coursesOwned Course[]     @relation("coursesOwned")
-    submissions  Submission[]
+    id                       String              @id @default(uuid())
+    email                    String              @unique
+    firstName                String
+    lastName                 String
+    createdAt                DateTime            @default(now())
+    updatedAt                DateTime            @updatedAt
+    password                 String
+    tokens                   Token[]
+    avatar                   String?             @db.LongText
+    gender                   String?
+    title                    String?
+    bio                      String?
+    role                     String              @default("user")
+    coursesOwned             Course[]            @relation("coursesOwned")
+    submissions              Submission[]
+    CourseMembers            CourseMembers[]
+    CourseInvitationsCreated CourseInvitations[] @relation("CourseInvites")
 }
 
 model Token {
@@ -48,15 +50,41 @@ model EmailVerification {
 }
 
 model Course {
-    id          String       @id @default(uuid())
-    name        String
-    code        String?
-    description String?
-    imageURL    String?
-    createdAt   DateTime     @default(now())
+    id                String              @id @default(uuid())
+    name              String
+    code              String?
+    description       String?
+    imageURL          String?
+    createdAt         DateTime            @default(now())
+    createdByID       String
+    createdBy         User                @relation("coursesOwned", fields: [createdByID], references: [id])
+    assessments       Assessment[]        @relation("courseAssessments")
+    CourseInvitations CourseInvitations[] @relation("CourseInvitations")
+}
+
+model CourseInvitations {
+    courseID    String
+    role        String
+    secret      String   @unique
+    course      Course   @relation("CourseInvitations", fields: [courseID], references: [id])
+    expiresAt   DateTime
     createdByID String
-    createdBy   User         @relation("coursesOwned", fields: [createdByID], references: [id])
-    assessments Assessment[] @relation("courseAssessments")
+    createdBy   User     @relation("CourseInvites", fields: [createdByID], references: [id])
+}
+
+enum CourseRole {
+    STUDENT
+    TEACHER
+}
+
+model CourseMembers {
+    courseID  String
+    userID    String
+    user      User       @relation(fields: [userID], references: [id])
+    role      CourseRole
+    createdAt DateTime   @default(now())
+
+    @@id([courseID, userID])
 }
 
 model Assessment {
