@@ -27,10 +27,10 @@ export const createCourseInvitation = async (
     throw new APIError("Course not found.");
   }
 
-  const memberships = await getCourseMemberships(user.id);
+  const memberships = await getCourseMemberships(course.id);
 
   const isTeacher = memberships.some(
-    (m) => m.role === "TEACHER" && m.courseID === course.id,
+    (m) => m.role === CourseRole.TEACHER && m.courseID === course.id,
   );
 
   if (!isTeacher) {

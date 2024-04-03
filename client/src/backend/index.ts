@@ -79,6 +79,11 @@ export interface UserSevenDayActivity {
     activities: number[];
 }
 
+export interface CourseMembership {
+    courseId: string;
+    role: string;
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
@@ -285,6 +290,7 @@ export interface GetUserCoursesRequest {
 // GetUserCoursesResponse is the response that is sent to the getUserCourses endpoint.
 export interface GetUserCoursesResponse {
     courses: Course[];
+    memberships: CourseMembership[];
 }
 
 // CreateCourseInvitationRequest is the request that is sent to the createCourseInvitation endpoint.

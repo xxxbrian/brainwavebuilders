@@ -4,7 +4,10 @@ import {
   GetUserCoursesResponse,
 } from "@/apis";
 import { useCurrentUser } from "@/context/auth";
-import { courseWithCreatedByDBToAPI } from "@/converts/course";
+import {
+  courseMembershipDBToAPI,
+  courseWithCreatedByDBToAPI,
+} from "@/converts/course";
 import { getCoursesByIDs, getUserCourseMembership } from "@/data/course";
 
 // getUserCourses implements the getUserCourses endpoint.
@@ -26,8 +29,10 @@ export const getUserCourses = async (
   }
 
   const apiCourses = courses.map(courseWithCreatedByDBToAPI);
+  const apiMemberships = memberships.map(courseMembershipDBToAPI);
 
   return {
     courses: apiCourses,
+    memberships: apiMemberships,
   };
 };

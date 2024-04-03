@@ -1,18 +1,19 @@
 "use client";
 
 import { APIError, Course } from "@/backend";
+import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { useBackend } from "@/hooks/useBackend";
 import { Heading } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { MdAssignment } from "react-icons/md";
+import { MdAssignment, MdOutlinePersonAddAlt1 } from "react-icons/md";
 
 interface ApplicationProps {
   icon: React.ReactNode;
   title: string;
-  onClick: (title: string) => void;
+  onClick?: (title: string) => void;
 }
 
 export const ApplicationIcon: React.FC<ApplicationProps> = ({
@@ -21,7 +22,7 @@ export const ApplicationIcon: React.FC<ApplicationProps> = ({
   onClick,
 }) => {
   const onclickInner = useCallback(() => {
-    onClick(title);
+    onClick?.(title);
   }, [onClick, title]);
 
   return (
@@ -137,21 +138,12 @@ export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
                 title="Assignments"
                 onClick={onClickAssignments}
               />
-              <ApplicationIcon
-                icon={<MdAssignment />}
-                title="Assignments"
-                onClick={() => {}}
-              />
-              <ApplicationIcon
-                icon={<MdAssignment />}
-                title="Assignments"
-                onClick={() => {}}
-              />
-              <ApplicationIcon
-                icon={<MdAssignment />}
-                title="Assignments"
-                onClick={() => {}}
-              />
+              <StatefulInviteMembersForm course={course}>
+                <ApplicationIcon
+                  icon={<MdOutlinePersonAddAlt1 />}
+                  title="Invite Member"
+                />
+              </StatefulInviteMembersForm>
             </div>
           </div>
           <div className="w-1/2">

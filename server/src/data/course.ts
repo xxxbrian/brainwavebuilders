@@ -141,12 +141,23 @@ export const leaveCourse = async (userID: string, courseID: string) => {
   return;
 };
 
+function generateCode() {
+  let code = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 6; i++) {
+    code += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return code;
+}
+
 export const createInvitation = async (
   courseID: string,
   createdByID: string,
   role: CourseRole,
 ): Promise<string> => {
-  const secret = Math.random().toString(36).substring(2, 15);
+  const secret = generateCode();
 
   await db.courseInvitations.create({
     data: {

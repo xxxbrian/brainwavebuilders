@@ -9,20 +9,20 @@ import { getCourses } from "@/handlers/getCourses";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
 import { getUserCourses } from "@/handlers/getUserCourses";
+import { joinCourse } from "@/handlers/joinCourse";
 import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
 import { setUserProfile } from "@/handlers/setUserProfile";
 import { createQuestion } from "@/handlers/createQuestion";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
 import { createCourse } from "@/handlers/createCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { checkEmail } from "@/handlers/checkEmail";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { joinCourse } from "@/handlers/joinCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -99,6 +99,11 @@ export interface UserStats {
 
 export interface UserSevenDayActivity {
     activities: number[];
+}
+
+export interface CourseMembership {
+    courseId: string;
+    role: string;
 }
 
 //////////////////////////////
@@ -307,6 +312,7 @@ export interface GetUserCoursesRequest {
 // GetUserCoursesResponse is the response that is sent to the getUserCourses endpoint.
 export interface GetUserCoursesResponse {
     courses: Course[];
+    memberships: CourseMembership[];
 }
 
 // CreateCourseInvitationRequest is the request that is sent to the createCourseInvitation endpoint.
