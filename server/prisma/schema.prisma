@@ -29,8 +29,8 @@ model User {
     role                     String              @default("user")
     coursesOwned             Course[]            @relation("coursesOwned")
     submissions              Submission[]
-    CourseMembers            CourseMembers[]
-    CourseInvitationsCreated CourseInvitations[] @relation("CourseInvites")
+    courseMembers            CourseMembers[]     @relation("CourseMemberUser")
+    courseInvitationsCreated CourseInvitations[] @relation("CourseInvites")
 }
 
 model Token {
@@ -59,7 +59,8 @@ model Course {
     createdByID       String
     createdBy         User                @relation("coursesOwned", fields: [createdByID], references: [id])
     assessments       Assessment[]        @relation("courseAssessments")
-    CourseInvitations CourseInvitations[] @relation("CourseInvitations")
+    courseInvitations CourseInvitations[] @relation("CourseInvitations")
+    courseMembers     CourseMembers[]     @relation("CourseMemberCourse")
 }
 
 model CourseInvitations {
@@ -80,11 +81,13 @@ enum CourseRole {
 model CourseMembers {
     courseID  String
     userID    String
-    user      User       @relation(fields: [userID], references: [id])
+    user      User       @relation("CourseMemberUser", fields: [userID], references: [id])
     role      CourseRole
     createdAt DateTime   @default(now())
+    course    Course     @relation("CourseMemberCourse", fields: [courseID], references: [id])
 
     @@id([courseID, userID])
+    @@index([courseID, userID])
 }
 
 model Assessment {
