@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useState } from "react";
 import ProfileEditing from "@/components/profile/profile_editing";
 import { User, isAPIError } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import { PageFrame } from "@/components/structural/PageFrame";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 export const Profile: React.FC = () => {
   const mockPreferences = {
@@ -36,32 +37,9 @@ export const Profile: React.FC = () => {
   };
 
   const backend = useBackend();
-  const [userInfo, setUserInfo] = useState<null | User>(null);
 
-  const [token, setToken] = useState<string | null>(null);
-  useEffect(() => {
-    const inner = async () => {
-      const token = localStorage.getItem("token");
-      if (token) {
-        setToken(token);
-      }
-    };
-
-    void inner();
-  }, []);
-
-  useEffect(() => {
-    console.log(token);
-    if (!token) {
-      return;
-    }
-    const inner = async () => {
-      const { user } = await backend.getUserInfo({});
-      setUserInfo(user);
-    };
-
-    void inner();
-  }, [backend, token]);
+  const user = useCurrentUser()!;
+  const [userInfo, setUserInfo] = useState<null | User>(user);
 
   const onChangeAvatar = useCallback((avatar: string) => {
     setUserInfo((prev) => {
@@ -118,18 +96,18 @@ export const Profile: React.FC = () => {
   }, []);
 
   const onClickProfileSave = useCallback(async () => {
-    if (userInfo && token) {
-      try {
-        await backend.setUserProfile({
-          user: userInfo,
-        });
-      } catch (e) {
-        if (isAPIError(e)) {
-          console.error(e);
-        }
+    try {
+      if (!userInfo) return;
+
+      await backend.setUserProfile({
+        user: userInfo,
+      });
+    } catch (e) {
+      if (isAPIError(e)) {
+        console.error(e);
       }
     }
-  }, [backend, token, userInfo]);
+  }, [backend, userInfo]);
 
   return (
     <PageFrame title="Edit Profile">
