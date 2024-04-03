@@ -1,9 +1,10 @@
-import React, { PropsWithChildren } from "react";
+import React, { PropsWithChildren, useCallback } from "react";
 import { Logo } from "../Logo";
 import { AiOutlineMenu } from "react-icons/ai";
 import { User } from "@/backend";
 import { RxAvatar } from "react-icons/rx";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useRouter } from "next/navigation";
 
 interface Props extends PropsWithChildren {
   title: string;
@@ -15,8 +16,13 @@ interface Props extends PropsWithChildren {
 }
 
 const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
+  const router = useRouter();
+  const onClickUserAvator = useCallback(() => {
+    router.push("/profile");
+  }, [router]);
+
   return (
-    <a href="profile">
+    <div onClick={onClickUserAvator}>
       {user.avatar ? (
         <img
           src={user.avatar}
@@ -26,7 +32,7 @@ const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
       ) : (
         <RxAvatar className="h-12 w-12 text-zinc-500 ml-2 mr-2" />
       )}
-    </a>
+    </div>
   );
 };
 

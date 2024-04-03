@@ -110,7 +110,7 @@ export const Profile: React.FC = () => {
   }, [backend, userInfo]);
 
   return (
-    <PageFrame title="Edit Profile">
+    <PageFrame title="Settings">
       {userInfo && (
         <ProfileEditing
           onClickProfileSave={onClickProfileSave}

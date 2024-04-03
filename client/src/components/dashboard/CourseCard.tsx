@@ -58,7 +58,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           </div>
           {/* Description */}
           <div className="mt-3">
-            <Text trim="both" className="text-sm line-clamp-2 text-gray-600">
+            <Text trim="both" className="text-sm text-gray-600">
               {description}
             </Text>
           </div>

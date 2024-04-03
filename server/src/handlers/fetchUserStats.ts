@@ -1,4 +1,6 @@
 import { FetchUserStatsRequest, FetchUserStatsResponse } from "@/apis";
+import { useCurrentUser } from "@/context/auth";
+import { getUserCourseMembership } from "@/data/course";
 
 // fetchUserStats implements the fetchUserStats endpoint.
 // TODO: Implement this
@@ -6,11 +8,14 @@ export const fetchUserStats = async (
   ctx: any,
   request: FetchUserStatsRequest,
 ): Promise<FetchUserStatsResponse> => {
+  const user = useCurrentUser(ctx)!;
+
+  const members = await getUserCourseMembership(user.id);
   return {
     stats: {
-      coursesCompleted: 12,
-      coursesInProgress: 5,
-      tasksFinished: 348,
+      coursesCompleted: 0,
+      coursesInProgress: members.length,
+      tasksFinished: 2,
     },
   };
 };
