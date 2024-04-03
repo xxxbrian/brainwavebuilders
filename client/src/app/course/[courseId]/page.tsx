@@ -1,9 +1,11 @@
+"use client";
+
 import { Course } from "@/backend";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { useBackend } from "@/hooks/useBackend";
 import { Heading } from "@radix-ui/themes";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { MdAssignment } from "react-icons/md";
 
@@ -35,16 +37,17 @@ export const ApplicationIcon: React.FC<ApplicationProps> = ({
   );
 };
 
-export const CoursesPage: React.FC = () => {
+export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
+  params: { courseId },
+}) => {
   const router = useRouter();
-  const courseId = router.query.courseId as string;
 
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
 
   const onClickAssignments = useCallback(async () => {
-    await router.push(`/course/${courseId}/assignment`);
+    router.push(`/course/${courseId}/assignment`);
   }, [courseId, router]);
 
   const backend = useBackend();

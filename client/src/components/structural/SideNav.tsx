@@ -12,7 +12,7 @@ import { BiTask, BiVideoRecording } from "react-icons/bi";
 import { TfiAnnouncement, TfiMedallAlt } from "react-icons/tfi";
 import Image from "next/image";
 import logoImg from "@/assets/logo-big.svg";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 
 interface NavItem {
   key: string;
@@ -105,6 +105,8 @@ export default function SideNav({
 }: Props) {
   const router = useRouter();
 
+  const pathName = usePathname();
+
   const onClickNavItem = useCallback(
     (item: NavItem) => {
       void router.push(item.href);
@@ -114,7 +116,7 @@ export default function SideNav({
 
   const currentPage =
     navItems.find((item) =>
-      router.pathname.toLowerCase().includes(item.href.toLowerCase()),
+      pathName.toLowerCase().includes(item.href.toLowerCase()),
     )?.key ?? "home";
 
   return (

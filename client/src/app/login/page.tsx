@@ -1,3 +1,5 @@
+"use client";
+
 import { isAPIError, type Featured } from "@/backend";
 import { Logo } from "@/components/Logo";
 import { CenteredLoading } from "@/components/loading";
@@ -8,7 +10,7 @@ import { VerificationForm } from "@/components/login/VerificationForm";
 import { useBackend } from "@/hooks/useBackend";
 import { useRefState } from "@/hooks/useRefState";
 import { Callout, Card } from "@radix-ui/themes";
-import { useRouter } from "next/router";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
 import Cookies from "js-cookie";
@@ -26,7 +28,7 @@ export const Login: React.FC<Props> = () => {
   useEffect(() => {
     if (user !== null) {
       void router.replace("/dashboard");
-      router.reload();
+      router.refresh();
     }
   }, [router, user]);
 
@@ -110,23 +112,25 @@ export const Login: React.FC<Props> = () => {
     }
   }, [step]);
 
+  const pathName = usePathname();
+
   const onClickSignIn = useCallback(async () => {
     try {
       const { token } = await backend.login({ email, password });
 
       Cookies.set("token", token, { expires: 7 });
 
-      if (router.pathname == "/login") {
-        await router.replace("/dashboard");
+      if (pathName == "/login") {
+        router.replace("/dashboard");
       }
 
-      router.reload();
+      window.location.reload();
     } catch (e) {
       if (isAPIError(e)) {
         setError(e.message);
       }
     }
-  }, [backend, email, password, router, setError]);
+  }, [backend, email, password, pathName, router, setError]);
 
   const onClickRegisterConfirm = useCallback(async () => {
     const { taken } = await backend.checkEmail({ email });

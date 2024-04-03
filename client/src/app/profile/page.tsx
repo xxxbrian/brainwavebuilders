@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useCallback, useEffect, useState } from "react";
 import ProfileEditing from "@/components/profile/profile_editing";
 import { User, isAPIError } from "@/backend";

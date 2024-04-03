@@ -1,3 +1,5 @@
+"use client";
+
 import React, { useState } from "react";
 import AssessmentInfo from "@/components/assessment/AssessmentInfo";
 import QuestionComponent from "@/components/assessment/Question";

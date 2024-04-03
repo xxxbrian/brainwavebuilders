@@ -1,6 +1,6 @@
 import { useBackend } from "@/hooks/useBackend";
 import { Button, Dialog, TextArea, TextField } from "@radix-ui/themes";
-import { useRouter } from "next/router";
+import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";
 import type { ChangeEvent } from "react";
 
@@ -35,7 +35,7 @@ export const CreateCourseButton: React.FC = () => {
         description: courseDescription,
       });
 
-      await router.push(`/course/${course.id}`);
+      router.push(`/course/${course.id}`);
     },
     [backend, courseDescription, courseName, router],
   );

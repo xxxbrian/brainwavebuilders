@@ -1,3 +1,5 @@
+"use client";
+
 import React, { PropsWithChildren } from "react";
 import { StatefulUserStatsDisplay } from "../../components/dashboard/Stats";
 import { StatefulUserSevenDayActivitiesDisplay } from "../../components/dashboard/Activity";
