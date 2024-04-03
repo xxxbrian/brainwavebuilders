@@ -2,11 +2,10 @@ import { Course } from "@/backend";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { useBackend } from "@/hooks/useBackend";
-import { Card, Heading, IconButton } from "@radix-ui/themes";
+import { Heading } from "@radix-ui/themes";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { MdAssignment } from "react-icons/md";
-import { RiAccountBoxFill, RiPencilFill } from "react-icons/ri";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -43,6 +42,10 @@ export const CoursesPage: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
+
+  const onClickAssignments = useCallback(async () => {
+    await router.push(`/course/${courseId}/assignment`);
+  }, [courseId, router]);
 
   const backend = useBackend();
 
@@ -119,7 +122,7 @@ export const CoursesPage: React.FC = () => {
               <ApplicationIcon
                 icon={<MdAssignment />}
                 title="Assignments"
-                onClick={() => {}}
+                onClick={onClickAssignments}
               />
               <ApplicationIcon
                 icon={<MdAssignment />}
