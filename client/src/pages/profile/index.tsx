@@ -1,18 +1,10 @@
 import React, { useCallback, useEffect, useState } from "react";
 import ProfileEditing from "@/components/profile/profile_editing";
-import TopNav, { type TopNavProps } from "../../components/dashboard/TopNav";
-import SideNav from "../../components/dashboard/SideNav";
 import { User, isAPIError } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
+import { PageFrame } from "@/components/structural/PageFrame";
 
 export const Profile: React.FC = () => {
-  const topNavProps: TopNavProps = {
-    displayType: "dash",
-    courseCode: "COMP3900",
-    courseName: "Computer Science Project",
-    userName: "Steve",
-  };
-
   const mockPreferences = {
     onClickPreferencesSave: async () => {},
     lang: "",
@@ -62,9 +54,7 @@ export const Profile: React.FC = () => {
       return;
     }
     const inner = async () => {
-      const { user } = await backend.getUserInfo({
-        token: token ?? "",
-      });
+      const { user } = await backend.getUserInfo({});
       setUserInfo(user);
     };
 
@@ -130,7 +120,6 @@ export const Profile: React.FC = () => {
       try {
         await backend.setUserProfile({
           user: userInfo,
-          token,
         });
       } catch (e) {
         if (isAPIError(e)) {
@@ -141,43 +130,37 @@ export const Profile: React.FC = () => {
   }, [backend, token, userInfo]);
 
   return (
-    <div className="flex">
-      <div className="lg:block">
-        <SideNav displayType={topNavProps.displayType} />
-      </div>
-      <div className="flex-grow">
-        <TopNav {...topNavProps} />
-        {userInfo && (
-          <ProfileEditing
-            onClickProfileSave={onClickProfileSave}
-            avatar={userInfo.avatar}
-            onChangeAvatar={onChangeAvatar}
-            firstName={userInfo.firstName}
-            onChangeFirstName={onChangeFirstName}
-            lastName={userInfo.lastName}
-            onChangeLastName={onChangeLastName}
-            title={userInfo.title}
-            onChangeTitle={onChangeTitle}
-            gender={userInfo.gender}
-            onChangeGender={onChangeGender}
-            bio={userInfo.bio}
-            onChangeBio={onChangeBio}
-            onClickPreferenceSave={mockPreferences.onClickPreferencesSave}
-            lang={mockPreferences.lang}
-            onChangeLang={mockPreferences.onChangeLang}
-            timezone={mockPreferences.timezone}
-            onChangeTimezone={mockPreferences.onChangeTimezone}
-            notification={mockPreferences.notifications}
-            onChangeNotification={mockPreferences.onChangeNotifications}
-            recommendation={mockPreferences.recommendation}
-            onChangeRecommendation={mockPreferences.onChangeRecommendation}
-            onClickSecuritySave={mockSecurity.onClickSecuritySave}
-            two_factor_auth={mockSecurity.twoFactorEnabled}
-            onChangeTwoFactorAuth={mockSecurity.onChangeTwoFactorEnabled}
-          />
-        )}
-      </div>
-    </div>
+    <PageFrame title="Edit Profile">
+      {userInfo && (
+        <ProfileEditing
+          onClickProfileSave={onClickProfileSave}
+          avatar={userInfo.avatar}
+          onChangeAvatar={onChangeAvatar}
+          firstName={userInfo.firstName}
+          onChangeFirstName={onChangeFirstName}
+          lastName={userInfo.lastName}
+          onChangeLastName={onChangeLastName}
+          title={userInfo.title}
+          onChangeTitle={onChangeTitle}
+          gender={userInfo.gender}
+          onChangeGender={onChangeGender}
+          bio={userInfo.bio}
+          onChangeBio={onChangeBio}
+          onClickPreferenceSave={mockPreferences.onClickPreferencesSave}
+          lang={mockPreferences.lang}
+          onChangeLang={mockPreferences.onChangeLang}
+          timezone={mockPreferences.timezone}
+          onChangeTimezone={mockPreferences.onChangeTimezone}
+          notification={mockPreferences.notifications}
+          onChangeNotification={mockPreferences.onChangeNotifications}
+          recommendation={mockPreferences.recommendation}
+          onChangeRecommendation={mockPreferences.onChangeRecommendation}
+          onClickSecuritySave={mockSecurity.onClickSecuritySave}
+          two_factor_auth={mockSecurity.twoFactorEnabled}
+          onChangeTwoFactorAuth={mockSecurity.onChangeTwoFactorEnabled}
+        />
+      )}
+    </PageFrame>
   );
 };
 

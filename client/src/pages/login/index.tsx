@@ -11,6 +11,8 @@ import { Callout, Card } from "@radix-ui/themes";
 import { useRouter } from "next/router";
 import { useCallback, useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
+import Cookies from "js-cookie";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface Props {}
 
@@ -18,6 +20,16 @@ const kEmailError =
   "There is already an account associated with this email. Please sign in or use a different email.";
 
 export const Login: React.FC<Props> = () => {
+  const user = useCurrentUser();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (user !== null) {
+      void router.replace("/dashboard");
+      router.reload();
+    }
+  }, [router, user]);
+
   const [featured, setFeatured] = useState<Featured | null>(null);
 
   const backend = useBackend();
@@ -29,8 +41,6 @@ export const Login: React.FC<Props> = () => {
 
     void inner();
   }, [backend]);
-
-  const router = useRouter();
 
   // step: "loggedin" | "login" | "register" | "reset"
   const [step, setStep] = useState<
@@ -102,11 +112,15 @@ export const Login: React.FC<Props> = () => {
 
   const onClickSignIn = useCallback(async () => {
     try {
-      const { user, token } = await backend.login({ email, password });
-      console.log(user);
-      localStorage.setItem("token", token);
-      // TODO: better redirect
-      await router.push("/");
+      const { token } = await backend.login({ email, password });
+
+      Cookies.set("token", token, { expires: 7 });
+
+      if (router.pathname == "/login") {
+        await router.replace("/dashboard");
+      }
+
+      router.reload();
     } catch (e) {
       if (isAPIError(e)) {
         setError(e.message);

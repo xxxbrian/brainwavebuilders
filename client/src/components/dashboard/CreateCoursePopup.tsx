@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import type { ChangeEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
-const CreateClassPopup: React.FC = () => {
+export const CreateCourseButton: React.FC = () => {
   const [courseName, setCourseName] = useState("");
   const [courseDescription, setCourseDescription] = useState("");
 
@@ -28,7 +28,7 @@ const CreateClassPopup: React.FC = () => {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="bg-gray-300 hover:text-white rounded-xl hover:bg-gray-400 px-4 py-2 mr-3">
+        <button className="bg-gray-300 hover:text-white rounded-xl hover:bg-gray-400 px-4 py-2 flex-shrink-0">
           Create Class
         </button>
       </Dialog.Trigger>
@@ -107,5 +107,3 @@ const CreateClassPopup: React.FC = () => {
     </Dialog.Root>
   );
 };
-
-export default CreateClassPopup;

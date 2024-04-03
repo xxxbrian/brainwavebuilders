@@ -8,12 +8,16 @@ import { APIError } from "@/apis";
 // You can move this function to other files within the /app/server/src/handlers directory,
 // as long as the signature remains the same and the function is exported.
 
-export const submitAnswers = async (request: SubmitAnswersRequest): Promise<SubmitAnswersResponse> => {
+export const submitAnswers = async (
+  ctx: any,
+  request: SubmitAnswersRequest,
+): Promise<SubmitAnswersResponse> => {
+  // TODO: Auth
+
   try {
     const submission = await submitAnswersData(request);
 
     return { submission: formatSubmissionResponse(submission) };
-
   } catch (error) {
     console.error("Error in submitAnswers handler:", error);
 

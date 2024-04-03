@@ -2,7 +2,7 @@ import React, { useState, useRef } from "react";
 import type { ChangeEvent, FormEvent } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 
-const JoinCoursePopup: React.FC = () => {
+export const JoinCourseButton: React.FC = () => {
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
   const [isInvalid, setIsInvalid] = useState(false);
   const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
@@ -54,7 +54,7 @@ const JoinCoursePopup: React.FC = () => {
   return (
     <Dialog.Root>
       <Dialog.Trigger asChild>
-        <button className="bg-[#004E89] text-white rounded-xl hover:bg-opacity-90 px-4 py-2">
+        <button className="bg-[#004E89] text-white rounded-xl hover:bg-opacity-90 px-4 py-2 flex-shrink-0">
           Join Class
         </button>
       </Dialog.Trigger>
@@ -130,5 +130,3 @@ const JoinCoursePopup: React.FC = () => {
     </Dialog.Root>
   );
 };
-
-export default JoinCoursePopup;
