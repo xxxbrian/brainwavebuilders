@@ -1,6 +1,5 @@
 import React from "react";
 import CourseCard from "./CourseCard";
-import { Card } from "@radix-ui/themes";
 import { Course } from "@/backend";
 
 type CourseContainerProps = {

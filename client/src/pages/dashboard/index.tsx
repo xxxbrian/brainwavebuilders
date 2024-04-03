@@ -5,9 +5,9 @@ import { PageFrame } from "@/components/structural/PageFrame";
 import { CreateCourseButton } from "@/components/dashboard/CreateCoursePopup";
 import { JoinCourseButton } from "@/components/dashboard/JoinCoursePopup";
 import { Card, Heading } from "@radix-ui/themes";
-import { StatefulUpcomingDueDatesDisplay } from "@/components/dashboard/UpcomingDueDates";
 import { CoursesContainer } from "@/components/dashboard/Courses";
-import { CourseData } from "@/utils/data";
+import { CourseData, mockTime, mockEvents } from "@/utils/data";
+import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
 
 interface DashboardItemProps extends PropsWithChildren {
   className?: string;
@@ -42,9 +42,13 @@ export const Dashboard: React.FC = () => {
             </div>
           </DashboardItem>
           <DashboardItem className="flex-1 flex flex-col flex-shrink-0 m-4 space-y-4">
-            <Heading>Upcoming Due Dates</Heading>
+            <Heading>TODO List</Heading>
             <Card className="h-full">
-              <StatefulUpcomingDueDatesDisplay />
+              <UpcomingEvents
+                today={mockTime}
+                events={mockEvents()}
+                showEventNumber={4}
+              />
             </Card>
           </DashboardItem>
         </div>
