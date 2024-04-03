@@ -181,7 +181,7 @@ export const AssessmentList: React.FC = () => {
                 <thead className="border border-blue-400 bg-blue-400 sticky top-0">
                   <tr>
                     {HEADERS.map((head, index) => (
-                      <th className="border p-3 text-center">
+                      <th className="border p-3 text-center" key={index}>
                         <Text as="span" className="text-m text-white">
                           {head}
                         </Text>
@@ -191,7 +191,7 @@ export const AssessmentList: React.FC = () => {
                 </thead>
                 <tbody>
                   {subAssessmentsList.map((ass, index) => (
-                    <tr>
+                    <tr key={index}>
                       <td className="border border-blue-400 text-center w-50%">
                         <Text as="span" className="text-sm text-black p-3">
                           {ass.name}
