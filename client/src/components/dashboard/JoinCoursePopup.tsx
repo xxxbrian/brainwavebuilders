@@ -1,6 +1,8 @@
 import React, { useState, useRef } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import * as Dialog from "@radix-ui/react-dialog";
+import { Dialog } from "@radix-ui/themes";
+import { useBackend } from "@/hooks/useBackend";
+import { useRouter } from "next/navigation";
 
 export const JoinCourseButton: React.FC = () => {
   const [code, setCode] = useState<string[]>(Array(6).fill(""));
@@ -11,6 +13,7 @@ export const JoinCourseButton: React.FC = () => {
     event: ChangeEvent<HTMLInputElement>,
     index: number,
   ) => {
+    setIsInvalid(false);
     const { value } = event.target;
     const newCode = [...code];
 
@@ -25,7 +28,7 @@ export const JoinCourseButton: React.FC = () => {
 
     // If input 6 numbers, submit code
     if (index === 5 && newCode.every((digit) => digit !== "")) {
-      handleSubmit(newCode.join(""));
+      void handleSubmit(newCode.join(""));
     }
   };
 
@@ -41,92 +44,83 @@ export const JoinCourseButton: React.FC = () => {
     }
   };
 
-  const handleSubmit = (finalCode: string) => {
+  const backend = useBackend();
+  const router = useRouter();
+
+  const handleSubmit = async (finalCode: string) => {
     console.log("Submitted code:", finalCode);
-    if (finalCode === "123456") {
-      setIsInvalid(false);
-      // TODO submit code to backend
-    } else {
-      setIsInvalid(true); // If code is invalid, set isInvalid to true
+    try {
+      const { course } = await backend.joinCourse({ code: finalCode });
+      console.log("Joined course:", course);
+      router.push(`/course/${course.id}`);
+    } catch {
+      setIsInvalid(true);
     }
   };
 
   return (
     <Dialog.Root>
-      <Dialog.Trigger asChild>
+      <Dialog.Trigger>
         <button className="bg-[#004E89] text-white rounded-xl hover:bg-opacity-90 px-4 py-2 flex-shrink-0">
           Join Class
         </button>
       </Dialog.Trigger>
-      <Dialog.Portal>
-        <Dialog.Overlay className="fixed inset-0 bg-black bg-opacity-30 backdrop-blur-sm" />
-        <Dialog.Content
-          className="fixed top-1/2 left-1/2 bg-white px-10 py-6 rounded-3xl shadow-lg"
-          style={{
-            transform: "translate(-50%, -50%)",
+      <Dialog.Content>
+        <Dialog.Title className="flex justify-between items-start">
+          <span className="font-bold text-[40px] leading-[48px] tracking-normal text-blue-500">
+            Class Code
+          </span>
+          {/* Close Button */}
+          <Dialog.Close>
+            <button>×</button>
+          </Dialog.Close>
+        </Dialog.Title>
+        <form
+          onSubmit={(e: FormEvent) => {
+            e.preventDefault();
+            handleSubmit(code.join(""));
           }}
+          className="mt-4"
         >
-          <Dialog.Title className="flex justify-between items-start">
-            <span className="font-bold text-[40px] leading-[48px] tracking-normal text-blue-500">
-              Class Code
-            </span>
-            {/* Close Button */}
-            <Dialog.Close asChild>
-              <button
-                className="text-orange-500 hover:text-orange-600 transform hover:scale-110 text-2xl"
-                style={{ transition: "transform 0.2s" }}
-              >
-                ×
-              </button>
-            </Dialog.Close>
-          </Dialog.Title>
-          <form
-            onSubmit={(e: FormEvent) => {
-              e.preventDefault();
-              handleSubmit(code.join(""));
-            }}
-            className="mt-4"
-          >
-            <p>Ask your teacher for the class code, then enter it here.</p>
-            <div className="flex items-center space-x-2 my-4">
-              {code.map((value, index) => (
-                <input
-                  key={index}
-                  type="text"
-                  inputMode="numeric"
-                  maxLength={1}
-                  className="border-2 border-gray-300 focus:border-blue-600 rounded-xl text-lg text-center focus:outline-none w-[57px] h-[91px]"
-                  placeholder=""
-                  value={code[index]}
-                  onChange={(e) => handleChange(e, index)}
-                  onKeyDown={(e) => handleKeyDown(e, index)}
-                  ref={(el) => (inputsRef.current[index] = el)}
-                />
-              ))}
-            </div>
-          </form>
-          <p
-            className={`text-sm mt-2 ${
-              isInvalid ? "text-red-500" : "text-transparent"
-            }`}
-          >
-            *Invalid code, please try again.
-          </p>
-          <p className="font-bold mt-4">To sign in with a class code:</p>
-          <ul className="list-disc pl-5 mb-4">
-            <li>Use an authorized account</li>
-            <li>Use a class code with 6 letters or numbers</li>
-          </ul>
-          <p>
-            {/* //TODO Please modify below link to real help center */}
-            If you have trouble joining the class, go to the{" "}
-            <a href="/help" className="text-blue-600 underline">
-              Help Center article
-            </a>
-            .
-          </p>
-        </Dialog.Content>
-      </Dialog.Portal>
+          <p>Ask your teacher for the class code, then enter it here.</p>
+          <div className="flex items-center space-x-2 my-4">
+            {code.map((value, index) => (
+              <input
+                key={index}
+                type="text"
+                inputMode="numeric"
+                maxLength={1}
+                className="border-2 border-gray-300 focus:border-blue-600 rounded-xl text-lg text-center focus:outline-none w-[57px] h-[91px]"
+                placeholder=""
+                value={code[index]}
+                onChange={(e) => handleChange(e, index)}
+                onKeyDown={(e) => handleKeyDown(e, index)}
+                ref={(el) => (inputsRef.current[index] = el)}
+              />
+            ))}
+          </div>
+        </form>
+        <p
+          className={`text-sm mt-2 ${
+            isInvalid ? "text-red-500" : "text-transparent"
+          }`}
+        >
+          *Invalid code, please try again.
+        </p>
+        <p className="font-bold mt-4">To sign in with a class code:</p>
+        <ul className="list-disc pl-5 mb-4">
+          <li>Use an authorized account</li>
+          <li>Use a class code with 6 letters or numbers</li>
+        </ul>
+        <p>
+          {/* //TODO Please modify below link to real help center */}
+          If you have trouble joining the class, go to the{" "}
+          <a href="/help" className="text-blue-600 underline">
+            Help Center article
+          </a>
+          .
+        </p>
+      </Dialog.Content>
     </Dialog.Root>
   );
 };
