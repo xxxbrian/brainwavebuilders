@@ -9,7 +9,6 @@ export type CourseCardProps = {
 
 const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
   const { code, description, imageURL, name } = course;
-  console.log(imageURL);
 
   return (
     <Card

@@ -24,6 +24,7 @@ interface Props extends PropsWithChildren {
   className?: string;
   left?: React.ReactNode;
   right?: React.ReactNode;
+  standardWidth?: boolean;
 }
 
 export const PageFrame: React.FC<Props> = ({
@@ -32,6 +33,7 @@ export const PageFrame: React.FC<Props> = ({
   className,
   left,
   right,
+  standardWidth = true,
 }) => {
   const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
 
@@ -70,7 +72,17 @@ export const PageFrame: React.FC<Props> = ({
             right={right}
             className="fixed left-0 right-0 z-40"
           />
-          <div className="px-4 flex-1 pt-24">{children}</div>
+          <div className={`px-4 flex-1 pt-24`}>
+            {standardWidth ? (
+              <div
+                className={`${standardWidth ? "py-10 max-w-7xl mx-auto" : ""}`}
+              >
+                {children}
+              </div>
+            ) : (
+              <>{children}</>
+            )}
+          </div>
         </div>
       </div>
     </div>

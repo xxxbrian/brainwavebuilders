@@ -14,7 +14,7 @@ CREATE TABLE `Course` (
 CREATE TABLE `Assessment` (
     `id` VARCHAR(191) NOT NULL,
     `title` VARCHAR(191) NOT NULL,
-    `courseCode` VARCHAR(191) NOT NULL,
+    `courseId` VARCHAR(191) NOT NULL,
     `dueDate` DATETIME(3) NOT NULL,
     `type` VARCHAR(191) NOT NULL,
     `createdAt` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
@@ -58,7 +58,7 @@ CREATE TABLE `_CourseStudents` (
 ALTER TABLE `Course` ADD CONSTRAINT `Course_instructorId_fkey` FOREIGN KEY (`instructorId`) REFERENCES `User`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `Assessment` ADD CONSTRAINT `Assessment_courseCode_fkey` FOREIGN KEY (`courseCode`) REFERENCES `Course`(`code`) ON DELETE RESTRICT ON UPDATE CASCADE;
+ALTER TABLE `Assessment` ADD CONSTRAINT `Assessment_courseId_fkey` FOREIGN KEY (`courseId`) REFERENCES `Course`(`code`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `Assignment` ADD CONSTRAINT `Assignment_assessmentId_fkey` FOREIGN KEY (`assessmentId`) REFERENCES `Assessment`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;

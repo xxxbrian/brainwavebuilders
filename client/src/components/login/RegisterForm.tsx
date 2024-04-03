@@ -64,7 +64,7 @@ export const RegisterForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             First name
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             placeholder="Enter your first name"
             value={firstName}
@@ -79,7 +79,7 @@ export const RegisterForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Last name
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             placeholder="Enter your last name"
             value={lastName}
@@ -94,7 +94,7 @@ export const RegisterForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Email address
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             placeholder="Enter your email"
             value={email}
@@ -109,7 +109,7 @@ export const RegisterForm: React.FC<Props> = ({
           <Text as="div" size="3" weight="medium" mb="2">
             Password
           </Text>
-          <TextField.Input
+          <TextField.Root
             variant="surface"
             type="password"
             placeholder="Enter your password"

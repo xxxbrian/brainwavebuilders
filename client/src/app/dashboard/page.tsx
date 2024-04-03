@@ -1,3 +1,5 @@
+"use client";
+
 import React, { PropsWithChildren } from "react";
 import { StatefulUserStatsDisplay } from "../../components/dashboard/Stats";
 import { StatefulUserSevenDayActivitiesDisplay } from "../../components/dashboard/Activity";
@@ -31,8 +33,8 @@ export const Dashboard: React.FC = () => {
   );
 
   return (
-    <PageFrame title="Dashboard" right={dashboardButtons}>
-      <div className="flex flex-col space-y-12 py-10 max-w-7xl mx-auto">
+    <PageFrame title="Dashboard" right={dashboardButtons} standardWidth>
+      <div className="flex flex-col space-y-12">
         <div className="flex flex-wrap">
           <DashboardItem className="flex flex-col m-4">
             <Heading>Activity</Heading>

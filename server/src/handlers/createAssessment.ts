@@ -34,7 +34,7 @@ export const createAssessment = async (
 };
 
 function validateRequest(request: CreateAssessmentRequest) {
-  if (!request.title || !request.courseCode || !request.type) {
+  if (!request.title || !request.courseId || !request.type) {
     throw new APIError("Missing required fields", "VALIDATION_ERROR");
   }
 }

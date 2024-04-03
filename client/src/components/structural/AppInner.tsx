@@ -1,15 +1,13 @@
-import { type AppType } from "next/dist/shared/lib/utils";
-
-import "@/styles/globals.css";
-import "@radix-ui/themes/styles.css";
+"use client";
 
 import { Theme } from "@radix-ui/themes";
 import { useAppearance } from "@/hooks/useAppearance";
 import { Session, SessionContext, createSession } from "@/hooks/useCurrentUser";
-import Login from "./login";
+// import Login from "./login";
 import { PropsWithChildren, useEffect, useState } from "react";
 import { useBackend } from "@/hooks/useBackend";
 import { CenteredLoading } from "@/components/loading";
+import Login from "@/app/login/page";
 
 interface WrapperProps extends PropsWithChildren {
   session: Session | null;
@@ -27,7 +25,7 @@ const AppWrapper: React.FC<WrapperProps> = ({ children, session }) => {
   );
 };
 
-const MyApp: AppType = ({ Component, pageProps }) => {
+const AppInner: React.FC<PropsWithChildren> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoadingSession, setIsLoadingSession] = useState(true);
 
@@ -61,11 +59,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     );
   }
 
-  return (
-    <AppWrapper session={session}>
-      <Component {...pageProps} />
-    </AppWrapper>
-  );
+  return <AppWrapper session={session}>{children}</AppWrapper>;
 };
 
-export default MyApp;
+export default AppInner;

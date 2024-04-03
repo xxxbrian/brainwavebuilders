@@ -1,3 +1,5 @@
+"use client";
+
 import {
   type Event,
   Calendar as CalendarComponent,
@@ -40,7 +42,7 @@ export const Calendar: React.FC = () => {
   };
 
   return (
-    <PageFrame title="Calendar">
+    <PageFrame title="Calendar" standardWidth={false}>
       <div className="flex flex-col gap-4">
         <CalendarComponent today={mockTime} events={mockEvents()} />
       </div>
