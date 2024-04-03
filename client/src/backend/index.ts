@@ -277,6 +277,47 @@ export interface GetCoursesResponse {
     courses: Course[];
 }
 
+// GetUserCoursesRequest is the request that is sent to the getUserCourses endpoint.
+export interface GetUserCoursesRequest {
+
+}
+
+// GetUserCoursesResponse is the response that is sent to the getUserCourses endpoint.
+export interface GetUserCoursesResponse {
+    courses: Course[];
+}
+
+// CreateCourseInvitationRequest is the request that is sent to the createCourseInvitation endpoint.
+export interface CreateCourseInvitationRequest {
+    courseId: string;
+    role: string;
+}
+
+// CreateCourseInvitationResponse is the response that is sent to the createCourseInvitation endpoint.
+export interface CreateCourseInvitationResponse {
+    code: string;
+}
+
+// JoinCourseRequest is the request that is sent to the joinCourse endpoint.
+export interface JoinCourseRequest {
+    code: string;
+}
+
+// JoinCourseResponse is the response that is sent to the joinCourse endpoint.
+export interface JoinCourseResponse {
+    course: Course;
+}
+
+// LeaveCourseRequest is the request that is sent to the leaveCourse endpoint.
+export interface LeaveCourseRequest {
+    courseId: string;
+}
+
+// LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
+export interface LeaveCourseResponse {
+
+}
+
 
 //////////////////////////////
 // API Errors
@@ -790,6 +831,122 @@ export class BrainwavesClient {
         }
 
         return json as GetCoursesResponse;
+    }
+
+
+
+    async getUserCourses(request: GetUserCoursesRequest): Promise<GetUserCoursesResponse> {
+        const response = await fetch(`${this.base_url}/getUserCourses`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetUserCoursesResponse;
+    }
+
+
+
+    async createCourseInvitation(request: CreateCourseInvitationRequest): Promise<CreateCourseInvitationResponse> {
+        const response = await fetch(`${this.base_url}/createCourseInvitation`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as CreateCourseInvitationResponse;
+    }
+
+
+
+    async joinCourse(request: JoinCourseRequest): Promise<JoinCourseResponse> {
+        const response = await fetch(`${this.base_url}/joinCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as JoinCourseResponse;
+    }
+
+
+
+    async leaveCourse(request: LeaveCourseRequest): Promise<LeaveCourseResponse> {
+        const response = await fetch(`${this.base_url}/leaveCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as LeaveCourseResponse;
     }
 }
 

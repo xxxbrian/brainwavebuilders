@@ -68,6 +68,7 @@ model CourseInvitations {
     role        String
     secret      String   @unique
     course      Course   @relation("CourseInvitations", fields: [courseID], references: [id])
+    createdAt   DateTime @default(now())
     expiresAt   DateTime
     createdByID String
     createdBy   User     @relation("CourseInvites", fields: [createdByID], references: [id])

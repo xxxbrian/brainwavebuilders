@@ -200,3 +200,30 @@ endpoints:
     response:
       courses: Course[]
     service: typescript
+
+  getUserCourses:
+    request:
+    response:
+      courses: Course[]
+    service: typescript
+
+  createCourseInvitation:
+    request:
+      courseId: string
+      role: string
+    response:
+      code: string
+    service: typescript
+
+  joinCourse:
+    request:
+      code: string
+    response:
+      course: Course
+    service: typescript
+
+  leaveCourse:
+    request:
+      courseId: string
+    response:
+    service: typescript
