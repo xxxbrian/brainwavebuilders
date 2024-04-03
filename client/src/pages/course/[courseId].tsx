@@ -2,9 +2,39 @@ import { Course } from "@/backend";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { useBackend } from "@/hooks/useBackend";
-import { Heading, TabNav, Tabs } from "@radix-ui/themes";
+import { Card, Heading, IconButton } from "@radix-ui/themes";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { MdAssignment } from "react-icons/md";
+import { RiAccountBoxFill, RiPencilFill } from "react-icons/ri";
+
+interface ApplicationProps {
+  icon: React.ReactNode;
+  title: string;
+  onClick: (title: string) => void;
+}
+
+export const ApplicationIcon: React.FC<ApplicationProps> = ({
+  icon,
+  title,
+  onClick,
+}) => {
+  const onclickInner = useCallback(() => {
+    onClick(title);
+  }, [onClick, title]);
+
+  return (
+    <div
+      className="flex flex-col space-y-4 justify-center w-36 h-36 bg-gray-100 items-center rounded-md select-none cursor-pointer flex-shrink-0 m-2"
+      onClick={onclickInner}
+    >
+      <div className="bg-indigo-500 w-fit h-fit p-3 text-white rounded-md text-4xl">
+        {icon}
+      </div>
+      <div className="text-xs uppercase text-gray-600">{title}</div>
+    </div>
+  );
+};
 
 export const CoursesPage: React.FC = () => {
   const router = useRouter();
@@ -82,14 +112,36 @@ export const CoursesPage: React.FC = () => {
 
           <div>{course.description}</div>
         </div>
-
-        <TabNav.Root>
-          <TabNav.Link href="#" active>
-            Classroom
-          </TabNav.Link>
-          <TabNav.Link href="#">Documents</TabNav.Link>
-          <TabNav.Link href="#">Settings</TabNav.Link>
-        </TabNav.Root>
+        <div className="flex space-x-4">
+          <div className="flex flex-col space-y-4 w-1/2">
+            <Heading size={"5"}>Course Applications</Heading>
+            <div className="flex flex-wrap">
+              <ApplicationIcon
+                icon={<MdAssignment />}
+                title="Assignments"
+                onClick={() => {}}
+              />
+              <ApplicationIcon
+                icon={<MdAssignment />}
+                title="Assignments"
+                onClick={() => {}}
+              />
+              <ApplicationIcon
+                icon={<MdAssignment />}
+                title="Assignments"
+                onClick={() => {}}
+              />
+              <ApplicationIcon
+                icon={<MdAssignment />}
+                title="Assignments"
+                onClick={() => {}}
+              />
+            </div>
+          </div>
+          <div className="w-1/2">
+            <Heading size={"5"}>Calendar</Heading>
+          </div>
+        </div>
       </div>
     </PageFrame>
   );
