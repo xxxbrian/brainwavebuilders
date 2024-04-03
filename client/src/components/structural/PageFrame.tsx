@@ -43,7 +43,7 @@ export const PageFrame: React.FC<Props> = ({
 
   const [hoverSideNav, setHoverSideNav] = React.useState(false);
 
-  const displaySideNav = hoverSideNav || isSideNavOpen;
+  // const displaySideNav = hoverSideNav || isSideNavOpen;
 
   const onHoverSideNav = useCallback(() => {
     setHoverSideNav(true);
@@ -57,7 +57,7 @@ export const PageFrame: React.FC<Props> = ({
     <div className={`${className ?? ""}`}>
       <div className="flex relative h-screen overflow-hidden">
         <SideNav
-          isOpen={displaySideNav}
+          isOpen={isSideNavOpen}
           className="overflow-y-auto pt-28"
           onMouseEnter={onHoverSideNav}
           onMouseLeave={onLeaveSideNav}
