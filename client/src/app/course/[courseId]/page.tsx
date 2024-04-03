@@ -48,8 +48,8 @@ export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
   const [course, setCourse] = useState<Course | null>(null);
 
   const onClickAssignments = useCallback(async () => {
-    router.push(`/course/${courseId}/assignment`);
-  }, [courseId, router]);
+    router.push(`/assessment`);
+  }, [router]);
 
   const backend = useBackend();
 
