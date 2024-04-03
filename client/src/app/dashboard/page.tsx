@@ -1,6 +1,11 @@
 "use client";
 
-import React, { PropsWithChildren } from "react";
+import React, {
+  PropsWithChildren,
+  useCallback,
+  useEffect,
+  useState,
+} from "react";
 import { StatefulUserStatsDisplay } from "../../components/dashboard/Stats";
 import { StatefulUserSevenDayActivitiesDisplay } from "../../components/dashboard/Activity";
 import { PageFrame } from "@/components/structural/PageFrame";
@@ -10,6 +15,10 @@ import { Card, Heading } from "@radix-ui/themes";
 import { CoursesContainer } from "@/components/dashboard/Courses";
 import { CourseData, mockTime, mockEvents } from "@/utils/data";
 import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
+import { Course } from "@/backend";
+import { useRouter } from "next/navigation";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useBackend } from "@/hooks/useBackend";
 
 interface DashboardItemProps extends PropsWithChildren {
   className?: string;
@@ -31,6 +40,28 @@ export const Dashboard: React.FC = () => {
       <JoinCourseButton />
     </>
   );
+
+  const router = useRouter();
+
+  const onClickOpenCourse = useCallback(
+    (course: Course) => {
+      router.push(`/course/${course.id}`);
+    },
+    [router],
+  );
+
+  const [courses, setCourses] = useState<Course[]>([]);
+
+  const backend = useBackend();
+
+  useEffect(() => {
+    const inner = async () => {
+      const { courses } = await backend.getUserCourses({});
+      setCourses(courses);
+    };
+
+    void inner();
+  }, [backend]);
 
   return (
     <PageFrame title="Dashboard" right={dashboardButtons} standardWidth>
@@ -55,7 +86,7 @@ export const Dashboard: React.FC = () => {
           </DashboardItem>
         </div>
 
-        <DashboardItem className="flex flex-col space-y-4">
+        {/* <DashboardItem className="flex flex-col space-y-4">
           <Heading>Starred</Heading>
           <CoursesContainer
             courses={[
@@ -65,12 +96,16 @@ export const Dashboard: React.FC = () => {
               CourseData,
               CourseData,
             ]}
+            onClickCourse={onClickOpenCourse}
           />
-        </DashboardItem>
+        </DashboardItem> */}
 
         <DashboardItem className="flex flex-col space-y-4">
           <Heading>My Courses</Heading>
-          <CoursesContainer courses={[CourseData]} />
+          <CoursesContainer
+            courses={courses}
+            onClickCourse={onClickOpenCourse}
+          />
         </DashboardItem>
       </div>
     </PageFrame>

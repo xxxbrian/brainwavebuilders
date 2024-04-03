@@ -8,13 +8,17 @@ import { login } from "@/handlers/login";
 import { getCourses } from "@/handlers/getCourses";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { joinCourse } from "@/handlers/joinCourse";
 import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
 import { setUserProfile } from "@/handlers/setUserProfile";
 import { createQuestion } from "@/handlers/createQuestion";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
 import { createCourse } from "@/handlers/createCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
@@ -95,6 +99,11 @@ export interface UserStats {
 
 export interface UserSevenDayActivity {
     activities: number[];
+}
+
+export interface CourseMembership {
+    courseId: string;
+    role: string;
 }
 
 //////////////////////////////
@@ -293,6 +302,48 @@ export interface GetCoursesRequest {
 // GetCoursesResponse is the response that is sent to the getCourses endpoint.
 export interface GetCoursesResponse {
     courses: Course[];
+}
+
+// GetUserCoursesRequest is the request that is sent to the getUserCourses endpoint.
+export interface GetUserCoursesRequest {
+
+}
+
+// GetUserCoursesResponse is the response that is sent to the getUserCourses endpoint.
+export interface GetUserCoursesResponse {
+    courses: Course[];
+    memberships: CourseMembership[];
+}
+
+// CreateCourseInvitationRequest is the request that is sent to the createCourseInvitation endpoint.
+export interface CreateCourseInvitationRequest {
+    courseId: string;
+    role: string;
+}
+
+// CreateCourseInvitationResponse is the response that is sent to the createCourseInvitation endpoint.
+export interface CreateCourseInvitationResponse {
+    code: string;
+}
+
+// JoinCourseRequest is the request that is sent to the joinCourse endpoint.
+export interface JoinCourseRequest {
+    code: string;
+}
+
+// JoinCourseResponse is the response that is sent to the joinCourse endpoint.
+export interface JoinCourseResponse {
+    course: Course;
+}
+
+// LeaveCourseRequest is the request that is sent to the leaveCourse endpoint.
+export interface LeaveCourseRequest {
+    courseId: string;
+}
+
+// LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
+export interface LeaveCourseResponse {
+
 }
 
 
@@ -683,6 +734,94 @@ app.post('/api/getCourses', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getCourses with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getUserCourses is the endpoint handler for the getUserCourses endpoint.
+// It wraps around the function at @/handlers/getUserCourses.
+app.post('/api/getUserCourses', async (req, res) => {
+    const request: GetUserCoursesRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetUserCoursesResponse = await getUserCourses(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getUserCourses with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createCourseInvitation is the endpoint handler for the createCourseInvitation endpoint.
+// It wraps around the function at @/handlers/createCourseInvitation.
+app.post('/api/createCourseInvitation', async (req, res) => {
+    const request: CreateCourseInvitationRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: CreateCourseInvitationResponse = await createCourseInvitation(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createCourseInvitation with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// joinCourse is the endpoint handler for the joinCourse endpoint.
+// It wraps around the function at @/handlers/joinCourse.
+app.post('/api/joinCourse', async (req, res) => {
+    const request: JoinCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: JoinCourseResponse = await joinCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request joinCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// leaveCourse is the endpoint handler for the leaveCourse endpoint.
+// It wraps around the function at @/handlers/leaveCourse.
+app.post('/api/leaveCourse', async (req, res) => {
+    const request: LeaveCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: LeaveCourseResponse = await leaveCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request leaveCourse with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

@@ -14,7 +14,11 @@ export const getCourses = async (
   const courses = await getCoursesByIDs(request.courseIds);
 
   if (!courses) {
-    throw new APIError("Not all courses can be retrieved");
+    throw new APIError(
+      request.courseIds.length === 1
+        ? "Course not found."
+        : "Not all courses can be retrieved.",
+    );
   }
 
   return {

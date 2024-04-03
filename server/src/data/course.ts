@@ -1,5 +1,12 @@
+import { APIError } from "@/apis";
 import { db } from "@/globals";
-import { Course, Prisma } from "@prisma/client";
+import {
+  Course,
+  CourseInvitations,
+  CourseMembers,
+  CourseRole,
+  Prisma,
+} from "@prisma/client";
 
 export type CourseWithCreatedBy = Prisma.CourseGetPayload<{
   include: {
@@ -78,4 +85,125 @@ export const createCourse = async ({
   });
 
   return course;
+};
+
+export const getUserCourseMembership = async (
+  userID: string,
+): Promise<CourseMembers[]> => {
+  const memberships = await db.courseMembers.findMany({
+    where: {
+      userID: userID,
+    },
+  });
+
+  return memberships;
+};
+
+export const joinCourse = async (
+  userID: string,
+  courseID: string,
+  role: CourseRole,
+): Promise<void> => {
+  if (!courseID || !userID || !role)
+    throw new APIError("Not all arguments have been provided.");
+
+  await db.$transaction(async (db) => {
+    await db.courseMembers.deleteMany({
+      where: {
+        userID: userID || "",
+        courseID: courseID || "",
+      },
+    });
+
+    await db.courseMembers.create({
+      data: {
+        userID: userID,
+        courseID: courseID,
+        role: role,
+      },
+    });
+  });
+
+  return;
+};
+
+export const leaveCourse = async (userID: string, courseID: string) => {
+  if (!courseID || !userID)
+    throw new APIError("Not all arguments have been provided.");
+
+  await db.courseMembers.deleteMany({
+    where: {
+      userID: userID,
+      courseID: courseID,
+    },
+  });
+
+  return;
+};
+
+function generateCode() {
+  let code = "";
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  const charactersLength = characters.length;
+  for (let i = 0; i < 6; i++) {
+    code += characters.charAt(Math.floor(Math.random() * charactersLength));
+  }
+  return code;
+}
+
+export const createInvitation = async (
+  courseID: string,
+  createdByID: string,
+  role: CourseRole,
+): Promise<string> => {
+  const secret = generateCode();
+
+  await db.courseInvitations.create({
+    data: {
+      courseID,
+      createdByID,
+      createdAt: new Date(),
+      role,
+      secret,
+      // Expires in 7 days
+      expiresAt: new Date(Date.now() + 1000 * 60 * 60 * 24 * 7),
+    },
+  });
+
+  return secret;
+};
+
+export const getCourseMemberships = async (
+  courseID: string,
+): Promise<CourseMembers[]> => {
+  const memberships = await db.courseMembers.findMany({
+    where: {
+      courseID: courseID,
+    },
+  });
+
+  return memberships;
+};
+
+export const getInvitation = async (
+  secret: string,
+): Promise<CourseInvitations | null> => {
+  const invitation = await db.courseInvitations.findUnique({
+    where: {
+      secret,
+    },
+  });
+
+  return invitation;
+};
+
+export const mapCourseRoleString = (role: string): CourseRole => {
+  if (role === "TEACHER") {
+    return CourseRole.TEACHER;
+  } else if (role === "STUDENT") {
+    return CourseRole.STUDENT;
+  } else {
+    throw new APIError("Invalid role.");
+  }
 };

@@ -52,7 +52,7 @@ export const CreateCourseButton: React.FC = () => {
           Create Course
           {/* Close Button */}
           <Dialog.Close>
-            <button className="">×</button>
+            <button>×</button>
           </Dialog.Close>
         </Dialog.Title>
         <form onSubmit={handleSubmit}>

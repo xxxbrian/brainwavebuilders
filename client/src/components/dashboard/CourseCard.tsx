@@ -1,19 +1,28 @@
-import React from "react";
-import { Card, Text, Box } from "@radix-ui/themes";
+import React, { useCallback } from "react";
+import { Card, Text, Box, Badge } from "@radix-ui/themes";
 import { Course } from "@/backend";
 import defaultCourseImg from "@/assets/UNSW.png";
 
 export type CourseCardProps = {
   course: Course;
+  onClick?: (course: Course) => void;
+  role?: string;
 };
 
-const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
+export const CourseCard: React.FC<CourseCardProps> = ({
+  course,
+  role,
+  onClick,
+}) => {
   const { code, description, imageURL, name } = course;
+
+  const onClickInner = useCallback(() => {
+    onClick?.(course);
+  }, [course, onClick]);
 
   return (
     <Card
       className="
-      rounded-3xl
       overflow-hidden
       max-w-sm
       shadow-md
@@ -24,9 +33,11 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
       bg-gray-300
       w-[240px]
       h-[294px]"
+      onClick={onClickInner}
     >
       {/* Content */}
       <Box className="p-2">
+        <Badge>{role}</Badge>
         {/* Header Image */}
         <img
           src={imageURL ?? defaultCourseImg.src}
@@ -62,5 +73,3 @@ const CourseCard: React.FC<CourseCardProps> = ({ course }) => {
     </Card>
   );
 };
-
-export default CourseCard;

@@ -64,6 +64,10 @@ types:
   UserSevenDayActivity:
     activities: int[]
 
+  CourseMembership:
+    courseId: string
+    role: string
+
 endpoints:
   ping:
     request:
@@ -199,4 +203,32 @@ endpoints:
       courseIds: string[]
     response:
       courses: Course[]
+    service: typescript
+
+  getUserCourses:
+    request:
+    response:
+      courses: Course[]
+      memberships: CourseMembership[]
+    service: typescript
+
+  createCourseInvitation:
+    request:
+      courseId: string
+      role: string
+    response:
+      code: string
+    service: typescript
+
+  joinCourse:
+    request:
+      code: string
+    response:
+      course: Course
+    service: typescript
+
+  leaveCourse:
+    request:
+      courseId: string
+    response:
     service: typescript

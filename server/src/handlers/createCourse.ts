@@ -1,7 +1,8 @@
 import { CreateCourseRequest, CreateCourseResponse } from "@/apis";
 import { useCurrentUser } from "@/context/auth";
 import { courseWithCreatedByDBToAPI } from "@/converts/course";
-import { createCourse as createCourseDB } from "@/data/course";
+import { createCourse as createCourseDB, joinCourse } from "@/data/course";
+import { CourseRole } from "@prisma/client";
 
 // createCourse implements the createCourse endpoint.
 // This code has been automatically generated.
@@ -11,7 +12,7 @@ export const createCourse = async (
   ctx: any,
   { name, description, code, imageURL }: CreateCourseRequest,
 ): Promise<CreateCourseResponse> => {
-  const user = useCurrentUser(ctx);
+  const user = useCurrentUser(ctx)!;
   const course = await createCourseDB({
     name,
     description,
@@ -19,6 +20,9 @@ export const createCourse = async (
     imageURL,
     createdByID: user!.id,
   });
+
+  // Join the course as teacher
+  await joinCourse(user.id, course.id, CourseRole.TEACHER);
 
   return {
     course: courseWithCreatedByDBToAPI(course),
