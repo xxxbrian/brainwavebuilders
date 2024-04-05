@@ -91,5 +91,9 @@ Updated RPC, based on Rust:
     Release the tstype-py in PYPI.
 Participation in Meetings.
 
+Week 8:
 
-
+Implemented frontend calendar and deadline system.
+Designed frontend structure related to the calendar.
+Fixed existing code based on new authentication middleware.
+Participation in Meetings.
