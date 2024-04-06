@@ -102,13 +102,13 @@ and improved code quality.
 STANDUP:
 
 Progress since last week:
-Major refactoring to the dashboard pages, significantly reduced code redundancy 
-and designed the login in API. Redesigned the dashboard with @Steve Yang, 
+Major refactoring to the dashboard pages, significantly reduced code redundancy
+and designed the login in API. Redesigned the dashboard with @Steve Yang,
 writing stub API code.
 
 Announcements will be done before the demo; Forums will be done following that.
 
-Blockers: not being blocked, but blocking @Steve Yang. I’ll merge in the 
+Blockers: not being blocked, but blocking @Steve Yang. I’ll merge in the
 refactor shortly so Steve can work on redoing the dashboard elements.
 
 Features that you worked on that could be presented in the demo:
@@ -118,3 +118,10 @@ Announcements.
 Features that you are working on but cannot be presented yet:
 
 Nothing else
+
+==
+# Week 8
+
+Cleaned up some things after the demo.
+Prepare for another (mental) sprint to get all features done for the final demo.
+More planning works.
