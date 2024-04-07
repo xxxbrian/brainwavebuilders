@@ -157,3 +157,17 @@ Thesis still priority one
 
 Weekend
 Worked on Submission system, hoping to be complete frontend side of all assessment interfacing by Monday evening meeting.
+
+========================================================================
+Week 8
+
+Worked on Assessment interface, tidied up a few things
+
+Discussed backend implementation for assessment features
+
+Demo B on Wednesday arvo - couldn't navigate to my sections with the new routing/page layout, so weren't shown, but were completed
+
+Took a break to focus on Thesis
+
+========================================================================
+Week 9
