@@ -75,3 +75,10 @@ week7
 2. Make all pages fit to full screen
 3. Build creating SAQ and MCQ component for creating-exam page
 4. Build creating-exam page, implementing editing and adding questions
+
+======================================================================
+- This week, I worked mainly on frontend refactor.
+1. Refactor navigation bar
+2. Refactor dashboard layout
+3. Refactor activiy and stats componets on dashboard. Use recharts to rebuild graph
+4. Add TODO list on dashboard
