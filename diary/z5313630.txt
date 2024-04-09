@@ -81,3 +81,9 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
   - Converter Functions: Introduced converter functions to translate database models to API response formats.
   - API Handlers: Implemented new API handlers that utilise our data layer functions and converter functions to process incoming requests and prepare appropriate responses.
 - Next week, we'll be working no merging the frontend and backend.
+
+꘎♡━━ Week 8 ━━━♡꘎
+- Modified the createAssessment data layer to be able to receive all assessment questions and details at once. This way, frontend only interacts with backend once.
+- Successfully ran Demo B. Just have to work on Final Demo and Final Report.
+- New tasks have been delegated and I'll be continously working on Assessment features like giving feedback, getting results, editing exam etc.,
+- Need to start merging frontend with backend. Trying to get documentation done by Wednesday of Week 9.
