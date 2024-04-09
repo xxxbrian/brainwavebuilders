@@ -49,3 +49,12 @@ Designed assisgment deadline related data structures, waiting for sohee to finis
 Tracked the progress of all team members
 Hosted weekly meeting
 Allocated all user stories and tasks for the team
+
+Week 8:
+restructured parts of the API made in wk7 because we added a middle layer to authenticate
+Led Demo B rehearsal
+Recorded and resized demo B video
+Made Retro B report
+Tracked the progress of all team members
+Hosted weekly meeting
+Allocated all user stories and tasks for the team
