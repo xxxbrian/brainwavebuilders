@@ -2,7 +2,11 @@ import React from "react";
 import { getBgColor, getSubjectColor } from "./colorScheme";
 import { type Event, type CalendarProps } from "./Calendar";
 
-export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
+export const CalendarBoard: React.FC<CalendarProps> = ({
+  today,
+  events,
+  warpperClassName = "md:block",
+}) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);
     const dayOfWeek = firstDay.getDay();
@@ -79,7 +83,7 @@ export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
   }
 
   return (
-    <div className="hidden w-full xl:overflow-x-hidden md:block">
+    <div className={`hidden w-full xl:overflow-x-hidden ${warpperClassName}`}>
       <table className="min-w-full bg-white">
         <thead className="items-center">
           <tr className="h-12 border border-gray-200 rounded-lg bg-gray-50">

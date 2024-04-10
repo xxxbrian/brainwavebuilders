@@ -5,6 +5,7 @@ import { CalendarProps } from "./Calendar";
 export const CalendarBoardMini: React.FC<CalendarProps> = ({
   today,
   events,
+  warpperClassName = "md:hidden",
 }) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);
@@ -69,7 +70,7 @@ export const CalendarBoardMini: React.FC<CalendarProps> = ({
   }
 
   return (
-    <div className="block mt-6 md:hidden">
+    <div className={`block mt-6 ${warpperClassName}`}>
       <div className="flex items-center justify-between w-full px-1 py-8 overflow-x-auto bg-white">
         <table className="w-full">
           <thead>

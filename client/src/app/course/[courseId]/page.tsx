@@ -1,6 +1,8 @@
 "use client";
 
 import { APIError, Course } from "@/backend";
+import { CalendarBoard } from "@/components/calendar/CalendarBoard";
+import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
@@ -9,6 +11,7 @@ import { Heading } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { MdAssignment, MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { mockTime, mockEvents } from "@/utils/data";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -130,7 +133,7 @@ export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
           <div>{course.description}</div>
         </div>
         <div className="flex space-x-4">
-          <div className="flex flex-col space-y-4 w-1/2">
+          <div className="flex flex-col space-y-4 w-1/3">
             <Heading size={"5"}>Course Applications</Heading>
             <div className="flex flex-wrap">
               <ApplicationIcon
@@ -146,8 +149,18 @@ export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
               </StatefulInviteMembersForm>
             </div>
           </div>
-          <div className="w-1/2">
+          <div className="w-2/3">
             <Heading size={"5"}>Calendar</Heading>
+            <CalendarBoard
+              today={mockTime}
+              events={mockEvents()}
+              warpperClassName="xl:block"
+            />
+            <CalendarBoardMini
+              today={mockTime}
+              events={mockEvents()}
+              warpperClassName="xl:hidden"
+            />
           </div>
         </div>
       </div>
