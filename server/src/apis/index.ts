@@ -7,15 +7,17 @@ import { submitAssignment } from "@/handlers/submitAssignment";
 import { getForumByCourseID } from "@/handlers/getForumByCourseID";
 import { login } from "@/handlers/login";
 import { getCourses } from "@/handlers/getCourses";
+import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
 import { getUserCourses } from "@/handlers/getUserCourses";
 import { getThreads } from "@/handlers/getThreads";
+import { upsertPost } from "@/handlers/upsertPost";
 import { joinCourse } from "@/handlers/joinCourse";
+import { deletePost } from "@/handlers/deletePost";
 import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
 import { createCourseInvitation } from "@/handlers/createCourseInvitation";
 import { setUserProfile } from "@/handlers/setUserProfile";
-import { createQuestion } from "@/handlers/createQuestion";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
@@ -24,11 +26,8 @@ import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { checkEmail } from "@/handlers/checkEmail";
-import { upsertThread } from "@/handlers/upsertThread";
 import { deleteThread } from "@/handlers/deleteThread";
-import { upsertPost } from "@/handlers/upsertPost";
-import { deletePost } from "@/handlers/deletePost";
+import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -62,7 +61,6 @@ export interface Assessment {
     courseId: string;
     startDate?: string;
     dueDate?: string;
-    duration?: number;
     type: string;
     questions: Question[];
     submissions: Submission[];
@@ -73,7 +71,7 @@ export interface Question {
     assessmentId: string;
     title: string;
     type: string;
-    options?: string;
+    options?: any;
     points: number;
 }
 
@@ -83,7 +81,7 @@ export interface Submission {
     studentId: string;
     submittedAt?: string;
     fileUrl?: string;
-    answers?: string;
+    answers?: any;
     grade?: number;
 }
 
@@ -239,7 +237,6 @@ export interface CreateAssessmentRequest {
     courseId: string;
     startDate?: string;
     dueDate?: string;
-    duration?: number;
     type: string;
 }
 
@@ -270,20 +267,6 @@ export interface SubmitAssignmentRequest {
 // SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
 export interface SubmitAssignmentResponse {
     submission: Submission;
-}
-
-// CreateQuestionRequest is the request that is sent to the createQuestion endpoint.
-export interface CreateQuestionRequest {
-    assessmentId: string;
-    title: string;
-    type: string;
-    options?: string;
-    points: number;
-}
-
-// CreateQuestionResponse is the response that is sent to the createQuestion endpoint.
-export interface CreateQuestionResponse {
-    question: Question;
 }
 
 // FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
@@ -697,28 +680,6 @@ app.post('/api/submitAssignment', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request submitAssignment with arguments ${ JSON.stringify(request) }: `, e);
-            return;
-        }
-    }
-});
-
-// createQuestion is the endpoint handler for the createQuestion endpoint.
-// It wraps around the function at @/handlers/createQuestion.
-app.post('/api/createQuestion', async (req, res) => {
-    const request: CreateQuestionRequest = req.body;
-    try {
-        const ctx = { req, res };
-        const response: CreateQuestionResponse = await createQuestion(ctx, request);
-        res.json(response);
-    } catch (e) {
-        if (e instanceof APIError) {
-            res.status(400);
-            res.json({ message: e.message, code: e.code, _rpc_error: true });
-            return;
-        } else {
-            res.status(500);
-            res.json({ message: "Internal server error", _rpc_error: true });
-            console.error(`Error occurred while handling request createQuestion with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

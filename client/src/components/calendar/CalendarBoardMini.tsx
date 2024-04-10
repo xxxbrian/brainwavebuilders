@@ -1,11 +1,12 @@
 import React from "react";
 
 import { CalendarProps } from "./Calendar";
+import { Tooltip } from "@radix-ui/themes";
 
 export const CalendarBoardMini: React.FC<CalendarProps> = ({
   today,
   events,
-  warpperClassName = "md:hidden",
+  warpperClassName,
 }) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);
@@ -24,12 +25,25 @@ export const CalendarBoardMini: React.FC<CalendarProps> = ({
     return (
       <>
         {todayEvents.map((event, index) => (
-          <div
-            className={`absolute flex items-center w-12 py-[2px] ml-[40px] ${
-              index == 0 ? "mt-8" : "mt-4"
-            } border-l-4 border-indigo-700 rounded-full bg-indigo-50`}
+          <Tooltip
             key={`${day.getDay()}-${index}`}
-          />
+            content={
+              <span className="flex items-center gap-x-1 flex-col">
+                <span className="text-xs font-medium leading-4">
+                  {event.name}
+                </span>
+                <span className="text-xs font-medium leading-4">
+                  ({event.time})
+                </span>
+              </span>
+            }
+          >
+            <div
+              className={`absolute flex items-center w-12 py-[2px] ml-[40px] ${
+                index == 0 ? "mt-8" : "mt-4"
+              } border-l-4 border-indigo-700 rounded-full bg-indigo-50`}
+            />
+          </Tooltip>
         ))}
       </>
     );

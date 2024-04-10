@@ -34,7 +34,6 @@ export interface Assessment {
     courseId: string;
     startDate?: string;
     dueDate?: string;
-    duration?: number;
     type: string;
     questions: Question[];
     submissions: Submission[];
@@ -45,7 +44,7 @@ export interface Question {
     assessmentId: string;
     title: string;
     type: string;
-    options?: string;
+    options?: any;
     points: number;
 }
 
@@ -55,7 +54,7 @@ export interface Submission {
     studentId: string;
     submittedAt?: string;
     fileUrl?: string;
-    answers?: string;
+    answers?: any;
     grade?: number;
 }
 
@@ -211,7 +210,6 @@ export interface CreateAssessmentRequest {
     courseId: string;
     startDate?: string;
     dueDate?: string;
-    duration?: number;
     type: string;
 }
 
@@ -242,20 +240,6 @@ export interface SubmitAssignmentRequest {
 // SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
 export interface SubmitAssignmentResponse {
     submission: Submission;
-}
-
-// CreateQuestionRequest is the request that is sent to the createQuestion endpoint.
-export interface CreateQuestionRequest {
-    assessmentId: string;
-    title: string;
-    type: string;
-    options?: string;
-    points: number;
-}
-
-// CreateQuestionResponse is the response that is sent to the createQuestion endpoint.
-export interface CreateQuestionResponse {
-    question: Question;
 }
 
 // FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
@@ -752,35 +736,6 @@ export class BrainwavesClient {
         }
 
         return json as SubmitAssignmentResponse;
-    }
-
-
-
-    async createQuestion(request: CreateQuestionRequest): Promise<CreateQuestionResponse> {
-        const response = await fetch(`${this.base_url}/createQuestion`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(request)
-        });
-
-        const json = await response.json();
-
-        if (!response.ok) {
-            if (isAPIError(json)) {
-                switch (response.status) {
-                    case 400:
-                        throw new APIError(json.message, json.code);
-                    case 500:
-                        throw new Error(json.message);
-                }
-            }
-
-            throw new Error("RPC Request Failed.");
-        }
-
-        return json as CreateQuestionResponse;
     }
 
 

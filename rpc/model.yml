@@ -25,7 +25,6 @@ types:
     courseId: string
     startDate?: string
     dueDate?: string
-    duration?: int
     type: string
     questions: Question[]
     submissions: Submission[]
@@ -35,7 +34,7 @@ types:
     assessmentId: string
     title: string
     type: string
-    options?: string
+    options?: json
     points: int
 
   Submission:
@@ -44,7 +43,7 @@ types:
     studentId: string
     submittedAt?: string
     fileUrl?: string
-    answers?: string
+    answers?: json
     grade?: int
 
   Course:
@@ -165,7 +164,6 @@ endpoints:
       courseId: string
       startDate?: string
       dueDate?: string
-      duration?: int
       type: string
     response:
       assessment: Assessment
@@ -187,17 +185,6 @@ endpoints:
       fileUrl: string
     response:
       submission: Submission
-    service: typescript
-
-  createQuestion:
-    request:
-      assessmentId: string
-      title: string
-      type: string
-      options?: string
-      points: int
-    response:
-      question: Question
     service: typescript
 
   fetchAssessmentDetails:

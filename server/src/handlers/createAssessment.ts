@@ -14,7 +14,10 @@ export const createAssessment = async (
   ctx: any,
   request: CreateAssessmentRequest,
 ): Promise<CreateAssessmentResponse> => {
-  // TODO: Auth
+  const userRole = ctx.user?.role;
+  if (userRole !== "TEACHER") {
+    throw new APIError("Forbidden", "FORBIDDEN");
+  }
 
   try {
     validateRequest(request);
