@@ -8,6 +8,7 @@ import {
   createInvitation,
   getCourseByID,
   getCourseMemberships,
+  getRoleInCourse,
   mapCourseRoleString,
 } from "@/data/course";
 import { CourseRole } from "@prisma/client";
@@ -29,9 +30,10 @@ export const createCourseInvitation = async (
 
   const memberships = await getCourseMemberships(course.id);
 
-  const isTeacher = memberships.some(
-    (m) => m.role === CourseRole.TEACHER && m.courseID === course.id,
-  );
+  const isTeacher =
+    (await getRoleInCourse(user.id, course.id)) === CourseRole.TEACHER;
+
+  console.log(memberships, user.id, course.id, isTeacher);
 
   if (!isTeacher) {
     throw new APIError(

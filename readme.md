@@ -2,6 +2,29 @@
 
 [![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)
 
+## Running the code locally
+
+If you are not intending to make any changes to this code, but just want to run the code locally, you may do so by:
+
+-   Installing [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/).
+-   Run `docker compose up` (or `docker compose up -d` to run the code in daemon mode, then shut it down using `docker compose down`).
+
+If you have `make` installed locally, you may use:
+
+```sh
+# Launch the code in daemon mode.
+make up
+
+# Shut down all processes gracefully and exit.
+make down
+```
+
+**Once running, the code should be available on [localhost:3900](http://localhost:3900).**
+
+As this project is a website, it is meant for deployment on Unix-like machines. While it has been successfully ran on Windows, we are not testing the code actively on Windows. However, due to the nature of Docker and Docker Compose, any Windows machine that is capable of running Docker and Compose should be able to launch this code.
+
+Note that this guide is for developers and testers only. Once deployed, users will only need to launch a website from their browser to access the platform.
+
 ## Setting up for development
 
 This project uses [pre-commit](https://pre-commit.com/#install). Please install it prior to development. Then run:

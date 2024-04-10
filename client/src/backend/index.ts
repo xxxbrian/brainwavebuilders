@@ -34,7 +34,6 @@ export interface Assessment {
     courseId: string;
     startDate?: string;
     dueDate?: string;
-    duration?: number;
     type: string;
     questions: Question[];
     submissions: Submission[];
@@ -45,7 +44,7 @@ export interface Question {
     assessmentId: string;
     title: string;
     type: string;
-    options?: string;
+    options?: any;
     points: number;
 }
 
@@ -55,7 +54,7 @@ export interface Submission {
     studentId: string;
     submittedAt?: string;
     fileUrl?: string;
-    answers?: string;
+    answers?: any;
     grade?: number;
 }
 
@@ -82,6 +81,33 @@ export interface UserSevenDayActivity {
 export interface CourseMembership {
     courseId: string;
     role: string;
+}
+
+export interface Forum {
+    id: string;
+    courseID: string;
+    name: string;
+}
+
+export interface Thread {
+    id: string;
+    forumID: string;
+    createdBy: User;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: number;
+    title: string;
+    posts: Post[];
+}
+
+export interface Post {
+    id: string;
+    threadID: string;
+    createdBy: User;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: number;
+    content: any;
 }
 
 //////////////////////////////
@@ -182,7 +208,6 @@ export interface CreateAssessmentRequest {
     courseId: string;
     startDate?: string;
     dueDate?: string;
-    duration?: number;
     type: string;
 }
 

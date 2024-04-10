@@ -34,7 +34,7 @@ types:
     assessmentId: string
     title: string
     type: string
-    options?: string
+    options?: json
     points: int
 
   Submission:
@@ -43,7 +43,7 @@ types:
     studentId: string
     submittedAt?: string
     fileUrl?: string
-    answers?: string
+    answers?: json
     grade?: int
 
   Course:
@@ -66,6 +66,35 @@ types:
   CourseMembership:
     courseId: string
     role: string
+
+  Forum:
+    id: string
+    courseID: string
+    name: string
+
+  Thread:
+    id: string
+    forumID: string
+
+    createdBy: User
+    createdAt: int
+    updatedAt: int
+    deletedAt?: int
+
+    title: string
+
+    posts: Post[]
+
+  Post:
+    id: string
+    threadID: string
+
+    createdBy: User
+    createdAt: int
+    updatedAt: int
+    deletedAt?: int
+
+    content: json
 
 endpoints:
   ping:

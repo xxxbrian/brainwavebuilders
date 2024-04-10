@@ -31,6 +31,9 @@ model User {
     submissions              Submission[]
     courseMembers            CourseMembers[]     @relation("CourseMemberUser")
     courseInvitationsCreated CourseInvitations[] @relation("CourseInvites")
+    threadsCreated           Thread[]            @relation("userThreadsCreated")
+    postsCreated             Post[]              @relation("userPostsCreated")
+    forumsCreated            Forum[]             @relation("userForumsCreated")
 }
 
 model Token {
@@ -61,6 +64,7 @@ model Course {
     assessments       Assessment[]        @relation("courseAssessments")
     courseInvitations CourseInvitations[] @relation("CourseInvitations")
     courseMembers     CourseMembers[]     @relation("CourseMemberCourse")
+    forums            Forum[]             @relation("courseForums")
 }
 
 model CourseInvitations {
@@ -126,4 +130,46 @@ model Submission {
     grade        Int?
     assessment   Assessment @relation(fields: [assessmentId], references: [id])
     student      User       @relation(fields: [studentId], references: [id])
+}
+
+model Forum {
+    id          String   @id @default(uuid())
+    courseID    String   @unique
+    name        String
+    course      Course   @relation("courseForums", fields: [courseID], references: [id])
+    threads     Thread[] @relation("formThread")
+    createdAt   DateTime @default(now())
+    createdByID String
+    createdBy   User     @relation("userForumsCreated", fields: [createdByID], references: [id])
+}
+
+model Thread {
+    id    String @id @default(uuid())
+    title String
+
+    forumID     String
+    forum       Forum  @relation("formThread", fields: [forumID], references: [id])
+    createdByID String
+    createdBy   User   @relation("userThreadsCreated", fields: [createdByID], references: [id])
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+    posts     Post[]   @relation("postsThreads")
+
+    deletedAt DateTime?
+
+    // TODO: Add type to thread (discussion, Q&A, etc.)
+}
+
+model Post {
+    id          String   @id @default(uuid())
+    threadID    String
+    thread      Thread   @relation("postsThreads", fields: [threadID], references: [id])
+    content     Json
+    createdByID String
+    createdBy   User     @relation("userPostsCreated", fields: [createdByID], references: [id])
+    createdAt   DateTime @default(now())
+    updatedAt   DateTime @updatedAt
+
+    deletedAt DateTime?
 }

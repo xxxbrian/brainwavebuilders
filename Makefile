@@ -1,7 +1,8 @@
-.PHONY: default clean install up down destroy pre-commit all
+.PHONY: default clean install up down destroy pre-commit all demo
 
 all:
-	@echo please specify a target
+	@echo error: please specify a target.
+	@echo hint: To run the project, do "make up".
 
 up:
 	docker-compose up -d
@@ -9,7 +10,7 @@ up:
 down:
 	docker-compose down --remove-orphans
 
-destroy:
+destroy: clean
 	docker-compose down --volumes --remove-orphans
 
 pre-commit:
@@ -25,3 +26,7 @@ db-apply:
 update-endpoints:
 	@docker compose exec endpoint-gen bash -c 'python3 rpc/generate.py rpc/model.yml client client/src/backend brainwaves /api'
 	@docker compose exec endpoint-gen bash -c 'python3 rpc/generate.py rpc/model.yml ts-server server/src server/src/handlers server/src/apis /api'
+
+clean:
+	rm -rf client/node_modules
+	rm -rf server/node_modules

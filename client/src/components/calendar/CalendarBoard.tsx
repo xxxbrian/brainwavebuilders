@@ -2,7 +2,11 @@ import React from "react";
 import { getBgColor, getSubjectColor } from "./colorScheme";
 import { type Event, type CalendarProps } from "./Calendar";
 
-export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
+export const CalendarBoard: React.FC<CalendarProps> = ({
+  today,
+  events,
+  warpperClassName = "md:block",
+}) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);
     const dayOfWeek = firstDay.getDay();
@@ -21,24 +25,30 @@ export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
       <>
         {todayEvents.map((event, index) => (
           <div
-            className={`absolute flex items-center gap-x-1 2xl:w-[20%] md:w-40 py-3 px-2 ml-[10px] ${
+            className={`absolute w-full ${
               index == 0 ? "lg:mt-[-115px]" : "lg:mt-[-60px] mt-[-50px]"
-            } rounded bg-${getBgColor(event.type)} xl:w-[20%] lg:w-[20%]`}
+            } rounded overflow-hidden my-1`}
             key={`${day.getDay()}-${index}`}
           >
             <div
-              className={`lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-${getSubjectColor(
+              className={`m-1 flex items-center gap-x-1 py-3 px-2 bg-${getBgColor(
                 event.type,
-              )} rounded-full lg:mt-[1px] mt-[-16px]`}
-            />
-            <div tabIndex={0} className="ml-1">
-              <p
-                className={`text-xs font-medium leading-normal text-${getSubjectColor(
+              )} rounded`}
+            >
+              <div
+                className={`lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-${getSubjectColor(
                   event.type,
-                )}`}
-              >
-                {event.name} <span className="ml-1">({event.time})</span>
-              </p>
+                )} rounded-full lg:mt-[1px] mt-[-16px]`}
+              />
+              <div tabIndex={0} className="ml-1">
+                <p
+                  className={`text-xs font-medium leading-normal text-${getSubjectColor(
+                    event.type,
+                  )}`}
+                >
+                  {event.name} <span className="ml-1">({event.time})</span>
+                </p>
+              </div>
             </div>
           </div>
         ))}
@@ -61,7 +71,10 @@ export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
                 const day =
                   daysArray[weekIndex * 7 + dayIndex - (startDay - 1)];
                 return (
-                  <td className="border-r border-gray-300" key={dayIndex}>
+                  <td
+                    className="border-r border-gray-300 relative"
+                    key={dayIndex}
+                  >
                     {day && (
                       <p className="pt-2 pb-32 pl-2 text-xs font-medium text-gray-600">
                         {day}
@@ -79,7 +92,7 @@ export const CalendarBoard: React.FC<CalendarProps> = ({ today, events }) => {
   }
 
   return (
-    <div className="hidden w-full xl:overflow-x-hidden md:block">
+    <div className={`w-full xl:overflow-x-hidden ${warpperClassName}`}>
       <table className="min-w-full bg-white">
         <thead className="items-center">
           <tr className="h-12 border border-gray-200 rounded-lg bg-gray-50">

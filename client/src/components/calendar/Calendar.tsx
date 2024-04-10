@@ -13,6 +13,7 @@ export type Event = {
 export interface CalendarProps {
   today: Date;
   events: Map<string, Event[]>;
+  warpperClassName?: string;
 }
 
 export const Calendar: React.FC<CalendarProps> = ({ today, events }) => {
