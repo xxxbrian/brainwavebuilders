@@ -33,6 +33,7 @@ model User {
     courseInvitationsCreated CourseInvitations[] @relation("CourseInvites")
     threadsCreated           Thread[]            @relation("userThreadsCreated")
     postsCreated             Post[]              @relation("userPostsCreated")
+    forumsCreated            Forum[]             @relation("userForumsCreated")
 }
 
 model Token {
@@ -133,11 +134,14 @@ model Submission {
 }
 
 model Forum {
-    id       String   @id @default(uuid())
-    courseID String
-    name     String
-    course   Course   @relation("courseForums", fields: [courseID], references: [id])
-    threads  Thread[] @relation("formThread")
+    id          String   @id @default(uuid())
+    courseID    String
+    name        String
+    course      Course   @relation("courseForums", fields: [courseID], references: [id])
+    threads     Thread[] @relation("formThread")
+    createdAt   DateTime @default(now())
+    createdByID String
+    createdBy   User     @relation("userForumsCreated", fields: [createdByID], references: [id])
 }
 
 model Thread {
