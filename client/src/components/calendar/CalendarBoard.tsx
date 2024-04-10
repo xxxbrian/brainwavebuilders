@@ -6,7 +6,7 @@ import { Tooltip } from "@radix-ui/themes";
 export const CalendarBoard: React.FC<CalendarProps> = ({
   today,
   events,
-  warpperClassName = "hidden md:block",
+  warpperClassName,
 }) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);

@@ -5,7 +5,7 @@ import { CalendarProps } from "./Calendar";
 export const CalendarBoardMini: React.FC<CalendarProps> = ({
   today,
   events,
-  warpperClassName = "md:hidden",
+  warpperClassName,
 }) => {
   function getMonthDetails(year: number, month: number): [number, number] {
     const firstDay = new Date(year, month - 1, 1);

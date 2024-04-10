@@ -131,9 +131,17 @@ export const Calendar: React.FC<CalendarProps> = ({ today, events }) => {
             <UpcomingEvents today={today} events={events} />
           </div>
           {/* MAIN PART */}
-          <CalendarBoard today={today} events={events} />
+          <CalendarBoard
+            today={today}
+            events={events}
+            warpperClassName="hidden md:block"
+          />
         </div>
-        <CalendarBoardMini today={today} events={events} />
+        <CalendarBoardMini
+          today={today}
+          events={events}
+          warpperClassName="md:hidden"
+        />
       </div>
     </div>
   );

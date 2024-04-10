@@ -4,10 +4,11 @@ import { CalendarBoard } from "@/components/calendar/CalendarBoard";
 import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
 import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { mockTime, mockEvents } from "@/utils/data";
 import { useCourseFromLayout } from "./layout";
+import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -103,6 +104,11 @@ export const CoursesPage: React.FC = ({}) => {
             today={mockTime}
             events={mockEvents()}
             warpperClassName="hidden xl:block flex-shrink-0"
+          />
+          <CalendarBoardMini
+            today={mockTime}
+            events={mockEvents()}
+            warpperClassName="xl:hidden"
           />
         </div>
       </div>
