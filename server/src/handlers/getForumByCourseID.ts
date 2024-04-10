@@ -21,7 +21,7 @@ export const getForumByCourseID = async (
 ): Promise<GetForumByCourseIDResponse> => {
   const user = useCurrentUser(ctx)!;
 
-  if (!isMemberOfCourse(user.id!, courseID)) {
+  if (!(await isMemberOfCourse(user.id!, courseID))) {
     throw new APIError(kForumNotFoundOrDeniedError);
   }
 

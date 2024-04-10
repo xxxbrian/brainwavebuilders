@@ -47,14 +47,22 @@ export const threadWithPostsDBToAPI = (thread: ThreadWithPosts): ThreadAPI => {
     createdBy: userDBToAPI(thread.createdBy),
     deletedAt: thread.deletedAt?.getTime(),
     title: thread.title,
-    posts: thread.posts.map((post) => ({
-      id: post.id,
-      threadID: post.threadID,
-      createdAt: post.createdAt.getTime(),
-      updatedAt: post.updatedAt.getTime(),
-      createdBy: userDBToAPI(post.createdBy),
-      deletedAt: post.deletedAt?.getTime(),
-      content: post.content,
-    })),
+    posts: thread.posts.map((post) => postWithCreatedByDBToAPI(post)),
+  };
+};
+
+export type PostWithCreatedBy = Prisma.PostGetPayload<{
+  include: { createdBy: true };
+}>;
+
+export const postWithCreatedByDBToAPI = (post: PostWithCreatedBy) => {
+  return {
+    id: post.id,
+    threadID: post.threadID,
+    createdAt: post.createdAt.getTime(),
+    updatedAt: post.updatedAt.getTime(),
+    createdBy: userDBToAPI(post.createdBy),
+    deletedAt: post.deletedAt?.getTime(),
+    content: post.content,
   };
 };

@@ -25,6 +25,10 @@ import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { checkEmail } from "@/handlers/checkEmail";
+import { upsertThread } from "@/handlers/upsertThread";
+import { deleteThread } from "@/handlers/deleteThread";
+import { upsertPost } from "@/handlers/upsertPost";
+import { deletePost } from "@/handlers/deletePost";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -395,6 +399,46 @@ export interface GetThreadsRequest {
 // GetThreadsResponse is the response that is sent to the getThreads endpoint.
 export interface GetThreadsResponse {
     threads: Thread[];
+}
+
+// UpsertThreadRequest is the request that is sent to the upsertThread endpoint.
+export interface UpsertThreadRequest {
+    thread: Thread;
+}
+
+// UpsertThreadResponse is the response that is sent to the upsertThread endpoint.
+export interface UpsertThreadResponse {
+    thread: Thread;
+}
+
+// DeleteThreadRequest is the request that is sent to the deleteThread endpoint.
+export interface DeleteThreadRequest {
+    threadID: string;
+}
+
+// DeleteThreadResponse is the response that is sent to the deleteThread endpoint.
+export interface DeleteThreadResponse {
+
+}
+
+// UpsertPostRequest is the request that is sent to the upsertPost endpoint.
+export interface UpsertPostRequest {
+    post: Post;
+}
+
+// UpsertPostResponse is the response that is sent to the upsertPost endpoint.
+export interface UpsertPostResponse {
+    post: Post;
+}
+
+// DeletePostRequest is the request that is sent to the deletePost endpoint.
+export interface DeletePostRequest {
+    postID: string;
+}
+
+// DeletePostResponse is the response that is sent to the deletePost endpoint.
+export interface DeletePostResponse {
+
 }
 
 
@@ -917,6 +961,94 @@ app.post('/api/getThreads', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getThreads with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// upsertThread is the endpoint handler for the upsertThread endpoint.
+// It wraps around the function at @/handlers/upsertThread.
+app.post('/api/upsertThread', async (req, res) => {
+    const request: UpsertThreadRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: UpsertThreadResponse = await upsertThread(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request upsertThread with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// deleteThread is the endpoint handler for the deleteThread endpoint.
+// It wraps around the function at @/handlers/deleteThread.
+app.post('/api/deleteThread', async (req, res) => {
+    const request: DeleteThreadRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: DeleteThreadResponse = await deleteThread(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request deleteThread with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// upsertPost is the endpoint handler for the upsertPost endpoint.
+// It wraps around the function at @/handlers/upsertPost.
+app.post('/api/upsertPost', async (req, res) => {
+    const request: UpsertPostRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: UpsertPostResponse = await upsertPost(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request upsertPost with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// deletePost is the endpoint handler for the deletePost endpoint.
+// It wraps around the function at @/handlers/deletePost.
+app.post('/api/deletePost', async (req, res) => {
+    const request: DeletePostRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: DeletePostResponse = await deletePost(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request deletePost with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

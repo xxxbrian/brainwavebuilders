@@ -373,6 +373,46 @@ export interface GetThreadsResponse {
     threads: Thread[];
 }
 
+// UpsertThreadRequest is the request that is sent to the upsertThread endpoint.
+export interface UpsertThreadRequest {
+    thread: Thread;
+}
+
+// UpsertThreadResponse is the response that is sent to the upsertThread endpoint.
+export interface UpsertThreadResponse {
+    thread: Thread;
+}
+
+// DeleteThreadRequest is the request that is sent to the deleteThread endpoint.
+export interface DeleteThreadRequest {
+    threadID: string;
+}
+
+// DeleteThreadResponse is the response that is sent to the deleteThread endpoint.
+export interface DeleteThreadResponse {
+
+}
+
+// UpsertPostRequest is the request that is sent to the upsertPost endpoint.
+export interface UpsertPostRequest {
+    post: Post;
+}
+
+// UpsertPostResponse is the response that is sent to the upsertPost endpoint.
+export interface UpsertPostResponse {
+    post: Post;
+}
+
+// DeletePostRequest is the request that is sent to the deletePost endpoint.
+export interface DeletePostRequest {
+    postID: string;
+}
+
+// DeletePostResponse is the response that is sent to the deletePost endpoint.
+export interface DeletePostResponse {
+
+}
+
 
 //////////////////////////////
 // API Errors
@@ -1060,6 +1100,122 @@ export class BrainwavesClient {
         }
 
         return json as GetThreadsResponse;
+    }
+
+
+
+    async upsertThread(request: UpsertThreadRequest): Promise<UpsertThreadResponse> {
+        const response = await fetch(`${this.base_url}/upsertThread`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as UpsertThreadResponse;
+    }
+
+
+
+    async deleteThread(request: DeleteThreadRequest): Promise<DeleteThreadResponse> {
+        const response = await fetch(`${this.base_url}/deleteThread`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as DeleteThreadResponse;
+    }
+
+
+
+    async upsertPost(request: UpsertPostRequest): Promise<UpsertPostResponse> {
+        const response = await fetch(`${this.base_url}/upsertPost`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as UpsertPostResponse;
+    }
+
+
+
+    async deletePost(request: DeletePostRequest): Promise<DeletePostResponse> {
+        const response = await fetch(`${this.base_url}/deletePost`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as DeletePostResponse;
     }
 }
 
