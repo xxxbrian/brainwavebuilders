@@ -186,6 +186,20 @@ export const getCourseMemberships = async (
   return memberships;
 };
 
+export const getRoleInCourse = async (
+  userID: string,
+  courseID: string,
+): Promise<CourseRole | null> => {
+  const membership = await db.courseMembers.findFirst({
+    where: {
+      userID: userID,
+      courseID: courseID,
+    },
+  });
+
+  return membership?.role ?? null;
+};
+
 export const getInvitation = async (
   secret: string,
 ): Promise<CourseInvitations | null> => {
