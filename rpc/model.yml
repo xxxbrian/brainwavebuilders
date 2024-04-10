@@ -71,14 +71,16 @@ types:
     id: string
     courseID: string
     name: string
+    createdAt: int
+    createdBy?: User
 
   Thread:
     id: string
     forumID: string
 
-    createdBy: User
     createdAt: int
     updatedAt: int
+    createdBy?: User
     deletedAt?: int
 
     title: string
@@ -89,9 +91,9 @@ types:
     id: string
     threadID: string
 
-    createdBy: User
     createdAt: int
     updatedAt: int
+    createdBy?: User
     deletedAt?: int
 
     content: json
@@ -247,4 +249,18 @@ endpoints:
     request:
       courseId: string
     response:
+    service: typescript
+
+  getForumByCourseID:
+    request:
+      courseID: string
+    response:
+      forum: Forum
+    service: typescript
+
+  getThreads:
+    request:
+      forumID: string
+    response:
+      threads: Thread[]
     service: typescript

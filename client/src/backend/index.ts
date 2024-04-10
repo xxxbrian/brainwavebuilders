@@ -87,14 +87,16 @@ export interface Forum {
     id: string;
     courseID: string;
     name: string;
+    createdAt: number;
+    createdBy?: User;
 }
 
 export interface Thread {
     id: string;
     forumID: string;
-    createdBy: User;
     createdAt: number;
     updatedAt: number;
+    createdBy?: User;
     deletedAt?: number;
     title: string;
     posts: Post[];
@@ -103,9 +105,9 @@ export interface Thread {
 export interface Post {
     id: string;
     threadID: string;
-    createdBy: User;
     createdAt: number;
     updatedAt: number;
+    createdBy?: User;
     deletedAt?: number;
     content: any;
 }
@@ -333,6 +335,26 @@ export interface LeaveCourseRequest {
 // LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
 export interface LeaveCourseResponse {
 
+}
+
+// GetForumByCourseIDRequest is the request that is sent to the getForumByCourseID endpoint.
+export interface GetForumByCourseIDRequest {
+    courseID: string;
+}
+
+// GetForumByCourseIDResponse is the response that is sent to the getForumByCourseID endpoint.
+export interface GetForumByCourseIDResponse {
+    forum: Forum;
+}
+
+// GetThreadsRequest is the request that is sent to the getThreads endpoint.
+export interface GetThreadsRequest {
+    forumID: string;
+}
+
+// GetThreadsResponse is the response that is sent to the getThreads endpoint.
+export interface GetThreadsResponse {
+    threads: Thread[];
 }
 
 
@@ -935,6 +957,64 @@ export class BrainwavesClient {
         }
 
         return json as LeaveCourseResponse;
+    }
+
+
+
+    async getForumByCourseID(request: GetForumByCourseIDRequest): Promise<GetForumByCourseIDResponse> {
+        const response = await fetch(`${this.base_url}/getForumByCourseID`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetForumByCourseIDResponse;
+    }
+
+
+
+    async getThreads(request: GetThreadsRequest): Promise<GetThreadsResponse> {
+        const response = await fetch(`${this.base_url}/getThreads`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetThreadsResponse;
     }
 }
 

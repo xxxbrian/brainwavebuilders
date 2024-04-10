@@ -2,26 +2,28 @@
 
 
 import { app } from "@/globals";
-import { checkEmail } from "@/handlers/checkEmail";
-import { createAssessment } from "@/handlers/createAssessment";
-import { createCourse } from "@/handlers/createCourse";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { ping } from "@/handlers/ping";
+import { submitAssignment } from "@/handlers/submitAssignment";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { login } from "@/handlers/login";
 import { getCourses } from "@/handlers/getCourses";
+import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
 import { getUserCourses } from "@/handlers/getUserCourses";
-import { getUserInfo } from "@/handlers/getUserInfo";
+import { getThreads } from "@/handlers/getThreads";
 import { joinCourse } from "@/handlers/joinCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { login } from "@/handlers/login";
-import { ping } from "@/handlers/ping";
-import { register } from "@/handlers/register";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
 import { setUserProfile } from "@/handlers/setUserProfile";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
-import { submitAssignment } from "@/handlers/submitAssignment";
-import { verifyEmail } from "@/handlers/verifyEmail";
+import { createCourse } from "@/handlers/createCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { register } from "@/handlers/register";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -65,7 +67,7 @@ export interface Question {
     assessmentId: string;
     title: string;
     type: string;
-    options?: any;
+    options?: string;
     points: number;
 }
 
@@ -75,7 +77,7 @@ export interface Submission {
     studentId: string;
     submittedAt?: string;
     fileUrl?: string;
-    answers?: any;
+    answers?: string;
     grade?: number;
 }
 
@@ -108,14 +110,16 @@ export interface Forum {
     id: string;
     courseID: string;
     name: string;
+    createdAt: number;
+    createdBy?: User;
 }
 
 export interface Thread {
     id: string;
     forumID: string;
-    createdBy: User;
     createdAt: number;
     updatedAt: number;
+    createdBy?: User;
     deletedAt?: number;
     title: string;
     posts: Post[];
@@ -124,9 +128,9 @@ export interface Thread {
 export interface Post {
     id: string;
     threadID: string;
-    createdBy: User;
     createdAt: number;
     updatedAt: number;
+    createdBy?: User;
     deletedAt?: number;
     content: any;
 }
@@ -354,6 +358,26 @@ export interface LeaveCourseRequest {
 // LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
 export interface LeaveCourseResponse {
 
+}
+
+// GetForumByCourseIDRequest is the request that is sent to the getForumByCourseID endpoint.
+export interface GetForumByCourseIDRequest {
+    courseID: string;
+}
+
+// GetForumByCourseIDResponse is the response that is sent to the getForumByCourseID endpoint.
+export interface GetForumByCourseIDResponse {
+    forum: Forum;
+}
+
+// GetThreadsRequest is the request that is sent to the getThreads endpoint.
+export interface GetThreadsRequest {
+    forumID: string;
+}
+
+// GetThreadsResponse is the response that is sent to the getThreads endpoint.
+export interface GetThreadsResponse {
+    threads: Thread[];
 }
 
 
@@ -810,6 +834,50 @@ app.post('/api/leaveCourse', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request leaveCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getForumByCourseID is the endpoint handler for the getForumByCourseID endpoint.
+// It wraps around the function at @/handlers/getForumByCourseID.
+app.post('/api/getForumByCourseID', async (req, res) => {
+    const request: GetForumByCourseIDRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetForumByCourseIDResponse = await getForumByCourseID(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getForumByCourseID with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getThreads is the endpoint handler for the getThreads endpoint.
+// It wraps around the function at @/handlers/getThreads.
+app.post('/api/getThreads', async (req, res) => {
+    const request: GetThreadsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetThreadsResponse = await getThreads(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getThreads with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

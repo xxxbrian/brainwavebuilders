@@ -54,7 +54,7 @@ export const createAssessment = async (
                 assessmentId: createdAssessment.id,
                 title: question.title,
                 type: question.type,
-                options: JSON.stringify(question.options),
+                options: question.options, // Directly pass the JSON object
                 points: question.points,
               },
             }),
