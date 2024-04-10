@@ -68,6 +68,37 @@ types:
     courseId: string
     role: string
 
+  Forum:
+    id: string
+    courseID: string
+    name: string
+    createdAt: int
+    createdBy?: User
+
+  Thread:
+    id: string
+    forumID: string
+
+    createdAt: int
+    updatedAt: int
+    createdBy?: User
+    deletedAt?: int
+
+    title: string
+
+    posts: Post[]
+
+  Post:
+    id: string
+    threadID: string
+
+    createdAt: int
+    updatedAt: int
+    createdBy?: User
+    deletedAt?: int
+
+    content: json
+
 endpoints:
   ping:
     request:
@@ -231,4 +262,18 @@ endpoints:
     request:
       courseId: string
     response:
+    service: typescript
+
+  getForumByCourseID:
+    request:
+      courseID: string
+    response:
+      forum: Forum
+    service: typescript
+
+  getThreads:
+    request:
+      forumID: string
+    response:
+      threads: Thread[]
     service: typescript

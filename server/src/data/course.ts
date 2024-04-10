@@ -200,6 +200,20 @@ export const getRoleInCourse = async (
   return membership?.role ?? null;
 };
 
+export const isMemberOfCourse = async (
+  userID: string,
+  courseID: string,
+): Promise<boolean> => {
+  const membership = await db.courseMembers.findFirst({
+    where: {
+      userID: userID,
+      courseID: courseID,
+    },
+  });
+
+  return membership !== null;
+};
+
 export const getInvitation = async (
   secret: string,
 ): Promise<CourseInvitations | null> => {
