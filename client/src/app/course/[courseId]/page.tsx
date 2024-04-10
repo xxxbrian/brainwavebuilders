@@ -1,17 +1,13 @@
 "use client";
 
-import { APIError, Course } from "@/backend";
 import { CalendarBoard } from "@/components/calendar/CalendarBoard";
-import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
-import { CenteredLoading } from "@/components/loading";
-import { PageFrame } from "@/components/structural/PageFrame";
-import { useBackend } from "@/hooks/useBackend";
 import { Heading } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { MdAssignment, MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { mockTime, mockEvents } from "@/utils/data";
+import { useCourseFromLayout } from "./layout";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -41,106 +37,57 @@ export const ApplicationIcon: React.FC<ApplicationProps> = ({
   );
 };
 
-export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
-  params: { courseId },
-}) => {
+export const CoursesPage: React.FC = ({}) => {
   const router = useRouter();
 
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [course, setCourse] = useState<Course | null>(null);
+  const course = useCourseFromLayout();
+
+  const pathName = usePathname();
 
   const onClickAssignments = useCallback(async () => {
-    router.push(`/assessment`);
-  }, [router]);
+    router.push(`${pathName}/assignments`);
+  }, [pathName, router]);
 
-  const backend = useBackend();
-
-  useEffect(() => {
-    const inner = async () => {
-      setError(null);
-      setIsLoading(true);
-      setCourse(null);
-
-      try {
-        const { courses } = await backend.getCourses({ courseIds: [courseId] });
-        const course = courses[0];
-
-        if (!course) {
-          setError("Course not found");
-          return;
-        }
-
-        setCourse(course);
-        setIsLoading(false);
-      } catch (e) {
-        if (e instanceof APIError) {
-          setError(e.message);
-        } else {
-          setError("An unexpected error occurred.");
-        }
-
-        setCourse(null);
-        setIsLoading(false);
-      }
-    };
-
-    void inner();
-  }, [backend, courseId]);
-
-  if (isLoading) {
-    return (
-      <PageFrame title="Course Overview">
-        <CenteredLoading />
-      </PageFrame>
-    );
-  }
-
-  if (error) {
-    return (
-      <PageFrame title="Course Overview">
-        <div>{error}</div>
-      </PageFrame>
-    );
-  }
-
-  if (!course) {
-    return (
-      <PageFrame title="Course Overview">
-        <div>An unexpected error occurred.</div>
-      </PageFrame>
-    );
-  }
+  const onClickForum = useCallback(async () => {
+    router.push(`${pathName}/forum`);
+  }, [pathName, router]);
 
   return (
-    <PageFrame title={`${course.name}`}>
-      <div className="flex flex-col space-y-8">
-        <div
-          className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-opacity-80"
-          style={{
-            background: course.imageURL ? `url(${course.imageURL})` : "",
-          }}
-        >
-          {course.code && (
-            <Heading className="text-white" size={"4"}>
-              {course.code}
-            </Heading>
-          )}
-          <Heading className="text-white" size={"8"}>
-            {course.name}
+    <div className="flex flex-col space-y-8">
+      <div
+        className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-opacity-80"
+        style={{
+          background: course.imageURL ? `url(${course.imageURL})` : "",
+        }}
+      >
+        {course.code && (
+          <Heading className="text-white" size={"4"}>
+            {course.code}
           </Heading>
+        )}
+        <Heading className="text-white" size={"8"}>
+          {course.name}
+        </Heading>
 
-          <div>{course.description}</div>
-        </div>
-        <div className="flex space-x-4">
-          <div className="flex flex-col space-y-4 w-1/3">
-            <Heading size={"5"}>Course Applications</Heading>
+        <div>{course.description}</div>
+      </div>
+      <div className="flex space-x-4">
+        <div className="flex flex-col space-y-4 w-1/3">
+          <Heading size={"5"}>Course Applications</Heading>
+          <div className="flex flex-wrap">
             <div className="flex flex-wrap">
               <ApplicationIcon
                 icon={<MdAssignment />}
                 title="Assignments"
                 onClick={onClickAssignments}
               />
+
+              <ApplicationIcon
+                icon={<MdForum />}
+                title="Forum"
+                onClick={onClickForum}
+              />
+
               <StatefulInviteMembersForm course={course}>
                 <ApplicationIcon
                   icon={<MdOutlinePersonAddAlt1 />}
@@ -149,22 +96,17 @@ export const CoursesPage: React.FC<{ params: { courseId: string } }> = ({
               </StatefulInviteMembersForm>
             </div>
           </div>
-          <div className="w-2/3">
-            <Heading size={"5"}>Calendar</Heading>
-            <CalendarBoard
-              today={mockTime}
-              events={mockEvents()}
-              warpperClassName="xl:block"
-            />
-            <CalendarBoardMini
-              today={mockTime}
-              events={mockEvents()}
-              warpperClassName="xl:hidden"
-            />
-          </div>
+        </div>
+        <div className="w-2/3 space-y-4 overflow-hidden">
+          <Heading size={"5"}>Calendar</Heading>
+          <CalendarBoard
+            today={mockTime}
+            events={mockEvents()}
+            warpperClassName="hidden xl:block flex-shrink-0"
+          />
         </div>
       </div>
-    </PageFrame>
+    </div>
   );
 };
 
