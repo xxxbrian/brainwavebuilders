@@ -21,7 +21,7 @@ export const getThreads = async (
     throw new APIError(kForumNotFoundOrDeniedError);
   }
 
-  if (!isMemberOfCourse(user.id!, forum.courseID)) {
+  if (!(await isMemberOfCourse(user.id!, forum.courseID))) {
     throw new APIError(kForumNotFoundOrDeniedError);
   }
 

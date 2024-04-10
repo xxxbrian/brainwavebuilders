@@ -2,28 +2,32 @@
 
 
 import { app } from "@/globals";
-import { checkEmail } from "@/handlers/checkEmail";
-import { createAssessment } from "@/handlers/createAssessment";
-import { createCourse } from "@/handlers/createCourse";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { getCourses } from "@/handlers/getCourses";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getForumByCourseID } from "@/handlers/getForumByCourseID";
-import { getThreads } from "@/handlers/getThreads";
-import { getUserCourses } from "@/handlers/getUserCourses";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { joinCourse } from "@/handlers/joinCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { login } from "@/handlers/login";
 import { ping } from "@/handlers/ping";
-import { register } from "@/handlers/register";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { submitAnswers } from "@/handlers/submitAnswers";
 import { submitAssignment } from "@/handlers/submitAssignment";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { login } from "@/handlers/login";
+import { getCourses } from "@/handlers/getCourses";
+import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { getThreads } from "@/handlers/getThreads";
+import { upsertPost } from "@/handlers/upsertPost";
+import { joinCourse } from "@/handlers/joinCourse";
+import { deletePost } from "@/handlers/deletePost";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { createAssessment } from "@/handlers/createAssessment";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { createCourse } from "@/handlers/createCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { register } from "@/handlers/register";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { deleteThread } from "@/handlers/deleteThread";
+import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -378,6 +382,46 @@ export interface GetThreadsRequest {
 // GetThreadsResponse is the response that is sent to the getThreads endpoint.
 export interface GetThreadsResponse {
     threads: Thread[];
+}
+
+// UpsertThreadRequest is the request that is sent to the upsertThread endpoint.
+export interface UpsertThreadRequest {
+    thread: Thread;
+}
+
+// UpsertThreadResponse is the response that is sent to the upsertThread endpoint.
+export interface UpsertThreadResponse {
+    thread: Thread;
+}
+
+// DeleteThreadRequest is the request that is sent to the deleteThread endpoint.
+export interface DeleteThreadRequest {
+    threadID: string;
+}
+
+// DeleteThreadResponse is the response that is sent to the deleteThread endpoint.
+export interface DeleteThreadResponse {
+
+}
+
+// UpsertPostRequest is the request that is sent to the upsertPost endpoint.
+export interface UpsertPostRequest {
+    post: Post;
+}
+
+// UpsertPostResponse is the response that is sent to the upsertPost endpoint.
+export interface UpsertPostResponse {
+    post: Post;
+}
+
+// DeletePostRequest is the request that is sent to the deletePost endpoint.
+export interface DeletePostRequest {
+    postID: string;
+}
+
+// DeletePostResponse is the response that is sent to the deletePost endpoint.
+export interface DeletePostResponse {
+
 }
 
 
@@ -878,6 +922,94 @@ app.post('/api/getThreads', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getThreads with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// upsertThread is the endpoint handler for the upsertThread endpoint.
+// It wraps around the function at @/handlers/upsertThread.
+app.post('/api/upsertThread', async (req, res) => {
+    const request: UpsertThreadRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: UpsertThreadResponse = await upsertThread(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request upsertThread with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// deleteThread is the endpoint handler for the deleteThread endpoint.
+// It wraps around the function at @/handlers/deleteThread.
+app.post('/api/deleteThread', async (req, res) => {
+    const request: DeleteThreadRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: DeleteThreadResponse = await deleteThread(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request deleteThread with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// upsertPost is the endpoint handler for the upsertPost endpoint.
+// It wraps around the function at @/handlers/upsertPost.
+app.post('/api/upsertPost', async (req, res) => {
+    const request: UpsertPostRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: UpsertPostResponse = await upsertPost(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request upsertPost with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// deletePost is the endpoint handler for the deletePost endpoint.
+// It wraps around the function at @/handlers/deletePost.
+app.post('/api/deletePost', async (req, res) => {
+    const request: DeletePostRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: DeletePostResponse = await deletePost(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request deletePost with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

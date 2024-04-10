@@ -264,3 +264,29 @@ endpoints:
     response:
       threads: Thread[]
     service: typescript
+
+  upsertThread:
+    request:
+      thread: Thread
+    response:
+      thread: Thread
+    service: typescript
+
+  deleteThread:
+    request:
+      threadID: string
+    response:
+    service: typescript
+
+  upsertPost:
+    request:
+      post: Post
+    response:
+      post: Post
+    service: typescript
+
+  deletePost:
+    request:
+      postID: string
+    response:
+    service: typescript
