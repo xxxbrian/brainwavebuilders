@@ -26,15 +26,45 @@ export const formatAssessment = (
     id: assessment.id,
     title: assessment.title,
     description: assessment.description ?? undefined,
-    courseId: assessment.courseId,
+    courseId: assessment.courseID,
     startDate: assessment.startDate
       ? assessment.startDate.toISOString()
       : undefined,
     dueDate: assessment.dueDate ? assessment.dueDate.toISOString() : undefined,
-    duration: assessment.duration ?? undefined,
     type: assessment.type,
     questions,
     submissions,
+  };
+};
+
+export const formatAssessmentForStudent = (
+  assessment: AssessmentDB | AssessmentDetails,
+): AssessmentAPI => {
+  const questions =
+    "questions" in assessment
+      ? assessment.questions.map((question: QuestionDB) => {
+          let parsedOptions =
+            typeof question.options === "string"
+              ? JSON.parse(question.options)
+              : null;
+          if (parsedOptions && "correct" in parsedOptions) {
+            delete parsedOptions.correct;
+          }
+
+          const optionsWithoutCorrect = parsedOptions
+            ? JSON.stringify(parsedOptions)
+            : null;
+
+          return {
+            ...question,
+            options: optionsWithoutCorrect, // Using modified or original options string
+          };
+        })
+      : [];
+
+  return {
+    ...formatAssessment(assessment), // Assuming formatAssessment is compatible or needs minor adjustments
+    questions,
   };
 };
 
@@ -47,7 +77,7 @@ export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
       ? submission.submittedAt.toISOString()
       : undefined,
     fileUrl: submission.fileUrl ?? undefined,
-    answers: JSON.stringify(submission.answers ?? {}),
+    answers: submission.answers,
     grade: submission.grade ?? undefined,
   };
 };
@@ -58,7 +88,7 @@ export const formatQuestion = (question: QuestionDB): QuestionAPI => {
     assessmentId: question.assessmentId,
     title: question.title,
     type: question.type,
-    options: question.options ? JSON.stringify(question.options) : undefined,
+    options: question.options,
     points: question.points,
   };
 };
