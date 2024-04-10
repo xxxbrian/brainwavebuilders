@@ -68,6 +68,35 @@ types:
     courseId: string
     role: string
 
+  Forum:
+    id: string
+    courseID: string
+    name: string
+
+  Thread:
+    id: string
+    forumID: string
+
+    createdBy: User
+    createdAt: int
+    updatedAt: int
+    deletedAt?: int
+
+    title: string
+
+    posts: Post[]
+
+  Post:
+    id: string
+    threadID: string
+
+    createdBy: User
+    createdAt: int
+    updatedAt: int
+    deletedAt?: int
+
+    content: json
+
 endpoints:
   ping:
     request:
