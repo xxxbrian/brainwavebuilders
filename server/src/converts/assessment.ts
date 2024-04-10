@@ -37,6 +37,40 @@ export const formatAssessment = (
   };
 };
 
+export const formatAssessmentForStudent = (
+  assessment: AssessmentDB | AssessmentDetails,
+): AssessmentAPI => {
+  const questions =
+    "questions" in assessment
+      ? assessment.questions.map((question) => {
+          let modifiedOptionsString: string = "{}";
+
+          if (typeof question.options === "string") {
+            try {
+              const optionsObject = JSON.parse(question.options);
+              if (typeof optionsObject === "object" && optionsObject !== null) {
+                const { correct, ...optionsWithoutCorrect } = optionsObject;
+                modifiedOptionsString = JSON.stringify(optionsWithoutCorrect);
+              }
+            } catch (error) {
+              console.error("Failed to parse options JSON:", error);
+              modifiedOptionsString = question.options;
+            }
+          }
+
+          return {
+            ...question,
+            options: modifiedOptionsString,
+          };
+        })
+      : [];
+
+  return {
+    ...formatAssessment(assessment),
+    questions,
+  };
+};
+
 export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
   return {
     id: submission.id,
