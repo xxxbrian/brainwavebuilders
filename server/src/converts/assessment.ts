@@ -43,9 +43,10 @@ export const formatAssessmentForStudent = (
   const questions =
     "questions" in assessment
       ? assessment.questions.map((question: QuestionDB) => {
-          let parsedOptions = question.options
-            ? JSON.parse(question.options)
-            : null;
+          let parsedOptions =
+            typeof question.options === "string"
+              ? JSON.parse(question.options)
+              : null;
           if (parsedOptions && "correct" in parsedOptions) {
             delete parsedOptions.correct;
           }
