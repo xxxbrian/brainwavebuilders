@@ -26,12 +26,11 @@ export const formatAssessment = (
     id: assessment.id,
     title: assessment.title,
     description: assessment.description ?? undefined,
-    courseId: assessment.courseId,
+    courseId: assessment.courseID,
     startDate: assessment.startDate
       ? assessment.startDate.toISOString()
       : undefined,
     dueDate: assessment.dueDate ? assessment.dueDate.toISOString() : undefined,
-    duration: assessment.duration ?? undefined,
     type: assessment.type,
     questions,
     submissions,

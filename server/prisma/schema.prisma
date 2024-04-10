@@ -95,12 +95,11 @@ model Assessment {
     id          String       @id @default(uuid())
     title       String
     description String?
-    courseId    String
+    courseID    String
     startDate   DateTime?
     dueDate     DateTime?
-    duration    Int?
     type        String // "assignment" or "exam"
-    course      Course       @relation("courseAssessments", fields: [courseId], references: [id])
+    course      Course       @relation("courseAssessments", fields: [courseID], references: [id])
     questions   Question[] // Only for exams
     submissions Submission[]
     createdAt   DateTime     @default(now())

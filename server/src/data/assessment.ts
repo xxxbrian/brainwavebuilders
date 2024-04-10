@@ -5,7 +5,6 @@ import {
   CreateAssessmentRequest,
   SubmitAnswersRequest,
   SubmitAssignmentRequest,
-  CreateQuestionRequest,
   FetchAssessmentDetailsRequest,
 } from "@/apis";
 import { hasCourse } from "./course";
@@ -15,7 +14,10 @@ interface ExtendedCreateAssessmentRequest extends CreateAssessmentRequest {
   questions?: {
     title: string;
     type: string;
-    options?: string;
+    options: {
+      options: string[]; // Array of option strings
+      correct: string; // The correct answer
+    };
     points: number;
   }[];
 }
@@ -36,10 +38,9 @@ export const createAssessment = async (
         data: {
           title: data.title,
           description: data.description,
-          courseId: data.courseId,
+          courseID: data.courseId,
           startDate: data.startDate ? new Date(data.startDate) : undefined,
           dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
-          duration: data.duration,
           type: data.type,
         },
       });
@@ -53,9 +54,7 @@ export const createAssessment = async (
                 assessmentId: createdAssessment.id,
                 title: question.title,
                 type: question.type,
-                options: question.options
-                  ? JSON.parse(question.options)
-                  : undefined,
+                options: JSON.stringify(question.options),
                 points: question.points,
               },
             }),
@@ -155,34 +154,5 @@ export const fetchAssessmentDetails = async (
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");
-  }
-};
-
-export const createQuestion = async (
-  data: CreateQuestionRequest,
-): Promise<Question> => {
-  try {
-    const assessmentExists = await db.assessment.findUnique({
-      where: { id: data.assessmentId },
-    });
-
-    if (!assessmentExists) {
-      throw new APIError("Assessment not found", "ASSESSMENT_NOT_FOUND");
-    }
-
-    const question = await db.question.create({
-      data: {
-        assessmentId: data.assessmentId,
-        title: data.title,
-        type: data.type,
-        options: data.options ? JSON.parse(data.options) : undefined,
-        points: data.points,
-      },
-    });
-
-    return question;
-  } catch (error) {
-    console.error("Failed to create question:", error);
-    throw new APIError("Failed to create question", "CREATION_FAILED");
   }
 };
