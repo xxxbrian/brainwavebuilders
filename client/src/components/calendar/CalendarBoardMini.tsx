@@ -28,10 +28,14 @@ export const CalendarBoardMini: React.FC<CalendarProps> = ({
           <Tooltip
             key={`${day.getDay()}-${index}`}
             content={
-              <div className="flex items-center gap-x-1 flex-col">
-                <p className="text-xs font-medium leading-4">{event.name}</p>
-                <p className="text-xs font-medium leading-4">({event.time})</p>
-              </div>
+              <span className="flex items-center gap-x-1 flex-col">
+                <span className="text-xs font-medium leading-4">
+                  {event.name}
+                </span>
+                <span className="text-xs font-medium leading-4">
+                  ({event.time})
+                </span>
+              </span>
             }
           >
             <div
