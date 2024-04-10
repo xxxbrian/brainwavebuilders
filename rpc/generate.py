@@ -20,6 +20,7 @@ TypescriptMap: TypeMap = {
     "boolean": "boolean",
     "any": "any",
     "null": "null",
+    "json": "object",
 }
 
 

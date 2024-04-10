@@ -84,6 +84,33 @@ export interface CourseMembership {
     role: string;
 }
 
+export interface Forum {
+    id: string;
+    courseID: string;
+    name: string;
+}
+
+export interface Thread {
+    id: string;
+    forumID: string;
+    createdBy: User;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: number;
+    title: string;
+    posts: Post[];
+}
+
+export interface Post {
+    id: string;
+    threadID: string;
+    createdBy: User;
+    createdAt: number;
+    updatedAt: number;
+    deletedAt?: number;
+    content: object;
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////

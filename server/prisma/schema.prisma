@@ -167,4 +167,6 @@ model Post {
     createdBy   User     @relation("userPostsCreated", fields: [createdByID], references: [id])
     createdAt   DateTime @default(now())
     updatedAt   DateTime @updatedAt
+
+    deletedAt DateTime?
 }
