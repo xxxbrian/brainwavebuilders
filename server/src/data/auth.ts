@@ -3,6 +3,7 @@ import { db } from "@/globals";
 import { makeID } from "./utils";
 import { sendEmail } from "./mailer";
 import { APIError } from "@/apis";
+import bcrypt from "bcrypt";
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
   const user = await db.user.findUnique({
@@ -71,9 +72,8 @@ export const verifyOTP = async (
   return true;
 };
 
-// TODO: Implement a real password hashing function
 const hashPassword = (password: string): string => {
-  return password;
+  return bcrypt.hashSync(password, 3);
 };
 
 interface CreateUserRequest {
@@ -117,7 +117,7 @@ export const checkPassword = async (
     throw new APIError("Invalid email or password");
   }
 
-  if (user.password !== hashPassword(password)) {
+  if (!bcrypt.compareSync(password, user.password)) {
     throw new APIError("Invalid email or password");
   }
 
