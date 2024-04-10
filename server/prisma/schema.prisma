@@ -135,6 +135,7 @@ model Submission {
 model Forum {
     id       String   @id @default(uuid())
     courseID String
+    name     String
     course   Course   @relation("courseForums", fields: [courseID], references: [id])
     threads  Thread[] @relation("formThread")
 }
