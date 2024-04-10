@@ -1,16 +1,11 @@
 "use client";
 
-import { APIError, Course } from "@/backend";
 import { CalendarBoard } from "@/components/calendar/CalendarBoard";
-import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
-import { CenteredLoading } from "@/components/loading";
-import { PageFrame } from "@/components/structural/PageFrame";
-import { useBackend } from "@/hooks/useBackend";
 import { Heading } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
-import { MdAssignment, MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { mockTime, mockEvents } from "@/utils/data";
 import { useCourseFromLayout } from "./layout";
 
@@ -47,9 +42,15 @@ export const CoursesPage: React.FC = ({}) => {
 
   const course = useCourseFromLayout();
 
+  const pathName = usePathname();
+
   const onClickAssignments = useCallback(async () => {
-    router.push(`/assessment`);
-  }, [router]);
+    router.push(`${pathName}/assignments`);
+  }, [pathName, router]);
+
+  const onClickForum = useCallback(async () => {
+    router.push(`${pathName}/forum`);
+  }, [pathName, router]);
 
   return (
     <div className="flex flex-col space-y-8">
@@ -79,6 +80,12 @@ export const CoursesPage: React.FC = ({}) => {
                 icon={<MdAssignment />}
                 title="Assignments"
                 onClick={onClickAssignments}
+              />
+
+              <ApplicationIcon
+                icon={<MdForum />}
+                title="Forum"
+                onClick={onClickForum}
               />
 
               <StatefulInviteMembersForm course={course}>
