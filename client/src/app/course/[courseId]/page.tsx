@@ -89,22 +89,14 @@ export const CoursesPage: React.FC = ({}) => {
               </StatefulInviteMembersForm>
             </div>
           </div>
-          <div className="w-2/3">
-            <Heading size={"5"}>Calendar</Heading>
-            <CalendarBoard
-              today={mockTime}
-              events={mockEvents()}
-              warpperClassName="xl:block"
-            />
-            <CalendarBoardMini
-              today={mockTime}
-              events={mockEvents()}
-              warpperClassName="xl:hidden"
-            />
-          </div>
         </div>
-        <div className="w-1/2">
+        <div className="w-2/3 space-y-4 overflow-hidden">
           <Heading size={"5"}>Calendar</Heading>
+          <CalendarBoard
+            today={mockTime}
+            events={mockEvents()}
+            warpperClassName="hidden xl:block flex-shrink-0"
+          />
         </div>
       </div>
     </div>
