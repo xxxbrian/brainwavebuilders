@@ -1,7 +1,8 @@
-.PHONY: default clean install up down destroy pre-commit all
+.PHONY: default clean install up down destroy pre-commit all demo
 
 all:
-	@echo please specify a target
+	@echo error: please specify a target.
+	@echo hint: To run the project, do "make up".
 
 up:
 	docker-compose up -d
