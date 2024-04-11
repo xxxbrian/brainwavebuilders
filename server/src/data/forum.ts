@@ -71,6 +71,9 @@ export const getThreadsByForumID = async (
         where: {
           deletedAt: null,
         },
+        orderBy: {
+          createdAt: "asc",
+        },
       },
     },
     orderBy: {
@@ -203,7 +206,7 @@ export const getThreadByID = async (
           deletedAt: null,
         },
         orderBy: {
-          createdAt: "desc",
+          createdAt: "asc",
         },
       },
     },

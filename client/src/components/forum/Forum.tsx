@@ -55,22 +55,25 @@ export const Forum: React.FC<Props> = ({
         />
       );
     } else if (activeThreadId) {
+      const thread = threads.find((t) => t.id === activeThreadId)!;
+
+      if (!thread) {
+        return <div />;
+      }
+
       return (
         <ThreadDisplay
           onDeletePost={onDeletePost}
           onDeleteThread={onDeleteThread}
           onUpsertPost={onUpsertPost}
           onUpsertThread={onUpsertThread}
+          thread={thread}
         />
       );
     } else {
       return <div />;
     }
   };
-
-  if (isLoading) {
-    return <CenteredLoading />;
-  }
 
   return (
     <div className="flex h-full overflow-hidden">

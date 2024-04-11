@@ -42,7 +42,7 @@ export const NewThreadDisplay: React.FC<Props> = ({
       />
 
       <AdvancedEditor
-        className="border rounded-md overflow-y-auto overflow-x-hidden max-h-[50vh] border-gray-300"
+        className="border rounded-md overflow-y-auto overflow-x-hidden max-h-[50vh] border-gray-300 p-12 px-8 sm:px-12"
         value={content}
         setValue={setContent}
       />
