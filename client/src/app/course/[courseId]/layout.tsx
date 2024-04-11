@@ -6,7 +6,7 @@ import { PageFrame } from "@/components/structural/PageFrame";
 import { CourseContext } from "@/contexts/CourseContext";
 import { CourseRoleContext } from "@/contexts/CourseRoleContext";
 import { useBackend } from "@/hooks/useBackend";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ClassroomPageLayout({
   children,
@@ -88,7 +88,11 @@ export default function ClassroomPageLayout({
   return (
     <CourseContext.Provider value={course}>
       <CourseRoleContext.Provider value={role ?? ""}>
-        <PageFrame title={`${course.name}`} standardWidth={false}>
+        <PageFrame
+          title={`${course.name}`}
+          standardWidth={false}
+          padding={false}
+        >
           {children}
         </PageFrame>
       </CourseRoleContext.Provider>

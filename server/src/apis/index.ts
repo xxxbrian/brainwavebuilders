@@ -22,6 +22,7 @@ import { setUserProfile } from "@/handlers/setUserProfile";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
+import { getForumByID } from "@/handlers/getForumByID";
 import { createCourse } from "@/handlers/createCourse";
 import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
@@ -373,6 +374,16 @@ export interface GetForumByCourseIDRequest {
 
 // GetForumByCourseIDResponse is the response that is sent to the getForumByCourseID endpoint.
 export interface GetForumByCourseIDResponse {
+    forum: Forum;
+}
+
+// GetForumByIDRequest is the request that is sent to the getForumByID endpoint.
+export interface GetForumByIDRequest {
+    id: string;
+}
+
+// GetForumByIDResponse is the response that is sent to the getForumByID endpoint.
+export interface GetForumByIDResponse {
     forum: Forum;
 }
 
@@ -912,6 +923,28 @@ app.post('/api/getForumByCourseID', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getForumByCourseID with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getForumByID is the endpoint handler for the getForumByID endpoint.
+// It wraps around the function at @/handlers/getForumByID.
+app.post('/api/getForumByID', async (req, res) => {
+    const request: GetForumByIDRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetForumByIDResponse = await getForumByID(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getForumByID with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

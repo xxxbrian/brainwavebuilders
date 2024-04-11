@@ -1,4 +1,4 @@
-import { UpsertPostRequest, UpsertPostResponse } from "@/apis";
+import { APIError, UpsertPostRequest, UpsertPostResponse } from "@/apis";
 import { useCurrentUser } from "@/context/auth";
 import { postWithCreatedByDBToAPI } from "@/converts/forum";
 import { createPost, getPostByID, updatePost } from "@/data/forum";
@@ -17,7 +17,7 @@ export const upsertPost = async (
 
   if (post.id) {
     if (!(await canModifyPost(user, post.id))) {
-      throw new Error("You are not authorized to modify this post.");
+      throw new APIError("You are not authorized to modify this post.");
     }
 
     await updatePost(post.id, {
@@ -25,7 +25,7 @@ export const upsertPost = async (
     });
   } else {
     if (!(await canCreatePostInThread(user, post.threadID))) {
-      throw new Error("You are not authorized to create posts.");
+      throw new APIError("You are not authorized to create posts.");
     }
 
     const { id } = await createPost({

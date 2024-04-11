@@ -259,6 +259,13 @@ endpoints:
       forum: Forum
     service: typescript
 
+  getForumByID:
+    request:
+      id: string
+    response:
+      forum: Forum
+    service: typescript
+
   getThreads:
     request:
       forumID: string

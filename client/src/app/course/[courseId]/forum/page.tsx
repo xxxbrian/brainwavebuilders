@@ -1,23 +1,56 @@
 "use client";
 
 import { useCourse } from "@/contexts/CourseContext";
-import { WithStudentRole, WithTeacherRole } from "@/contexts/CourseRoleContext";
-import AdvancedEditor from "@/components/editor/advanced-editor";
+import { useCallback, useEffect, useState } from "react";
+import { CenteredLoading } from "@/components/loading";
+import { useBackend } from "@/hooks/useBackend";
+import { StatefulForum } from "@/components/forum/Forum";
+import { useRouter, useSearchParams } from "next/navigation";
 
 export const ForumPage: React.FC = () => {
   const course = useCourse();
 
-  return (
-    <div className="flex flex-col justify-center items-center space-y-4">
-      <h1>Forum {course.id}</h1>
-      <WithTeacherRole>
-        <p>Only teachers can see this</p>
-      </WithTeacherRole>
+  const [forumId, setForumId] = useState<string | null>(null);
 
-      <WithStudentRole>
-        <p>Only students can see this</p>
-      </WithStudentRole>
-      <AdvancedEditor />
+  const backend = useBackend();
+  const params = useSearchParams();
+
+  const activeThreadId = params.get("thread");
+
+  useEffect(() => {
+    if (course === null) return;
+
+    const inner = async () => {
+      const { forum } = await backend.getForumByCourseID({
+        courseID: course.id,
+      });
+
+      setForumId(forum.id);
+    };
+
+    void inner();
+  }, [backend, course]);
+
+  const router = useRouter();
+
+  const onChangeActiveThreadId = useCallback(
+    (threadId: string | null) => {
+      router.push(
+        `/course/${course.id}/forum${threadId ? "?thread=" + threadId : ""}`,
+      );
+    },
+    [course.id, router],
+  );
+
+  if (forumId === null) return <CenteredLoading />;
+
+  return (
+    <div className="flex flex-col space-y-4 h-full">
+      <StatefulForum
+        forumId={forumId}
+        activeThreadId={activeThreadId}
+        onChangeActiveThreadId={onChangeActiveThreadId}
+      />
     </div>
   );
 };
