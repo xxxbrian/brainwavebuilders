@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import AssessmentInfo from "@/components/assessment/AssessmentInfo";
 import QuestionComponent from "@/components/assessment/Question";
+import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
 
 type Question = {
@@ -15,10 +16,20 @@ type Question = {
 };
 
 export const Assessment: React.FC = () => {
+  const router = useRouter();
+
+  const pathName = usePathname();
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startDate, setStartDate] = useState("");
+
+  const onClickSave = useCallback(async () => {
+    // TODO: Send exam info to backend
+    const newPath = pathName.replace(/\/createexam$/, "");
+    router.push(newPath);
+  }, [pathName, router]);
 
   const [questions, setQuestions] = useState<Question[]>([
     {
@@ -93,7 +104,10 @@ export const Assessment: React.FC = () => {
         />
       ))}
       <div className="flex">
-        <button className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90">
+        <button
+          onClick={onClickSave}
+          className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90"
+        >
           Save
         </button>
       </div>
