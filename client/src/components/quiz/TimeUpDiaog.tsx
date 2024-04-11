@@ -6,7 +6,10 @@ interface TimeUpDialogProps {
   setIsOpen: (isOpen: boolean) => void;
 }
 
-const TimeUpDialog: React.FC<TimeUpDialogProps> = ({ isOpen, setIsOpen }) => {
+export const TimeUpDialog: React.FC<TimeUpDialogProps> = ({
+  isOpen,
+  setIsOpen,
+}) => {
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Portal>
@@ -29,5 +32,3 @@ const TimeUpDialog: React.FC<TimeUpDialogProps> = ({ isOpen, setIsOpen }) => {
     </Dialog.Root>
   );
 };
-
-export default TimeUpDialog;

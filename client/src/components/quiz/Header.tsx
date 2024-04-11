@@ -1,6 +1,6 @@
 import { Flex } from "@radix-ui/themes";
 import React, { useState, useEffect } from "react";
-import TimeUpDialog from "./TimeUpDiaog";
+import { TimeUpDialog } from "./TimeUpDiaog";
 
 interface QuizInfoProps {
   title: string;
