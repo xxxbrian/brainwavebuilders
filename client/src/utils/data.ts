@@ -38,6 +38,69 @@ export const quizData: Assessment = {
   submissions: [],
 };
 
+export const AssessmentsData: Assessment[] = [
+  {
+    id: "1",
+    title: "Final Exam",
+    description:
+      "Comprehensive examination for advanced understanding of algorithmic principles.",
+    courseId: "ALG201",
+    type: "exam",
+    startDate: "2024-03-10T00:00:00Z",
+    dueDate: "2024-06-12T00:00:00Z",
+    questions: [],
+    submissions: [],
+  },
+  {
+    id: "2",
+    title: "Midterm Project",
+    description:
+      "Project assessment focusing on the practical application of database management.",
+    courseId: "DBM302",
+    type: "assignment",
+    startDate: "2024-05-01T00:00:00Z",
+    dueDate: "2024-05-15T00:00:00Z",
+    questions: [],
+    submissions: [],
+  },
+  {
+    id: "3",
+    title: "Network Security Exam",
+    description:
+      "Evaluation of students' knowledge in network security protocols and defenses.",
+    courseId: "NET400",
+    type: "exam",
+    startDate: "2024-07-20T00:00:00Z",
+    dueDate: "2024-07-22T00:00:00Z",
+    questions: [],
+    submissions: [],
+  },
+  {
+    id: "4",
+    title: "Web Development Assignment",
+    description:
+      "Practical assignment for building responsive web applications.",
+    courseId: "WEB101",
+    type: "assignment",
+    startDate: "2023-01-05T00:00:00Z",
+    dueDate: "2023-01-20T00:00:00Z",
+    questions: [],
+    submissions: [],
+  },
+  {
+    id: "5",
+    title: "Software Engineering Ethics",
+    description:
+      "Discussion-based assessment on the ethical considerations in software development.",
+    courseId: "ETH303",
+    type: "exam",
+    startDate: "2024-09-10T00:00:00Z",
+    dueDate: "2024-09-12T00:00:00Z",
+    questions: [],
+    submissions: [],
+  },
+];
+
 export const CourseData: Course = {
   createdAt: new Date().getTime(),
   createdBy: UserData,

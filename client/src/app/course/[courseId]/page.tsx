@@ -4,11 +4,14 @@ import { CalendarBoard } from "@/components/calendar/CalendarBoard";
 import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
 import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { mockTime, mockEvents } from "@/utils/data";
 import { useCourse } from "@/contexts/CourseContext";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
+import AssignmentsTable from "@/components/assessment/AssessmentsTable";
+import { AssessmentsData } from "@/utils/data";
+import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -52,6 +55,34 @@ export const CoursesPage: React.FC = ({}) => {
   const onClickForum = useCallback(async () => {
     router.push(`${pathName}/forum`);
   }, [pathName, router]);
+
+  const [isCreateAssignment, setIsCreateAssignment] = useState(false);
+
+  const onClickAddExam = useCallback(async () => {
+    router.push(`${pathName}/createexam`);
+  }, [pathName, router]);
+
+  const onClickAddAssignment = () => {
+    setIsCreateAssignment(true);
+  };
+
+  const assignmentsData = AssessmentsData.filter(
+    (assessment) => assessment.type !== "exam",
+  ).map((assessment) => ({
+    id: assessment.id,
+    name: assessment.title,
+    startDate: assessment.startDate ?? "",
+    dueDate: assessment.dueDate ?? "",
+  }));
+
+  const examsData = AssessmentsData.filter(
+    (assessment) => assessment.type === "exam",
+  ).map((assessment) => ({
+    id: assessment.id,
+    name: assessment.title,
+    startDate: assessment.startDate ?? "",
+    dueDate: assessment.dueDate ?? "",
+  }));
 
   return (
     <div className="flex flex-col space-y-8">
@@ -112,6 +143,20 @@ export const CoursesPage: React.FC = ({}) => {
           />
         </div>
       </div>
+      <AssignmentsTable
+        assignments={assignmentsData}
+        type="Assignment"
+        onClickAddButton={onClickAddAssignment}
+      />
+      <AssignmentsTable
+        assignments={examsData}
+        type="Exam"
+        onClickAddButton={onClickAddExam}
+      />
+      <CreateAssignmentDialog
+        isOpen={isCreateAssignment}
+        setIsOpen={setIsCreateAssignment}
+      />
     </div>
   );
 };
