@@ -4,12 +4,12 @@ import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
 
 interface Props {
-  onClickCreatePost: (title: string, content: JSONContent) => void;
+  onClickCreateThreadAndPost: (title: string, content: JSONContent) => void;
   onClickCancel: () => void;
 }
 
 export const NewThreadDisplay: React.FC<Props> = ({
-  onClickCreatePost,
+  onClickCreateThreadAndPost: onClickCreatePost,
   onClickCancel,
 }) => {
   const [title, setTitle] = useState("");
@@ -39,8 +39,8 @@ export const NewThreadDisplay: React.FC<Props> = ({
 
       <AdvancedEditor className="border rounded-md overflow-y-auto overflow-x-hidden max-h-[50vh] border-gray-300" />
 
-      <div className="flex justify-end">
-        <Button onClick={onClickPost} variant="surface">
+      <div className="flex justify-end space-x-2">
+        <Button onClick={onClickCancel} variant="surface">
           Cancel
         </Button>
         <Button onClick={onClickPost} variant="solid">

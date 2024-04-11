@@ -15,7 +15,9 @@ interface Props {
   threads: Thread[];
   activeThreadId: string;
   onCreateThreadAndPost: (title: string, content: JSONContent) => void;
-  onClickThread: (thread: Thread) => void;
+  onClickCancelNewThread: () => void;
+
+  onClickThread: (thread: Thread | null) => void;
   onUpsertThread: (thread: Thread) => void;
   onDeleteThread: (thread: Thread) => void;
   onUpsertPost: (post: Post) => void;
@@ -35,30 +37,20 @@ export const Forum: React.FC<Props> = ({
   onUpsertPost,
   onUpsertThread,
   onClickNewThread,
+  onClickCancelNewThread: onCancelNewThread,
+  onCreateThreadAndPost,
   isCreatingNewThread,
   isLoading,
 }) => {
-  const onClickCreateNewThread = useCallback(
-    (title: string, content: JSONContent) => {
-      onUpsertThread({
-        createdAt: 0,
-        updatedAt: 0,
-        forumID: forum.id,
-        id: "",
-        posts: [],
-        title,
-      });
-    },
-    [onClickNewThread],
-  );
-
-  const onClickCancelNewThread = useCallback(() => {}, [onClickNewThread]);
+  const onClickCancelNewThread = useCallback(() => {
+    onCancelNewThread();
+  }, [onCancelNewThread]);
 
   const getDisplay = () => {
     if (isCreatingNewThread) {
       return (
         <NewThreadDisplay
-          onClickCreatePost={onClickCreateNewThread}
+          onClickCreateThreadAndPost={onCreateThreadAndPost}
           onClickCancel={onClickCancelNewThread}
         />
       );
@@ -75,6 +67,11 @@ export const Forum: React.FC<Props> = ({
       return <div />;
     }
   };
+
+  if (isLoading) {
+    return <CenteredLoading />;
+  }
+
   return (
     <div className="flex h-full overflow-hidden">
       <ThreadList
@@ -105,8 +102,8 @@ export const StatefulForum: React.FC<StatefulProps> = ({
   const backend = useBackend();
 
   const onClickThread = useCallback(
-    (t: Thread) => {
-      onChangeActiveThreadId(t.id);
+    (t: Thread | null) => {
+      onChangeActiveThreadId(t?.id ?? null);
     },
     [onChangeActiveThreadId],
   );
@@ -123,7 +120,8 @@ export const StatefulForum: React.FC<StatefulProps> = ({
 
   const onCreateThreadAndPost = useCallback(
     async (title: string, content: JSONContent) => {
-      dispatch({ type: "set-loading", isLoading: true });
+      onChangeActiveThreadId(null);
+
       const { thread } = await backend.upsertThread({
         thread: {
           createdAt: 0,
@@ -147,7 +145,6 @@ export const StatefulForum: React.FC<StatefulProps> = ({
 
       await reloadThreads();
 
-      dispatch({ type: "set-loading", isLoading: false });
       onChangeActiveThreadId(thread.id);
     },
     [backend, forumId, onChangeActiveThreadId, reloadThreads],
@@ -198,12 +195,19 @@ export const StatefulForum: React.FC<StatefulProps> = ({
   );
 
   useEffect(() => {
-    dispatch({ type: "set-creating-new-thread", isCreatingNewThread: false });
+    if (activeThreadId !== null) {
+      dispatch({ type: "set-creating-new-thread", isCreatingNewThread: false });
+    }
   }, [activeThreadId]);
 
   const onClickNewThread = useCallback(() => {
-    onChangeActiveThreadId(null);
     dispatch({ type: "set-creating-new-thread", isCreatingNewThread: true });
+    onChangeActiveThreadId(null);
+  }, [onChangeActiveThreadId]);
+
+  const onClickCancelNewThread = useCallback(() => {
+    dispatch({ type: "set-creating-new-thread", isCreatingNewThread: false });
+    onChangeActiveThreadId(null);
   }, [onChangeActiveThreadId]);
 
   useEffect(() => {
@@ -240,6 +244,7 @@ export const StatefulForum: React.FC<StatefulProps> = ({
       onUpsertPost={onUpsertPost}
       onDeletePost={onDeletePost}
       onClickNewThread={onClickNewThread}
+      onClickCancelNewThread={onClickCancelNewThread}
       isCreatingNewThread={s.isCreatingNewThread}
       isLoading={s.isLoading}
     />
