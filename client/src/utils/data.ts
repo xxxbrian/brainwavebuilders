@@ -1,10 +1,41 @@
 import { Course, User } from "@/backend";
 import { type Event } from "@/components/calendar/Calendar";
+import { Assessment } from "@/backend";
 
 export const UserData: User = {
   email: "lincoln@yyjlincoln.com",
   firstName: "Lincoln",
   lastName: "Yan",
+};
+
+export const quizData: Assessment = {
+  id: "1",
+  title: "Final Exam",
+  description:
+    "This course aims for students to become proficient in a high-level programming language, C. It also focuses on long-term mental preparedness for programming, including problem-solving, debugging, and testing.",
+  courseId: "COMP1522",
+  type: "exam",
+  startDate: "2024-04-10T00:00:00Z",
+  dueDate: "2024-04-12T00:00:00Z",
+  questions: [
+    {
+      assessmentId: "1",
+      id: "question1",
+      title: "Which city is the capital of France?",
+      type: "MCQ",
+      options: JSON.stringify(["Paris", "Berlin", "Rome"]),
+      points: 5,
+    },
+    {
+      assessmentId: "1",
+      id: "question2",
+      title: "Explain the process of photosynthesis.",
+      type: "SAQ",
+      points: 10,
+      // No options or correct answer provided for SAQ
+    },
+  ],
+  submissions: [],
 };
 
 export const CourseData: Course = {
