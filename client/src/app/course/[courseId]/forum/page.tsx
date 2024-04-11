@@ -1,7 +1,7 @@
 "use client";
 
 import { useCourse } from "@/contexts/CourseContext";
-import AdvancedEditor from "@/components/editor/advanced-editor";
+import AdvancedEditor from "@/components/editor/AdvancedEditor";
 import { useCallback, useEffect, useState } from "react";
 import { CenteredLoading } from "@/components/loading";
 import { useBackend } from "@/hooks/useBackend";

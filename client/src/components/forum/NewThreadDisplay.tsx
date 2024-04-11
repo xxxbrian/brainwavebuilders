@@ -1,14 +1,52 @@
-import { Thread } from "@/backend";
+import { AdvancedEditor } from "@/components/editor/AdvancedEditor";
+import { Button, TextField } from "@radix-ui/themes";
+import { JSONContent } from "novel";
+import { useCallback, useState } from "react";
 
 interface Props {
-  onUpsertThread: (thread: Thread) => void;
+  onClickCreatePost: (title: string, content: JSONContent) => void;
+  onClickCancel: () => void;
 }
 
-export const NewThreadDisplay: React.FC<Props> = ({ onUpsertThread }) => {
+export const NewThreadDisplay: React.FC<Props> = ({
+  onClickCreatePost,
+  onClickCancel,
+}) => {
+  const [title, setTitle] = useState("");
+
+  const onChangeTitle = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setTitle(e.currentTarget.value);
+    },
+    [],
+  );
+
+  const onClickPost = useCallback(() => {
+    onClickCreatePost(title, {} as JSONContent);
+  }, [onClickCreatePost, title]);
+
   return (
-    <div>
-      <h1>New Thread</h1>
-      {/* <AdvancedEditor /> */}
+    <div className="flex flex-col px-4 py-4 space-y-4">
+      <div className="text-2xl">Create Thread</div>
+      <TextField.Root
+        variant="surface"
+        size={"3"}
+        placeholder="Name the thread"
+        value={title}
+        onChange={onChangeTitle}
+        className="w-full text-2xl"
+      />
+
+      <AdvancedEditor className="border rounded-md overflow-y-auto overflow-x-hidden max-h-[50vh] border-gray-300" />
+
+      <div className="flex justify-end">
+        <Button onClick={onClickPost} variant="surface">
+          Cancel
+        </Button>
+        <Button onClick={onClickPost} variant="solid">
+          Post
+        </Button>
+      </div>
     </div>
   );
 };
