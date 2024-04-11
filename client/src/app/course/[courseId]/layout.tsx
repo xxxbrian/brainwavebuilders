@@ -6,7 +6,7 @@ import { PageFrame } from "@/components/structural/PageFrame";
 import { CourseContext } from "@/contexts/CourseContext";
 import { CourseRoleContext } from "@/contexts/CourseRoleContext";
 import { useBackend } from "@/hooks/useBackend";
-import { createContext, useContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function ClassroomPageLayout({
   children,

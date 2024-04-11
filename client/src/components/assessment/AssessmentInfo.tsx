@@ -5,8 +5,8 @@ interface AssessmentInfoProps {
   setTitle: (value: string) => void;
   description: string;
   setDescription: (value: string) => void;
-  duration: number;
-  setDuration: (value: number) => void;
+  endDate: string;
+  setEndDate: (value: string) => void;
   startDate: string;
   setStartDate: (value: string) => void;
 }
@@ -16,8 +16,8 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
   setTitle,
   description,
   setDescription,
-  duration,
-  setDuration,
+  endDate,
+  setEndDate,
   startDate,
   setStartDate,
 }) => {
@@ -40,13 +40,11 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
     [setDescription],
   );
 
-  const handleDurationChange = useCallback(
-    (newDuration: number) => {
-      if (newDuration >= 0) {
-        setDuration(newDuration);
-      }
+  const handleEndDateChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setEndDate(event.target.value);
     },
-    [setDuration],
+    [setEndDate],
   );
 
   const handleStartDateChange = useCallback(
@@ -84,22 +82,9 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
           rows={4}
         />
       </div>
-      <div className="flex gap-4 mb-4">
-        <div className="w-1/2">
-          <label htmlFor="duration" className="text-md font-medium block mb-2">
-            Duration
-          </label>
-          <input
-            id="duration"
-            type="number"
-            value={duration}
-            onChange={(e) => handleDurationChange(Number(e.target.value))}
-            className="px-3 py-2 border w-20 border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:border-2"
-          />
-          <span className="ml-2 text-xl">minutes</span>
-        </div>
+      <div className="flex justify-between">
         {/* Start Date Input */}
-        <div className="w-1/2">
+        <div className="w-2/5">
           <label htmlFor="startDate" className="text-md font-medium block mb-2">
             Start Date
           </label>
@@ -109,6 +94,19 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
             value={startDate}
             onChange={handleStartDateChange}
             min={minStartDate}
+            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:border-2"
+          />
+        </div>
+        <div className="w-2/5">
+          <label htmlFor="endDate" className="text-md font-medium block mb-2">
+            End Date
+          </label>
+          <input
+            id="endDate"
+            type="datetime-local"
+            value={endDate}
+            onChange={handleEndDateChange}
+            min={startDate}
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:border-2"
           />
         </div>

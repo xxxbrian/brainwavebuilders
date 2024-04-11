@@ -22,6 +22,7 @@ import { setUserProfile } from "@/handlers/setUserProfile";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
 import { submitAnswers } from "@/handlers/submitAnswers";
+import { getForumByID } from "@/handlers/getForumByID";
 import { createCourse } from "@/handlers/createCourse";
 import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
@@ -29,7 +30,6 @@ import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
-import { getForumByID } from "@/handlers/getForumByID";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
