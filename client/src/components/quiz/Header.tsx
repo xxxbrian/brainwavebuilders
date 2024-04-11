@@ -1,5 +1,6 @@
 import { Flex } from "@radix-ui/themes";
 import React, { useState, useEffect } from "react";
+import TimeUpDialog from "./TimeUpDiaog";
 
 interface QuizInfoProps {
   title: string;
@@ -15,6 +16,7 @@ const QuizHeader: React.FC<QuizInfoProps> = ({
   onSubmit,
 }) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
+  const [isTimeUp, setIsTimeUp] = useState(false);
 
   useEffect(() => {
     const calculateTimeLeft = () => {
@@ -41,6 +43,7 @@ const QuizHeader: React.FC<QuizInfoProps> = ({
       if (difference <= 0) {
         clearInterval(timer);
         onSubmit();
+        setIsTimeUp(true);
       }
     };
 
@@ -66,6 +69,7 @@ const QuizHeader: React.FC<QuizInfoProps> = ({
           </button>
         </Flex>
       </div>
+      <TimeUpDialog isOpen={isTimeUp} setIsOpen={setIsTimeUp} />
     </div>
   );
 };
