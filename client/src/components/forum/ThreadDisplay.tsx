@@ -27,6 +27,8 @@ export const ThreadDisplay: React.FC<Props> = ({ thread, onUpsertPost }) => {
       threadID: thread.id,
       updatedAt: 0,
     });
+
+    setDraftContent({ type: "doc", content: [] });
   }, [draftContent, onUpsertPost, thread.id]);
 
   return (
