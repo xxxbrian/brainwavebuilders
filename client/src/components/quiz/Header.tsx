@@ -31,15 +31,23 @@ const QuizHeader: React.FC<QuizInfoProps> = ({
         timeLeft = "Time's up!";
       }
 
-      return timeLeft;
+      return { difference, timeLeft };
     };
 
-    const timer = setInterval(() => {
-      setTimeLeft(calculateTimeLeft());
-    }, 1000);
+    const updateTimer = () => {
+      const { difference, timeLeft } = calculateTimeLeft();
+      setTimeLeft(timeLeft);
+      // Automatically submit when time is up
+      if (difference <= 0) {
+        clearInterval(timer);
+        onSubmit();
+      }
+    };
+
+    const timer = setInterval(updateTimer, 1000);
 
     return () => clearInterval(timer);
-  }, [endDate]);
+  }, [endDate, onSubmit]);
 
   return (
     <div className="flex justify-between items-center p-4 bg-blue-100 rounded-2xl border-2 border-blue-500">
