@@ -291,3 +291,10 @@ endpoints:
       postID: string
     response:
     service: typescript
+
+  getRoleInCourse:
+    request:
+      courseId: string
+    response:
+      role: string | null
+    service: typescript

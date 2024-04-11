@@ -17,10 +17,19 @@ export const upsertThread = async (
   { thread }: UpsertThreadRequest,
 ): Promise<UpsertThreadResponse> => {
   const user = useCurrentUser(ctx)!;
+
+  if (!thread) {
+    throw new APIError("missing thread");
+  }
+
+  if (thread.forumID === undefined) {
+    throw new APIError("a thread must have a forumID");
+  }
+
   let threadID = thread.id;
 
   if (thread.id) {
-    if (!canModifyThread(user, thread.id)) {
+    if (!(await canModifyThread(user, thread.id))) {
       throw new APIError(kThreadNotFoundOrDeniedError);
     }
 
@@ -37,6 +46,8 @@ export const upsertThread = async (
       forumID: thread.forumID,
       title: thread.title,
     });
+
+    threadID = id;
   }
 
   return {

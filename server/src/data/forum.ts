@@ -4,7 +4,7 @@ import {
   ThreadWithPosts,
 } from "@/converts/forum";
 import { db } from "@/globals";
-import { Forum, Post, Prisma, Thread } from "@prisma/client";
+import { Forum, Post, Thread } from "@prisma/client";
 
 export const createForum = async (
   createdByID: string,
