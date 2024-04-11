@@ -5,12 +5,14 @@ interface QuizInfoProps {
   title: string;
   description?: string;
   endDate: string;
+  onSubmit: () => void;
 }
 
 const QuizHeader: React.FC<QuizInfoProps> = ({
   title,
   description,
   endDate,
+  onSubmit,
 }) => {
   const [timeLeft, setTimeLeft] = useState<string>("");
 
@@ -48,7 +50,10 @@ const QuizHeader: React.FC<QuizInfoProps> = ({
       <div className="space-y-2">
         <p className="font-semibold">Time Left: {timeLeft}</p>
         <Flex className="justify-end">
-          <button className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90">
+          <button
+            className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90"
+            onClick={onSubmit}
+          >
             End Quiz
           </button>
         </Flex>
