@@ -50,7 +50,7 @@ export const Quiz: React.FC = () => {
 
   return (
     <PageFrame title="Quiz">
-      <div className="flex flex-col space-y-4 pt-8 pb-16 pl-16 pr-16 m-auto max-w-[1200px]">
+      <div className="flex flex-col space-y-4 pt-8 pl-8 pr-8 m-auto max-w-[1200px]">
         <QuizHeader
           title={quizData.title}
           description={quizData.description}

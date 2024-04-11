@@ -80,7 +80,7 @@ export const CreateCourseButton: React.FC = () => {
             <TextArea
               value={courseDescription}
               onChange={handleCourseDescriptionChange}
-              placeholder="Enter course name"
+              placeholder="Enter course description"
               required
             />
           </div>
