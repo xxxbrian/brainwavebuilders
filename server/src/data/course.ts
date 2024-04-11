@@ -1,7 +1,6 @@
 import { APIError } from "@/apis";
 import { db } from "@/globals";
 import {
-  Course,
   CourseInvitations,
   CourseMembers,
   CourseRole,

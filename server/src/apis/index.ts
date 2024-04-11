@@ -12,6 +12,7 @@ import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
 import { getUserCourses } from "@/handlers/getUserCourses";
 import { getThreads } from "@/handlers/getThreads";
+import { getRoleInCourse } from "@/handlers/getRoleInCourse";
 import { upsertPost } from "@/handlers/upsertPost";
 import { joinCourse } from "@/handlers/joinCourse";
 import { deletePost } from "@/handlers/deletePost";
@@ -422,6 +423,16 @@ export interface DeletePostRequest {
 // DeletePostResponse is the response that is sent to the deletePost endpoint.
 export interface DeletePostResponse {
 
+}
+
+// GetRoleInCourseRequest is the request that is sent to the getRoleInCourse endpoint.
+export interface GetRoleInCourseRequest {
+    courseId: string;
+}
+
+// GetRoleInCourseResponse is the response that is sent to the getRoleInCourse endpoint.
+export interface GetRoleInCourseResponse {
+    role: string | null;
 }
 
 
@@ -1010,6 +1021,28 @@ app.post('/api/deletePost', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request deletePost with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getRoleInCourse is the endpoint handler for the getRoleInCourse endpoint.
+// It wraps around the function at @/handlers/getRoleInCourse.
+app.post('/api/getRoleInCourse', async (req, res) => {
+    const request: GetRoleInCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetRoleInCourseResponse = await getRoleInCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getRoleInCourse with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

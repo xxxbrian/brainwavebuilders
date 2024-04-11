@@ -7,7 +7,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useCallback } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { mockTime, mockEvents } from "@/utils/data";
-import { useCourseFromLayout } from "./layout";
+import { useCourse } from "@/contexts/CourseContext";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 
 interface ApplicationProps {
@@ -41,7 +41,7 @@ export const ApplicationIcon: React.FC<ApplicationProps> = ({
 export const CoursesPage: React.FC = ({}) => {
   const router = useRouter();
 
-  const course = useCourseFromLayout();
+  const course = useCourse();
 
   const pathName = usePathname();
 
