@@ -1,6 +1,6 @@
 "use client";
 
-import AdvancedEditor from "@/components/noval/advanced-editor";
+import AdvancedEditor from "@/components/editor/advanced-editor";
 import { useCourseFromLayout } from "../layout";
 
 export const ForumPage: React.FC = () => {

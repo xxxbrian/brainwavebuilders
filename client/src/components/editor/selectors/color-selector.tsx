@@ -6,8 +6,8 @@ import {
   PopoverTrigger,
   Popover,
   PopoverContent,
-} from "@/components/noval/ui/popover";
-import { Button } from "@/components/noval/ui/button";
+} from "@/components/editor/ui/popover";
+import { Button } from "@/components/editor/ui/button";
 export interface BubbleColorMenuItem {
   name: string;
   color: string;

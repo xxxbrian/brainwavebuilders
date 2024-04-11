@@ -9,8 +9,8 @@ import {
   useRef,
 } from "react";
 import { Popover, PopoverTrigger } from "@radix-ui/react-popover";
-import { Button } from "@/components/noval/ui/button";
-import { PopoverContent } from "@/components/noval/ui/popover";
+import { Button } from "@/components/editor/ui/button";
+import { PopoverContent } from "@/components/editor/ui/popover";
 
 export function isValidUrl(url: string) {
   try {

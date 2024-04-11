@@ -1,6 +1,6 @@
 "use client";
 
-import { Command, CommandInput } from "@/components/noval/ui/command";
+import { Command, CommandInput } from "@/components/editor/ui/command";
 
 import { useCompletion } from "ai/react";
 import { toast } from "sonner";
@@ -28,7 +28,7 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
   const { completion, complete, isLoading } = useCompletion({
     // id: "novel",
-    api: "/api/generate",
+    api: "/client/api/generate",
     onResponse: (response) => {
       if (response.status === 429) {
         toast.error("You have reached your request limit for the day.");
