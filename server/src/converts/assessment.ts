@@ -8,7 +8,6 @@ import {
   Submission as SubmissionAPI,
   Question as QuestionAPI,
 } from "@/apis";
-
 import { AssessmentDetails } from "@/data/assessment";
 
 // Adjust the formatAssessment function to check for the presence of questions and submissions
@@ -26,7 +25,7 @@ export const formatAssessment = (
     id: assessment.id,
     title: assessment.title,
     description: assessment.description ?? undefined,
-    courseId: assessment.courseID,
+    courseId: assessment.courseID, // Ensure this is 'courseId' as per your DB model
     startDate: assessment.startDate
       ? assessment.startDate.toISOString()
       : undefined,
@@ -42,30 +41,22 @@ export const formatAssessmentForStudent = (
 ): AssessmentAPI => {
   const questions =
     "questions" in assessment
-      ? assessment.questions.map((question: QuestionDB) => {
-          let parsedOptions =
+      ? assessment.questions.map((question) => {
+          const options =
             typeof question.options === "string"
               ? JSON.parse(question.options)
-              : null;
-          if (parsedOptions && "correct" in parsedOptions) {
-            delete parsedOptions.correct;
+              : {};
+          if (typeof options === "object" && "correct" in options) {
+            delete options.correct;
           }
-
-          const optionsWithoutCorrect = parsedOptions
-            ? JSON.stringify(parsedOptions)
-            : null;
-
           return {
-            ...question,
-            options: optionsWithoutCorrect, // Using modified or original options string
+            ...formatQuestion(question),
+            options: JSON.stringify(options),
           };
         })
       : [];
 
-  return {
-    ...formatAssessment(assessment), // Assuming formatAssessment is compatible or needs minor adjustments
-    questions,
-  };
+  return { ...formatAssessment(assessment), questions };
 };
 
 export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
