@@ -11,6 +11,7 @@ import {
 import { AssessmentDetails } from "@/data/assessment";
 
 // Adjust the formatAssessment function to check for the presence of questions and submissions
+// questions can be empty for Assignment
 export const formatAssessment = (
   assessment: AssessmentDB | AssessmentDetails,
 ): AssessmentAPI => {
@@ -25,7 +26,7 @@ export const formatAssessment = (
     id: assessment.id,
     title: assessment.title,
     description: assessment.description ?? undefined,
-    courseId: assessment.courseID, // Ensure this is 'courseId' as per your DB model
+    courseId: assessment.courseID,
     startDate: assessment.startDate
       ? assessment.startDate.toISOString()
       : undefined,
