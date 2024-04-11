@@ -13,7 +13,7 @@ import { JSONContent } from "novel";
 interface Props {
   forum: ForumType;
   threads: Thread[];
-  activeThreadId: string;
+  activeThreadId: string | null;
   onCreateThreadAndPost: (title: string, content: JSONContent) => void;
   onClickCancelNewThread: () => void;
 
@@ -88,7 +88,7 @@ export const Forum: React.FC<Props> = ({
 
 interface StatefulProps {
   forumId: string;
-  activeThreadId: string;
+  activeThreadId: string | null;
   onChangeActiveThreadId: (threadId: string | null) => void;
 }
 

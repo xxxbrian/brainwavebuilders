@@ -51,7 +51,7 @@ export const ThreadCard: React.FC<CardProps> = ({
 };
 
 interface ListProps {
-  activeThreadId: string;
+  activeThreadId: string | null;
   threads: Thread[];
   className?: string;
   onClickThread?: (thread: Thread) => void;
