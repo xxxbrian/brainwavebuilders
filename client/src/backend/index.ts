@@ -348,6 +348,16 @@ export interface GetForumByCourseIDResponse {
     forum: Forum;
 }
 
+// GetForumByIDRequest is the request that is sent to the getForumByID endpoint.
+export interface GetForumByIDRequest {
+    id: string;
+}
+
+// GetForumByIDResponse is the response that is sent to the getForumByID endpoint.
+export interface GetForumByIDResponse {
+    forum: Forum;
+}
+
 // GetThreadsRequest is the request that is sent to the getThreads endpoint.
 export interface GetThreadsRequest {
     forumID: string;
@@ -1037,6 +1047,35 @@ export class BrainwavesClient {
         }
 
         return json as GetForumByCourseIDResponse;
+    }
+
+
+
+    async getForumByID(request: GetForumByIDRequest): Promise<GetForumByIDResponse> {
+        const response = await fetch(`${this.base_url}/getForumByID`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetForumByIDResponse;
     }
 
 

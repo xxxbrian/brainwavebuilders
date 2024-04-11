@@ -1,11 +1,11 @@
 "use client";
 
 import { useCourse } from "@/contexts/CourseContext";
-import { WithStudentRole, WithTeacherRole } from "@/contexts/CourseRoleContext";
 import AdvancedEditor from "@/components/editor/advanced-editor";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { CenteredLoading } from "@/components/loading";
 import { useBackend } from "@/hooks/useBackend";
+import { StatefulForum } from "@/components/forum/Forum";
 
 export const ForumPage: React.FC = () => {
   const course = useCourse();
@@ -28,21 +28,24 @@ export const ForumPage: React.FC = () => {
     void inner();
   }, [backend, course]);
 
+  const [activeThreadId, setActiveThreadId] = useState<string>("");
+
+  const onChangeActiveThreadId = useCallback((threadId: string) => {
+    setActiveThreadId(threadId);
+  }, []);
+
   if (forumId === null) return <CenteredLoading />;
 
   return (
-    <div className="flex flex-col justify-center items-center space-y-4">
+    <div className="flex flex-col space-y-4 h-full">
       <h1>
         Forum CourseID={course.id} ForumID={forumId}
       </h1>
-      <WithTeacherRole>
-        <p>Only teachers can see this</p>
-      </WithTeacherRole>
-
-      <WithStudentRole>
-        <p>Only students can see this</p>
-      </WithStudentRole>
-      <AdvancedEditor />
+      <StatefulForum
+        forumId={forumId}
+        activeThreadId={activeThreadId}
+        onChangeActiveThreadId={onChangeActiveThreadId}
+      />
     </div>
   );
 };

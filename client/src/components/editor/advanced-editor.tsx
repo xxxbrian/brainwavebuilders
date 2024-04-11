@@ -50,8 +50,11 @@ const AdvancedEditor = () => {
 
   useEffect(() => {
     const content = window.localStorage.getItem("novel-content");
-    if (content) setInitialContent(JSON.parse(content));
-    else setInitialContent(mockEditorContent);
+    if (content) {
+      setInitialContent(JSON.parse(content));
+    } else {
+      setInitialContent(mockEditorContent);
+    }
   }, []);
 
   if (!initialContent) return null;
@@ -79,7 +82,7 @@ const AdvancedEditor = () => {
             },
           }}
           onUpdate={({ editor }) => {
-            debouncedUpdates(editor);
+            void debouncedUpdates(editor);
             setSaveStatus("Unsaved");
           }}
           slotAfter={<ImageResizer />}
@@ -92,7 +95,7 @@ const AdvancedEditor = () => {
               {suggestionItems.map((item) => (
                 <EditorCommandItem
                   value={item.title}
-                  onCommand={(val) => item.command(val)}
+                  onCommand={(val) => item.command?.(val)}
                   className={`flex w-full items-center space-x-2 rounded-md px-2 py-1 text-left text-sm hover:bg-accent aria-selected:bg-accent `}
                   key={item.title}
                 >

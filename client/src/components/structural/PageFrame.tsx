@@ -25,6 +25,7 @@ interface Props extends PropsWithChildren {
   left?: React.ReactNode;
   right?: React.ReactNode;
   standardWidth?: boolean;
+  padding?: boolean;
 }
 
 export const PageFrame: React.FC<Props> = ({
@@ -34,6 +35,7 @@ export const PageFrame: React.FC<Props> = ({
   left,
   right,
   standardWidth = true,
+  padding = true,
 }) => {
   const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
 
@@ -41,27 +43,10 @@ export const PageFrame: React.FC<Props> = ({
     setIsSideNavOpen((prev) => !prev);
   }, []);
 
-  const [hoverSideNav, setHoverSideNav] = React.useState(false);
-
-  // const displaySideNav = hoverSideNav || isSideNavOpen;
-
-  const onHoverSideNav = useCallback(() => {
-    setHoverSideNav(true);
-  }, []);
-
-  const onLeaveSideNav = useCallback(() => {
-    setHoverSideNav(false);
-  }, []);
-
   return (
     <div className={`${className ?? ""}`}>
       <div className="flex relative h-screen overflow-hidden">
-        <SideNav
-          isOpen={isSideNavOpen}
-          className="overflow-y-auto pt-28"
-          onMouseEnter={onHoverSideNav}
-          onMouseLeave={onLeaveSideNav}
-        />
+        <SideNav isOpen={isSideNavOpen} className="overflow-y-auto pt-28" />
 
         <div className="flex flex-col space-x-4 relative flex-1 overflow-y-auto">
           <TopNav
@@ -72,7 +57,7 @@ export const PageFrame: React.FC<Props> = ({
             right={right}
             className="fixed left-0 right-0 z-40"
           />
-          <div className={`px-4 flex-1 pt-24`}>
+          <div className={`${padding ? "px-4" : ""} flex-1 pt-24`}>
             {standardWidth ? (
               <div
                 className={`${standardWidth ? "py-10 max-w-7xl mx-auto" : ""}`}

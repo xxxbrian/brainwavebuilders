@@ -88,7 +88,11 @@ export default function ClassroomPageLayout({
   return (
     <CourseContext.Provider value={course}>
       <CourseRoleContext.Provider value={role ?? ""}>
-        <PageFrame title={`${course.name}`} standardWidth={false}>
+        <PageFrame
+          title={`${course.name}`}
+          standardWidth={false}
+          padding={false}
+        >
           {children}
         </PageFrame>
       </CourseRoleContext.Provider>
