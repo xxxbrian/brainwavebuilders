@@ -211,6 +211,7 @@ export interface CreateAssessmentRequest {
     startDate?: string;
     dueDate?: string;
     type: string;
+    questions?: Question[];
 }
 
 // CreateAssessmentResponse is the response that is sent to the createAssessment endpoint.

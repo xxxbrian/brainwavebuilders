@@ -18,20 +18,19 @@ export const createAssessment = async (
   if (userRole !== "TEACHER") {
     throw new APIError("Forbidden", "FORBIDDEN");
   }
+  validateRequest(request);
 
   try {
-    validateRequest(request);
-
     const assessment = await createAssessmentData(request);
 
-    return { assessment: formatAssessmentResponse(assessment) };
+    const formattedAssessment = formatAssessmentResponse(assessment);
+
+    return { assessment: formattedAssessment };
   } catch (error) {
     console.error("Error in createAssessment handler:", error);
-
     if (error instanceof APIError) {
       throw error;
     }
-
     throw new APIError("Failed to create assessment", "UNKNOWN_ERROR");
   }
 };

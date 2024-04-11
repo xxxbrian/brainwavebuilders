@@ -1,10 +1,41 @@
 import { Course, User } from "@/backend";
 import { type Event } from "@/components/calendar/Calendar";
+import { Assessment } from "@/backend";
 
 export const UserData: User = {
   email: "lincoln@yyjlincoln.com",
   firstName: "Lincoln",
   lastName: "Yan",
+};
+
+export const quizData: Assessment = {
+  id: "1",
+  title: "Final Exam",
+  description:
+    "This course aims for students to become proficient in a high-level programming language, C. It also focuses on long-term mental preparedness for programming, including problem-solving, debugging, and testing.",
+  courseId: "COMP1522",
+  type: "exam",
+  startDate: "2024-04-10T00:00:00Z",
+  dueDate: "2024-04-12T00:00:00Z",
+  questions: [
+    {
+      assessmentId: "1",
+      id: "question1",
+      title: "Which city is the capital of France?",
+      type: "MCQ",
+      options: JSON.stringify(["Paris", "Berlin", "Rome"]),
+      points: 5,
+    },
+    {
+      assessmentId: "1",
+      id: "question2",
+      title: "Explain the process of photosynthesis.",
+      type: "SAQ",
+      points: 10,
+      // No options or correct answer provided for SAQ
+    },
+  ],
+  submissions: [],
 };
 
 export const CourseData: Course = {
@@ -60,4 +91,164 @@ export const mockEvents = () => {
     }
   }
   return events;
+};
+
+export const mockEditorContent = {
+  type: "doc",
+  content: [
+    {
+      type: "heading",
+      attrs: { level: 1 },
+      content: [
+        { type: "text", text: "This is a " },
+        {
+          type: "text",
+          marks: [{ type: "textStyle", attrs: { color: "#9333EA" } }],
+          text: "Heading",
+        },
+        { type: "text", text: " 1" },
+      ],
+    },
+    {
+      type: "heading",
+      attrs: { level: 2 },
+      content: [
+        { type: "text", text: "This is a " },
+        {
+          type: "text",
+          marks: [{ type: "textStyle", attrs: { color: "#E00000" } }],
+          text: "Heading",
+        },
+        { type: "text", text: " 2" },
+      ],
+    },
+    {
+      type: "heading",
+      attrs: { level: 3 },
+      content: [
+        { type: "text", text: "This is a " },
+        {
+          type: "text",
+          marks: [{ type: "textStyle", attrs: { color: "#EAB308" } }],
+          text: "Heading",
+        },
+        { type: "text", text: " 3" },
+      ],
+    },
+    {
+      type: "bulletList",
+      attrs: { tight: true },
+      content: [
+        {
+          type: "listItem",
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "This is a List" }],
+            },
+          ],
+        },
+        {
+          type: "listItem",
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "This is a List" }],
+            },
+          ],
+        },
+        {
+          type: "listItem",
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "This is a List" }],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "paragraph",
+      content: [
+        { type: "text", text: "This is plain text" },
+        { type: "hardBreak" },
+        { type: "text", text: "This is plain text with " },
+        { type: "text", marks: [{ type: "bold" }], text: "bold," },
+        { type: "text", text: " " },
+        { type: "text", marks: [{ type: "italic" }], text: "Italic, " },
+        { type: "text", marks: [{ type: "underline" }], text: "underline" },
+        { type: "text", marks: [{ type: "italic" }], text: ", " },
+        { type: "text", marks: [{ type: "strike" }], text: "strikethrough" },
+        { type: "text", marks: [{ type: "italic" }], text: ", " },
+        { type: "text", marks: [{ type: "code" }], text: "code" },
+        { type: "text", text: " and " },
+        {
+          type: "text",
+          marks: [{ type: "textStyle", attrs: { color: "#9333EA" } }],
+          text: "beautiful",
+        },
+        { type: "text", text: " " },
+        {
+          type: "text",
+          marks: [{ type: "textStyle", attrs: { color: "#FFA500" } }],
+          text: "colors",
+        },
+        {
+          type: "text",
+          marks: [{ type: "textStyle", attrs: { color: "#2563EB" } }],
+          text: " !",
+        },
+      ],
+    },
+    {
+      type: "taskList",
+      content: [
+        {
+          type: "taskItem",
+          attrs: { checked: false },
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "This is a TODO LIST" }],
+            },
+          ],
+        },
+        {
+          type: "taskItem",
+          attrs: { checked: true },
+          content: [
+            {
+              type: "paragraph",
+              content: [{ type: "text", text: "This is a finished TODO list" }],
+            },
+          ],
+        },
+      ],
+    },
+    {
+      type: "blockquote",
+      content: [
+        {
+          type: "paragraph",
+          content: [{ type: "text", text: "this is a quote" }],
+        },
+      ],
+    },
+    {
+      type: "image",
+      attrs: {
+        src: "https://avatars.githubusercontent.com/u/65097138",
+        alt: "xxxbrian.png",
+        title: "xxxbrian.png",
+        width: null,
+        height: null,
+      },
+    },
+    {
+      type: "codeBlock",
+      attrs: { language: null },
+      content: [{ type: "text", text: "fn the_code() {\n\n}" }],
+    },
+  ],
 };

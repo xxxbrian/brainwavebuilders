@@ -9,21 +9,8 @@ import {
 } from "@/apis";
 import { hasCourse } from "./course";
 
-// Extend the CreateAssessmentRequest to include an optional array of questions
-interface ExtendedCreateAssessmentRequest extends CreateAssessmentRequest {
-  questions?: {
-    title: string;
-    type: string;
-    options: {
-      options: string[]; // Array of option strings
-      correct: string; // The correct answer
-    };
-    points: number;
-  }[];
-}
-
 export const createAssessment = async (
-  data: ExtendedCreateAssessmentRequest,
+  data: CreateAssessmentRequest,
 ): Promise<Assessment> => {
   try {
     const courseExists = await hasCourse(data.courseId);
@@ -32,20 +19,19 @@ export const createAssessment = async (
       throw new APIError("Course not found", "COURSE_NOT_FOUND");
     }
 
-    // Use a transaction if creating both assessments and questions
     const assessment = await db.$transaction(async (transactionalDb) => {
       const createdAssessment = await transactionalDb.assessment.create({
         data: {
           title: data.title,
           description: data.description,
           courseID: data.courseId,
-          startDate: data.startDate ? new Date(data.startDate) : undefined,
-          dueDate: data.dueDate ? new Date(data.dueDate) : undefined,
+          startDate: data.startDate ? new Date(data.startDate) : null,
+          dueDate: data.dueDate ? new Date(data.dueDate) : null,
           type: data.type,
         },
       });
 
-      // If questions are provided, create them using the transactional client
+      // Create questions if they are included in the request
       if (data.questions && data.questions.length > 0) {
         await Promise.all(
           data.questions.map((question) =>
@@ -54,7 +40,7 @@ export const createAssessment = async (
                 assessmentId: createdAssessment.id,
                 title: question.title,
                 type: question.type,
-                options: question.options, // Directly pass the JSON object
+                options: JSON.stringify(question.options),
                 points: question.points,
               },
             }),
