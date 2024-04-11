@@ -1,7 +1,7 @@
 import { AdvancedEditor } from "@/components/editor/AdvancedEditor";
 import { Button, TextField } from "@radix-ui/themes";
 import { JSONContent } from "novel";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 interface Props {
   onClickCreateThreadAndPost: (title: string, content: JSONContent) => void;
@@ -13,6 +13,10 @@ export const NewThreadDisplay: React.FC<Props> = ({
   onClickCancel,
 }) => {
   const [title, setTitle] = useState("");
+  const [content, setContent] = useState<JSONContent>({
+    type: "doc",
+    content: [],
+  });
 
   const onChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,8 +26,8 @@ export const NewThreadDisplay: React.FC<Props> = ({
   );
 
   const onClickPost = useCallback(() => {
-    onClickCreatePost(title, {} as JSONContent);
-  }, [onClickCreatePost, title]);
+    onClickCreatePost(title, content);
+  }, [onClickCreatePost, title, content]);
 
   return (
     <div className="flex flex-col px-4 py-4 space-y-4">
@@ -37,7 +41,11 @@ export const NewThreadDisplay: React.FC<Props> = ({
         className="w-full text-2xl"
       />
 
-      <AdvancedEditor className="border rounded-md overflow-y-auto overflow-x-hidden max-h-[50vh] border-gray-300" />
+      <AdvancedEditor
+        className="border rounded-md overflow-y-auto overflow-x-hidden max-h-[50vh] border-gray-300"
+        value={content}
+        setValue={setContent}
+      />
 
       <div className="flex justify-end space-x-2">
         <Button onClick={onClickCancel} variant="surface">
