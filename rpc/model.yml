@@ -165,6 +165,7 @@ endpoints:
       startDate?: string
       dueDate?: string
       type: string
+      questions?: Question[]
     response:
       assessment: Assessment
     service: typescript
