@@ -96,3 +96,29 @@ export const canCreatePostInThread = async (
 
   return canCreateThreadInForum(user, thread.forumID);
 };
+
+export const canViewThread = async (
+  user: User,
+  threadID: string,
+): Promise<boolean> => {
+  const thread = await getThreadByID(threadID);
+
+  if (!thread) {
+    return false;
+  }
+
+  return canCreateThreadInForum(user, thread.forumID);
+};
+
+export const canViewPost = async (
+  user: User,
+  postID: string,
+): Promise<boolean> => {
+  const post = await getPostByID(postID);
+
+  if (!post) {
+    return false;
+  }
+
+  return canViewThread(user, post.threadID);
+};

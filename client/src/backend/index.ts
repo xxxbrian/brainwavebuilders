@@ -102,6 +102,17 @@ export interface Thread {
     posts: Post[];
 }
 
+export interface ThreadStats {
+    threadID: string;
+    views: number;
+}
+
+export interface PostStats {
+    postID: string;
+    likes: number;
+    liked: boolean;
+}
+
 export interface Post {
     id: string;
     threadID: string;
@@ -416,6 +427,37 @@ export interface GetRoleInCourseRequest {
 // GetRoleInCourseResponse is the response that is sent to the getRoleInCourse endpoint.
 export interface GetRoleInCourseResponse {
     role: string | null;
+}
+
+// GetThreadAndPostStatsRequest is the request that is sent to the getThreadAndPostStats endpoint.
+export interface GetThreadAndPostStatsRequest {
+    threadID: string;
+}
+
+// GetThreadAndPostStatsResponse is the response that is sent to the getThreadAndPostStats endpoint.
+export interface GetThreadAndPostStatsResponse {
+    thread: ThreadStats;
+    posts: Record<string, PostStats>;
+}
+
+// ToggleLikePostRequest is the request that is sent to the toggleLikePost endpoint.
+export interface ToggleLikePostRequest {
+    postID: string;
+}
+
+// ToggleLikePostResponse is the response that is sent to the toggleLikePost endpoint.
+export interface ToggleLikePostResponse {
+
+}
+
+// IncrementThreadViewRequest is the request that is sent to the incrementThreadView endpoint.
+export interface IncrementThreadViewRequest {
+    threadID: string;
+}
+
+// IncrementThreadViewResponse is the response that is sent to the incrementThreadView endpoint.
+export interface IncrementThreadViewResponse {
+
 }
 
 
@@ -1250,6 +1292,93 @@ export class BrainwavesClient {
         }
 
         return json as GetRoleInCourseResponse;
+    }
+
+
+
+    async getThreadAndPostStats(request: GetThreadAndPostStatsRequest): Promise<GetThreadAndPostStatsResponse> {
+        const response = await fetch(`${this.base_url}/getThreadAndPostStats`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetThreadAndPostStatsResponse;
+    }
+
+
+
+    async toggleLikePost(request: ToggleLikePostRequest): Promise<ToggleLikePostResponse> {
+        const response = await fetch(`${this.base_url}/toggleLikePost`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as ToggleLikePostResponse;
+    }
+
+
+
+    async incrementThreadView(request: IncrementThreadViewRequest): Promise<IncrementThreadViewResponse> {
+        const response = await fetch(`${this.base_url}/incrementThreadView`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as IncrementThreadViewResponse;
     }
 }
 

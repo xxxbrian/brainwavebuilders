@@ -173,3 +173,19 @@ model Post {
 
     deletedAt DateTime?
 }
+
+model ThreadViews {
+    id       String   @id @default(uuid())
+    threadID String
+    userID   String
+    viewedAt DateTime @default(now())
+}
+
+model PostLikes {
+    postID String
+    userID String
+
+    @@id([postID, userID])
+    @@unique([postID, userID])
+    @@index([postID, userID])
+}

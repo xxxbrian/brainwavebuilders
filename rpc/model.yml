@@ -87,6 +87,15 @@ types:
 
     posts: Post[]
 
+  ThreadStats:
+    threadID: string
+    views: int
+
+  PostStats:
+    postID: string
+    likes: int
+    liked: boolean
+
   Post:
     id: string
     threadID: string
@@ -304,4 +313,24 @@ endpoints:
       courseId: string
     response:
       role: string | null
+    service: typescript
+
+  getThreadAndPostStats:
+    request:
+      threadID: string
+    response:
+      thread: ThreadStats
+      posts: Map<string, PostStats>
+    service: typescript
+
+  toggleLikePost:
+    request:
+      postID: string
+    response:
+    service: typescript
+
+  incrementThreadView:
+    request:
+      threadID: string
+    response:
     service: typescript

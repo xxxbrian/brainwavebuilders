@@ -1,4 +1,4 @@
-import { Post, Thread } from "@/backend";
+import { Post, PostStats, Thread, ThreadStats } from "@/backend";
 import { Button } from "@radix-ui/themes";
 import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
@@ -11,9 +11,20 @@ interface Props {
   onUpsertPost: (post: Post) => void;
   onUpsertThread: (thread: Thread) => void;
   thread: Thread;
+
+  onToggleLike: (post: Post) => void;
+
+  threadStats?: ThreadStats;
+  postStats?: Record<string, PostStats>;
 }
 
-export const ThreadDisplay: React.FC<Props> = ({ thread, onUpsertPost }) => {
+export const ThreadDisplay: React.FC<Props> = ({
+  thread,
+  onUpsertPost,
+  postStats,
+  threadStats,
+  onToggleLike,
+}) => {
   const [draftContent, setDraftContent] = useState<JSONContent>({
     type: "doc",
     content: [],
@@ -33,10 +44,17 @@ export const ThreadDisplay: React.FC<Props> = ({ thread, onUpsertPost }) => {
 
   return (
     <div className="flex flex-col px-4 py-4 space-y-4">
-      <div className="text-4xl mb-8">{thread.title}</div>
+      <div className="text-4xl mb-4">{thread.title}</div>
 
-      {thread.posts.map((post) => (
-        <PostDisplay post={post} key={post.id} />
+      {thread.posts.map((post, idx) => (
+        <PostDisplay
+          post={post}
+          key={post.id}
+          asThreadContent={idx === 0}
+          postStats={postStats?.[post.id] ?? undefined}
+          threadStats={threadStats}
+          onClickLike={onToggleLike}
+        />
       ))}
 
       <div className="text-2xl mt-12">Reply</div>
