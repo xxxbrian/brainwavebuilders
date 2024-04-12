@@ -7,7 +7,7 @@ Python 3.11.7 (main, Dec  4 2023, 18:10:11) [Clang 15.0.0 (clang-1500.1.0.2.5)] 
 Type "help", "copyright", "credits" or "license" for more information.
 >>> import tstype_py as ts
 >>> import json
->>> text = "string|Map<string,Map<number, Array<string | number>>>[][]"
+>>> text = "string|Record<string,Record<number, Array<string | number>>>[][]"
 >>> # parse a type definition string into a JSON object
 >>> json.loads(ts.parse_type_definition(text))
 {'Union': [{'Basic': 'string'}, {'Array': {'Array': {'Map': [{'Basic': 'string'}, {'Map': [{'Basic': 'number'}, {'Array': {'Union': [{'Basic': 'string'}, {'Basic': 'number'}]}}]}]}}}]}
@@ -15,5 +15,5 @@ Type "help", "copyright", "credits" or "license" for more information.
 >>> ts.parse_type_definition(text)
 '{"Union":[{"Basic":"string"},{"Array":{"Array":{"Map":[{"Basic":"string"},{"Map":[{"Basic":"number"},{"Array":{"Union":[{"Basic":"string"},{"Basic":"number"}]}}]}]}}}]}'
 >>> ts.build_type_definition('{"Union":[{"Basic":"string"},{"Array":{"Array":{"Map":[{"Basic":"string"},{"Map":[{"Basic":"number"},{"Array":{"Union":[{"Basic":"string"},{"Basic":"number"}]}}]}]}}}]}')
-'Map<string, Map<number, string | number[]>>[][] | string'
+'Record<string, Record<number, string | number[]>>[][] | string'
 ```

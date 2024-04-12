@@ -11,11 +11,11 @@ import React from "react";
 export const Calendar: React.FC = () => {
   const mockTime = new Date("2024-03-01");
   const mockEvents = () => {
-    const events = new Map<string, Event[]>();
+    const events: Record<string, Event[]> = {};
     for (let i = 1; i <= 31; i++) {
       const key = `${mockTime.getFullYear()}-${mockTime.getMonth() + 1}-${i}`;
       if (i % 9 === 0) {
-        events.set(key, [
+        events[key] = [
           {
             name: "CS3900 Meeting",
             time: "3 PM - 5 PM",
@@ -33,9 +33,9 @@ export const Calendar: React.FC = () => {
                 () => Math.random() - 0.5,
               )[0] ?? "exam",
           },
-        ]);
+        ];
       } else {
-        events.set(key, []);
+        events[key] = [];
       }
     }
     return events;
