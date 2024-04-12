@@ -5,6 +5,7 @@ import { app } from "@/globals";
 import { incrementThreadView } from "@/handlers/incrementThreadView";
 import { ping } from "@/handlers/ping";
 import { submitAssignment } from "@/handlers/submitAssignment";
+import { forgotPassword } from "@/handlers/forgotPassword";
 import { getForumByCourseID } from "@/handlers/getForumByCourseID";
 import { login } from "@/handlers/login";
 import { toggleLikePost } from "@/handlers/toggleLikePost";
@@ -29,12 +30,12 @@ import { createCourse } from "@/handlers/createCourse";
 import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
+import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
-import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
-import { forgotPassword } from "@/handlers/forgotPassword";
+import { resetPassword } from "@/handlers/resetPassword";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -276,6 +277,17 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
+
+}
+
+// ResetPasswordRequest is the request that is sent to the resetPassword endpoint.
+export interface ResetPasswordRequest {
+    password: string;
+    newPassword: string;
+}
+
+// ResetPasswordResponse is the response that is sent to the resetPassword endpoint.
+export interface ResetPasswordResponse {
 
 }
 
@@ -759,6 +771,28 @@ app.post('/api/setUserProfile', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request setUserProfile with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// resetPassword is the endpoint handler for the resetPassword endpoint.
+// It wraps around the function at @/handlers/resetPassword.
+app.post('/api/resetPassword', async (req, res) => {
+    const request: ResetPasswordRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: ResetPasswordResponse = await resetPassword(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request resetPassword with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
