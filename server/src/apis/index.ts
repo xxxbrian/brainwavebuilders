@@ -2,37 +2,39 @@
 
 
 import { app } from "@/globals";
-import { checkEmail } from "@/handlers/checkEmail";
-import { createAssessment } from "@/handlers/createAssessment";
-import { createCourse } from "@/handlers/createCourse";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { deletePost } from "@/handlers/deletePost";
-import { deleteThread } from "@/handlers/deleteThread";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { getCourses } from "@/handlers/getCourses";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getForumByCourseID } from "@/handlers/getForumByCourseID";
-import { getForumByID } from "@/handlers/getForumByID";
-import { getRoleInCourse } from "@/handlers/getRoleInCourse";
-import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
-import { getThreads } from "@/handlers/getThreads";
-import { getUserCourses } from "@/handlers/getUserCourses";
-import { getUserInfo } from "@/handlers/getUserInfo";
 import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { joinCourse } from "@/handlers/joinCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { login } from "@/handlers/login";
 import { ping } from "@/handlers/ping";
-import { register } from "@/handlers/register";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { submitAnswers } from "@/handlers/submitAnswers";
 import { submitAssignment } from "@/handlers/submitAssignment";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { login } from "@/handlers/login";
 import { toggleLikePost } from "@/handlers/toggleLikePost";
-import { upsertPost } from "@/handlers/upsertPost";
+import { getCourses } from "@/handlers/getCourses";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { getThreads } from "@/handlers/getThreads";
+import { getRoleInCourse } from "@/handlers/getRoleInCourse";
+import { upsertPost } from "@/handlers/upsertPost";
+import { joinCourse } from "@/handlers/joinCourse";
+import { deletePost } from "@/handlers/deletePost";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { createAssessment } from "@/handlers/createAssessment";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { getForumByID } from "@/handlers/getForumByID";
+import { createCourse } from "@/handlers/createCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { register } from "@/handlers/register";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
+import { deleteThread } from "@/handlers/deleteThread";
+import { checkEmail } from "@/handlers/checkEmail";
+import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
+import { forgotPassword } from "@/handlers/forgotPassword";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -223,6 +225,28 @@ export interface LoginRequest {
 export interface LoginResponse {
     user: User;
     token: Token;
+}
+
+// VerifyForgotPasswordRequest is the request that is sent to the verifyForgotPassword endpoint.
+export interface VerifyForgotPasswordRequest {
+    email: string;
+}
+
+// VerifyForgotPasswordResponse is the response that is sent to the verifyForgotPassword endpoint.
+export interface VerifyForgotPasswordResponse {
+
+}
+
+// ForgotPasswordRequest is the request that is sent to the forgotPassword endpoint.
+export interface ForgotPasswordRequest {
+    email: string;
+    newPassword: string;
+    otp: string;
+}
+
+// ForgotPasswordResponse is the response that is sent to the forgotPassword endpoint.
+export interface ForgotPasswordResponse {
+
 }
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
@@ -625,6 +649,50 @@ app.post('/api/login', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request login with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// verifyForgotPassword is the endpoint handler for the verifyForgotPassword endpoint.
+// It wraps around the function at @/handlers/verifyForgotPassword.
+app.post('/api/verifyForgotPassword', async (req, res) => {
+    const request: VerifyForgotPasswordRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: VerifyForgotPasswordResponse = await verifyForgotPassword(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request verifyForgotPassword with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// forgotPassword is the endpoint handler for the forgotPassword endpoint.
+// It wraps around the function at @/handlers/forgotPassword.
+app.post('/api/forgotPassword', async (req, res) => {
+    const request: ForgotPasswordRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: ForgotPasswordResponse = await forgotPassword(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request forgotPassword with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

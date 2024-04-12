@@ -9,6 +9,8 @@ const kPublicAPIs = [
   "/api/checkEmail",
   "/api/register",
   "/api/verifyEmail",
+  "/api/verifyForgotPassword",
+  "/api/forgotPassword",
 ];
 
 export const app = express();

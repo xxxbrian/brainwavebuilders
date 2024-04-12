@@ -193,6 +193,28 @@ export interface LoginResponse {
     token: Token;
 }
 
+// VerifyForgotPasswordRequest is the request that is sent to the verifyForgotPassword endpoint.
+export interface VerifyForgotPasswordRequest {
+    email: string;
+}
+
+// VerifyForgotPasswordResponse is the response that is sent to the verifyForgotPassword endpoint.
+export interface VerifyForgotPasswordResponse {
+
+}
+
+// ForgotPasswordRequest is the request that is sent to the forgotPassword endpoint.
+export interface ForgotPasswordRequest {
+    email: string;
+    newPassword: string;
+    otp: string;
+}
+
+// ForgotPasswordResponse is the response that is sent to the forgotPassword endpoint.
+export interface ForgotPasswordResponse {
+
+}
+
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
 
@@ -634,6 +656,64 @@ export class BrainwavesClient {
         }
 
         return json as LoginResponse;
+    }
+
+
+
+    async verifyForgotPassword(request: VerifyForgotPasswordRequest): Promise<VerifyForgotPasswordResponse> {
+        const response = await fetch(`${this.base_url}/verifyForgotPassword`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as VerifyForgotPasswordResponse;
+    }
+
+
+
+    async forgotPassword(request: ForgotPasswordRequest): Promise<ForgotPasswordResponse> {
+        const response = await fetch(`${this.base_url}/forgotPassword`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as ForgotPasswordResponse;
     }
 
 

@@ -21,6 +21,8 @@ interface Props {}
 const kEmailError =
   "There is already an account associated with this email. Please sign in or use a different email.";
 
+const kAccountNotFoundError = "Account not found. Please check your email.";
+
 export const Login: React.FC<Props> = () => {
   const user = useCurrentUser();
   const router = useRouter();
@@ -89,6 +91,9 @@ export const Login: React.FC<Props> = () => {
   }, []);
 
   const onClickForgotPassword = useCallback(() => {
+    setFirstName("");
+    setLastName("");
+    setPassword("");
     setStep("reset");
   }, []);
 
@@ -160,11 +165,26 @@ export const Login: React.FC<Props> = () => {
     }
   }, [email, errorRef, setError]);
 
-  const onClickSendResetEmail = useCallback(() => {
-    // noop
-  }, []);
+  const onClickSendResetEmail = useCallback(async () => {
+    try {
+      const { taken } = await backend.checkEmail({ email });
+      if (!taken) {
+        setPassword("");
+        setError(kAccountNotFoundError);
+        return;
+      }
 
-  const onClickVerify = useCallback(async () => {
+      await backend.verifyForgotPassword({ email });
+
+      setStep("verify-reset");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [backend, email, setError]);
+
+  const onClickRegisterVerify = useCallback(async () => {
     try {
       await backend.register({
         email,
@@ -188,6 +208,21 @@ export const Login: React.FC<Props> = () => {
     setError,
     verificationCode,
   ]);
+
+  const onClickResetVerify = useCallback(async () => {
+    try {
+      await backend.forgotPassword({
+        email,
+        newPassword: password,
+        otp: verificationCode,
+      });
+      setStep("login");
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      }
+    }
+  }, [backend, email, password, setError, verificationCode]);
 
   if (!featured) {
     return <CenteredLoading />;
@@ -246,7 +281,11 @@ export const Login: React.FC<Props> = () => {
             verificationCode={verificationCode}
             onChangeVerificationCode={onChangeVerificationCode}
             onClickBack={onClickBack}
-            onClickVerify={onClickVerify}
+            onClickVerify={
+              step === "verify-register"
+                ? onClickRegisterVerify
+                : onClickResetVerify
+            }
           />
         )}
       </>

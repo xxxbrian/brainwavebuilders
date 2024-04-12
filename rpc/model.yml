@@ -155,6 +155,20 @@ endpoints:
       token: Token
     service: typescript
 
+  verifyForgotPassword:
+    request:
+      email: string
+    response:
+    service: typescript
+
+  forgotPassword:
+    request:
+      email: string
+      newPassword: string
+      otp: string
+    response:
+    service: typescript
+
   getFeatured:
     request:
     response:
