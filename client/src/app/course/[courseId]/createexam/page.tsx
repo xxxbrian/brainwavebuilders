@@ -5,6 +5,7 @@ import AssessmentInfo from "@/components/assessment/AssessmentInfo";
 import QuestionComponent from "@/components/assessment/Question";
 import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { IoIosArrowBack } from "react-icons/io";
 
 type Question = {
   id: string;
@@ -27,6 +28,11 @@ export const Assessment: React.FC = () => {
 
   const onClickSave = useCallback(async () => {
     // TODO: Send exam info to backend
+    const newPath = pathName.replace(/\/createexam$/, "");
+    router.push(newPath);
+  }, [pathName, router]);
+
+  const onClickBack = useCallback(() => {
     const newPath = pathName.replace(/\/createexam$/, "");
     router.push(newPath);
   }, [pathName, router]);
@@ -66,7 +72,17 @@ export const Assessment: React.FC = () => {
 
   console.log(questions);
   return (
-    <div className="flex flex-col space-y-4 pt-8 pb-16 pl-16 pr-16 m-auto max-w-[1200px]">
+    <div
+      className="flex flex-col space-y-4 pt-8 pb-16 pl-16 pr-16 m-auto max-w-[1200px] "
+      onClick={onClickBack}
+    >
+      <div className="flex items-center font-bold">
+        <button className="text-xl" onClick={(e) => e.stopPropagation()}>
+          <IoIosArrowBack />
+        </button>
+        <span className="cursor-pointer">Back</span>
+      </div>
+
       <AssessmentInfo
         title={title}
         setTitle={setTitle}
