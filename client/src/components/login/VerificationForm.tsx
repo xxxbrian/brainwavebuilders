@@ -54,7 +54,7 @@ export const VerificationForm: React.FC<Props> = ({
           Back
         </Button>
         <Button variant="solid" onClick={onClickVerify} size="3">
-          Create
+          Verify
         </Button>
       </Flex>
     </div>
