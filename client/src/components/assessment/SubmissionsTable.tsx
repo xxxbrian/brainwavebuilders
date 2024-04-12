@@ -1,5 +1,7 @@
 import React from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
+import { Table } from "@radix-ui/themes";
+import { Heading } from "@radix-ui/themes";
 
 interface Submission {
   id: string;
@@ -26,38 +28,45 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   };
 
   return (
-    <div className="shadow-lg">
-      <table className="w-full rounded-b-xl">
-        <thead className="bg-gray-50 text-[#004E89]">
-          <tr>
-            <td className="py-2 font-bold text-lg pl-2">Student Name</td>
-            <td className="py-2 font-bold text-lg">Submitted Time</td>
-            <td className="py-2 font-bold text-lg">Grade</td>
-            <td></td>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+    <div>
+      <Heading color="indigo" className="p-2">
+        Recieved Submissions
+      </Heading>
+
+      <Table.Root variant="surface">
+        <Table.Header>
+          <Table.Row className="font-bold text-lg">
+            <Table.ColumnHeaderCell>Student Name</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Submitted Time</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Grade</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell></Table.ColumnHeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
           {submissions.map((submission) => (
-            <tr key={submission.id}>
-              <td className="py-2 pl-2">{submission.studentName}</td>
-              <td className="py-2">{formatDate(submission.submittedAt)}</td>
-              <td className="py-2">
+            <Table.Row key={submission.id}>
+              <Table.RowHeaderCell>
+                {submission.studentName}
+              </Table.RowHeaderCell>
+              <Table.Cell>{formatDate(submission.submittedAt)}</Table.Cell>
+              <Table.Cell>
                 {submission.grade !== undefined ? (
                   `${submission.grade}/100`
                 ) : (
                   <span className="text-red-500">Not marked yet</span>
                 )}
-              </td>
-              <td
+              </Table.Cell>
+              <Table.Cell
                 className="cursor-pointer"
                 onClick={() => onClickMark(submission.id)}
               >
                 <FaRegPenToSquare />
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table.Root>
     </div>
   );
 };

@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from "react";
+import { Heading } from "@radix-ui/themes";
+import { Table } from "@radix-ui/themes";
 
 interface AssignmentProps {
   id: string;
@@ -82,31 +84,33 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
 
   // TODO: Use Id to navigate assignment from table
   return (
-    <div className="shadow-lg">
-      <div className="flex justify-between text-3xl font-bold bg-blue-100 text-[#004E89] px-3 py-2">
-        <h1>{type}</h1>
+    <div>
+      <div className="flex justify-between p-2">
+        <Heading color="indigo">{type}</Heading>
         <button onClick={onClickAddButton}>+</button>
       </div>
-      <table className="w-full rouned-b-xl">
-        <thead className="bg-gray-50 text-[#004E89]">
-          <tr>
-            <td className="py-2 font-bold text-lg pl-2">Title</td>
-            <td className="py-2 font-bold text-lg">Start Date</td>
-            <td className="py-2 font-bold text-lg">Due Date</td>
-            <td className="py-2 font-bold text-lg">Status</td>
-          </tr>
-        </thead>
-        <tbody className="bg-white divide-y divide-gray-200">
+
+      <Table.Root variant="surface">
+        <Table.Header>
+          <Table.Row className="font-bold text-lg">
+            <Table.ColumnHeaderCell>Title</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Start Date</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Due Date</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
           {sortedAssignments.map((assignment) => (
-            <tr
+            <Table.Row
               key={assignment.id}
-              className="text-md cursor-pointer"
+              className="cursor-pointer"
               onClick={() => onClickAsessment(assignment.id)}
             >
-              <td className="py-2 pl-2">{assignment.name}</td>
-              <td className="py-2">{assignment.startDate}</td>
-              <td className="py-2">{assignment.dueDate}</td>
-              <td
+              <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
+              <Table.Cell>{assignment.startDate}</Table.Cell>
+              <Table.Cell>{assignment.dueDate}</Table.Cell>
+              <Table.Cell
                 className={`py-2 ${
                   assignment.status === "Completed"
                     ? "text-yellow-500"
@@ -116,11 +120,11 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                 }`}
               >
                 {assignment.status}
-              </td>
-            </tr>
+              </Table.Cell>
+            </Table.Row>
           ))}
-        </tbody>
-      </table>
+        </Table.Body>
+      </Table.Root>
     </div>
   );
 };
