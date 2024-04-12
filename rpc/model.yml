@@ -188,6 +188,13 @@ endpoints:
     response:
     service: typescript
 
+  resetPassword:
+    request:
+      password: string
+      newPassword: string
+    response:
+    service: typescript
+
   createAssessment:
     request:
       title: string
