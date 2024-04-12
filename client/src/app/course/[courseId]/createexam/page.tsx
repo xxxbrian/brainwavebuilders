@@ -16,7 +16,7 @@ type Question = {
   questionMark: number;
 };
 
-export const Assessment: React.FC = () => {
+export const CreateExamPage: React.FC = () => {
   const router = useRouter();
 
   const pathName = usePathname();
@@ -137,4 +137,4 @@ export const Assessment: React.FC = () => {
   );
 };
 
-export default Assessment;
+export default CreateExamPage;

@@ -16,6 +16,7 @@ interface AssignmentWithStatusProps extends AssignmentProps {
 interface AssignmentsTableProps {
   assignments: AssignmentProps[];
   type: string;
+  onClickAsessment: (assessmentId: string) => void;
   onClickAddButton: () => void;
 }
 
@@ -24,6 +25,7 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
   assignments,
   type,
   onClickAddButton,
+  onClickAsessment,
 }) => {
   const [sortedAssignments, setSortedAssignments] = useState<
     AssignmentWithStatusProps[]
@@ -96,7 +98,11 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
         </thead>
         <tbody className="bg-white divide-y divide-gray-200">
           {sortedAssignments.map((assignment) => (
-            <tr key={assignment.id} className="text-md">
+            <tr
+              key={assignment.id}
+              className="text-md cursor-pointer"
+              onClick={() => onClickAsessment(assignment.id)}
+            >
               <td className="py-2 pl-2">{assignment.name}</td>
               <td className="py-2">{assignment.startDate}</td>
               <td className="py-2">{assignment.dueDate}</td>

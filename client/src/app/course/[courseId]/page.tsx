@@ -58,6 +58,20 @@ export const CoursesPage: React.FC = ({}) => {
 
   const [isCreateAssignment, setIsCreateAssignment] = useState(false);
 
+  const onClickAssignment = useCallback(
+    (assessmentId: string) => {
+      router.push(`${pathName}/assignment/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
+  const onClickExam = useCallback(
+    (assessmentId: string) => {
+      router.push(`${pathName}/exam/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
   const onClickAddExam = useCallback(async () => {
     router.push(`${pathName}/createexam`);
   }, [pathName, router]);
@@ -147,11 +161,13 @@ export const CoursesPage: React.FC = ({}) => {
         assignments={assignmentsData}
         type="Assignment"
         onClickAddButton={onClickAddAssignment}
+        onClickAsessment={onClickAssignment}
       />
       <AssignmentsTable
         assignments={examsData}
         type="Exam"
         onClickAddButton={onClickAddExam}
+        onClickAsessment={onClickExam}
       />
       <CreateAssignmentDialog
         isOpen={isCreateAssignment}
