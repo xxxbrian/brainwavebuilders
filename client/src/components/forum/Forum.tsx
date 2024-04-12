@@ -1,8 +1,14 @@
 "use client";
 
-import { Thread, Forum as ForumType, Post } from "@/backend";
+import {
+  Thread,
+  Forum as ForumType,
+  Post,
+  ThreadStats,
+  PostStats,
+} from "@/backend";
 import { ThreadList } from "./ThreadList";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { CenteredLoading } from "../loading";
 import { useBackend } from "@/hooks/useBackend";
 import { initialState, reducer } from "./Forum.reducer";
@@ -13,7 +19,11 @@ import { JSONContent } from "novel";
 interface Props {
   forum: ForumType;
   threads: Thread[];
+
   activeThreadId: string | null;
+  activeThreadStats?: ThreadStats;
+  activePostStats?: Record<string, PostStats>;
+
   onCreateThreadAndPost: (title: string, content: JSONContent) => void;
   onClickCancelNewThread: () => void;
 
@@ -25,6 +35,8 @@ interface Props {
   onClickNewThread: () => void;
   isCreatingNewThread: boolean;
   isLoading: boolean;
+
+  onToggleLike: (post: Post) => void;
 }
 
 export const Forum: React.FC<Props> = ({
@@ -40,7 +52,10 @@ export const Forum: React.FC<Props> = ({
   onClickCancelNewThread: onCancelNewThread,
   onCreateThreadAndPost,
   isCreatingNewThread,
+  activePostStats,
+  activeThreadStats,
   isLoading,
+  onToggleLike,
 }) => {
   const onClickCancelNewThread = useCallback(() => {
     onCancelNewThread();
@@ -68,6 +83,9 @@ export const Forum: React.FC<Props> = ({
           onUpsertPost={onUpsertPost}
           onUpsertThread={onUpsertThread}
           thread={thread}
+          postStats={activePostStats}
+          threadStats={activeThreadStats}
+          onToggleLike={onToggleLike}
         />
       );
     } else {
@@ -85,6 +103,11 @@ export const Forum: React.FC<Props> = ({
         onClickNewThread={onClickNewThread}
       />
       <div className="w-full h-full overflow-hidden">{getDisplay()}</div>
+      {/* {isLoading && (
+        <div className="h-2 w-screen fixed left-0 top-0 z-50">
+          <div className="h-full bg-green-100 animate-pulse" />
+        </div>
+      )} */}
     </div>
   );
 };
@@ -111,6 +134,25 @@ export const StatefulForum: React.FC<StatefulProps> = ({
     [onChangeActiveThreadId],
   );
 
+  const reloadThreadStats = useCallback(async () => {
+    if (activeThreadIdRef.current === null) {
+      return;
+    }
+
+    dispatch({ type: "set-loading", isLoading: true });
+
+    const { thread, posts } = await backend.getThreadAndPostStats({
+      threadID: activeThreadIdRef.current,
+    });
+
+    dispatch({
+      type: "load-thread-stats",
+      threadStats: thread,
+      postStats: posts,
+    });
+    dispatch({ type: "set-loading", isLoading: false });
+  }, [backend]);
+
   const reloadThreads = useCallback(async () => {
     dispatch({ type: "set-loading", isLoading: true });
 
@@ -119,7 +161,23 @@ export const StatefulForum: React.FC<StatefulProps> = ({
     });
 
     dispatch({ type: "load-threads", threads });
-  }, [backend, forumId]);
+
+    void reloadThreadStats();
+  }, [backend, forumId, reloadThreadStats]);
+
+  const activeThreadIdRef = useRef(activeThreadId);
+
+  useEffect(() => {
+    if (activeThreadIdRef.current !== activeThreadId) {
+      activeThreadIdRef.current = activeThreadId;
+    }
+
+    const actID = activeThreadIdRef.current;
+
+    if (actID !== null) {
+      void backend.incrementThreadView({ threadID: actID });
+    }
+  }, [activeThreadId, backend]);
 
   const onCreateThreadAndPost = useCallback(
     async (title: string, content: JSONContent) => {
@@ -201,7 +259,9 @@ export const StatefulForum: React.FC<StatefulProps> = ({
     if (activeThreadId !== null) {
       dispatch({ type: "set-creating-new-thread", isCreatingNewThread: false });
     }
-  }, [activeThreadId]);
+
+    void reloadThreadStats();
+  }, [activeThreadId, reloadThreadStats]);
 
   const onClickNewThread = useCallback(() => {
     dispatch({ type: "set-creating-new-thread", isCreatingNewThread: true });
@@ -227,6 +287,17 @@ export const StatefulForum: React.FC<StatefulProps> = ({
     void inner();
   }, [backend, forumId, reloadThreads]);
 
+  const onToggleLike = useCallback(
+    async (post: Post) => {
+      await backend.toggleLikePost({
+        postID: post.id,
+      });
+
+      await reloadThreadStats();
+    },
+    [backend, reloadThreadStats],
+  );
+
   useEffect(() => {
     void reloadThreads();
   }, [reloadThreads]);
@@ -240,6 +311,8 @@ export const StatefulForum: React.FC<StatefulProps> = ({
       forum={s.forum}
       threads={s.threads}
       activeThreadId={activeThreadId}
+      activePostStats={s.activePostStats}
+      activeThreadStats={s.activeThreadStats}
       onClickThread={onClickThread}
       onUpsertThread={onUpsertThread}
       onCreateThreadAndPost={onCreateThreadAndPost}
@@ -248,6 +321,7 @@ export const StatefulForum: React.FC<StatefulProps> = ({
       onDeletePost={onDeletePost}
       onClickNewThread={onClickNewThread}
       onClickCancelNewThread={onClickCancelNewThread}
+      onToggleLike={onToggleLike}
       isCreatingNewThread={s.isCreatingNewThread}
       isLoading={s.isLoading}
     />

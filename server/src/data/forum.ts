@@ -1,10 +1,10 @@
 import {
   ForumWithCreatedBy,
   PostWithCreatedBy,
-  ThreadWithPosts,
+  ThreadWithPostsAndCounts,
 } from "@/converts/forum";
 import { db } from "@/globals";
-import { Forum, Post, Thread } from "@prisma/client";
+import { Forum, Post, PostLikes, Thread, ThreadViews } from "@prisma/client";
 
 export const createForum = async (
   createdByID: string,
@@ -56,7 +56,7 @@ export const getForumByID = async (
 export const getThreadsByForumID = async (
   forumID: string,
   userID: string,
-): Promise<ThreadWithPosts[]> => {
+): Promise<ThreadWithPostsAndCounts[]> => {
   const threads = await db.thread.findMany({
     where: {
       forumID,
@@ -191,7 +191,7 @@ export const deletePost = async (id: string): Promise<Post> => {
 
 export const getThreadByID = async (
   id: string,
-): Promise<ThreadWithPosts | null> => {
+): Promise<ThreadWithPostsAndCounts | null> => {
   const thread = await db.thread.findUnique({
     where: {
       id,
@@ -228,4 +228,95 @@ export const getPostByID = async (
   });
 
   return post;
+};
+
+export const incrementView = async (
+  threadID: string,
+  userID: string,
+): Promise<void> => {
+  await db.threadViews.create({
+    data: {
+      threadID,
+      userID,
+      viewedAt: new Date(),
+    },
+  });
+};
+
+export const getThreadViews = async (
+  threadID: string,
+): Promise<ThreadViews[]> => {
+  const threadViews = await db.threadViews.findMany({
+    where: {
+      threadID,
+    },
+  });
+
+  return threadViews;
+};
+
+export const getPostsReactions = async (
+  postIDs: string[],
+): Promise<PostLikes[]> => {
+  const postLikes = await db.postLikes.findMany({
+    where: {
+      postID: {
+        in: postIDs,
+      },
+    },
+  });
+
+  return postLikes;
+};
+
+export const getPostIDsByThreadID = async (
+  threadID: string,
+): Promise<string[]> => {
+  const posts = await db.post.findMany({
+    where: {
+      threadID,
+      deletedAt: null,
+    },
+    select: {
+      id: true,
+    },
+  });
+
+  return posts.map((p) => p.id);
+};
+
+export const toggleLikePost = async (
+  postID: string,
+  userID: string,
+): Promise<boolean> => {
+  const existingLike = await db.postLikes.findUnique({
+    where: {
+      postID_userID: {
+        postID,
+        userID,
+      },
+    },
+  });
+
+  if (existingLike) {
+    await db.postLikes.delete({
+      where: {
+        postID_userID: {
+          postID,
+          userID,
+        },
+      },
+    });
+
+    return false;
+  }
+
+  await db.postLikes.create({
+    data: {
+      postID,
+      userID,
+    },
+  });
+
+  return true;
 };

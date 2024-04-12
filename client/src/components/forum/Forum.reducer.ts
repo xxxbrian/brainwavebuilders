@@ -1,10 +1,12 @@
-import { Forum, Thread } from "@/backend";
+import { Forum, PostStats, Thread, ThreadStats } from "@/backend";
 
 export interface ForumState {
   threads: Thread[];
   isLoading: boolean;
   isCreatingNewThread: boolean;
   forum?: Forum;
+  activeThreadStats?: ThreadStats;
+  activePostStats?: Record<string, PostStats>;
 }
 
 export const initialState: () => ForumState = () => ({
@@ -16,6 +18,11 @@ export const initialState: () => ForumState = () => ({
 export type ForumAction =
   | { type: "load-threads"; threads: Thread[] }
   | { type: "load-forum"; forum: Forum }
+  | {
+      type: "load-thread-stats";
+      threadStats?: ThreadStats;
+      postStats?: Record<string, PostStats>;
+    }
   | { type: "set-loading"; isLoading: boolean }
   | {
       type: "set-creating-new-thread";
@@ -37,6 +44,12 @@ export const reducer: React.Reducer<ForumState, ForumAction> = (
       return { ...state, forum: action.forum, isLoading: false };
     case "set-creating-new-thread":
       return { ...state, isCreatingNewThread: action.isCreatingNewThread };
+    case "load-thread-stats":
+      return {
+        ...state,
+        activeThreadStats: action.threadStats,
+        activePostStats: action.postStats,
+      };
     default:
       return isNever(action);
   }

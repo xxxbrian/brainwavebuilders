@@ -27,7 +27,7 @@ export const forumDBToAPIWithCreatedBy = (
   };
 };
 
-export type ThreadWithPosts = Prisma.ThreadGetPayload<{
+export type ThreadWithPostsAndCounts = Prisma.ThreadGetPayload<{
   include: {
     posts: {
       include: {
@@ -38,7 +38,9 @@ export type ThreadWithPosts = Prisma.ThreadGetPayload<{
   };
 }>;
 
-export const threadWithPostsDBToAPI = (thread: ThreadWithPosts): ThreadAPI => {
+export const threadWithPostsDBToAPI = (
+  thread: ThreadWithPostsAndCounts,
+): ThreadAPI => {
   return {
     id: thread.id,
     forumID: thread.forumID,

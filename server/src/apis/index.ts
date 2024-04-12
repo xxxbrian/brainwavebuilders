@@ -2,10 +2,12 @@
 
 
 import { app } from "@/globals";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
 import { ping } from "@/handlers/ping";
 import { submitAssignment } from "@/handlers/submitAssignment";
 import { getForumByCourseID } from "@/handlers/getForumByCourseID";
 import { login } from "@/handlers/login";
+import { toggleLikePost } from "@/handlers/toggleLikePost";
 import { getCourses } from "@/handlers/getCourses";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
@@ -28,6 +30,7 @@ import { leaveCourse } from "@/handlers/leaveCourse";
 import { getUserInfo } from "@/handlers/getUserInfo";
 import { register } from "@/handlers/register";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
@@ -129,6 +132,17 @@ export interface Thread {
     deletedAt?: number;
     title: string;
     posts: Post[];
+}
+
+export interface ThreadStats {
+    threadID: string;
+    views: number;
+}
+
+export interface PostStats {
+    postID: string;
+    likes: number;
+    liked: boolean;
 }
 
 export interface Post {
@@ -445,6 +459,37 @@ export interface GetRoleInCourseRequest {
 // GetRoleInCourseResponse is the response that is sent to the getRoleInCourse endpoint.
 export interface GetRoleInCourseResponse {
     role: string | null;
+}
+
+// GetThreadAndPostStatsRequest is the request that is sent to the getThreadAndPostStats endpoint.
+export interface GetThreadAndPostStatsRequest {
+    threadID: string;
+}
+
+// GetThreadAndPostStatsResponse is the response that is sent to the getThreadAndPostStats endpoint.
+export interface GetThreadAndPostStatsResponse {
+    thread: ThreadStats;
+    posts: Record<string, PostStats>;
+}
+
+// ToggleLikePostRequest is the request that is sent to the toggleLikePost endpoint.
+export interface ToggleLikePostRequest {
+    postID: string;
+}
+
+// ToggleLikePostResponse is the response that is sent to the toggleLikePost endpoint.
+export interface ToggleLikePostResponse {
+
+}
+
+// IncrementThreadViewRequest is the request that is sent to the incrementThreadView endpoint.
+export interface IncrementThreadViewRequest {
+    threadID: string;
+}
+
+// IncrementThreadViewResponse is the response that is sent to the incrementThreadView endpoint.
+export interface IncrementThreadViewResponse {
+
 }
 
 
@@ -1077,6 +1122,72 @@ app.post('/api/getRoleInCourse', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getRoleInCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getThreadAndPostStats is the endpoint handler for the getThreadAndPostStats endpoint.
+// It wraps around the function at @/handlers/getThreadAndPostStats.
+app.post('/api/getThreadAndPostStats', async (req, res) => {
+    const request: GetThreadAndPostStatsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetThreadAndPostStatsResponse = await getThreadAndPostStats(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getThreadAndPostStats with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// toggleLikePost is the endpoint handler for the toggleLikePost endpoint.
+// It wraps around the function at @/handlers/toggleLikePost.
+app.post('/api/toggleLikePost', async (req, res) => {
+    const request: ToggleLikePostRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: ToggleLikePostResponse = await toggleLikePost(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request toggleLikePost with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// incrementThreadView is the endpoint handler for the incrementThreadView endpoint.
+// It wraps around the function at @/handlers/incrementThreadView.
+app.post('/api/incrementThreadView', async (req, res) => {
+    const request: IncrementThreadViewRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: IncrementThreadViewResponse = await incrementThreadView(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request incrementThreadView with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
