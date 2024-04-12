@@ -35,6 +35,14 @@ types:
     title: string
     type: string
     options?: json
+    answer?: string
+    points: int
+
+  NewQuestion:
+    title: string
+    type: string
+    options?: json
+    answer?: string
     points: int
 
   Submission:
@@ -174,7 +182,7 @@ endpoints:
       startDate?: string
       dueDate?: string
       type: string
-      questions?: Question[]
+      questions?: NewQuestion[]
     response:
       assessment: Assessment
     service: typescript

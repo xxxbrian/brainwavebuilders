@@ -37,10 +37,11 @@ export const createAssessment = async (
           data.questions.map((question) =>
             transactionalDb.question.create({
               data: {
-                assessmentId: createdAssessment.id,
+                assessmentID: createdAssessment.id,
                 title: question.title,
                 type: question.type,
                 options: JSON.stringify(question.options),
+                answer: question.answer,
                 points: question.points,
               },
             }),
