@@ -58,6 +58,20 @@ export const CoursesPage: React.FC = ({}) => {
 
   const [isCreateAssignment, setIsCreateAssignment] = useState(false);
 
+  const onClickAssignment = useCallback(
+    async (assessmentId: string) => {
+      router.push(`${pathName}/assignment/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
+  const onClickExam = useCallback(
+    async (assessmentId: string) => {
+      router.push(`${pathName}/exam/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
   const onClickAddExam = useCallback(async () => {
     router.push(`${pathName}/createexam`);
   }, [pathName, router]);
@@ -85,7 +99,7 @@ export const CoursesPage: React.FC = ({}) => {
   }));
 
   return (
-    <div className="flex flex-col space-y-8">
+    <div className="flex flex-col space-y-8 px-4">
       <div
         className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-opacity-80"
         style={{
@@ -147,11 +161,13 @@ export const CoursesPage: React.FC = ({}) => {
         assignments={assignmentsData}
         type="Assignment"
         onClickAddButton={onClickAddAssignment}
+        onClickAsessment={onClickAssignment}
       />
       <AssignmentsTable
         assignments={examsData}
         type="Exam"
         onClickAddButton={onClickAddExam}
+        onClickAsessment={onClickExam}
       />
       <CreateAssignmentDialog
         isOpen={isCreateAssignment}

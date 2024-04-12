@@ -315,3 +315,49 @@ export const mockEditorContent = {
     },
   ],
 };
+
+export const assignmentData = {
+  id: "2",
+  title: "Midterm Project",
+  description:
+    "Project assessment focusing on the practical application of database management.",
+  courseId: "DBM302",
+  type: "assignment",
+  startDate: "2024-05-01T00:00:00Z",
+  dueDate: "2024-05-15T00:00:00Z",
+  questions: [],
+  submissions: [
+    {
+      id: "abc1",
+      assessmentId: "2",
+      studentId: "Steve", // Should be an Id for this part, search student name by Id to get the name
+      submittedAt: "2024-05-12T00:00:00Z",
+      content: mockEditorContent,
+      grade: 85,
+    },
+    {
+      id: "abc2",
+      assessmentId: "2",
+      studentId: "Steve", // Should be an Id for this part, search student name by Id to get the name
+      submittedAt: "2024-05-12T00:00:00Z",
+      content: mockEditorContent,
+      grade: 85,
+    },
+    {
+      id: "abc3",
+      assessmentId: "2",
+      studentId: "Steve", // Should be an Id for this part, search student name by Id to get the name
+      submittedAt: "2024-05-12T00:00:00Z",
+      content: mockEditorContent,
+      grade: 85,
+    },
+    {
+      id: "abc4",
+      assessmentId: "2",
+      studentId: "Steve", // Should be an Id for this part, search student name by Id to get the name
+      submittedAt: "2024-05-12T00:00:00Z",
+      content: mockEditorContent,
+      grade: 85,
+    },
+  ],
+};
