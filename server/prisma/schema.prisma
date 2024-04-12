@@ -28,7 +28,7 @@ model User {
     bio                      String?
     role                     String              @default("user")
     coursesOwned             Course[]            @relation("coursesOwned")
-    submissions              Submission[]
+    submissions              Submission[]        @relation("studentSubmissions")
     courseMembers            CourseMembers[]     @relation("CourseMemberUser")
     courseInvitationsCreated CourseInvitations[] @relation("CourseInvites")
     threadsCreated           Thread[]            @relation("userThreadsCreated")
@@ -104,20 +104,21 @@ model Assessment {
     dueDate     DateTime?
     type        String // "assignment" or "exam"
     course      Course       @relation("courseAssessments", fields: [courseID], references: [id])
-    questions   Question[] // Only for exams
-    submissions Submission[]
+    questions   Question[]   @relation("assessmentQuestions")
+    submissions Submission[] @relation("assessmentSubmissions")
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
 }
 
 model Question {
     id           String     @id @default(uuid())
-    assessmentId String
+    assessmentID String
     title        String
     type         String // "MCQ" or "short_answer"
     options      Json? // For MCQs: store options and correct answer
+    answer       String?
     points       Int // Points/weighting for this question
-    assessment   Assessment @relation(fields: [assessmentId], references: [id])
+    assessment   Assessment @relation("assessmentQuestions", fields: [assessmentID], references: [id])
 }
 
 model Submission {
@@ -128,8 +129,8 @@ model Submission {
     fileUrl      String?
     answers      Json? // For exam submissions: student's answers
     grade        Int?
-    assessment   Assessment @relation(fields: [assessmentId], references: [id])
-    student      User       @relation(fields: [studentId], references: [id])
+    assessment   Assessment @relation("assessmentSubmissions", fields: [assessmentId], references: [id])
+    student      User       @relation("studentSubmissions", fields: [studentId], references: [id])
 }
 
 model Forum {

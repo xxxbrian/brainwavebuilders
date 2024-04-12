@@ -7,6 +7,7 @@ import {
   Assessment as AssessmentAPI,
   Submission as SubmissionAPI,
   Question as QuestionAPI,
+  NewQuestion as NewQuestionAPI,
 } from "@/apis";
 import { AssessmentDetails } from "@/data/assessment";
 
@@ -43,16 +44,13 @@ export const formatAssessmentForStudent = (
   const questions =
     "questions" in assessment
       ? assessment.questions.map((question) => {
-          const options =
-            typeof question.options === "string"
-              ? JSON.parse(question.options)
-              : {};
-          if (typeof options === "object" && "correct" in options) {
-            delete options.correct;
-          }
           return {
-            ...formatQuestion(question),
-            options: JSON.stringify(options),
+            id: question.id,
+            assessmentId: question.assessmentID,
+            title: question.title,
+            type: question.type,
+            options: question.options,
+            points: question.points,
           };
         })
       : [];
@@ -77,10 +75,11 @@ export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
 export const formatQuestion = (question: QuestionDB): QuestionAPI => {
   return {
     id: question.id,
-    assessmentId: question.assessmentId,
+    assessmentId: question.assessmentID,
     title: question.title,
     type: question.type,
     options: question.options,
+    answer: question.answer ?? undefined,
     points: question.points,
   };
 };

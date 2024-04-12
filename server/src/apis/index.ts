@@ -2,37 +2,37 @@
 
 
 import { app } from "@/globals";
-import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { ping } from "@/handlers/ping";
-import { submitAssignment } from "@/handlers/submitAssignment";
-import { getForumByCourseID } from "@/handlers/getForumByCourseID";
-import { login } from "@/handlers/login";
-import { toggleLikePost } from "@/handlers/toggleLikePost";
+import { checkEmail } from "@/handlers/checkEmail";
+import { createAssessment } from "@/handlers/createAssessment";
+import { createCourse } from "@/handlers/createCourse";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
+import { deletePost } from "@/handlers/deletePost";
+import { deleteThread } from "@/handlers/deleteThread";
+import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { getCourses } from "@/handlers/getCourses";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { getForumByID } from "@/handlers/getForumByID";
+import { getRoleInCourse } from "@/handlers/getRoleInCourse";
+import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
+import { getThreads } from "@/handlers/getThreads";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
+import { joinCourse } from "@/handlers/joinCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { login } from "@/handlers/login";
+import { ping } from "@/handlers/ping";
+import { register } from "@/handlers/register";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { submitAssignment } from "@/handlers/submitAssignment";
+import { toggleLikePost } from "@/handlers/toggleLikePost";
+import { upsertPost } from "@/handlers/upsertPost";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getUserCourses } from "@/handlers/getUserCourses";
-import { getThreads } from "@/handlers/getThreads";
-import { getRoleInCourse } from "@/handlers/getRoleInCourse";
-import { upsertPost } from "@/handlers/upsertPost";
-import { joinCourse } from "@/handlers/joinCourse";
-import { deletePost } from "@/handlers/deletePost";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { createAssessment } from "@/handlers/createAssessment";
-import { submitAnswers } from "@/handlers/submitAnswers";
-import { getForumByID } from "@/handlers/getForumByID";
-import { createCourse } from "@/handlers/createCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { register } from "@/handlers/register";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
-import { deleteThread } from "@/handlers/deleteThread";
-import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -77,6 +77,15 @@ export interface Question {
     title: string;
     type: string;
     options?: any;
+    answer?: string;
+    points: number;
+}
+
+export interface NewQuestion {
+    title: string;
+    type: string;
+    options?: any;
+    answer?: string;
     points: number;
 }
 
@@ -254,7 +263,7 @@ export interface CreateAssessmentRequest {
     startDate?: string;
     dueDate?: string;
     type: string;
-    questions?: Question[];
+    questions?: NewQuestion[];
 }
 
 // CreateAssessmentResponse is the response that is sent to the createAssessment endpoint.

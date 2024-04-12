@@ -45,6 +45,15 @@ export interface Question {
     title: string;
     type: string;
     options?: any;
+    answer?: string;
+    points: number;
+}
+
+export interface NewQuestion {
+    title: string;
+    type: string;
+    options?: any;
+    answer?: string;
     points: number;
 }
 
@@ -222,7 +231,7 @@ export interface CreateAssessmentRequest {
     startDate?: string;
     dueDate?: string;
     type: string;
-    questions?: Question[];
+    questions?: NewQuestion[];
 }
 
 // CreateAssessmentResponse is the response that is sent to the createAssessment endpoint.
