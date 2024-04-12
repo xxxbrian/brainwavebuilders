@@ -19,9 +19,11 @@ export const CalendarBoard: React.FC<CalendarProps> = ({
 
   function eventsInDay(day: Date) {
     const todayEvents: Event[] =
-      events.get(
-        `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`,
-      ) ?? [];
+      // events.get(
+      //   `${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`,
+      // ) ?? [];
+      events[`${day.getFullYear()}-${day.getMonth() + 1}-${day.getDate()}`] ??
+      [];
     return (
       <>
         {todayEvents.map((event, index) => (
