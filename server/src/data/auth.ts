@@ -20,18 +20,27 @@ export const isEmailTaken = async (email: string): Promise<boolean> => {
   return !!user;
 };
 
-export const generateAndSendOTP = async (email: string): Promise<string> => {
-  if (await isEmailTaken(email)) {
-    throw new APIError("Email already taken");
+export const isCanResetPassword = async (email: string): Promise<boolean> => {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new APIError("Account not found");
   }
+  return true;
+};
+
+export const generateAndSendOTP = async (
+  email: string,
+  generateHtml: (code: string) => string,
+): Promise<string> => {
   const subject = "Verify your email address";
   const code = makeID(6);
 
-  const html = `
-      <h1>Verify your email address</h1>
-      <p>Enter the following code to verify your email address:</p>
-      <h2>${code}</h2>
-      `;
+  // const html = `
+  //     <h1>Verify your email address</h1>
+  //     <p>Enter the following code to verify your email address:</p>
+  //     <h2>${code}</h2>
+  //     `;
+  const html = generateHtml(code);
   console.log("Sending email to", email);
   await sendEmail(email, subject, html);
   await db.emailVerification.create({
@@ -122,6 +131,25 @@ export const checkPassword = async (
   }
 
   return user;
+};
+
+export const updatePassword = async (
+  email: string,
+  password: string,
+): Promise<void> => {
+  const user = await getUserByEmail(email);
+  if (!user) {
+    throw new APIError("Account not found");
+  }
+
+  await db.user.update({
+    where: {
+      id: user.id,
+    },
+    data: {
+      password: hashPassword(password),
+    },
+  });
 };
 
 export const generateToken = async (user: User): Promise<string> => {

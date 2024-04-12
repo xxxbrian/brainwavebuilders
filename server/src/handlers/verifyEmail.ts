@@ -11,6 +11,11 @@ export const verifyEmail = async (
 ): Promise<VerifyEmailResponse> => {
   let { email } = request;
   await isEmailTaken(email);
-  await generateAndSendOTP(email);
+  const generateHtml = (code: string) => `
+        <h1>Verify your email address</h1>
+        <p>Enter the following code to verify your email address:</p>
+        <h2>${code}</h2>
+        `;
+  await generateAndSendOTP(email, generateHtml);
   return {};
 };
