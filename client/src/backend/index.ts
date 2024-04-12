@@ -245,6 +245,17 @@ export interface SetUserProfileResponse {
 
 }
 
+// ResetPasswordRequest is the request that is sent to the resetPassword endpoint.
+export interface ResetPasswordRequest {
+    password: string;
+    newPassword: string;
+}
+
+// ResetPasswordResponse is the response that is sent to the resetPassword endpoint.
+export interface ResetPasswordResponse {
+
+}
+
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
 export interface CreateAssessmentRequest {
     title: string;
@@ -801,6 +812,35 @@ export class BrainwavesClient {
         }
 
         return json as SetUserProfileResponse;
+    }
+
+
+
+    async resetPassword(request: ResetPasswordRequest): Promise<ResetPasswordResponse> {
+        const response = await fetch(`${this.base_url}/resetPassword`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as ResetPasswordResponse;
     }
 
 

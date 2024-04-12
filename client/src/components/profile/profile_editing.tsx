@@ -34,6 +34,8 @@ export type PreferenceProps = {
 };
 
 export type SecurityProps = {
+  onChangePassword: (password: string) => void;
+  onChangeNewPassword: (newPassword: string) => void;
   onClickSecuritySave: () => Promise<void>;
   two_factor_auth: boolean;
   onChangeTwoFactorAuth: (two_factor_auth: boolean) => void;
@@ -67,6 +69,8 @@ const ProfileEditing: React.FC<EditingProps> = ({
   recommendation,
   onChangeRecommendation,
   // SecurityProps
+  onChangePassword,
+  onChangeNewPassword,
   onClickSecuritySave,
   two_factor_auth,
   onChangeTwoFactorAuth,
@@ -233,8 +237,14 @@ const ProfileEditing: React.FC<EditingProps> = ({
       setIsDialogOpen(true);
       return;
     }
-    setCurrentPassword("");
-    setNewPassword("");
+    // If current password is empty
+    if (currentPassword === "") {
+      setErrorMessage("Current password cannot be empty.");
+      setIsDialogOpen(true);
+      return;
+    }
+    onChangePassword(currentPassword);
+    onChangeNewPassword(newPassword);
     await onClickSecuritySave();
   };
 

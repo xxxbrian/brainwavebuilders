@@ -109,6 +109,30 @@ export const Profile: React.FC = () => {
     }
   }, [backend, userInfo]);
 
+  const [password, setPassword] = useState("");
+  const [newPassword, setNewPassword] = useState("");
+
+  const onChangePassword = useCallback((password: string) => {
+    setPassword(password);
+  }, []);
+
+  const onChangeNewPassword = useCallback((newPassword: string) => {
+    setNewPassword(newPassword);
+  }, []);
+
+  const onClickSecuritySave = useCallback(async () => {
+    try {
+      await backend.resetPassword({
+        password,
+        newPassword,
+      });
+    } catch (e) {
+      if (isAPIError(e)) {
+        console.error(e);
+      }
+    }
+  }, [backend, password, newPassword]);
+
   return (
     <PageFrame title="Settings">
       {userInfo && (
@@ -135,7 +159,9 @@ export const Profile: React.FC = () => {
           onChangeNotification={mockPreferences.onChangeNotifications}
           recommendation={mockPreferences.recommendation}
           onChangeRecommendation={mockPreferences.onChangeRecommendation}
-          onClickSecuritySave={mockSecurity.onClickSecuritySave}
+          onClickSecuritySave={onClickSecuritySave}
+          onChangePassword={onChangePassword}
+          onChangeNewPassword={onChangeNewPassword}
           two_factor_auth={mockSecurity.twoFactorEnabled}
           onChangeTwoFactorAuth={mockSecurity.onChangeTwoFactorEnabled}
         />
