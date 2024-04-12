@@ -113,7 +113,7 @@ export const CourseData: Course = {
 
 export const mockTime = new Date("2024-03-01");
 export const mockEvents = () => {
-  const events = new Map<string, Event[]>();
+  const events: Record<string, Event[]> = {};
   for (
     let i = 1;
     i <= new Date(mockTime.getFullYear(), mockTime.getMonth() + 1, 0).getDate();
@@ -121,7 +121,7 @@ export const mockEvents = () => {
   ) {
     const key = `${mockTime.getFullYear()}-${mockTime.getMonth() + 1}-${i}`;
     if (i % 9 === 0) {
-      events.set(key, [
+      events[key] = [
         {
           name:
             ["CS3900 Meeting", "ECSE321 Meeting", "COMP1522 Meeting"].sort(
@@ -148,9 +148,9 @@ export const mockEvents = () => {
               () => Math.random() - 0.5,
             )[0] ?? "exam",
         },
-      ]);
+      ];
     } else {
-      events.set(key, []);
+      events[key] = [];
     }
   }
   return events;

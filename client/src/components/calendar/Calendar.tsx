@@ -12,7 +12,7 @@ export type Event = {
 
 export interface CalendarProps {
   today: Date;
-  events: Map<string, Event[]>;
+  events: Record<string, Event[]>;
   warpperClassName?: string;
 }
 
