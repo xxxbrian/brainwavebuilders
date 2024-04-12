@@ -279,7 +279,7 @@ class TypescriptTypeCompiler:
         return f"{type_ref}[]"
 
     def is_map(self, type_ref: str) -> tuple[bool, str, str]:
-        obj_regex = re.compile(r"^Map<(.+),\s*(.+)>$")
+        obj_regex = re.compile(r"^Record<(.+),\s*(.+)>$")
         mat = obj_regex.match(type_ref)
 
         if mat:
