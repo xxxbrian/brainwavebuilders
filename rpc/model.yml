@@ -320,7 +320,7 @@ endpoints:
       threadID: string
     response:
       thread: ThreadStats
-      posts: Map<string, PostStats>
+      posts: Record<string, PostStats>
     service: typescript
 
   toggleLikePost:
