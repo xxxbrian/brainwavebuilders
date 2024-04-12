@@ -2,9 +2,10 @@ import React, { PropsWithChildren, useCallback } from "react";
 import { Logo } from "../Logo";
 import { AiOutlineMenu } from "react-icons/ai";
 import { User } from "@/backend";
-import { RxAvatar } from "react-icons/rx";
 import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
+import { Avatar, DropdownMenu } from "@radix-ui/themes";
+import Cookies from "js-cookie";
 
 interface Props extends PropsWithChildren {
   title: string;
@@ -20,19 +21,31 @@ const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
   const onClickUserAvator = useCallback(() => {
     router.push("/profile");
   }, [router]);
+  const onClickLogOut = useCallback(() => {
+    Cookies.remove("token");
+    router.push("/login");
+  }, [router]);
 
   return (
-    <div onClick={onClickUserAvator}>
-      {user.avatar ? (
-        <img
-          src={user.avatar}
-          alt="avatar"
-          className="h-12 w-12 rounded-full"
-        />
-      ) : (
-        <RxAvatar className="h-12 w-12 text-zinc-500 ml-2 mr-2" />
-      )}
-    </div>
+    <DropdownMenu.Root>
+      <DropdownMenu.Trigger>
+        <div>
+          <Avatar src={user.avatar} fallback={user.firstName[0] ?? "?"} />
+        </div>
+      </DropdownMenu.Trigger>
+      <DropdownMenu.Content variant="soft" size="2">
+        <DropdownMenu.Item>
+          <div onClick={onClickUserAvator}>Profile</div>
+        </DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item>Invite Friends</DropdownMenu.Item>
+        <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
+        <DropdownMenu.Separator />
+        <DropdownMenu.Item color="red">
+          <div onClick={onClickLogOut}>Log out</div>
+        </DropdownMenu.Item>
+      </DropdownMenu.Content>
+    </DropdownMenu.Root>
   );
 };
 
