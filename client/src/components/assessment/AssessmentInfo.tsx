@@ -58,7 +58,7 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
     <div className="p-4 bg-blue-100 rounded-2xl border-2 border-blue-500">
       <div className="mb-4">
         <label htmlFor="title" className="text-md font-medium block mb-2">
-          Assessment Title
+          Title
         </label>
         <input
           id="title"

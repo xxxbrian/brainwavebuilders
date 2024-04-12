@@ -72,11 +72,8 @@ export const CreateExamPage: React.FC = () => {
 
   console.log(questions);
   return (
-    <div
-      className="flex flex-col space-y-4 pt-8 pb-16 pl-16 pr-16 m-auto max-w-[1200px] "
-      onClick={onClickBack}
-    >
-      <div className="flex items-center font-bold">
+    <div className="flex flex-col space-y-4 pt-8 pb-16 pl-16 pr-16 m-auto max-w-[1200px] ">
+      <div className="flex items-center font-bold" onClick={onClickBack}>
         <button className="text-xl" onClick={(e) => e.stopPropagation()}>
           <IoIosArrowBack />
         </button>
