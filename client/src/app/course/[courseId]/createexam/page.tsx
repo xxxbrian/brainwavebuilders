@@ -5,19 +5,21 @@ import AssessmentInfo from "@/components/assessment/AssessmentInfo";
 import QuestionComponent from "@/components/assessment/Question";
 import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
+import { useBackend } from "@/hooks/useBackend";
+import { useCourse } from "@/contexts/CourseContext";
 import { IoIosArrowBack } from "react-icons/io";
+import { NewQuestion } from "@/backend";
 
-type Question = {
+interface Question extends NewQuestion {
   id: string;
-  questionTitle: string;
-  questionType: string;
-  questionOptions: string[];
-  questionAnswer: string;
-  questionMark: number;
-};
+}
 
 export const CreateExamPage: React.FC = () => {
   const router = useRouter();
+
+  const backend = useBackend();
+
+  const courseId = useCourse().id;
 
   const pathName = usePathname();
 
@@ -26,36 +28,67 @@ export const CreateExamPage: React.FC = () => {
   const [endDate, setEndDate] = useState("");
   const [startDate, setStartDate] = useState("");
 
+  const [questions, setQuestions] = useState<Question[]>([
+    {
+      id: uuidv4(),
+      title: "",
+      type: "short_answer",
+      options: ["", "", ""],
+      answer: "",
+      points: 1,
+    },
+  ]);
+
   const onClickSave = useCallback(async () => {
     // TODO: Send exam info to backend
+    const preparedQuestions = questions.map(
+      ({ id, title, type, options, answer, points }) => ({
+        title,
+        type,
+        options,
+        answer,
+        points,
+      }),
+    );
+
+    // Send exam info to the backend
+    await backend.createAssessment({
+      title: title,
+      description: description,
+      courseId: courseId,
+      startDate: startDate,
+      dueDate: endDate,
+      type: "exam",
+      questions: preparedQuestions,
+    });
+
     const newPath = pathName.replace(/\/createexam$/, "");
     router.push(newPath);
-  }, [pathName, router]);
+  }, [
+    title,
+    description,
+    courseId,
+    questions,
+    startDate,
+    endDate,
+    pathName,
+    router,
+    backend,
+  ]);
 
   const onClickBack = useCallback(() => {
     const newPath = pathName.replace(/\/createexam$/, "");
     router.push(newPath);
   }, [pathName, router]);
 
-  const [questions, setQuestions] = useState<Question[]>([
-    {
-      id: uuidv4(),
-      questionTitle: "",
-      questionType: "short_answer",
-      questionOptions: ["", "", ""],
-      questionAnswer: "",
-      questionMark: 1,
-    },
-  ]);
-
   const handleAddQuestion = () => {
     const newQuestion = {
       id: uuidv4(),
-      questionTitle: "",
-      questionType: "short_answer",
-      questionOptions: ["", "", ""],
-      questionAnswer: "",
-      questionMark: 1,
+      title: "",
+      type: "short_answer",
+      options: ["", "", ""],
+      answer: "",
+      points: 1,
     };
     setQuestions(questions.concat(newQuestion));
   };
@@ -70,7 +103,6 @@ export const CreateExamPage: React.FC = () => {
     setQuestions(questions.filter((question) => question.id !== id));
   };
 
-  console.log(questions);
   return (
     <div className="flex flex-col space-y-4 pt-8 pb-16 pl-16 pr-16 m-auto max-w-[1200px] ">
       <div className="flex items-center font-bold" onClick={onClickBack}>
@@ -93,25 +125,25 @@ export const CreateExamPage: React.FC = () => {
       {questions.map((question, index) => (
         <QuestionComponent
           key={question.id}
-          title={question.questionTitle}
-          type={question.questionType}
-          options={question.questionOptions}
-          answer={question.questionAnswer}
-          mark={question.questionMark}
+          title={question.title}
+          type={question.type}
+          options={question.options}
+          answer={question.answer ?? ""}
+          mark={question.points}
           onTitleChange={(title) =>
-            updateQuestion(index, { ...question, questionTitle: title })
+            updateQuestion(index, { ...question, title: title })
           }
           onTypeChange={(type) =>
-            updateQuestion(index, { ...question, questionType: type })
+            updateQuestion(index, { ...question, type: type })
           }
           onOptionsChange={(options) =>
-            updateQuestion(index, { ...question, questionOptions: options })
+            updateQuestion(index, { ...question, options: options })
           }
           onAnswerChange={(answer) =>
-            updateQuestion(index, { ...question, questionAnswer: answer })
+            updateQuestion(index, { ...question, answer: answer })
           }
           onMarkChange={(mark) =>
-            updateQuestion(index, { ...question, questionMark: mark })
+            updateQuestion(index, { ...question, points: mark })
           }
           onDelete={() => handleDeleteQuestion(question.id)}
         />
