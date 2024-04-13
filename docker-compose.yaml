@@ -39,6 +39,15 @@ services:
         "yarn && yarn dev",
       ]
 
+  liveroom:
+    image: oven/bun:latest
+    ports:
+      - 3904:3000
+    volumes:
+      - .:/app
+    working_dir: /app/liveroom
+    entrypoint: ["bun", "run", "--watch", "index.ts"]
+
   db:
     ports:
       - 3903:3306
