@@ -2,40 +2,43 @@
 
 
 import { app } from "@/globals";
-import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { ping } from "@/handlers/ping";
-import { submitAssignment } from "@/handlers/submitAssignment";
+import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
+import { checkEmail } from "@/handlers/checkEmail";
+import { createAssessment } from "@/handlers/createAssessment";
+import { createCourse } from "@/handlers/createCourse";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
+import { deletePost } from "@/handlers/deletePost";
+import { deleteThread } from "@/handlers/deleteThread";
+import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
+import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { forgotPassword } from "@/handlers/forgotPassword";
-import { getForumByCourseID } from "@/handlers/getForumByCourseID";
-import { login } from "@/handlers/login";
-import { toggleLikePost } from "@/handlers/toggleLikePost";
 import { getCourses } from "@/handlers/getCourses";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { getForumByID } from "@/handlers/getForumByID";
+import { getRoleInCourse } from "@/handlers/getRoleInCourse";
+import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
+import { getThreads } from "@/handlers/getThreads";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
+import { joinCourse } from "@/handlers/joinCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { login } from "@/handlers/login";
+import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
+import { ping } from "@/handlers/ping";
+import { register } from "@/handlers/register";
+import { resetPassword } from "@/handlers/resetPassword";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { submitAssignment } from "@/handlers/submitAssignment";
+import { toggleLikePost } from "@/handlers/toggleLikePost";
+import { upsertPost } from "@/handlers/upsertPost";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getUserCourses } from "@/handlers/getUserCourses";
-import { getThreads } from "@/handlers/getThreads";
-import { getRoleInCourse } from "@/handlers/getRoleInCourse";
-import { upsertPost } from "@/handlers/upsertPost";
-import { joinCourse } from "@/handlers/joinCourse";
-import { deletePost } from "@/handlers/deletePost";
-import { fetchAssessmentDetails } from "@/handlers/fetchAssessmentDetails";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { createAssessment } from "@/handlers/createAssessment";
-import { submitAnswers } from "@/handlers/submitAnswers";
-import { getForumByID } from "@/handlers/getForumByID";
-import { createCourse } from "@/handlers/createCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { register } from "@/handlers/register";
 import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
-import { deleteThread } from "@/handlers/deleteThread";
-import { checkEmail } from "@/handlers/checkEmail";
-import { resetPassword } from "@/handlers/resetPassword";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -97,8 +100,9 @@ export interface Submission {
     assessmentId: string;
     studentId: string;
     submittedAt?: string;
-    fileUrl?: string;
+    assignmentContent?: any;
     answers?: any;
+    feedback?: string;
     grade?: number;
 }
 
@@ -311,7 +315,7 @@ export interface CreateAssessmentResponse {
 export interface SubmitAnswersRequest {
     assessmentId: string;
     studentId: string;
-    answers: string;
+    answers: any;
 }
 
 // SubmitAnswersResponse is the response that is sent to the submitAnswers endpoint.
@@ -323,7 +327,7 @@ export interface SubmitAnswersResponse {
 export interface SubmitAssignmentRequest {
     assessmentId: string;
     studentId: string;
-    fileUrl: string;
+    assignmentContent: any;
 }
 
 // SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
@@ -331,13 +335,46 @@ export interface SubmitAssignmentResponse {
     submission: Submission;
 }
 
-// FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
-export interface FetchAssessmentDetailsRequest {
+// ManualGradeSubmissionRequest is the request that is sent to the manualGradeSubmission endpoint.
+export interface ManualGradeSubmissionRequest {
+    submissionId: string;
+    saqGrades: number;
+}
+
+// ManualGradeSubmissionResponse is the response that is sent to the manualGradeSubmission endpoint.
+export interface ManualGradeSubmissionResponse {
+    submission: Submission;
+}
+
+// AssignmentGradeSubmissionRequest is the request that is sent to the assignmentGradeSubmission endpoint.
+export interface AssignmentGradeSubmissionRequest {
+    submissionId: string;
+    grades: number;
+    feedback: string;
+}
+
+// AssignmentGradeSubmissionResponse is the response that is sent to the assignmentGradeSubmission endpoint.
+export interface AssignmentGradeSubmissionResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentDetailsTeacherRequest is the request that is sent to the fetchAssessmentDetailsTeacher endpoint.
+export interface FetchAssessmentDetailsTeacherRequest {
     assessmentId: string;
 }
 
-// FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
-export interface FetchAssessmentDetailsResponse {
+// FetchAssessmentDetailsTeacherResponse is the response that is sent to the fetchAssessmentDetailsTeacher endpoint.
+export interface FetchAssessmentDetailsTeacherResponse {
+    assessment: Assessment;
+}
+
+// FetchAssessmentDetailsStudentRequest is the request that is sent to the fetchAssessmentDetailsStudent endpoint.
+export interface FetchAssessmentDetailsStudentRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentDetailsStudentResponse is the response that is sent to the fetchAssessmentDetailsStudent endpoint.
+export interface FetchAssessmentDetailsStudentResponse {
     assessment: Assessment;
 }
 
@@ -864,13 +901,13 @@ app.post('/api/submitAssignment', async (req, res) => {
     }
 });
 
-// fetchAssessmentDetails is the endpoint handler for the fetchAssessmentDetails endpoint.
-// It wraps around the function at @/handlers/fetchAssessmentDetails.
-app.post('/api/fetchAssessmentDetails', async (req, res) => {
-    const request: FetchAssessmentDetailsRequest = req.body;
+// manualGradeSubmission is the endpoint handler for the manualGradeSubmission endpoint.
+// It wraps around the function at @/handlers/manualGradeSubmission.
+app.post('/api/manualGradeSubmission', async (req, res) => {
+    const request: ManualGradeSubmissionRequest = req.body;
     try {
         const ctx = { req, res };
-        const response: FetchAssessmentDetailsResponse = await fetchAssessmentDetails(ctx, request);
+        const response: ManualGradeSubmissionResponse = await manualGradeSubmission(ctx, request);
         res.json(response);
     } catch (e) {
         if (e instanceof APIError) {
@@ -880,7 +917,73 @@ app.post('/api/fetchAssessmentDetails', async (req, res) => {
         } else {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
-            console.error(`Error occurred while handling request fetchAssessmentDetails with arguments ${ JSON.stringify(request) }: `, e);
+            console.error(`Error occurred while handling request manualGradeSubmission with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// assignmentGradeSubmission is the endpoint handler for the assignmentGradeSubmission endpoint.
+// It wraps around the function at @/handlers/assignmentGradeSubmission.
+app.post('/api/assignmentGradeSubmission', async (req, res) => {
+    const request: AssignmentGradeSubmissionRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: AssignmentGradeSubmissionResponse = await assignmentGradeSubmission(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request assignmentGradeSubmission with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchAssessmentDetailsTeacher is the endpoint handler for the fetchAssessmentDetailsTeacher endpoint.
+// It wraps around the function at @/handlers/fetchAssessmentDetailsTeacher.
+app.post('/api/fetchAssessmentDetailsTeacher', async (req, res) => {
+    const request: FetchAssessmentDetailsTeacherRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchAssessmentDetailsTeacherResponse = await fetchAssessmentDetailsTeacher(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchAssessmentDetailsTeacher with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchAssessmentDetailsStudent is the endpoint handler for the fetchAssessmentDetailsStudent endpoint.
+// It wraps around the function at @/handlers/fetchAssessmentDetailsStudent.
+app.post('/api/fetchAssessmentDetailsStudent', async (req, res) => {
+    const request: FetchAssessmentDetailsStudentRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchAssessmentDetailsStudentResponse = await fetchAssessmentDetailsStudent(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchAssessmentDetailsStudent with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

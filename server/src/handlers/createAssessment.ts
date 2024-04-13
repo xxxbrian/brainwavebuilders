@@ -14,10 +14,6 @@ export const createAssessment = async (
   ctx: any,
   request: CreateAssessmentRequest,
 ): Promise<CreateAssessmentResponse> => {
-  // const userRole = ctx.user?.role;
-  // if (userRole !== "TEACHER") {
-  //   throw new APIError("Forbidden", "FORBIDDEN");
-  // }
   validateRequest(request);
 
   try {
@@ -31,7 +27,10 @@ export const createAssessment = async (
     if (error instanceof APIError) {
       throw error;
     }
-    throw new APIError("Failed to create assessment", "UNKNOWN_ERROR");
+    throw new APIError(
+      "Failed to create assessment",
+      "CREATE_ASSIGNMENT_FAILED",
+    );
   }
 };
 

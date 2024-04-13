@@ -50,8 +50,9 @@ types:
     assessmentId: string
     studentId: string
     submittedAt?: string
-    fileUrl?: string
+    assignmentContent?: json
     answers?: json
+    feedback?: string
     grade?: int
 
   Course:
@@ -212,7 +213,7 @@ endpoints:
     request:
       assessmentId: string
       studentId: string
-      answers: string
+      answers: json
     response:
       submission: Submission
     service: typescript
@@ -221,12 +222,36 @@ endpoints:
     request:
       assessmentId: string
       studentId: string
-      fileUrl: string
+      assignmentContent: json
     response:
       submission: Submission
     service: typescript
 
-  fetchAssessmentDetails:
+  manualGradeSubmission:
+    request:
+      submissionId: string
+      saqGrades: int
+    response:
+      submission: Submission
+    service: typescript
+
+  assignmentGradeSubmission:
+    request:
+      submissionId: string
+      grades: int
+      feedback: string
+    response:
+      submission: Submission
+    service: typescript
+
+  fetchAssessmentDetailsTeacher:
+    request:
+      assessmentId: string
+    response:
+      assessment: Assessment
+    service: typescript
+
+  fetchAssessmentDetailsStudent:
     request:
       assessmentId: string
     response:
