@@ -61,13 +61,14 @@ export const formatAssessmentForStudent = (
 export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
   return {
     id: submission.id,
-    assessmentId: submission.assessmentId,
-    studentId: submission.studentId,
+    assessmentId: submission.assessmentID,
+    studentId: submission.studentID,
     submittedAt: submission.submittedAt
       ? submission.submittedAt.toISOString()
       : undefined,
-    fileUrl: submission.fileUrl ?? undefined,
+    assignmentContent: submission.assignmentContent ?? undefined,
     answers: submission.answers,
+    feedback: submission.feedback ?? undefined,
     grade: submission.grade ?? undefined,
   };
 };

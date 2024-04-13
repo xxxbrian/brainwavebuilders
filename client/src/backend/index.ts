@@ -62,8 +62,9 @@ export interface Submission {
     assessmentId: string;
     studentId: string;
     submittedAt?: string;
-    fileUrl?: string;
+    assignmentContent?: any;
     answers?: any;
+    feedback?: string;
     grade?: number;
 }
 
@@ -276,7 +277,7 @@ export interface CreateAssessmentResponse {
 export interface SubmitAnswersRequest {
     assessmentId: string;
     studentId: string;
-    answers: string;
+    answers: any;
 }
 
 // SubmitAnswersResponse is the response that is sent to the submitAnswers endpoint.
@@ -288,7 +289,7 @@ export interface SubmitAnswersResponse {
 export interface SubmitAssignmentRequest {
     assessmentId: string;
     studentId: string;
-    fileUrl: string;
+    assignmentContent: any;
 }
 
 // SubmitAssignmentResponse is the response that is sent to the submitAssignment endpoint.
@@ -296,14 +297,77 @@ export interface SubmitAssignmentResponse {
     submission: Submission;
 }
 
-// FetchAssessmentDetailsRequest is the request that is sent to the fetchAssessmentDetails endpoint.
-export interface FetchAssessmentDetailsRequest {
+// ManualGradeSubmissionRequest is the request that is sent to the manualGradeSubmission endpoint.
+export interface ManualGradeSubmissionRequest {
+    submissionId: string;
+    saqGrades: number;
+}
+
+// ManualGradeSubmissionResponse is the response that is sent to the manualGradeSubmission endpoint.
+export interface ManualGradeSubmissionResponse {
+    submission: Submission;
+}
+
+// AssignmentGradeSubmissionRequest is the request that is sent to the assignmentGradeSubmission endpoint.
+export interface AssignmentGradeSubmissionRequest {
+    submissionId: string;
+    grades: number;
+    feedback: string;
+}
+
+// AssignmentGradeSubmissionResponse is the response that is sent to the assignmentGradeSubmission endpoint.
+export interface AssignmentGradeSubmissionResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentDetailsTeacherRequest is the request that is sent to the fetchAssessmentDetailsTeacher endpoint.
+export interface FetchAssessmentDetailsTeacherRequest {
     assessmentId: string;
 }
 
-// FetchAssessmentDetailsResponse is the response that is sent to the fetchAssessmentDetails endpoint.
-export interface FetchAssessmentDetailsResponse {
+// FetchAssessmentDetailsTeacherResponse is the response that is sent to the fetchAssessmentDetailsTeacher endpoint.
+export interface FetchAssessmentDetailsTeacherResponse {
     assessment: Assessment;
+}
+
+// FetchAssessmentDetailsStudentRequest is the request that is sent to the fetchAssessmentDetailsStudent endpoint.
+export interface FetchAssessmentDetailsStudentRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentDetailsStudentResponse is the response that is sent to the fetchAssessmentDetailsStudent endpoint.
+export interface FetchAssessmentDetailsStudentResponse {
+    assessment: Assessment;
+}
+
+// FetchAssessmentSubmissionsRequest is the request that is sent to the fetchAssessmentSubmissions endpoint.
+export interface FetchAssessmentSubmissionsRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentSubmissionsResponse is the response that is sent to the fetchAssessmentSubmissions endpoint.
+export interface FetchAssessmentSubmissionsResponse {
+    submissions: Submission[];
+}
+
+// FetchSubmissionRequest is the request that is sent to the fetchSubmission endpoint.
+export interface FetchSubmissionRequest {
+    submissionId: string;
+}
+
+// FetchSubmissionResponse is the response that is sent to the fetchSubmission endpoint.
+export interface FetchSubmissionResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentsRequest is the request that is sent to the fetchAssessments endpoint.
+export interface FetchAssessmentsRequest {
+    courseId: string;
+}
+
+// FetchAssessmentsResponse is the response that is sent to the fetchAssessments endpoint.
+export interface FetchAssessmentsResponse {
+    assessments: Assessment[];
 }
 
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
@@ -932,8 +996,8 @@ export class BrainwavesClient {
 
 
 
-    async fetchAssessmentDetails(request: FetchAssessmentDetailsRequest): Promise<FetchAssessmentDetailsResponse> {
-        const response = await fetch(`${this.base_url}/fetchAssessmentDetails`, {
+    async manualGradeSubmission(request: ManualGradeSubmissionRequest): Promise<ManualGradeSubmissionResponse> {
+        const response = await fetch(`${this.base_url}/manualGradeSubmission`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -956,7 +1020,181 @@ export class BrainwavesClient {
             throw new Error("RPC Request Failed.");
         }
 
-        return json as FetchAssessmentDetailsResponse;
+        return json as ManualGradeSubmissionResponse;
+    }
+
+
+
+    async assignmentGradeSubmission(request: AssignmentGradeSubmissionRequest): Promise<AssignmentGradeSubmissionResponse> {
+        const response = await fetch(`${this.base_url}/assignmentGradeSubmission`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as AssignmentGradeSubmissionResponse;
+    }
+
+
+
+    async fetchAssessmentDetailsTeacher(request: FetchAssessmentDetailsTeacherRequest): Promise<FetchAssessmentDetailsTeacherResponse> {
+        const response = await fetch(`${this.base_url}/fetchAssessmentDetailsTeacher`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchAssessmentDetailsTeacherResponse;
+    }
+
+
+
+    async fetchAssessmentDetailsStudent(request: FetchAssessmentDetailsStudentRequest): Promise<FetchAssessmentDetailsStudentResponse> {
+        const response = await fetch(`${this.base_url}/fetchAssessmentDetailsStudent`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchAssessmentDetailsStudentResponse;
+    }
+
+
+
+    async fetchAssessmentSubmissions(request: FetchAssessmentSubmissionsRequest): Promise<FetchAssessmentSubmissionsResponse> {
+        const response = await fetch(`${this.base_url}/fetchAssessmentSubmissions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchAssessmentSubmissionsResponse;
+    }
+
+
+
+    async fetchSubmission(request: FetchSubmissionRequest): Promise<FetchSubmissionResponse> {
+        const response = await fetch(`${this.base_url}/fetchSubmission`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchSubmissionResponse;
+    }
+
+
+
+    async fetchAssessments(request: FetchAssessmentsRequest): Promise<FetchAssessmentsResponse> {
+        const response = await fetch(`${this.base_url}/fetchAssessments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchAssessmentsResponse;
     }
 
 

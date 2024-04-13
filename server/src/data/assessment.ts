@@ -5,7 +5,12 @@ import {
   CreateAssessmentRequest,
   SubmitAnswersRequest,
   SubmitAssignmentRequest,
-  FetchAssessmentDetailsRequest,
+  FetchAssessmentDetailsTeacherRequest as fetchAssessmentDetailsRequest,
+  FetchAssessmentSubmissionsRequest,
+  FetchSubmissionRequest,
+  FetchAssessmentsRequest,
+  ManualGradeSubmissionRequest,
+  AssignmentGradeSubmissionRequest,
 } from "@/apis";
 import { hasCourse } from "./course";
 
@@ -63,23 +68,45 @@ export const submitAnswers = async (
   data: SubmitAnswersRequest,
 ): Promise<Submission> => {
   try {
-    const assessmentExists = await db.assessment.findUnique({
+    const assessment = await db.assessment.findUnique({
       where: { id: data.assessmentId },
+      include: { questions: true },
     });
-    if (!assessmentExists) {
+
+    if (!assessment) {
       throw new APIError("Assessment not found", "ASSESSMENT_NOT_FOUND");
     }
 
     const submission = await db.submission.create({
       data: {
-        assessmentId: data.assessmentId,
-        studentId: data.studentId,
+        assessmentID: data.assessmentId,
+        studentID: data.studentId,
         answers: data.answers,
         submittedAt: new Date(),
+        grade: 0,
       },
     });
 
-    return submission;
+    const studentAnswers = JSON.parse(data.answers);
+    let totalScore = 0;
+
+    assessment.questions.forEach((question) => {
+      if (question.type === "MCQ") {
+        const correctAnswer = question.answer;
+        const studentAnswer = studentAnswers[question.id];
+
+        if (studentAnswer === correctAnswer) {
+          totalScore += question.points;
+        }
+      }
+    });
+
+    const updatedSubmission = await db.submission.update({
+      where: { id: submission.id },
+      data: { grade: totalScore },
+    });
+
+    return updatedSubmission;
   } catch (error) {
     console.error("Failed to submit answers:", error);
     throw new APIError("Failed to submit answers", "SUBMISSION_FAILED");
@@ -107,9 +134,9 @@ export const submitAssignment = async (
 
     const submission = await db.submission.create({
       data: {
-        assessmentId: data.assessmentId,
-        studentId: data.studentId,
-        fileUrl: data.fileUrl,
+        assessmentID: data.assessmentId,
+        studentID: data.studentId,
+        assignmentContent: JSON.stringify(data.assignmentContent),
         submittedAt: new Date(),
       },
     });
@@ -122,7 +149,7 @@ export const submitAssignment = async (
 };
 
 export const fetchAssessmentDetails = async (
-  data: FetchAssessmentDetailsRequest,
+  data: fetchAssessmentDetailsRequest,
 ): Promise<AssessmentDetails> => {
   try {
     const assessment = await db.assessment.findUnique({
@@ -141,5 +168,125 @@ export const fetchAssessmentDetails = async (
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");
+  }
+};
+
+export const fetchAssessmentSubmissions = async (
+  data: FetchAssessmentSubmissionsRequest,
+): Promise<Submission[]> => {
+  try {
+    const submissions = await db.submission.findMany({
+      where: { assessmentID: data.assessmentId },
+    });
+
+    if (!submissions.length) {
+      throw new APIError(
+        "No submissions found for this assessment",
+        "NO_SUBMISSIONS_FOUND",
+      );
+    }
+
+    return submissions;
+  } catch (error) {
+    console.error("Failed to fetch submissions:", error);
+    throw new APIError("Failed to fetch submissions", "FETCH_FAILED");
+  }
+};
+
+export const fetchSubmission = async (
+  data: FetchSubmissionRequest,
+): Promise<Submission> => {
+  try {
+    const submission = await db.submission.findUnique({
+      where: { id: data.submissionId },
+    });
+
+    if (!submission) {
+      throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
+    }
+
+    return submission;
+  } catch (error) {
+    console.error(
+      "Failed to fetch submission with ID " + data.submissionId + ":",
+      error,
+    );
+    throw new APIError("Failed to fetch submission", "FETCH_FAILED");
+  }
+};
+
+export const fetchAssessments = async (
+  data: FetchAssessmentsRequest,
+): Promise<Assessment[]> => {
+  try {
+    const assessments = await db.assessment.findMany({
+      where: { courseID: data.courseId },
+    });
+
+    if (!assessments.length) {
+      throw new APIError(
+        "No assessments found for this course",
+        "NO_ASSESSMENTS_FOUND",
+      );
+    }
+
+    return assessments;
+  } catch (error) {
+    console.error("Failed to fetch submissions:", error);
+    throw new APIError("Failed to fetch submissions", "FETCH_FAILED");
+  }
+};
+
+export const manualGradeSubmission = async (
+  data: ManualGradeSubmissionRequest,
+): Promise<Submission> => {
+  const { submissionId, saqGrades } = data;
+
+  const submission = await db.submission.findUnique({
+    where: { id: submissionId },
+  });
+
+  if (!submission) {
+    throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
+  }
+
+  const newTotalGrade = (submission.grade || 0) + saqGrades;
+
+  const updatedSubmission = await db.submission.update({
+    where: { id: submissionId },
+    data: {
+      grade: newTotalGrade,
+    },
+  });
+
+  return updatedSubmission;
+};
+
+export const assignmentGradeSubmission = async (
+  data: AssignmentGradeSubmissionRequest,
+): Promise<Submission> => {
+  try {
+    const { submissionId, grades, feedback } = data;
+
+    const existingSubmission = await db.submission.findUnique({
+      where: { id: submissionId },
+    });
+
+    if (!existingSubmission) {
+      throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
+    }
+
+    const updatedSubmission = await db.submission.update({
+      where: { id: submissionId },
+      data: {
+        grade: grades,
+        feedback: feedback,
+      },
+    });
+
+    return updatedSubmission;
+  } catch (error) {
+    console.error("Failed to grade the assignment:", error);
+    throw new APIError("Failed to update the submission", "UPDATE_FAILED");
   }
 };
