@@ -361,3 +361,70 @@ export const assignmentData = {
     },
   ],
 };
+
+export const examData = {
+  id: "5",
+  title: "Final Exam",
+  description:
+    "This course aims for students to become proficient in a high-level programming language, C. It also focuses on long-term mental preparedness for programming, including problem-solving, debugging, and testing.",
+  courseId: "COMP1522",
+  type: "exam",
+  startDate: "2024-04-10T00:00:00Z",
+  dueDate: "2024-04-12T00:00:00Z",
+  questions: [
+    {
+      assessmentId: "5",
+      id: "question1",
+      title: "Which city is the capital of France?",
+      type: "MCQ",
+      options: JSON.stringify(["Paris", "Berlin", "Rome"]),
+      answer: "Paris",
+      points: 5,
+    },
+    {
+      assessmentId: "5",
+      id: "question2",
+      title: "Explain the process of photosynthesis.",
+      type: "SAQ",
+      answer:
+        "photosynthesis, the process by which green plants and certain other organisms transform light energy into chemical energy. During photosynthesis in green plants, light energy is captured and used to convert water, carbon dioxide, and minerals into oxygen and energy-rich organic compounds.",
+      points: 10,
+    },
+    {
+      assessmentId: "5",
+      id: "question3",
+      title: "Explain the process of photosynthesis.",
+      type: "SAQ",
+      answer:
+        "photosynthesis, the process by which green plants and certain other organisms transform light energy into chemical energy. During photosynthesis in green plants, light energy is captured and used to convert water, carbon dioxide, and minerals into oxygen and energy-rich organic compounds.",
+      points: 10,
+    },
+  ],
+  submissions: [
+    {
+      id: "xyz1",
+      assessmentId: "5",
+      studentId: "Steve", // Should be an Id for this part, search student name by Id to get the name
+      submittedAt: "2024-05-12T00:00:00Z",
+      answers: {
+        question1: "Paris",
+        question2: "lalalalalala",
+        question3: "test",
+      },
+      grade: 0,
+    },
+  ],
+};
+
+export const examSubmission = {
+  id: "xyz1",
+  assessmentId: "5",
+  studentId: "Steve", // Should be an Id for this part, search student name by Id to get the name
+  submittedAt: "2024-05-12T00:00:00Z",
+  answers: {
+    question1: "Paris",
+    question2: "lalalalalala",
+    question3: "test",
+  },
+  grade: 0,
+};
