@@ -39,6 +39,9 @@ import { upsertPost } from "@/handlers/upsertPost";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
+import { fetchAssessmentSubmissions } from "@/handlers/fetchAssessmentSubmissions";
+import { fetchSubmission } from "@/handlers/fetchSubmission";
+import { fetchAssessments } from "@/handlers/fetchAssessments";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -376,6 +379,36 @@ export interface FetchAssessmentDetailsStudentRequest {
 // FetchAssessmentDetailsStudentResponse is the response that is sent to the fetchAssessmentDetailsStudent endpoint.
 export interface FetchAssessmentDetailsStudentResponse {
     assessment: Assessment;
+}
+
+// FetchAssessmentSubmissionsRequest is the request that is sent to the fetchAssessmentSubmissions endpoint.
+export interface FetchAssessmentSubmissionsRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentSubmissionsResponse is the response that is sent to the fetchAssessmentSubmissions endpoint.
+export interface FetchAssessmentSubmissionsResponse {
+    submissions: Submission[];
+}
+
+// FetchSubmissionRequest is the request that is sent to the fetchSubmission endpoint.
+export interface FetchSubmissionRequest {
+    submissionId: string;
+}
+
+// FetchSubmissionResponse is the response that is sent to the fetchSubmission endpoint.
+export interface FetchSubmissionResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentsRequest is the request that is sent to the fetchAssessments endpoint.
+export interface FetchAssessmentsRequest {
+    courseId: string;
+}
+
+// FetchAssessmentsResponse is the response that is sent to the fetchAssessments endpoint.
+export interface FetchAssessmentsResponse {
+    assessments: Assessment[];
 }
 
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
@@ -984,6 +1017,72 @@ app.post('/api/fetchAssessmentDetailsStudent', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request fetchAssessmentDetailsStudent with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchAssessmentSubmissions is the endpoint handler for the fetchAssessmentSubmissions endpoint.
+// It wraps around the function at @/handlers/fetchAssessmentSubmissions.
+app.post('/api/fetchAssessmentSubmissions', async (req, res) => {
+    const request: FetchAssessmentSubmissionsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchAssessmentSubmissionsResponse = await fetchAssessmentSubmissions(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchAssessmentSubmissions with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchSubmission is the endpoint handler for the fetchSubmission endpoint.
+// It wraps around the function at @/handlers/fetchSubmission.
+app.post('/api/fetchSubmission', async (req, res) => {
+    const request: FetchSubmissionRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchSubmissionResponse = await fetchSubmission(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchSubmission with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// fetchAssessments is the endpoint handler for the fetchAssessments endpoint.
+// It wraps around the function at @/handlers/fetchAssessments.
+app.post('/api/fetchAssessments', async (req, res) => {
+    const request: FetchAssessmentsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchAssessmentsResponse = await fetchAssessments(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchAssessments with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

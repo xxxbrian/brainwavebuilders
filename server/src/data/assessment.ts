@@ -6,6 +6,9 @@ import {
   SubmitAnswersRequest,
   SubmitAssignmentRequest,
   FetchAssessmentDetailsTeacherRequest as fetchAssessmentDetailsRequest,
+  FetchAssessmentSubmissionsRequest,
+  FetchSubmissionRequest,
+  FetchAssessmentsRequest,
   ManualGradeSubmissionRequest,
   AssignmentGradeSubmissionRequest,
 } from "@/apis";
@@ -76,8 +79,8 @@ export const submitAnswers = async (
 
     const submission = await db.submission.create({
       data: {
-        assessmentId: data.assessmentId,
-        studentId: data.studentId,
+        assessmentID: data.assessmentId,
+        studentID: data.studentId,
         answers: data.answers,
         submittedAt: new Date(),
         grade: 0,
@@ -131,8 +134,8 @@ export const submitAssignment = async (
 
     const submission = await db.submission.create({
       data: {
-        assessmentId: data.assessmentId,
-        studentId: data.studentId,
+        assessmentID: data.assessmentId,
+        studentID: data.studentId,
         assignmentContent: JSON.stringify(data.assignmentContent),
         submittedAt: new Date(),
       },
@@ -165,6 +168,72 @@ export const fetchAssessmentDetails = async (
   } catch (error) {
     console.error("Failed to fetch assessment details:", error);
     throw new APIError("Failed to fetch assessment details", "FETCH_FAILED");
+  }
+};
+
+export const fetchAssessmentSubmissions = async (
+  data: FetchAssessmentSubmissionsRequest,
+): Promise<Submission[]> => {
+  try {
+    const submissions = await db.submission.findMany({
+      where: { assessmentID: data.assessmentId },
+    });
+
+    if (!submissions.length) {
+      throw new APIError(
+        "No submissions found for this assessment",
+        "NO_SUBMISSIONS_FOUND",
+      );
+    }
+
+    return submissions;
+  } catch (error) {
+    console.error("Failed to fetch submissions:", error);
+    throw new APIError("Failed to fetch submissions", "FETCH_FAILED");
+  }
+};
+
+export const fetchSubmission = async (
+  data: FetchSubmissionRequest,
+): Promise<Submission> => {
+  try {
+    const submission = await db.submission.findUnique({
+      where: { id: data.submissionId },
+    });
+
+    if (!submission) {
+      throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
+    }
+
+    return submission;
+  } catch (error) {
+    console.error(
+      "Failed to fetch submission with ID " + data.submissionId + ":",
+      error,
+    );
+    throw new APIError("Failed to fetch submission", "FETCH_FAILED");
+  }
+};
+
+export const fetchAssessments = async (
+  data: FetchAssessmentsRequest,
+): Promise<Assessment[]> => {
+  try {
+    const assessments = await db.assessment.findMany({
+      where: { courseID: data.courseId },
+    });
+
+    if (!assessments.length) {
+      throw new APIError(
+        "No assessments found for this course",
+        "NO_ASSESSMENTS_FOUND",
+      );
+    }
+
+    return assessments;
+  } catch (error) {
+    console.error("Failed to fetch submissions:", error);
+    throw new APIError("Failed to fetch submissions", "FETCH_FAILED");
   }
 };
 

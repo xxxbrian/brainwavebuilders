@@ -340,6 +340,36 @@ export interface FetchAssessmentDetailsStudentResponse {
     assessment: Assessment;
 }
 
+// FetchAssessmentSubmissionsRequest is the request that is sent to the fetchAssessmentSubmissions endpoint.
+export interface FetchAssessmentSubmissionsRequest {
+    assessmentId: string;
+}
+
+// FetchAssessmentSubmissionsResponse is the response that is sent to the fetchAssessmentSubmissions endpoint.
+export interface FetchAssessmentSubmissionsResponse {
+    submissions: Submission[];
+}
+
+// FetchSubmissionRequest is the request that is sent to the fetchSubmission endpoint.
+export interface FetchSubmissionRequest {
+    submissionId: string;
+}
+
+// FetchSubmissionResponse is the response that is sent to the fetchSubmission endpoint.
+export interface FetchSubmissionResponse {
+    submission: Submission;
+}
+
+// FetchAssessmentsRequest is the request that is sent to the fetchAssessments endpoint.
+export interface FetchAssessmentsRequest {
+    courseId: string;
+}
+
+// FetchAssessmentsResponse is the response that is sent to the fetchAssessments endpoint.
+export interface FetchAssessmentsResponse {
+    assessments: Assessment[];
+}
+
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
 export interface FetchUserStatsRequest {
 
@@ -1078,6 +1108,93 @@ export class BrainwavesClient {
         }
 
         return json as FetchAssessmentDetailsStudentResponse;
+    }
+
+
+
+    async fetchAssessmentSubmissions(request: FetchAssessmentSubmissionsRequest): Promise<FetchAssessmentSubmissionsResponse> {
+        const response = await fetch(`${this.base_url}/fetchAssessmentSubmissions`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchAssessmentSubmissionsResponse;
+    }
+
+
+
+    async fetchSubmission(request: FetchSubmissionRequest): Promise<FetchSubmissionResponse> {
+        const response = await fetch(`${this.base_url}/fetchSubmission`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchSubmissionResponse;
+    }
+
+
+
+    async fetchAssessments(request: FetchAssessmentsRequest): Promise<FetchAssessmentsResponse> {
+        const response = await fetch(`${this.base_url}/fetchAssessments`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchAssessmentsResponse;
     }
 
 
