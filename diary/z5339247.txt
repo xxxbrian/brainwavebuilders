@@ -97,3 +97,16 @@ Implemented frontend calendar and deadline system.
 Designed frontend structure related to the calendar.
 Fixed existing code based on new authentication middleware.
 Participation in Meetings.
+
+
+Week 9:
+Implemented an advanced editor component similar to Notion:
+    - Supports dragging text blocks
+    - Features such as bold, italic, underline, strikethrough, headings, lists, quotes, code blocks, images, links,
+    tables and separators
+    - Undo and redo functionality
+    - Color support
+    - Image uploading capability
+    - Enhanced with ChatGPT AI for refinement and generation.
+Implemented a file drive, both the front-end and back-end.
+Participation in Meetings.
