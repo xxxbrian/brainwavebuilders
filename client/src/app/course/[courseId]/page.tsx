@@ -46,9 +46,7 @@ export const CoursesPage: React.FC = ({}) => {
   const router = useRouter();
 
   const course = useCourse();
-
-  const courseId = course.id;
-
+  
   const pathName = usePathname();
 
   const backend = useBackend();
