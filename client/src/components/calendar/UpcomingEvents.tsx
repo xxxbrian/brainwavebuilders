@@ -13,7 +13,7 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
   showEventNumber,
 }) => {
   // filter events that are after yesterday
-  const upcomingEvents = Array.from(events).filter(
+  const upcomingEvents = Object.entries(events).filter(
     ([date]) => new Date(date) >= today,
   );
 
