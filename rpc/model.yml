@@ -116,6 +116,11 @@ types:
 
     content: json
 
+  Event:
+    name: string
+    time: string
+    type: string
+
 endpoints:
   ping:
     request:
@@ -408,4 +413,17 @@ endpoints:
     request:
       threadID: string
     response:
+    service: typescript
+
+  getUserEvents:
+    request:
+    response:
+      events: Record<string, Event[]>
+    service: typescript
+
+  getCourseEvents:
+    request:
+      courseId: string
+    response:
+      events: Record<string, Event[]>
     service: typescript

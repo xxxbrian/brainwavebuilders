@@ -13,7 +13,7 @@ import { Assessment } from "@/backend";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import AssignmentsTable from "@/components/assessment/AssessmentsTable";
 import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
-
+import { type Event } from "@/components/calendar/Calendar";
 interface ApplicationProps {
   icon: React.ReactNode;
   title: string;
@@ -46,10 +46,24 @@ export const CoursesPage: React.FC = ({}) => {
   const router = useRouter();
 
   const course = useCourse();
-  
+
   const pathName = usePathname();
 
   const backend = useBackend();
+
+  const [events, setEvents] = useState<Record<string, Event[]>>({});
+
+  useEffect(() => {
+    const inner = async () => {
+      if (!course.id) {
+        return;
+      }
+      const { events } = await backend.getCourseEvents({ courseId: course.id });
+      setEvents(events);
+    };
+
+    void inner();
+  }, [backend, course.id]);
 
   const onClickAssignments = useCallback(async () => {
     router.push(`${pathName}/assignments`);
@@ -75,8 +89,16 @@ export const CoursesPage: React.FC = ({}) => {
     try {
       const response = await backend.fetchAssessments({ courseId: course.id });
       setAssessments(response.assessments);
-      setAssignmentsData(response.assessments.filter(ass => ass.type === "assignment").map(formatAssessmentProps));
-      setExamsData(response.assessments.filter(ass => ass.type === "exam").map(formatAssessmentProps));
+      setAssignmentsData(
+        response.assessments
+          .filter((ass) => ass.type === "assignment")
+          .map(formatAssessmentProps),
+      );
+      setExamsData(
+        response.assessments
+          .filter((ass) => ass.type === "exam")
+          .map(formatAssessmentProps),
+      );
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }
@@ -167,13 +189,13 @@ export const CoursesPage: React.FC = ({}) => {
         <div className="w-2/3 space-y-4 overflow-hidden">
           <Heading size={"5"}>Calendar</Heading>
           <CalendarBoard
-            today={mockTime}
-            events={mockEvents()}
+            today={new Date()}
+            events={events}
             warpperClassName="hidden xl:block flex-shrink-0"
           />
           <CalendarBoardMini
-            today={mockTime}
-            events={mockEvents()}
+            today={new Date()}
+            events={events}
             warpperClassName="xl:hidden"
           />
         </div>
