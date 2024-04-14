@@ -2,20 +2,27 @@ import { useBackend } from "@/hooks/useBackend";
 import { Button, Dialog, TextArea, TextField } from "@radix-ui/themes";
 import React, { useCallback, useState, useMemo } from "react";
 import type { ChangeEvent } from "react";
+import { useRouter } from "next/navigation";
+import { useCourse } from "@/contexts/CourseContext";
 
 interface CreateAssignmentProps {
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  onUpdateAssignments: () => void;
 }
 
 export const CreateAssignmentDialog: React.FC<CreateAssignmentProps> = ({
   isOpen,
   setIsOpen,
+  onUpdateAssignments,
 }) => {
   const [assignmentName, setAssignmentName] = useState("");
   const [assignmentDescription, setAssignmentDescription] = useState("");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+
+  const backend = useBackend();
+  const courseId = useCourse().id;
 
   const minStartDate = useMemo(() => {
     const now = new Date();
@@ -50,37 +57,45 @@ export const CreateAssignmentDialog: React.FC<CreateAssignmentProps> = ({
     [],
   );
 
-  // TODO: Merge backend
-  //   const backend = useBackend();
+  const resetForm = useCallback(() => {
+    setAssignmentName("");
+    setAssignmentDescription("");
+    setStartDate("");
+    setEndDate("");
+  }, []);
 
-  //   const router = useRouter();
+  const handleSubmit = useCallback(async (event: React.FormEvent) => {
+    event.preventDefault();
+    try {
+      const response = await backend.createAssessment({
+        title: assignmentName,
+        description: assignmentDescription,
+        courseId: courseId as string,
+        startDate: startDate,
+        dueDate: endDate,
+        type: "assignment",
+      });
+      setIsOpen(false);
+      onUpdateAssignments();
+      resetForm();
+    } catch (error) {
+      console.error("Failed to create assignment:", error);
+    }
+  }, [assignmentName, assignmentDescription, startDate, endDate, backend, setIsOpen, onUpdateAssignments]);
 
-  //   const handleSubmit = useCallback(
-  //     async (e: React.FormEvent) => {
-  //       e.preventDefault();
-
-  //       const { course } = await backend.createCourse({
-  //         name: assignmentName,
-  //         description: assignmentDescription,
-  //       });
-
-  //       router.push(`/course/${course.id}`);
-  //     },
-  //     [backend, assignmentDescription, assignmentName, router],
-  //   );
+  const handleClose = useCallback(() => {
+    setIsOpen(false);
+    resetForm();
+  }, [setIsOpen, resetForm]);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Content className="bg-white px-10 py-6 rounded-3xl shadow-lg">
         <Dialog.Title className="flex justify-between items-start">
           Create Assignment
-          {/* Close Button */}
-          <Dialog.Close>
-            <button>×</button>
-          </Dialog.Close>
+          <button onClick={handleClose}>×</button>
         </Dialog.Title>
-        {/* TODO: Add onSubmit={handleSubmit} */}
-        <form>
+        <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label
               htmlFor="assignmentName"

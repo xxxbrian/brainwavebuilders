@@ -73,20 +73,24 @@ export const CoursesPage: React.FC = ({}) => {
   const [assignmentsData, setAssignmentsData] = useState<AssignmentProps[]>([]);
   const [examsData, setExamsData] = useState<AssignmentProps[]>([]);
 
-  useEffect(() => {
-    const fetchAssessments = async () => {
-      try {
-        const response = await backend.fetchAssessments({ courseId: course.id });
-        setAssessments(response.assessments);
-        setAssignmentsData(response.assessments.filter(ass => ass.type === "assignment").map(formatAssessmentProps));
-        setExamsData(response.assessments.filter(ass => ass.type === "exam").map(formatAssessmentProps));
-      } catch (error) {
-        console.error("Failed to fetch assessments:", error);
-      }
-    };
+  const fetchAssessments = async () => {
+    try {
+      const response = await backend.fetchAssessments({ courseId: course.id });
+      setAssessments(response.assessments);
+      setAssignmentsData(response.assessments.filter(ass => ass.type === "assignment").map(formatAssessmentProps));
+      setExamsData(response.assessments.filter(ass => ass.type === "exam").map(formatAssessmentProps));
+    } catch (error) {
+      console.error("Failed to fetch assessments:", error);
+    }
+  };
 
+  useEffect(() => {
     fetchAssessments();
   }, [backend, course.id]);
+
+  const handleUpdateAssignments = useCallback(() => {
+    fetchAssessments();
+  }, [fetchAssessments]);
 
   const formatAssessmentProps = (assessment: Assessment): AssignmentProps => ({
     id: assessment.id,
@@ -191,6 +195,7 @@ export const CoursesPage: React.FC = ({}) => {
       <CreateAssignmentDialog
         isOpen={isCreateAssignment}
         setIsOpen={setIsCreateAssignment}
+        onUpdateAssignments={handleUpdateAssignments}
       />
     </div>
   );
