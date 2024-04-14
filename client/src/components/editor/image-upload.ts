@@ -2,13 +2,12 @@ import { createImageUpload } from "novel/plugins";
 import { toast } from "sonner";
 
 const onUpload = (file: File) => {
-  const promise = fetch("/api/upload", {
+  const formData = new FormData();
+  formData.append("file", file);
+
+  const promise = fetch("/upload", {
     method: "POST",
-    headers: {
-      "content-type": file?.type || "application/octet-stream",
-      "x-vercel-filename": file?.name || "image.png",
-    },
-    body: file,
+    body: formData,
   });
 
   return new Promise((resolve) => {
@@ -16,20 +15,15 @@ const onUpload = (file: File) => {
       promise.then(async (res) => {
         // Successfully uploaded image
         if (res.status === 200) {
-          const { url } = (await res.json()) as any;
+          const data = await res.text();
+          // [{src: "/file/336108d21bbfd31465bbd.png"}]
+          const url = `https://img.xvv.net${JSON.parse(data)[0].src}`;
           // preload the image
-          let image = new Image();
+          const image = new Image();
           image.src = url;
           image.onload = () => {
             resolve(url);
           };
-          // No blob store configured
-        } else if (res.status === 401) {
-          resolve(file);
-          throw new Error(
-            "`BLOB_READ_WRITE_TOKEN` environment variable not found, reading image locally instead.",
-          );
-          // Unknown error
         } else {
           throw new Error(`Error uploading image. Please try again.`);
         }
@@ -37,7 +31,7 @@ const onUpload = (file: File) => {
       {
         loading: "Uploading image...",
         success: "Image uploaded successfully.",
-        error: (e) => e.message,
+        error: (e: Error) => e.message,
       },
     );
   });
