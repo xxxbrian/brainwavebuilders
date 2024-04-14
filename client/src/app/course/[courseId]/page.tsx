@@ -4,13 +4,14 @@ import { CalendarBoard } from "@/components/calendar/CalendarBoard";
 import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
 import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
-import { useCallback, useState } from "react";
+import { useCallback, useState, useEffect } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { mockTime, mockEvents } from "@/utils/data";
 import { useCourse } from "@/contexts/CourseContext";
+import { useBackend } from "@/hooks/useBackend";
+import { Assessment } from "@/backend";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import AssignmentsTable from "@/components/assessment/AssessmentsTable";
-import { AssessmentsData } from "@/utils/data";
 import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
 
 interface ApplicationProps {
@@ -46,7 +47,11 @@ export const CoursesPage: React.FC = ({}) => {
 
   const course = useCourse();
 
+  const courseId = course.id;
+
   const pathName = usePathname();
+
+  const backend = useBackend();
 
   const onClickAssignments = useCallback(async () => {
     router.push(`${pathName}/assignments`);
@@ -56,7 +61,39 @@ export const CoursesPage: React.FC = ({}) => {
     router.push(`${pathName}/forum`);
   }, [pathName, router]);
 
+  interface AssignmentProps {
+    id: string;
+    name: string;
+    startDate: string;
+    dueDate: string;
+  }
+
   const [isCreateAssignment, setIsCreateAssignment] = useState(false);
+  const [assessments, setAssessments] = useState<Assessment[]>([]);
+  const [assignmentsData, setAssignmentsData] = useState<AssignmentProps[]>([]);
+  const [examsData, setExamsData] = useState<AssignmentProps[]>([]);
+
+  useEffect(() => {
+    const fetchAssessments = async () => {
+      try {
+        const response = await backend.fetchAssessments({ courseId: course.id });
+        setAssessments(response.assessments);
+        setAssignmentsData(response.assessments.filter(ass => ass.type === "assignment").map(formatAssessmentProps));
+        setExamsData(response.assessments.filter(ass => ass.type === "exam").map(formatAssessmentProps));
+      } catch (error) {
+        console.error("Failed to fetch assessments:", error);
+      }
+    };
+
+    fetchAssessments();
+  }, [backend, course.id]);
+
+  const formatAssessmentProps = (assessment: Assessment): AssignmentProps => ({
+    id: assessment.id,
+    name: assessment.title,
+    startDate: assessment.startDate ?? "",
+    dueDate: assessment.dueDate ?? "",
+  });
 
   const onClickAssignment = useCallback(
     async (assessmentId: string) => {
@@ -76,27 +113,9 @@ export const CoursesPage: React.FC = ({}) => {
     router.push(`${pathName}/createexam`);
   }, [pathName, router]);
 
-  const onClickAddAssignment = () => {
+  const onClickAddAssignment = useCallback(() => {
     setIsCreateAssignment(true);
-  };
-
-  const assignmentsData = AssessmentsData.filter(
-    (assessment) => assessment.type !== "exam",
-  ).map((assessment) => ({
-    id: assessment.id,
-    name: assessment.title,
-    startDate: assessment.startDate ?? "",
-    dueDate: assessment.dueDate ?? "",
-  }));
-
-  const examsData = AssessmentsData.filter(
-    (assessment) => assessment.type === "exam",
-  ).map((assessment) => ({
-    id: assessment.id,
-    name: assessment.title,
-    startDate: assessment.startDate ?? "",
-    dueDate: assessment.dueDate ?? "",
-  }));
+  }, []);
 
   return (
     <div className="flex flex-col space-y-8 px-4">
