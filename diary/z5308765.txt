@@ -171,3 +171,19 @@ Took a break to focus on Thesis
 
 ========================================================================
 Week 9
+
+Check in with Xin on wednesday in tutorial
+
+Discussed allocation of work for rest of project
+
+I'm working on testing frontend with jest
+	had some issues setting up environment with our tech stack
+	got environment working for components - so can do basic render testing
+	will do a bunch of that to get coverage up
+
+having difficulties with rendering whole pages in jsdom (just not actually rendering)
+	once i figure this out, i can complete the tests and merge to main
+
+need to help with presentation prep and report writing
+
+My contribution lately has been low, I will reflect this in my peer review so that the others are not brought down by it.
