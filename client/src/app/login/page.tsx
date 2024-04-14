@@ -1,20 +1,36 @@
 "use client";
 
-import { isAPIError, type Featured } from "@/backend";
-import { Logo } from "@/components/Logo";
-import { CenteredLoading } from "@/components/loading";
-import { LoginForm } from "@/components/login/LoginForm";
-import { RegisterForm } from "@/components/login/RegisterForm";
-import { ResetForm } from "@/components/login/ResetForm";
-import { VerificationForm } from "@/components/login/VerificationForm";
-import { useBackend } from "@/hooks/useBackend";
-import { useRefState } from "@/hooks/useRefState";
+// import { isAPIError, type Featured } from "@/backend";
+// import { Logo } from "@/components/Logo";
+// import { CenteredLoading } from "@/components/loading";
+// import { LoginForm } from "@/components/login/LoginForm";
+// import { RegisterForm } from "@/components/login/RegisterForm";
+// import { ResetForm } from "@/components/login/ResetForm";
+// import { VerificationForm } from "@/components/login/VerificationForm";
+// import { useBackend } from "@/hooks/useBackend";
+// import { useRefState } from "@/hooks/useRefState";
+// import { Callout, Card } from "@radix-ui/themes";
+// import { usePathname, useRouter } from "next/navigation";
+// import { useCallback, useEffect, useState } from "react";
+// import { VscError } from "react-icons/vsc";
+// import Cookies from "js-cookie";
+// import { useCurrentUser } from "@/hooks/useCurrentUser";
+
+import { isAPIError, type Featured } from "../../backend";
+import { Logo } from "../../components/Logo";
+import { CenteredLoading } from "../../components/loading";
+import { LoginForm } from "../../components/login/LoginForm";
+import { RegisterForm } from "../../components/login/RegisterForm";
+import { ResetForm } from "../../components/login/ResetForm";
+import { VerificationForm } from "../../components/login/VerificationForm";
+import { useBackend } from "../../hooks/useBackend";
+import { useRefState } from "../../hooks/useRefState";
 import { Callout, Card } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
 import { VscError } from "react-icons/vsc";
 import Cookies from "js-cookie";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 
 interface Props {}
 
