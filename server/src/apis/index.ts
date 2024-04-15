@@ -25,6 +25,7 @@ import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission"
 import { getRoleInCourse } from "@/handlers/getRoleInCourse";
 import { upsertPost } from "@/handlers/upsertPost";
 import { joinCourse } from "@/handlers/joinCourse";
+import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
 import { deletePost } from "@/handlers/deletePost";
 import { createCourseInvitation } from "@/handlers/createCourseInvitation";
 import { setUserProfile } from "@/handlers/setUserProfile";
@@ -285,6 +286,16 @@ export interface GetUserInfoRequest {
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
     user: User;
+}
+
+// GetUserInfoByIDsRequest is the request that is sent to the getUserInfoByIDs endpoint.
+export interface GetUserInfoByIDsRequest {
+    ids: string[];
+}
+
+// GetUserInfoByIDsResponse is the response that is sent to the getUserInfoByIDs endpoint.
+export interface GetUserInfoByIDsResponse {
+    users: Record<string, User>;
 }
 
 // SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
@@ -849,6 +860,28 @@ app.post('/api/getUserInfo', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getUserInfo with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getUserInfoByIDs is the endpoint handler for the getUserInfoByIDs endpoint.
+// It wraps around the function at @/handlers/getUserInfoByIDs.
+app.post('/api/getUserInfoByIDs', async (req, res) => {
+    const request: GetUserInfoByIDsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetUserInfoByIDsResponse = await getUserInfoByIDs(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getUserInfoByIDs with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

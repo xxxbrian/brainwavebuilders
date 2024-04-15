@@ -191,6 +191,13 @@ endpoints:
       user: User
     service: typescript
 
+  getUserInfoByIDs:
+    request:
+      ids: string[]
+    response:
+      users: Record<string, User>
+    service: typescript
+
   setUserProfile:
     request:
       user: User
