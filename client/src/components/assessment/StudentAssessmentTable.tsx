@@ -48,38 +48,39 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
 
   useEffect(() => {
     const fetchSubmissionsAndMapToAssignments = async () => {
+      let submissionsMap: Record<string, Submission> = {};
+
       try {
         const submissionsResponse = await backend.fetchStudentSubmission({});
-        const submissionsMap: Record<string, Submission> =
-          submissionsResponse.submissions.reduce(
-            (acc: Record<string, Submission>, sub: Submission) => {
-              acc[sub.assessmentId] = sub;
-              return acc;
-            },
-            {},
-          );
-
-        const withSubmissions = assignments.map((assignment) => {
-          const submission = submissionsMap[assignment.id];
-          return {
-            ...assignment,
-            startDate: formatDate(assignment.startDate),
-            dueDate: formatDate(assignment.dueDate),
-            submissionId: submission?.id,
-            grade: submission?.isMarked
-              ? `${submission.grade}/${assignment.totalPoints}`
-              : "Not Graded",
-            status: determineStatus(assignment, new Date()),
-          };
-        });
-
-        void setSortedAssignments(withSubmissions);
+        submissionsMap = submissionsResponse.submissions.reduce(
+          (acc: Record<string, Submission>, sub: Submission) => {
+            acc[sub.assessmentId] = sub;
+            return acc;
+          },
+          {},
+        );
       } catch (error) {
         console.error("Failed to fetch submissions:", error);
       }
+
+      const withSubmissions = assignments.map((assignment) => {
+        const submission = submissionsMap[assignment.id];
+        return {
+          ...assignment,
+          startDate: formatDate(assignment.startDate),
+          dueDate: formatDate(assignment.dueDate),
+          submissionId: submission?.id,
+          grade: submission?.isMarked
+            ? `${submission.grade}/${assignment.totalPoints}`
+            : "Not Graded",
+          status: determineStatus(assignment, new Date()),
+        };
+      });
+
+      setSortedAssignments(withSubmissions);
     };
 
-    void fetchSubmissionsAndMapToAssignments();
+    fetchSubmissionsAndMapToAssignments();
   }, [assignments, backend]);
 
   const determineStatus = (
@@ -98,9 +99,7 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
   };
 
   const handleRowClick = (id: string, status: string) => {
-    if (type === "Assignment" && status === "Completed") {
-      viewAssignmentResult("fake_submission_id");
-    } else if (type === "Assignment" && status !== "Not Start") {
+    if (type === "Assignment" && status !== "Not Start") {
       onClickAsessment(id);
     } else if (type === "Exam" && status === "In Progress") {
       onClickAsessment(id);
