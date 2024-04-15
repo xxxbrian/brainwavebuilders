@@ -9,6 +9,7 @@ export interface Session {
 
 export const useCurrentUser = (): User | null => {
   const session = useSession();
+
   if (session) {
     return session.user;
   }
@@ -16,10 +17,20 @@ export const useCurrentUser = (): User | null => {
   return null;
 };
 
-export const SessionContext = createContext<Session | null>(null);
+type ResetSession = () => void;
+
+export const SessionContext = createContext<[Session, ResetSession] | null>(
+  null,
+);
 
 export const useSession = (): Session | null => {
-  return useContext(SessionContext);
+  const sess = useContext(SessionContext);
+  return sess?.[0] ?? null;
+};
+
+export const useResetSession = (): ResetSession | null => {
+  const sess = useContext(SessionContext);
+  return sess?.[1] ?? null;
 };
 
 export const createSession = async (
