@@ -5,6 +5,7 @@ import { app } from "@/globals";
 import { fetchAssessmentSubmissions } from "@/handlers/fetchAssessmentSubmissions";
 import { incrementThreadView } from "@/handlers/incrementThreadView";
 import { ping } from "@/handlers/ping";
+import { getAnnouncements } from "@/handlers/getAnnouncements";
 import { fetchSubmission } from "@/handlers/fetchSubmission";
 import { submitAssignment } from "@/handlers/submitAssignment";
 import { forgotPassword } from "@/handlers/forgotPassword";
@@ -646,6 +647,16 @@ export interface GetCourseEventsRequest {
 // GetCourseEventsResponse is the response that is sent to the getCourseEvents endpoint.
 export interface GetCourseEventsResponse {
     events: Record<string, Event[]>;
+}
+
+// GetAnnouncementsRequest is the request that is sent to the getAnnouncements endpoint.
+export interface GetAnnouncementsRequest {
+    courseIDs?: string[];
+}
+
+// GetAnnouncementsResponse is the response that is sent to the getAnnouncements endpoint.
+export interface GetAnnouncementsResponse {
+    threads: Thread[];
 }
 
 
@@ -1608,6 +1619,28 @@ app.post('/api/getCourseEvents', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getCourseEvents with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getAnnouncements is the endpoint handler for the getAnnouncements endpoint.
+// It wraps around the function at @/handlers/getAnnouncements.
+app.post('/api/getAnnouncements', async (req, res) => {
+    const request: GetAnnouncementsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetAnnouncementsResponse = await getAnnouncements(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getAnnouncements with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

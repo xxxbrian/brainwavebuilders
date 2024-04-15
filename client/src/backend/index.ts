@@ -604,6 +604,16 @@ export interface GetCourseEventsResponse {
     events: Record<string, Event[]>;
 }
 
+// GetAnnouncementsRequest is the request that is sent to the getAnnouncements endpoint.
+export interface GetAnnouncementsRequest {
+    courseIDs?: string[];
+}
+
+// GetAnnouncementsResponse is the response that is sent to the getAnnouncements endpoint.
+export interface GetAnnouncementsResponse {
+    threads: Thread[];
+}
+
 
 //////////////////////////////
 // API Errors
@@ -1871,6 +1881,35 @@ export class BrainwavesClient {
         }
 
         return json as GetCourseEventsResponse;
+    }
+
+
+
+    async getAnnouncements(request: GetAnnouncementsRequest): Promise<GetAnnouncementsResponse> {
+        const response = await fetch(`${this.base_url}/getAnnouncements`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetAnnouncementsResponse;
     }
 }
 

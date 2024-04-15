@@ -345,3 +345,26 @@ export const toggleLikePost = async (
 
   return true;
 };
+
+export const getAnnouncements = async (
+  threadIDs: string[],
+): Promise<ThreadWithPostsAndCounts[]> => {
+  const threads = await db.thread.findMany({
+    where: {
+      id: {
+        in: threadIDs,
+      },
+      isAnnouncement: true,
+    },
+    include: {
+      posts: {
+        include: {
+          createdBy: true,
+        },
+      },
+      createdBy: true,
+    },
+  });
+
+  return threads;
+};

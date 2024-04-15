@@ -59,7 +59,7 @@ export const upsertPost = async (
   };
 };
 
-export const notifyPostUpdate = async (post: Post) => {
+const notifyPostUpdate = async (post: Post) => {
   const thread = (await getThreadByID(post.threadID))!;
 
   if (thread.isAnnouncement && thread.posts.length === 1) {
