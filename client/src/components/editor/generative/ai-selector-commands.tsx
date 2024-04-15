@@ -40,6 +40,7 @@ interface AISelectorCommandsProps {
 
 const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
   const { editor } = useEditor();
+  if (!editor) return null;
 
   return (
     <>
@@ -48,9 +49,11 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
           <CommandItem
             onSelect={(value) => {
               const slice = editor.state.selection.content();
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
               const text = editor.storage.markdown.serializer.serialize(
                 slice.content,
               );
+              // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
               onSelect(text, value);
             }}
             className="flex gap-2 px-4"
@@ -67,6 +70,7 @@ const AISelectorCommands = ({ onSelect }: AISelectorCommandsProps) => {
         <CommandItem
           onSelect={() => {
             const text = getPrevText(editor, { chars: 5000 });
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
             onSelect(text, "continue");
           }}
           value="continue"
