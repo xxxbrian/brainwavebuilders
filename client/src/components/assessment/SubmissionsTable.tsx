@@ -44,27 +44,35 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
         </Table.Header>
 
         <Table.Body>
-          {submissions.map((submission) => (
-            <Table.Row key={submission.id}>
-              <Table.RowHeaderCell>
-                {submission.studentName}
-              </Table.RowHeaderCell>
-              <Table.Cell>{formatDate(submission.submittedAt)}</Table.Cell>
-              <Table.Cell>
-                {submission.grade !== undefined ? (
-                  `${submission.grade}/100`
-                ) : (
-                  <span className="text-red-500">Not marked yet</span>
-                )}
-              </Table.Cell>
-              <Table.Cell
-                className="cursor-pointer"
-                onClick={() => onClickMark(submission.id)}
-              >
-                <FaRegPenToSquare />
+          {submissions.length > 0 ? (
+            submissions.map((submission) => (
+              <Table.Row key={submission.id}>
+                <Table.RowHeaderCell>
+                  {submission.studentName}
+                </Table.RowHeaderCell>
+                <Table.Cell>{formatDate(submission.submittedAt)}</Table.Cell>
+                <Table.Cell>
+                  {submission.grade !== undefined ? (
+                    `${submission.grade}/100`
+                  ) : (
+                    <span className="text-red-500">Not marked yet</span>
+                  )}
+                </Table.Cell>
+                <Table.Cell
+                  className="cursor-pointer"
+                  onClick={() => onClickMark(submission.id)}
+                >
+                  <FaRegPenToSquare />
+                </Table.Cell>
+              </Table.Row>
+            ))
+          ) : (
+            <Table.Row>
+              <Table.Cell colSpan={4} className="text-center">
+                There is no Submission
               </Table.Cell>
             </Table.Row>
-          ))}
+          )}
         </Table.Body>
       </Table.Root>
     </div>

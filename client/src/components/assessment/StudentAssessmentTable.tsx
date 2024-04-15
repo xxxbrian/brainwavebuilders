@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Heading } from "@radix-ui/themes";
 import { Table } from "@radix-ui/themes";
-import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 
 interface AssignmentProps {
   id: string;
@@ -20,15 +19,15 @@ interface AssignmentsTableProps {
   assignments: AssignmentProps[];
   type: string;
   onClickAsessment: (assessmentId: string) => void;
-  onClickAddButton: () => void;
+  viewAssignmentResult: (submissionId: string) => void;
 }
 
 // Component to display a table of assignments
-const AssessmentTable: React.FC<AssignmentsTableProps> = ({
+const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
   assignments,
   type,
-  onClickAddButton,
   onClickAsessment,
+  viewAssignmentResult,
 }) => {
   const [sortedAssignments, setSortedAssignments] = useState<
     AssignmentWithStatusProps[]
@@ -83,14 +82,22 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
     );
   }, [assignments]);
 
+  const handleRowClick = (id: string, status: string) => {
+    if (type === "Assignment" && status === "Completed") {
+      // TODO: You need to add a function to get real submission Id by using user Id and assignment Id
+      viewAssignmentResult("fake_submission_id");
+    } else if (type === "Assignment" && status !== "Not Start") {
+      onClickAsessment(id);
+    } else if (type === "Exam" && status === "In Progress") {
+      onClickAsessment(id);
+    }
+  };
+
   // TODO: Use Id to navigate assignment from table
   return (
     <div>
       <div className="flex justify-between p-2">
         <Heading color="indigo">{type}</Heading>
-        <WithTeacherRole>
-          <button onClick={onClickAddButton}>+</button>
-        </WithTeacherRole>
       </div>
 
       <Table.Root variant="surface">
@@ -100,6 +107,7 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
             <Table.ColumnHeaderCell>Start Date</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Due Date</Table.ColumnHeaderCell>
             <Table.ColumnHeaderCell>Status</Table.ColumnHeaderCell>
+            <Table.ColumnHeaderCell>Grade</Table.ColumnHeaderCell>
           </Table.Row>
         </Table.Header>
 
@@ -108,8 +116,14 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
             sortedAssignments.map((assignment) => (
               <Table.Row
                 key={assignment.id}
-                className="cursor-pointer"
-                onClick={() => onClickAsessment(assignment.id)}
+                className={`${
+                  (type === "Assignment" &&
+                    assignment.status !== "Not Start") ||
+                  (type === "Exam" && assignment.status === "In Progress")
+                    ? "cursor-pointer"
+                    : ""
+                }`}
+                onClick={() => handleRowClick(assignment.id, assignment.status)}
               >
                 <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
                 <Table.Cell>{assignment.startDate}</Table.Cell>
@@ -125,11 +139,14 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
                 >
                   {assignment.status}
                 </Table.Cell>
+                <Table.Cell>
+                  {/* TODO: Add Grade here, check isMarked, true: mark, false: "Not Marked" */}
+                </Table.Cell>
               </Table.Row>
             ))
           ) : (
             <Table.Row>
-              <Table.Cell colSpan={4} className="text-center text-lg">
+              <Table.Cell colSpan={5} className="text-center text-lg">
                 There is no {type}
               </Table.Cell>
             </Table.Row>
@@ -140,4 +157,4 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
   );
 };
 
-export default AssessmentTable;
+export default StudentAssesmentTable;
