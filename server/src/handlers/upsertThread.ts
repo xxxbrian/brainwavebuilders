@@ -1,9 +1,14 @@
 import { createThread, getThreadByID, updateThread } from "@/data/forum";
 import { APIError, UpsertThreadRequest, UpsertThreadResponse } from "@/apis";
 import { useCurrentUser } from "@/context/auth";
-import { canCreateThreadInForum, canModifyThread } from "@/data/permissions";
+import {
+  canCreateThreadInForum,
+  canModifyThread,
+  canPublishAnnouncement,
+} from "@/data/permissions";
 import { threadWithPostsDBToAPI } from "@/converts/forum";
 import { kForumNotFoundOrDeniedError } from "./getForumByCourseID";
+import { getRoleInCourse } from "@/data/course";
 
 export const kThreadNotFoundOrDeniedError =
   "Forum not found, or you are not authorized to access it.";
@@ -39,6 +44,12 @@ export const upsertThread = async (
   } else {
     if (!(await canCreateThreadInForum(user, thread.forumID))) {
       throw new APIError(kForumNotFoundOrDeniedError);
+    }
+
+    if (!(await canPublishAnnouncement(user, thread.forumID))) {
+      throw new APIError(
+        "Only teachers can publish announcements in this forum.",
+      );
     }
 
     const { id } = await createThread({

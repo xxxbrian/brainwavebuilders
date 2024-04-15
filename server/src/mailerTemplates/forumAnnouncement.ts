@@ -20,17 +20,22 @@ export const forumAnnouncementEmail: EmailGenerator<
 > = async ({ course, title, recipient, sender, post, thread }) => {
   return generalEmailWithSubject({
     subject: `[${course.code ?? course.name}] ${thread.title}`,
-    title: `${thread.title}`,
+    title: `New announcement in ${course.name}`,
     name: recipient.firstName,
     content: `<b>${sender.firstName} ${
       sender.lastName
     }</b> has posted an announcement in <b>${course.name}</b>:
+
+  <hr>
+  <h1>${thread.title}</h1>
 
   ${
     post.content
       ? generateHTMLFromTiptap(post.content as JSONContent)
       : "(no preview is available)"
   }
+
+  <hr>
 
 You can view this announcement <a href="${FRONTEND_ADDRESS}/course/${
       course.id

@@ -67,7 +67,7 @@ export const NewThreadDisplay: React.FC<Props> = ({
           onClick={onToggleIsAnnouncement}
         >
           <Checkbox size="3" checked={isAnnouncement} />
-          <div>Send as an Announcement Thread</div>
+          <div>Send as an Announcement</div>
         </div>
       </WithTeacherRole>
 

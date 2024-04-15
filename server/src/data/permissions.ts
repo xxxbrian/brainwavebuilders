@@ -1,5 +1,10 @@
 import { CourseRole, Post, Thread, User } from "@prisma/client";
-import { getForumByID, getPostByID, getThreadByID } from "./forum";
+import {
+  getCourseByForumID,
+  getForumByID,
+  getPostByID,
+  getThreadByID,
+} from "./forum";
 import { getRoleInCourse, isMemberOfCourse } from "./course";
 
 export const canViewForum = async (
@@ -121,4 +126,26 @@ export const canViewPost = async (
   }
 
   return canViewThread(user, post.threadID);
+};
+
+export const hasTeacherRoleInCourse = async (
+  user: User,
+  courseID: string,
+): Promise<boolean> => {
+  const role = await getRoleInCourse(user.id, courseID);
+
+  return role === CourseRole.TEACHER;
+};
+
+export const canPublishAnnouncement = async (
+  user: User,
+  forumID: string,
+): Promise<boolean> => {
+  const course = await getCourseByForumID(forumID);
+
+  if (!course) {
+    return false;
+  }
+
+  return hasTeacherRoleInCourse(user, course.id);
 };
