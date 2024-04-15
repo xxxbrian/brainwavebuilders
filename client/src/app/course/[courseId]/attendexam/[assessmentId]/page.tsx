@@ -78,6 +78,7 @@ export const Quiz: React.FC = () => {
         {quizData.questions.map((question) => (
           <Question
             key={question.id}
+            id={question.id}
             title={question.title}
             type={question.type}
             options={JSON.parse(String(question.options ?? "[]"))}

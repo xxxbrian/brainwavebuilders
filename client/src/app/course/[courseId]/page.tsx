@@ -10,11 +10,12 @@ import { useCourse } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
-import AssignmentsTable from "@/components/assessment/AssessmentsTable";
+import AssessmentTable from "@/components/assessment/AssessmentsTable";
 import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
 import { type Event } from "@/components/calendar/Calendar";
 import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { WithStudentRole } from "@/contexts/CourseRoleContext";
+import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTable";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -107,11 +108,14 @@ export const CoursesPage: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    fetchAssessments();
-  }, [backend, course.id]);
+    const inner = async () => {
+      await fetchAssessments();
+    };
+    void inner();
+  }, [backend, course.id, fetchAssessments]);
 
-  const handleUpdateAssignments = useCallback(() => {
-    fetchAssessments();
+  const handleUpdateAssignments = useCallback(async () => {
+    await fetchAssessments();
   }, [fetchAssessments]);
 
   const formatAssessmentProps = (assessment: Assessment): AssignmentProps => ({
@@ -145,6 +149,13 @@ export const CoursesPage: React.FC = ({}) => {
   const onAttendAssignment = useCallback(
     async (assessmentId: string) => {
       router.push(`${pathName}/attendassignment/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
+  const viewAssignmentResult = useCallback(
+    (submissionId: string) => {
+      router.push(`${pathName}/assignmentresult/${submissionId}`);
     },
     [router, pathName],
   );
@@ -217,13 +228,13 @@ export const CoursesPage: React.FC = ({}) => {
         </div>
       </div>
       <WithTeacherRole>
-        <AssignmentsTable
+        <AssessmentTable
           assignments={assignmentsData}
           type="Assignment"
           onClickAddButton={onClickAddAssignment}
           onClickAsessment={onClickAssignment}
         />
-        <AssignmentsTable
+        <AssessmentTable
           assignments={examsData}
           type="Exam"
           onClickAddButton={onClickAddExam}
@@ -236,17 +247,17 @@ export const CoursesPage: React.FC = ({}) => {
         />
       </WithTeacherRole>
       <WithStudentRole>
-        <AssignmentsTable
+        <StudentAssesmentTable
           assignments={assignmentsData}
           type="Assignment"
-          onClickAddButton={onClickAddAssignment}
           onClickAsessment={onAttendAssignment}
+          viewAssignmentResult={viewAssignmentResult}
         />
-        <AssignmentsTable
+        <StudentAssesmentTable
           assignments={examsData}
           type="Exam"
-          onClickAddButton={onClickAddExam}
           onClickAsessment={onAttendExam}
+          viewAssignmentResult={viewAssignmentResult}
         />
         <CreateAssignmentDialog
           isOpen={isCreateAssignment}

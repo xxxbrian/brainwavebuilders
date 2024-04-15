@@ -42,6 +42,8 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
 
   const hasCompletion = completion.length > 0;
 
+  if (!editor) return null;
+
   return (
     <Command className="w-[350px]">
       {hasCompletion && (
@@ -87,13 +89,20 @@ export function AISelector({ open, onOpenChange }: AISelectorProps) {
                   }).then(() => setInputValue(""));
 
                 const slice = editor.state.selection.content();
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
                 const text = editor.storage.markdown.serializer.serialize(
                   slice.content,
                 );
 
+                // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
                 complete(text, {
                   body: { option: "zap", command: inputValue },
-                }).then(() => setInputValue(""));
+                })
+                  .then(() => setInputValue(""))
+                  .catch((e) => {
+                    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
+                    toast.error(e.message);
+                  });
               }}
             >
               <ArrowUp className="h-4 w-4" />

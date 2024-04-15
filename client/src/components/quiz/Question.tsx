@@ -1,6 +1,7 @@
 import React from "react";
 
 type QuestionProps = {
+  id: string;
   title: string;
   type: string;
   options: string[];
@@ -9,16 +10,17 @@ type QuestionProps = {
 };
 
 const Question: React.FC<QuestionProps> = ({
+  id,
   title,
   type,
   options,
   mark,
   onSelectAnswer,
 }) => {
+  console.log(`id is ${id}`);
   return (
     <div className="flex flex-col p-4 border-2 border-blue-500 space-y-3 rounded-xl">
       <div className="text-md font-medium mb-2">{title}</div>
-
       {type === "SAQ" ? (
         <textarea
           className="p-2 border border-blue-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -32,7 +34,7 @@ const Question: React.FC<QuestionProps> = ({
             <label key={index} className="flex items-center space-x-3">
               <input
                 type="radio"
-                name="mcq"
+                name={id}
                 onChange={() => onSelectAnswer(option)}
                 className="form-radio h-5 w-5"
               />
