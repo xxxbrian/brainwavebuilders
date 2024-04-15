@@ -85,7 +85,7 @@ export const ThreadList: React.FC<ListProps> = ({
           </Button>
         </div>
       )}
-      <div className="flex flex-col">
+      <div className="flex flex-col overflow-y-auto">
         {threads.map((thread) => (
           <div className="border-t first:border-t-0 py-1 px-1" key={thread.id}>
             <ThreadCard

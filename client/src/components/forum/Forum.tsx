@@ -98,15 +98,15 @@ export const Forum: React.FC<Props> = ({
   };
 
   return (
-    <div className="flex h-full overflow-hidden">
+    <div className="flex h-full w-full overflow-hidden">
       <ThreadList
         activeThreadId={activeThreadId}
         threads={threads}
-        className="w-1/5 min-w-48 border-r border-gray-300 h-full sticky"
+        className="w-1/5 min-w-48 border-r border-gray-300 h-full sticky py-4"
         onClickThread={onClickThread}
         onClickNewThread={onClickNewThread}
       />
-      <div className="w-full h-full overflow-hidden">{getDisplay()}</div>
+      <div className="flex-1 h-full overflow-y-auto">{getDisplay()}</div>
       {/* {isLoading && (
         <div className="h-2 w-screen fixed left-0 top-0 z-50">
           <div className="h-full bg-green-100 animate-pulse" />

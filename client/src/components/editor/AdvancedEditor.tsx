@@ -56,7 +56,7 @@ export const AdvancedEditor: React.FC<Props> = ({
   }, [editor, value]);
 
   return (
-    <div className={`relative w-full ${className}`}>
+    <div className={`relative w-full ${className ?? ""}`}>
       <EditorRoot>
         <EditorContent
           editable={isEditable}

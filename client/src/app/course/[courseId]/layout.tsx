@@ -8,6 +8,41 @@ import { CourseRoleContext } from "@/contexts/CourseRoleContext";
 import { useBackend } from "@/hooks/useBackend";
 import { useEffect, useState } from "react";
 
+import { Props as FrameProps } from "@/components/structural/PageFrame";
+import { usePathname } from "next/navigation";
+
+interface ApplicationState {
+  regex: RegExp;
+  frameProps: Exclude<FrameProps, "children">;
+}
+
+const mapApplicationState: (course: Course, url: string) => ApplicationState = (
+  course: Course,
+  url: string,
+) => {
+  const state: ApplicationState[] = [
+    {
+      regex: /\/forum$/g,
+      frameProps: {
+        title: `Forum - ${course.name}`,
+        standardWidth: false,
+        padding: false,
+        singlePageApplication: true,
+      },
+    },
+    {
+      regex: /.*/g,
+      frameProps: {
+        title: course.name,
+        standardWidth: false,
+        padding: false,
+      },
+    },
+  ];
+
+  return state.find((s) => s.regex.test(url)) ?? state[0]!;
+};
+
 export default function ClassroomPageLayout({
   children,
   params: { courseId },
@@ -61,6 +96,8 @@ export default function ClassroomPageLayout({
     void inner();
   }, [backend, courseId]);
 
+  const pathName = usePathname();
+
   if (isLoading) {
     return (
       <PageFrame title="Course Overview">
@@ -85,16 +122,12 @@ export default function ClassroomPageLayout({
     );
   }
 
+  const state = mapApplicationState(course, pathName);
+
   return (
     <CourseContext.Provider value={course}>
       <CourseRoleContext.Provider value={role ?? ""}>
-        <PageFrame
-          title={`${course.name}`}
-          standardWidth={false}
-          padding={false}
-        >
-          {children}
-        </PageFrame>
+        <PageFrame {...state.frameProps}>{children}</PageFrame>
       </CourseRoleContext.Provider>
     </CourseContext.Provider>
   );
