@@ -124,6 +124,7 @@ interface ThreadCreatable {
   forumID: string;
   title: string;
   createdByID: string;
+  isAnnouncement: boolean;
 }
 
 export const createThread = async ({

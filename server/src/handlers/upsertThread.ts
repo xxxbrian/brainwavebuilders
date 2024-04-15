@@ -45,6 +45,7 @@ export const upsertThread = async (
       createdByID: user.id,
       forumID: thread.forumID,
       title: thread.title,
+      isAnnouncement: thread.isAnnouncement,
     });
 
     threadID = id;

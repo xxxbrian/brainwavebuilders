@@ -12,7 +12,7 @@ import { useCallback, useEffect, useReducer, useRef, useState } from "react";
 import { CenteredLoading } from "../loading";
 import { useBackend } from "@/hooks/useBackend";
 import { initialState, reducer } from "./Forum.reducer";
-import { NewThreadDisplay } from "./NewThreadDisplay";
+import { NewThreadDisplay, ThreadAttributes } from "./NewThreadDisplay";
 import { ThreadDisplay } from "./ThreadDisplay";
 import { JSONContent } from "novel";
 
@@ -24,7 +24,11 @@ interface Props {
   activeThreadStats?: ThreadStats;
   activePostStats?: Record<string, PostStats>;
 
-  onCreateThreadAndPost: (title: string, content: JSONContent) => void;
+  onCreateThreadAndPost: (
+    title: string,
+    content: JSONContent,
+    attrs: ThreadAttributes,
+  ) => void;
   onClickCancelNewThread: () => void;
 
   onClickThread: (thread: Thread | null) => void;
@@ -180,7 +184,7 @@ export const StatefulForum: React.FC<StatefulProps> = ({
   }, [activeThreadId, backend]);
 
   const onCreateThreadAndPost = useCallback(
-    async (title: string, content: JSONContent) => {
+    async (title: string, content: JSONContent, attrs: ThreadAttributes) => {
       onChangeActiveThreadId(null);
 
       const { thread } = await backend.upsertThread({
@@ -191,6 +195,7 @@ export const StatefulForum: React.FC<StatefulProps> = ({
           posts: [],
           title,
           updatedAt: 0,
+          isAnnouncement: attrs.isAnnouncement,
         },
       });
 
