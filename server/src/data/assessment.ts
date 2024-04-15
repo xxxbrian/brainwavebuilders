@@ -31,10 +31,8 @@ export const createAssessment = async (
           title: data.title,
           description: data.description,
           courseID: data.courseId,
-          startDate: data.startDate
-            ? new Date(data.startDate + "+10:00")
-            : null,
-          dueDate: data.dueDate ? new Date(data.dueDate + "+10:00") : null,
+          startDate: data.startDate ? new Date(data.startDate) : null,
+          dueDate: data.dueDate ? new Date(data.dueDate) : null,
           type: data.type,
         },
       });
@@ -91,7 +89,7 @@ export const submitAnswers = async (
         assessmentID: data.assessmentId,
         studentID: user.id,
         answers: JSON.stringify(data.answers),
-        submittedAt: new Date(),
+        submittedAt: new Date(new Date().getTime() + 10 * 60 * 60 * 1000),
         grade: 0,
       },
     });
@@ -150,7 +148,7 @@ export const submitAssignment = async (
         assessmentID: data.assessmentId,
         studentID: user.id,
         assignmentContent: JSON.stringify(data.assignmentContent),
-        submittedAt: new Date(),
+        submittedAt: new Date(new Date().getTime() + 10 * 60 * 60 * 1000),
       },
     });
 

@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
-import { Assessment, Submission } from "@/backend";
+import { Submission, User } from "@/backend";
+import { useBackend } from "@/hooks/useBackend";
 
 interface SubmissionsTableProps {
   submissions: Submission[];
@@ -13,14 +14,56 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   submissions,
   onClickMark,
 }) => {
+  const backend = useBackend();
+  const [studentDetails, setStudentDetails] = useState<
+    Record<string, User | undefined>
+  >({});
+
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Not submitted";
     const date = new Date(dateString);
-    const year = date.getFullYear().toString();
-    const month = (date.getMonth() + 1).toString().padStart(2, "0");
-    const day = date.getDate().toString().padStart(2, "0");
-    return `${day}/${month}/${year}`;
+    const year = date.getUTCFullYear().toString().slice(2);
+    const month = (date.getUTCMonth() + 1).toString().padStart(2, "0");
+    const day = date.getUTCDate().toString().padStart(2, "0");
+    const hours = date.getUTCHours().toString().padStart(2, "0");
+    const minutes = date.getUTCMinutes().toString().padStart(2, "0");
+    return `${year}-${month}-${day}-${hours}:${minutes}`;
   };
+
+  useEffect(() => {
+    const fetchStudentDetails = async () => {
+      const studentInfoPromises = submissions.map((submission) =>
+        backend
+          .getUserInfoByID({ id: submission.studentId })
+          .then((response) => {
+            return { id: submission.studentId, user: response.user };
+          })
+          .catch((error) => {
+            console.error(
+              "Failed to fetch user details for student:",
+              submission.studentId,
+              error,
+            );
+            return { id: submission.studentId, user: undefined };
+          }),
+      );
+
+      const results = await Promise.all(studentInfoPromises);
+      const detailsMap = results.reduce<Record<string, User | undefined>>(
+        (acc, current) => {
+          acc[current.id] = current.user;
+          return acc;
+        },
+        {},
+      );
+
+      setStudentDetails(detailsMap);
+    };
+
+    fetchStudentDetails();
+  }, [submissions, backend]);
+
+  if (!submissions) return <div>Loading assessment details...</div>;
 
   return (
     <div>
@@ -43,7 +86,11 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
             submissions.map((submission) => (
               <Table.Row key={submission.id}>
                 <Table.RowHeaderCell>
-                  {submission.studentId}
+                  {submission && studentDetails[submission.studentId]
+                    ? `${studentDetails[submission.studentId]
+                        ?.firstName} ${studentDetails[submission.studentId]
+                        ?.lastName}`
+                    : "Unknown Student"}
                 </Table.RowHeaderCell>
                 {formatDate(submission.submittedAt)}
                 <Table.Cell>
