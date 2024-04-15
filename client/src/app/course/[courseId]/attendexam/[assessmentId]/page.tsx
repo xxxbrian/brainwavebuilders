@@ -6,7 +6,7 @@ import QuizHeader from "@/components/quiz/Header";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 import { useBackend } from "@/hooks/useBackend";
-import { Assessment, Submission } from "@/backend";
+import { Assessment } from "@/backend";
 
 export const Quiz: React.FC = () => {
   const router = useRouter();
@@ -34,7 +34,7 @@ export const Quiz: React.FC = () => {
         }
       };
 
-      fetchAssessment();
+      void fetchAssessment();
     }
   }, [assessmentId, backend]);
 
@@ -90,13 +90,14 @@ export const Quiz: React.FC = () => {
         </div>
         <QuizHeader
           title={assessment.title}
-          description={assessment.description || "No description available"}
-          endDate={assessment.dueDate || "Due date not set"}
+          description={assessment.description ?? "No description available"}
+          endDate={assessment.dueDate ?? "Due date not set"}
           onSubmit={submitAnswersToBackend}
         />
         {assessment.questions.map((question) => {
           return (
             <Question
+              key={question.id}
               id={question.id}
               title={question.title}
               type={question.type}

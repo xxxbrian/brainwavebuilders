@@ -2,52 +2,53 @@
 
 
 import { app } from "@/globals";
-import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
-import { checkEmail } from "@/handlers/checkEmail";
-import { createAssessment } from "@/handlers/createAssessment";
-import { createCourse } from "@/handlers/createCourse";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { deletePost } from "@/handlers/deletePost";
-import { deleteThread } from "@/handlers/deleteThread";
-import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
-import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
 import { fetchAssessmentSubmissions } from "@/handlers/fetchAssessmentSubmissions";
-import { fetchAssessments } from "@/handlers/fetchAssessments";
-import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
-import { fetchSubmission } from "@/handlers/fetchSubmission";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { forgotPassword } from "@/handlers/forgotPassword";
-import { getAnnouncements } from "@/handlers/getAnnouncements";
-import { getCourseEvents } from "@/handlers/getCourseEvents";
-import { getCourses } from "@/handlers/getCourses";
-import { getFeatured } from "@/handlers/getFeatured";
-import { getForumByCourseID } from "@/handlers/getForumByCourseID";
-import { getForumByID } from "@/handlers/getForumByID";
-import { getRoleInCourse } from "@/handlers/getRoleInCourse";
-import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
-import { getThreads } from "@/handlers/getThreads";
-import { getUserCourses } from "@/handlers/getUserCourses";
-import { getUserEvents } from "@/handlers/getUserEvents";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { getUserInfoByID } from "@/handlers/getUserInfoByID";
-import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
 import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { joinCourse } from "@/handlers/joinCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { login } from "@/handlers/login";
-import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
 import { ping } from "@/handlers/ping";
-import { register } from "@/handlers/register";
-import { resetPassword } from "@/handlers/resetPassword";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { submitAnswers } from "@/handlers/submitAnswers";
+import { getAnnouncements } from "@/handlers/getAnnouncements";
+import { fetchSubmission } from "@/handlers/fetchSubmission";
 import { submitAssignment } from "@/handlers/submitAssignment";
+import { forgotPassword } from "@/handlers/forgotPassword";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { login } from "@/handlers/login";
+import { fetchAssessments } from "@/handlers/fetchAssessments";
+import { resetPassword } from "@/handlers/resetPassword";
 import { toggleLikePost } from "@/handlers/toggleLikePost";
-import { upsertPost } from "@/handlers/upsertPost";
+import { getCourses } from "@/handlers/getCourses";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
+import { getFeatured } from "@/handlers/getFeatured";
+import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
+import { getCourseEvents } from "@/handlers/getCourseEvents";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { getThreads } from "@/handlers/getThreads";
+import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
+import { getRoleInCourse } from "@/handlers/getRoleInCourse";
+import { upsertPost } from "@/handlers/upsertPost";
+import { joinCourse } from "@/handlers/joinCourse";
+import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
+import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
+import { deletePost } from "@/handlers/deletePost";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { createAssessment } from "@/handlers/createAssessment";
+import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { getForumByID } from "@/handlers/getForumByID";
+import { getUserInfoByID } from "@/handlers/getUserInfoByID";
+import { createCourse } from "@/handlers/createCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { register } from "@/handlers/register";
+import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
+import { getUserEvents } from "@/handlers/getUserEvents";
 import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
+import { deleteThread } from "@/handlers/deleteThread";
+import { checkEmail } from "@/handlers/checkEmail";
+import { getCourseMembers } from "@/handlers/getCourseMembers";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -679,6 +680,17 @@ export interface GetAnnouncementsRequest {
 export interface GetAnnouncementsResponse {
     threads: Thread[];
     threadToCourse: Record<string, Course>;
+}
+
+// GetCourseMembersRequest is the request that is sent to the getCourseMembers endpoint.
+export interface GetCourseMembersRequest {
+    courseID: string;
+}
+
+// GetCourseMembersResponse is the response that is sent to the getCourseMembers endpoint.
+export interface GetCourseMembersResponse {
+    users: User[];
+    memberships: CourseMembership[];
 }
 
 
@@ -1707,6 +1719,28 @@ app.post('/api/getAnnouncements', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getAnnouncements with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getCourseMembers is the endpoint handler for the getCourseMembers endpoint.
+// It wraps around the function at @/handlers/getCourseMembers.
+app.post('/api/getCourseMembers', async (req, res) => {
+    const request: GetCourseMembersRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetCourseMembersResponse = await getCourseMembers(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getCourseMembers with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

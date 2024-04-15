@@ -82,7 +82,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
       setStudentDetails(detailsMap);
     };
 
-    fetchStudentDetails();
+    void fetchStudentDetails();
   }, [submissions, backend]);
 
   if (!submissions || !assessmentDetails)

@@ -88,7 +88,17 @@ export const CoursesPage: React.FC = ({}) => {
   const [assignmentsData, setAssignmentsData] = useState<AssignmentProps[]>([]);
   const [examsData, setExamsData] = useState<AssignmentProps[]>([]);
 
-  const fetchAssessments = async () => {
+  const formatAssessmentProps = useCallback(
+    (assessment: Assessment): AssignmentProps => ({
+      id: assessment.id,
+      name: assessment.title,
+      startDate: assessment.startDate ?? "",
+      dueDate: assessment.dueDate ?? "",
+    }),
+    [],
+  );
+
+  const fetchAssessments = useCallback(async () => {
     try {
       const response = await backend.fetchAssessments({ courseId: course.id });
       setAssessments(response.assessments);
@@ -105,7 +115,7 @@ export const CoursesPage: React.FC = ({}) => {
     } catch (error) {
       console.error("Failed to fetch assessments:", error);
     }
-  };
+  }, [backend, course.id, formatAssessmentProps]);
 
   useEffect(() => {
     const inner = async () => {
@@ -117,13 +127,6 @@ export const CoursesPage: React.FC = ({}) => {
   const handleUpdateAssignments = useCallback(async () => {
     await fetchAssessments();
   }, [fetchAssessments]);
-
-  const formatAssessmentProps = (assessment: Assessment): AssignmentProps => ({
-    id: assessment.id,
-    name: assessment.title,
-    startDate: assessment.startDate ?? "",
-    dueDate: assessment.dueDate ?? "",
-  });
 
   const onClickAssignment = useCallback(
     async (assessmentId: string) => {
@@ -170,6 +173,10 @@ export const CoursesPage: React.FC = ({}) => {
     setIsCreateAssignment(true);
   }, []);
 
+  const onClickManageMembers = useCallback(() => {
+    router.push(`${pathName}/members`);
+  }, [pathName, router]);
+
   return (
     <div className="flex flex-col space-y-8 px-4 py-4">
       <div
@@ -212,6 +219,12 @@ export const CoursesPage: React.FC = ({}) => {
                   title="Invite Member"
                 />
               </StatefulInviteMembersForm>
+
+              <ApplicationIcon
+                icon={<MdOutlinePersonAddAlt1 />}
+                title="Manage Members"
+                onClick={onClickManageMembers}
+              />
             </div>
           </div>
         </div>

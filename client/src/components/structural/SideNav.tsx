@@ -22,19 +22,19 @@ interface NavItem {
 }
 
 const navItems = [
-  { key: "home", href: "/dashboard", Icon: IoHome, label: "Home" },
+  { key: "home", href: "/dashboard", Icon: IoHome, label: "Dashboard" },
   {
     key: "calendar",
     href: "/calendar",
     Icon: IoCalendarOutline,
-    label: "Calendar",
+    label: "My Calendar",
   },
-  { key: "courses", href: "/Courses", Icon: BiTask, label: "Courses" },
+  { key: "courses", href: "/course", Icon: BiTask, label: "My Courses" },
   {
     key: "announcements",
     href: "/Announcements",
     Icon: TfiAnnouncement,
-    label: "Announcements",
+    label: "Forums and Announcements",
   },
   { key: "tasks", href: "/Tasks", Icon: BsListTask, label: "Tasks" },
   { key: "grades", href: "/My_Grades", Icon: TfiMedallAlt, label: "My Grades" },

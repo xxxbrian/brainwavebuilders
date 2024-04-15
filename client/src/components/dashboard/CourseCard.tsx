@@ -62,7 +62,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
               {code}
             </Text>
           </Box>
-          <Badge>{role}</Badge>
+          {role && <Badge>{role}</Badge>}
         </div>
       </Card>
     </Box>
