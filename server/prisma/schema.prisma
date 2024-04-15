@@ -160,7 +160,7 @@ model Thread {
 
     deletedAt DateTime?
 
-    isAnnoucement Boolean @default(false)
+    isAnnouncement Boolean @default(false)
 
     // TODO: Add type to thread (discussion, Q&A, etc.)
 }

@@ -155,6 +155,7 @@ export interface Thread {
     deletedAt?: number;
     title: string;
     posts: Post[];
+    isAnnouncement: boolean;
 }
 
 export interface ThreadStats {
@@ -176,7 +177,6 @@ export interface Post {
     createdBy?: User;
     deletedAt?: number;
     content: any;
-    isAnnouncement: boolean;
 }
 
 export interface Event {

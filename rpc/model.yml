@@ -97,6 +97,8 @@ types:
 
     posts: Post[]
 
+    isAnnouncement: boolean
+
   ThreadStats:
     threadID: string
     views: int
@@ -116,8 +118,6 @@ types:
     deletedAt?: int
 
     content: json
-
-    isAnnouncement: boolean
 
   Event:
     name: string
