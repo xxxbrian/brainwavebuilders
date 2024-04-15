@@ -104,28 +104,36 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
         </Table.Header>
 
         <Table.Body>
-          {sortedAssignments.map((assignment) => (
-            <Table.Row
-              key={assignment.id}
-              className="cursor-pointer"
-              onClick={() => onClickAsessment(assignment.id)}
-            >
-              <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
-              <Table.Cell>{assignment.startDate}</Table.Cell>
-              <Table.Cell>{assignment.dueDate}</Table.Cell>
-              <Table.Cell
-                className={`py-2 ${
-                  assignment.status === "Completed"
-                    ? "text-yellow-500"
-                    : assignment.status === "Not Start"
-                      ? "text-red-500"
-                      : "text-green-500"
-                }`}
+          {sortedAssignments.length > 0 ? (
+            sortedAssignments.map((assignment) => (
+              <Table.Row
+                key={assignment.id}
+                className="cursor-pointer"
+                onClick={() => onClickAsessment(assignment.id)}
               >
-                {assignment.status}
+                <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
+                <Table.Cell>{assignment.startDate}</Table.Cell>
+                <Table.Cell>{assignment.dueDate}</Table.Cell>
+                <Table.Cell
+                  className={`py-2 ${
+                    assignment.status === "Completed"
+                      ? "text-yellow-500"
+                      : assignment.status === "Not Start"
+                        ? "text-red-500"
+                        : "text-green-500"
+                  }`}
+                >
+                  {assignment.status}
+                </Table.Cell>
+              </Table.Row>
+            ))
+          ) : (
+            <Table.Row>
+              <Table.Cell colSpan={4} className="text-center text-lg">
+                There is no {type}
               </Table.Cell>
             </Table.Row>
-          ))}
+          )}
         </Table.Body>
       </Table.Root>
     </div>

@@ -112,36 +112,45 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
         </Table.Header>
 
         <Table.Body>
-          {sortedAssignments.map((assignment) => (
-            <Table.Row
-              key={assignment.id}
-              className={`${
-                (type === "Assignment" && assignment.status !== "Not Start") ||
-                (type === "Exam" && assignment.status === "In Progress")
-                  ? "cursor-pointer"
-                  : ""
-              }`}
-              onClick={() => handleRowClick(assignment.id, assignment.status)}
-            >
-              <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
-              <Table.Cell>{assignment.startDate}</Table.Cell>
-              <Table.Cell>{assignment.dueDate}</Table.Cell>
-              <Table.Cell
-                className={`py-2 ${
-                  assignment.status === "Completed"
-                    ? "text-yellow-500"
-                    : assignment.status === "Not Start"
-                      ? "text-red-500"
-                      : "text-green-500"
+          {sortedAssignments.length > 0 ? (
+            sortedAssignments.map((assignment) => (
+              <Table.Row
+                key={assignment.id}
+                className={`${
+                  (type === "Assignment" &&
+                    assignment.status !== "Not Start") ||
+                  (type === "Exam" && assignment.status === "In Progress")
+                    ? "cursor-pointer"
+                    : ""
                 }`}
+                onClick={() => handleRowClick(assignment.id, assignment.status)}
               >
-                {assignment.status}
-              </Table.Cell>
-              <Table.Cell>
-                {/* TODO: Add Grade here, check isMarked, true: mark, false: "Not Marked" */}
+                <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
+                <Table.Cell>{assignment.startDate}</Table.Cell>
+                <Table.Cell>{assignment.dueDate}</Table.Cell>
+                <Table.Cell
+                  className={`py-2 ${
+                    assignment.status === "Completed"
+                      ? "text-yellow-500"
+                      : assignment.status === "Not Start"
+                        ? "text-red-500"
+                        : "text-green-500"
+                  }`}
+                >
+                  {assignment.status}
+                </Table.Cell>
+                <Table.Cell>
+                  {/* TODO: Add Grade here, check isMarked, true: mark, false: "Not Marked" */}
+                </Table.Cell>
+              </Table.Row>
+            ))
+          ) : (
+            <Table.Row>
+              <Table.Cell colSpan={5} className="text-center text-lg">
+                There is no {type}
               </Table.Cell>
             </Table.Row>
-          ))}
+          )}
         </Table.Body>
       </Table.Root>
     </div>
