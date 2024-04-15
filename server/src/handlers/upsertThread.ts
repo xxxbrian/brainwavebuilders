@@ -46,7 +46,10 @@ export const upsertThread = async (
       throw new APIError(kForumNotFoundOrDeniedError);
     }
 
-    if (!(await canPublishAnnouncement(user, thread.forumID))) {
+    if (
+      thread.isAnnouncement &&
+      !(await canPublishAnnouncement(user, thread.forumID))
+    ) {
       throw new APIError(
         "Only teachers can publish announcements in this forum.",
       );
