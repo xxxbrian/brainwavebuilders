@@ -64,29 +64,42 @@ export const CreateAssignmentDialog: React.FC<CreateAssignmentProps> = ({
     setEndDate("");
   }, []);
 
-  const handleSubmit = useCallback(async (event: React.FormEvent) => {
-    event.preventDefault();
-    try {
-      const response = await backend.createAssessment({
-        title: assignmentName,
-        description: assignmentDescription,
-        courseId: courseId as string,
-        startDate: startDate,
-        dueDate: endDate,
-        type: "assignment",
-      });
-      setIsOpen(false);
-      onUpdateAssignments();
-      resetForm();
-    } catch (error) {
-      console.error("Failed to create assignment:", error);
-    }
-  }, [assignmentName, assignmentDescription, startDate, endDate, backend, setIsOpen, onUpdateAssignments]);
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      try {
+        await backend.createAssessment({
+          title: assignmentName,
+          description: assignmentDescription,
+          courseId: courseId,
+          startDate: startDate,
+          dueDate: endDate,
+          type: "assignment",
+        });
+        setIsOpen(false);
+        onUpdateAssignments();
+        resetForm();
+      } catch (error) {
+        console.error("Failed to create assignment:", error);
+      }
+    },
+    [
+      assignmentName,
+      assignmentDescription,
+      startDate,
+      endDate,
+      backend,
+      setIsOpen,
+      onUpdateAssignments,
+    ],
+  );
 
   const handleClose = useCallback(() => {
     setIsOpen(false);
     resetForm();
   }, [setIsOpen, resetForm]);
+
+  console.log(startDate);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
