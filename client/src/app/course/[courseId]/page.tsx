@@ -108,11 +108,14 @@ export const CoursesPage: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    fetchAssessments();
-  }, [backend, course.id]);
+    const inner = async () => {
+      await fetchAssessments();
+    };
+    void inner();
+  }, [backend, course.id, fetchAssessments]);
 
-  const handleUpdateAssignments = useCallback(() => {
-    fetchAssessments();
+  const handleUpdateAssignments = useCallback(async () => {
+    await fetchAssessments();
   }, [fetchAssessments]);
 
   const formatAssessmentProps = (assessment: Assessment): AssignmentProps => ({
