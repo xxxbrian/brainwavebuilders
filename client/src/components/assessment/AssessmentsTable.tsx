@@ -12,7 +12,7 @@ interface AssignmentProps {
 
 interface AssignmentWithStatusProps extends AssignmentProps {
   isCompleted: boolean;
-  status: "Not Start" | "In Progress" | "Completed";
+  status: "Not started" | "In Progress" | "Completed";
 }
 
 // Define the prop types for the component
@@ -51,12 +51,12 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
       .map((assignment) => {
         const start = new Date(assignment.startDate);
         const due = new Date(assignment.dueDate);
-        let status: "Not Start" | "In Progress" | "Completed" = "In Progress";
+        let status: "Not started" | "In Progress" | "Completed" = "In Progress";
 
         if (now > due) {
           status = "Completed";
         } else if (now < start) {
-          status = "Not Start";
+          status = "Not started";
         }
 
         return {
@@ -67,7 +67,11 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
         };
       })
       .sort((a, b) => {
-        const statusOrder = { "In Progress": 1, "Not Start": 2, Completed: 3 };
+        const statusOrder = {
+          "In Progress": 1,
+          "Not started": 2,
+          Completed: 3,
+        };
         if (statusOrder[a.status] !== statusOrder[b.status]) {
           return statusOrder[a.status] - statusOrder[b.status];
         } else {
@@ -117,7 +121,7 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
                 className={`py-2 ${
                   assignment.status === "Completed"
                     ? "text-yellow-500"
-                    : assignment.status === "Not Start"
+                    : assignment.status === "Not started"
                       ? "text-red-500"
                       : "text-green-500"
                 }`}

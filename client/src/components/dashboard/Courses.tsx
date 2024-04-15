@@ -23,7 +23,9 @@ export const CoursesContainer: React.FC<CourseContainerProps> = ({
   }, [courseMemberships]);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 p-3 rounded-xl">
+    <div
+      className={`flex flex-col justify-center md:justify-normal md:flex-row md:space-x-4 flex-wrap space-y-4 md:space-y-0`}
+    >
       {courses.map((c) => (
         <CourseCard
           course={c}
