@@ -16,25 +16,29 @@ export const AssignmentSubmissionOverviewPage: React.FC = () => {
   const pathName = usePathname();
 
   useEffect(() => {
-    const pathSegments = pathName.split('/');
+    const pathSegments = pathName.split("/");
     const assessmentId = pathSegments[pathSegments.length - 1];
 
     if (assessmentId) {
       console.log("hello");
       const fetchDetails = async () => {
         try {
-          const assessmentDetails = await backend.fetchAssessmentDetailsTeacher({ assessmentId });
+          const assessmentDetails = await backend.fetchAssessmentDetailsTeacher(
+            { assessmentId },
+          );
           console.log("empty");
           console.log(assessmentDetails);
           setAssessment(assessmentDetails.assessment);
-          const submissionsResponse = await backend.fetchAssessmentSubmissions({ assessmentId });
+          const submissionsResponse = await backend.fetchAssessmentSubmissions({
+            assessmentId,
+          });
           setSubmissions(submissionsResponse.submissions);
         } catch (error) {
-          console.error('Failed to fetch data:', error);
+          console.error("Failed to fetch data:", error);
         }
       };
 
-      fetchDetails();
+      void fetchDetails();
     }
   }, [pathName, backend]);
 
@@ -62,14 +66,11 @@ export const AssignmentSubmissionOverviewPage: React.FC = () => {
       </div>
       <AssessmentHeader
         title={assessment.title}
-        description={assessment.description || "No description available"}
-        startDate={assessment.startDate || "Start date not set"}
-        endDate={assessment.dueDate || "Due date not set"}
+        description={assessment.description ?? "No description available"}
+        startDate={assessment.startDate ?? "Start date not set"}
+        endDate={assessment.dueDate ?? "Due date not set"}
       />
-      <SubmissionsTable
-        submissions={submissions}
-        onClickMark={onClickMark}
-      />
+      <SubmissionsTable submissions={submissions} onClickMark={onClickMark} />
     </div>
   );
 };

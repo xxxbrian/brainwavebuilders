@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
@@ -60,7 +60,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
       setStudentDetails(detailsMap);
     };
 
-    fetchStudentDetails();
+    void fetchStudentDetails();
   }, [submissions, backend]);
 
   if (!submissions) return <div>Loading assessment details...</div>;
