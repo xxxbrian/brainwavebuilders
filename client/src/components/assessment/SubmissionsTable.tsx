@@ -79,7 +79,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
         {},
       );
 
-      setStudentDetails(detailsMap);
+      void setStudentDetails(detailsMap);
     };
 
     void fetchStudentDetails();
