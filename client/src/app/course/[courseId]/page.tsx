@@ -6,13 +6,15 @@ import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
-import { mockTime, mockEvents } from "@/utils/data";
 import { useCourse } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import AssignmentsTable from "@/components/assessment/AssessmentsTable";
 import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
+import { type Event } from "@/components/calendar/Calendar";
+import { WithTeacherRole } from "@/contexts/CourseRoleContext";
+import { WithStudentRole } from "@/contexts/CourseRoleContext";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -50,6 +52,20 @@ export const CoursesPage: React.FC = ({}) => {
   const pathName = usePathname();
 
   const backend = useBackend();
+
+  const [events, setEvents] = useState<Record<string, Event[]>>({});
+
+  useEffect(() => {
+    const inner = async () => {
+      if (!course.id) {
+        return;
+      }
+      const { events } = await backend.getCourseEvents({ courseId: course.id });
+      setEvents(events);
+    };
+
+    void inner();
+  }, [backend, course.id]);
 
   const onClickAssignments = useCallback(async () => {
     router.push(`${pathName}/assignments`);
@@ -111,6 +127,20 @@ export const CoursesPage: React.FC = ({}) => {
     [router, pathName],
   );
 
+  const onAttendExam = useCallback(
+    async (assessmentId: string) => {
+      router.push(`${pathName}/attendexam/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
+  const onAttendAssignment = useCallback(
+    async (assessmentId: string) => {
+      router.push(`${pathName}/attendassignment/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
   const onClickAddExam = useCallback(async () => {
     router.push(`${pathName}/createexam`);
   }, [pathName, router]);
@@ -167,34 +197,55 @@ export const CoursesPage: React.FC = ({}) => {
         <div className="w-2/3 space-y-4 overflow-hidden">
           <Heading size={"5"}>Calendar</Heading>
           <CalendarBoard
-            today={mockTime}
-            events={mockEvents()}
+            today={new Date()}
+            events={events}
             warpperClassName="hidden xl:block flex-shrink-0"
           />
           <CalendarBoardMini
-            today={mockTime}
-            events={mockEvents()}
+            today={new Date()}
+            events={events}
             warpperClassName="xl:hidden"
           />
         </div>
       </div>
-      <AssignmentsTable
-        assignments={assignmentsData}
-        type="Assignment"
-        onClickAddButton={onClickAddAssignment}
-        onClickAsessment={onClickAssignment}
-      />
-      <AssignmentsTable
-        assignments={examsData}
-        type="Exam"
-        onClickAddButton={onClickAddExam}
-        onClickAsessment={onClickExam}
-      />
-      <CreateAssignmentDialog
-        isOpen={isCreateAssignment}
-        setIsOpen={setIsCreateAssignment}
-        onUpdateAssignments={handleUpdateAssignments}
-      />
+      <WithTeacherRole>
+        <AssignmentsTable
+          assignments={assignmentsData}
+          type="Assignment"
+          onClickAddButton={onClickAddAssignment}
+          onClickAsessment={onClickAssignment}
+        />
+        <AssignmentsTable
+          assignments={examsData}
+          type="Exam"
+          onClickAddButton={onClickAddExam}
+          onClickAsessment={onClickExam}
+        />
+        <CreateAssignmentDialog
+          isOpen={isCreateAssignment}
+          setIsOpen={setIsCreateAssignment}
+          onUpdateAssignments={handleUpdateAssignments}
+        />
+      </WithTeacherRole>
+      <WithStudentRole>
+        <AssignmentsTable
+          assignments={assignmentsData}
+          type="Assignment"
+          onClickAddButton={onClickAddAssignment}
+          onClickAsessment={onAttendAssignment}
+        />
+        <AssignmentsTable
+          assignments={examsData}
+          type="Exam"
+          onClickAddButton={onClickAddExam}
+          onClickAsessment={onAttendExam}
+        />
+        <CreateAssignmentDialog
+          isOpen={isCreateAssignment}
+          setIsOpen={setIsCreateAssignment}
+          onUpdateAssignments={handleUpdateAssignments}
+        />
+      </WithStudentRole>
     </div>
   );
 };

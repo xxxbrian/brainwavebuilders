@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useCallback } from "react";
 import Question from "@/components/quiz/Question";
-import { PageFrame } from "@/components/structural/PageFrame";
 import QuizHeader from "@/components/quiz/Header";
 import { quizData } from "@/utils/data";
+import { usePathname, useRouter } from "next/navigation";
+import { IoIosArrowBack } from "react-icons/io";
 
 type Question = {
   id: string;
@@ -16,6 +17,10 @@ type Question = {
 };
 
 export const Quiz: React.FC = () => {
+  const router = useRouter();
+
+  const pathName = usePathname();
+
   const [answers, setAnswers] = useState<Record<string, string>>({});
 
   const onSelectAnswer = (questionId: string, selectedAnswer: string) => {
@@ -25,13 +30,13 @@ export const Quiz: React.FC = () => {
     }));
   };
 
-  const submitAnswersToBackend = async () => {
+  const submitAnswersToBackend = useCallback(async () => {
     const answersArray = Object.entries(answers).map(
       ([questionId, answer]) => ({
         questionId,
         answer,
       }),
-    );
+    ); // Combine questions with its answer for you to send to backend
 
     // Answer struct should be
     // [
@@ -45,12 +50,25 @@ export const Quiz: React.FC = () => {
     //   }
     // ]
 
+    const newPath = pathName.replace(/\/attendexam\/[^\/]+/, "");
+    router.push(newPath);
     //TODO: send answer and to backend
-  };
+  }, [pathName, router, answers]);
+
+  const onClickBack = useCallback(() => {
+    const newPath = pathName.replace(/\/attendexam\/[^\/]+/, "");
+    router.push(newPath);
+  }, [pathName, router]);
 
   return (
-    <PageFrame title="Quiz">
+    <div>
       <div className="flex flex-col space-y-4 pt-8 pl-8 pr-8 m-auto max-w-[1200px]">
+        <div className="flex items-center font-bold" onClick={onClickBack}>
+          <button className="text-xl" onClick={(e) => e.stopPropagation()}>
+            <IoIosArrowBack />
+          </button>
+          <span className="cursor-pointer">Back</span>
+        </div>
         <QuizHeader
           title={quizData.title}
           description={quizData.description}
@@ -62,7 +80,7 @@ export const Quiz: React.FC = () => {
             key={question.id}
             title={question.title}
             type={question.type}
-            options={JSON.parse(question.options ?? "[]")}
+            options={JSON.parse(String(question.options ?? "[]"))}
             mark={question.points}
             onSelectAnswer={(selectedAnswer) =>
               onSelectAnswer(question.id, selectedAnswer)
@@ -70,7 +88,7 @@ export const Quiz: React.FC = () => {
           />
         ))}
       </div>
-    </PageFrame>
+    </div>
   );
 };
 

@@ -13,7 +13,7 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
   showEventNumber,
 }) => {
   // filter events that are after yesterday
-  const upcomingEvents = Array.from(events).filter(
+  const upcomingEvents = Object.entries(events).filter(
     ([date]) => new Date(date) >= today,
   );
 
@@ -22,11 +22,11 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
     .slice(0, showEventNumber);
 
   return (
-    <div className="px-4 py-4 bg-white lg:min-w-[260px] w-full">
+    <div className="px-4 py-4 bg-white lg:min-w-[260px] flex flex-col h-full">
       <p className="mb-2 text-sm font-semibold text-gray-800">
         Upcoming Events
       </p>
-      <p className="text-xs text-gray-600">Don’t Miss Scheduled Events</p>
+      <p className="text-xs text-gray-600">Don&apos;t Miss Scheduled Events</p>
       {flattenedAndLimitedEvents.map(({ date, event }, index) => (
         <div
           key={`${date}-${index}`}
@@ -58,6 +58,13 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
           <p className="text-xs leading-3 text-gray-600">{event.name}</p>
         </div>
       ))}
+      {flattenedAndLimitedEvents.length === 0 && (
+        <div className="flex flex-col justify-center items-center h-full flex-1">
+          <p className="text-center text-gray-500 text-xs">
+            No upcoming events! Take a break, grab a coffee!
+          </p>
+        </div>
+      )}
     </div>
   );
 };

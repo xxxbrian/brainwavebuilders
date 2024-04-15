@@ -13,12 +13,11 @@ import { CreateCourseButton } from "@/components/dashboard/CreateCoursePopup";
 import { JoinCourseButton } from "@/components/dashboard/JoinCoursePopup";
 import { Card, Heading } from "@radix-ui/themes";
 import { CoursesContainer } from "@/components/dashboard/Courses";
-import { CourseData, mockTime, mockEvents } from "@/utils/data";
 import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
 import { Course } from "@/backend";
 import { useRouter } from "next/navigation";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
 import { useBackend } from "@/hooks/useBackend";
+import { type Event } from "@/components/calendar/Calendar";
 
 interface DashboardItemProps extends PropsWithChildren {
   className?: string;
@@ -63,6 +62,16 @@ export const Dashboard: React.FC = () => {
     void inner();
   }, [backend]);
 
+  const [events, setEvents] = useState<Record<string, Event[]>>({});
+  useEffect(() => {
+    const inner = async () => {
+      const { events } = await backend.getUserEvents({});
+      setEvents(events);
+    };
+
+    void inner();
+  }, [backend]);
+
   return (
     <PageFrame title="Dashboard" right={dashboardButtons} standardWidth>
       <div className="flex flex-col space-y-12">
@@ -75,11 +84,11 @@ export const Dashboard: React.FC = () => {
             </div>
           </DashboardItem>
           <DashboardItem className="flex-1 flex flex-col flex-shrink-0 m-4 space-y-4">
-            <Heading>TODO List</Heading>
+            <Heading>Key Dates</Heading>
             <Card className="h-full">
               <UpcomingEvents
-                today={mockTime}
-                events={mockEvents()}
+                today={new Date()}
+                events={events}
                 showEventNumber={4}
               />
             </Card>

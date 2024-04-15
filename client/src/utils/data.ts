@@ -16,7 +16,7 @@ export const quizData: Assessment = {
   courseId: "COMP1522",
   type: "exam",
   startDate: "2024-04-10T00:00:00Z",
-  dueDate: "2024-04-12T00:00:00Z",
+  dueDate: "2024-04-16T00:00:00Z",
   questions: [
     {
       assessmentId: "1",

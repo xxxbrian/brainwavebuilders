@@ -122,16 +122,16 @@ model Question {
 }
 
 model Submission {
-    id                     String     @id @default(uuid())
-    assessmentID           String
-    studentID              String
-    submittedAt            DateTime?
-    assignmentContent      Json?
-    answers                Json? // For exam submissions: student's answers
-    grade                  Int?
-    feedback               String?
-    assessment             Assessment @relation("assessmentSubmissions", fields: [assessmentID], references: [id])
-    student                User       @relation("studentSubmissions", fields: [studentID], references: [id])
+    id                String     @id @default(uuid())
+    assessmentID      String
+    studentID         String
+    submittedAt       DateTime?
+    assignmentContent Json?
+    answers           Json? // For exam submissions: student's answers
+    grade             Int?
+    feedback          String?
+    assessment        Assessment @relation("assessmentSubmissions", fields: [assessmentID], references: [id])
+    student           User       @relation("studentSubmissions", fields: [studentID], references: [id])
 }
 
 model Forum {
@@ -159,6 +159,8 @@ model Thread {
     posts     Post[]   @relation("postsThreads")
 
     deletedAt DateTime?
+
+    isAnnouncement Boolean @default(false)
 
     // TODO: Add type to thread (discussion, Q&A, etc.)
 }

@@ -1,5 +1,6 @@
 types:
   User:
+    id: string
     email: string
     firstName: string
     lastName: string
@@ -96,6 +97,8 @@ types:
 
     posts: Post[]
 
+    isAnnouncement: boolean
+
   ThreadStats:
     threadID: string
     views: int
@@ -115,6 +118,11 @@ types:
     deletedAt?: int
 
     content: json
+
+  Event:
+    name: string
+    time: string
+    type: string
 
 endpoints:
   ping:
@@ -181,6 +189,13 @@ endpoints:
       email?: string
     response:
       user: User
+    service: typescript
+
+  getUserInfoByIDs:
+    request:
+      ids: string[]
+    response:
+      users: Record<string, User>
     service: typescript
 
   setUserProfile:
@@ -408,4 +423,17 @@ endpoints:
     request:
       threadID: string
     response:
+    service: typescript
+
+  getUserEvents:
+    request:
+    response:
+      events: Record<string, Event[]>
+    service: typescript
+
+  getCourseEvents:
+    request:
+      courseId: string
+    response:
+      events: Record<string, Event[]>
     service: typescript

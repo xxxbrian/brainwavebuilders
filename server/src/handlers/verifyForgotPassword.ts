@@ -2,7 +2,11 @@ import {
   VerifyForgotPasswordRequest,
   VerifyForgotPasswordResponse,
 } from "@/apis";
-import { generateAndSendOTP, isCanResetPassword } from "@/data/auth";
+import {
+  generateAndSendForgotPasswordOTP,
+  generateAndSendOTP,
+  isCanResetPassword,
+} from "@/data/auth";
 
 // verifyForgotPassword implements the verifyForgotPassword endpoint.
 // This code has been automatically generated.
@@ -14,11 +18,7 @@ export const verifyForgotPassword = async (
 ): Promise<VerifyForgotPasswordResponse> => {
   let { email } = request;
   await isCanResetPassword(email);
-  const generateHtml = (code: string) => `
-        <h1>Reset your password</h1>
-        <p>Enter the following code to reset your password:</p>
-        <h2>${code}</h2>
-        `;
-  await generateAndSendOTP(email, generateHtml);
+
+  await generateAndSendForgotPasswordOTP(email);
   return {};
 };
