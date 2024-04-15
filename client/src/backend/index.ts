@@ -175,7 +175,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-
+    
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -185,7 +185,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-
+    
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -207,7 +207,7 @@ export interface VerifyForgotPasswordRequest {
 
 // VerifyForgotPasswordResponse is the response that is sent to the verifyForgotPassword endpoint.
 export interface VerifyForgotPasswordResponse {
-
+    
 }
 
 // ForgotPasswordRequest is the request that is sent to the forgotPassword endpoint.
@@ -219,12 +219,12 @@ export interface ForgotPasswordRequest {
 
 // ForgotPasswordResponse is the response that is sent to the forgotPassword endpoint.
 export interface ForgotPasswordResponse {
-
+    
 }
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-
+    
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -249,7 +249,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-
+    
 }
 
 // ResetPasswordRequest is the request that is sent to the resetPassword endpoint.
@@ -260,7 +260,7 @@ export interface ResetPasswordRequest {
 
 // ResetPasswordResponse is the response that is sent to the resetPassword endpoint.
 export interface ResetPasswordResponse {
-
+    
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -376,9 +376,19 @@ export interface FetchAssessmentsResponse {
     assessments: Assessment[];
 }
 
+// FetchStudentSubmissionRequest is the request that is sent to the fetchStudentSubmission endpoint.
+export interface FetchStudentSubmissionRequest {
+    studentId: string;
+}
+
+// FetchStudentSubmissionResponse is the response that is sent to the fetchStudentSubmission endpoint.
+export interface FetchStudentSubmissionResponse {
+    submission: Submission;
+}
+
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
 export interface FetchUserStatsRequest {
-
+    
 }
 
 // FetchUserStatsResponse is the response that is sent to the fetchUserStats endpoint.
@@ -388,7 +398,7 @@ export interface FetchUserStatsResponse {
 
 // FetchUserSevenDayActivityRequest is the request that is sent to the fetchUserSevenDayActivity endpoint.
 export interface FetchUserSevenDayActivityRequest {
-
+    
 }
 
 // FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
@@ -421,7 +431,7 @@ export interface GetCoursesResponse {
 
 // GetUserCoursesRequest is the request that is sent to the getUserCourses endpoint.
 export interface GetUserCoursesRequest {
-
+    
 }
 
 // GetUserCoursesResponse is the response that is sent to the getUserCourses endpoint.
@@ -458,7 +468,7 @@ export interface LeaveCourseRequest {
 
 // LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
 export interface LeaveCourseResponse {
-
+    
 }
 
 // GetForumByCourseIDRequest is the request that is sent to the getForumByCourseID endpoint.
@@ -508,7 +518,7 @@ export interface DeleteThreadRequest {
 
 // DeleteThreadResponse is the response that is sent to the deleteThread endpoint.
 export interface DeleteThreadResponse {
-
+    
 }
 
 // UpsertPostRequest is the request that is sent to the upsertPost endpoint.
@@ -528,7 +538,7 @@ export interface DeletePostRequest {
 
 // DeletePostResponse is the response that is sent to the deletePost endpoint.
 export interface DeletePostResponse {
-
+    
 }
 
 // GetRoleInCourseRequest is the request that is sent to the getRoleInCourse endpoint.
@@ -559,7 +569,7 @@ export interface ToggleLikePostRequest {
 
 // ToggleLikePostResponse is the response that is sent to the toggleLikePost endpoint.
 export interface ToggleLikePostResponse {
-
+    
 }
 
 // IncrementThreadViewRequest is the request that is sent to the incrementThreadView endpoint.
@@ -569,12 +579,12 @@ export interface IncrementThreadViewRequest {
 
 // IncrementThreadViewResponse is the response that is sent to the incrementThreadView endpoint.
 export interface IncrementThreadViewResponse {
-
+    
 }
 
 // GetUserEventsRequest is the request that is sent to the getUserEvents endpoint.
 export interface GetUserEventsRequest {
-
+    
 }
 
 // GetUserEventsResponse is the response that is sent to the getUserEvents endpoint.
@@ -1221,6 +1231,35 @@ export class BrainwavesClient {
         }
 
         return json as FetchAssessmentsResponse;
+    }
+
+
+
+    async fetchStudentSubmission(request: FetchStudentSubmissionRequest): Promise<FetchStudentSubmissionResponse> {
+        const response = await fetch(`${this.base_url}/fetchStudentSubmission`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchStudentSubmissionResponse;
     }
 
 

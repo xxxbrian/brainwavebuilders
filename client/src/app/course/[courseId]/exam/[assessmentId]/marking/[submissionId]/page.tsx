@@ -3,18 +3,49 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
-import { examData } from "@/utils/data"; // get fake questions info
-import { examSubmission } from "@/utils/data"; // get fake submission info
 import { MarkQestion } from "@/components/assessment/MarkQuestion";
+import { useBackend } from "@/hooks/useBackend";
+import { Submission } from "@/backend";
+import { Assessment } from "@/backend";
 
 type Scores = Record<string, number>; // <Qid, score>
 
 export const MarkExamPage: React.FC = () => {
-  const router = useRouter();
-  const pathName = usePathname();
-
+  const [submission, setSubmission] = useState<Submission | null>(null);
+  const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [scores, setScores] = useState<Scores>({});
   const [totalScore, setTotalScore] = useState<number>(0);
+  const pathName = usePathname();
+  const router = useRouter();
+  const backend = useBackend();
+
+  const pathSegments = pathName.split('/');
+  const submissionId = pathSegments[pathSegments.length - 1];
+  const assessmentId = pathSegments[pathSegments.length - 3];
+
+
+  useEffect(() => {
+    const fetchDetailsAndSubmission = async () => {
+      if (assessmentId) {
+        try {
+          const response = await backend.fetchAssessmentDetailsTeacher({ assessmentId });
+          setAssessment(response.assessment);
+        } catch (error) {
+          console.error('Failed to fetch assessment details:', error);
+        }
+      }
+      if (submissionId) {
+        try {
+          const { submission } = await backend.fetchSubmission({ submissionId });
+          setSubmission(submission);
+        } catch (error) {
+          console.error("Failed to fetch submission:", error);
+        }
+      }
+    };
+
+    fetchDetailsAndSubmission();
+  }, [submissionId, assessmentId, backend]);
 
   useEffect(() => {
     const newTotalScore = Object.values(scores).reduce(
@@ -23,6 +54,7 @@ export const MarkExamPage: React.FC = () => {
     );
     setTotalScore(newTotalScore);
   }, [scores]);
+
   const handleScoreChange = (questionId: string, score: number) => {
     setScores((prevScores) => ({ ...prevScores, [questionId]: score }));
   };
@@ -36,20 +68,28 @@ export const MarkExamPage: React.FC = () => {
   }, [pathName, router]);
 
   const onClickSave = useCallback(async () => {
-    // TODO: Handle saving the scores and feedback to the backend
-    const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
-    router.push(newPath);
-  }, [pathName, router]);
+    if (submissionId) {
+      try {
+        await backend.manualGradeSubmission({
+          submissionId,
+          saqGrades: totalScore
+        });
+        alert('Total SAQ scores successfully saved!');
+        const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
+        router.push(newPath);
+      } catch (error) {
+        console.error("Failed to save total SAQ scores:", error);
+      }
+    }
+  }, [backend, submissionId, totalScore, router, pathName]);
 
-  // TODO change to use real submission, combine submission's answer with question and sample answer
-  const saqQuestions = examData.questions
+  if (!assessment || !submission) return <div>Loading...</div>;
+
+  const saqQuestions = assessment.questions
     .filter((question) => question.type === "SAQ")
     .map((question) => ({
       ...question,
-      studentAnswer:
-        examSubmission.answers[
-          question.id as keyof typeof examSubmission.answers
-        ],
+      studentAnswer: submission.answers[question.id],
       sampleAnswer: question.answer,
     }));
 
@@ -67,7 +107,7 @@ export const MarkExamPage: React.FC = () => {
           title={question.title}
           points={question.points}
           studentAnswer={question.studentAnswer}
-          sampleAnswer={question.sampleAnswer}
+          sampleAnswer={question.sampleAnswer || "No sample answer provided"}
           onScoreChange={(score) => handleScoreChange(question.id, score)}
         />
       ))}

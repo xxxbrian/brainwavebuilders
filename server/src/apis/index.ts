@@ -2,48 +2,49 @@
 
 
 import { app } from "@/globals";
+import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
+import { checkEmail } from "@/handlers/checkEmail";
+import { createAssessment } from "@/handlers/createAssessment";
+import { createCourse } from "@/handlers/createCourse";
+import { createCourseInvitation } from "@/handlers/createCourseInvitation";
+import { deletePost } from "@/handlers/deletePost";
+import { deleteThread } from "@/handlers/deleteThread";
+import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
+import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
 import { fetchAssessmentSubmissions } from "@/handlers/fetchAssessmentSubmissions";
-import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { ping } from "@/handlers/ping";
-import { fetchSubmission } from "@/handlers/fetchSubmission";
-import { submitAssignment } from "@/handlers/submitAssignment";
-import { forgotPassword } from "@/handlers/forgotPassword";
-import { getForumByCourseID } from "@/handlers/getForumByCourseID";
-import { login } from "@/handlers/login";
 import { fetchAssessments } from "@/handlers/fetchAssessments";
-import { resetPassword } from "@/handlers/resetPassword";
-import { toggleLikePost } from "@/handlers/toggleLikePost";
+import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
+import { fetchSubmission } from "@/handlers/fetchSubmission";
+import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
+import { fetchUserStats } from "@/handlers/fetchUserStats";
+import { forgotPassword } from "@/handlers/forgotPassword";
+import { getCourseEvents } from "@/handlers/getCourseEvents";
 import { getCourses } from "@/handlers/getCourses";
+import { getFeatured } from "@/handlers/getFeatured";
+import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { getForumByID } from "@/handlers/getForumByID";
+import { getRoleInCourse } from "@/handlers/getRoleInCourse";
+import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
+import { getThreads } from "@/handlers/getThreads";
+import { getUserCourses } from "@/handlers/getUserCourses";
+import { getUserEvents } from "@/handlers/getUserEvents";
+import { getUserInfo } from "@/handlers/getUserInfo";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
+import { joinCourse } from "@/handlers/joinCourse";
+import { leaveCourse } from "@/handlers/leaveCourse";
+import { login } from "@/handlers/login";
+import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
+import { ping } from "@/handlers/ping";
+import { register } from "@/handlers/register";
+import { resetPassword } from "@/handlers/resetPassword";
+import { setUserProfile } from "@/handlers/setUserProfile";
+import { submitAnswers } from "@/handlers/submitAnswers";
+import { submitAssignment } from "@/handlers/submitAssignment";
+import { toggleLikePost } from "@/handlers/toggleLikePost";
+import { upsertPost } from "@/handlers/upsertPost";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
-import { getFeatured } from "@/handlers/getFeatured";
-import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
-import { getCourseEvents } from "@/handlers/getCourseEvents";
-import { getUserCourses } from "@/handlers/getUserCourses";
-import { getThreads } from "@/handlers/getThreads";
-import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
-import { getRoleInCourse } from "@/handlers/getRoleInCourse";
-import { upsertPost } from "@/handlers/upsertPost";
-import { joinCourse } from "@/handlers/joinCourse";
-import { deletePost } from "@/handlers/deletePost";
-import { createCourseInvitation } from "@/handlers/createCourseInvitation";
-import { setUserProfile } from "@/handlers/setUserProfile";
-import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
-import { createAssessment } from "@/handlers/createAssessment";
-import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
-import { submitAnswers } from "@/handlers/submitAnswers";
-import { getForumByID } from "@/handlers/getForumByID";
-import { createCourse } from "@/handlers/createCourse";
-import { leaveCourse } from "@/handlers/leaveCourse";
-import { getUserInfo } from "@/handlers/getUserInfo";
-import { register } from "@/handlers/register";
-import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
-import { getUserEvents } from "@/handlers/getUserEvents";
 import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
-import { fetchUserStats } from "@/handlers/fetchUserStats";
-import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
-import { deleteThread } from "@/handlers/deleteThread";
-import { checkEmail } from "@/handlers/checkEmail";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -218,7 +219,7 @@ export interface RegisterRequest {
 
 // RegisterResponse is the response that is sent to the register endpoint.
 export interface RegisterResponse {
-
+    
 }
 
 // VerifyEmailRequest is the request that is sent to the verifyEmail endpoint.
@@ -228,7 +229,7 @@ export interface VerifyEmailRequest {
 
 // VerifyEmailResponse is the response that is sent to the verifyEmail endpoint.
 export interface VerifyEmailResponse {
-
+    
 }
 
 // LoginRequest is the request that is sent to the login endpoint.
@@ -250,7 +251,7 @@ export interface VerifyForgotPasswordRequest {
 
 // VerifyForgotPasswordResponse is the response that is sent to the verifyForgotPassword endpoint.
 export interface VerifyForgotPasswordResponse {
-
+    
 }
 
 // ForgotPasswordRequest is the request that is sent to the forgotPassword endpoint.
@@ -262,12 +263,12 @@ export interface ForgotPasswordRequest {
 
 // ForgotPasswordResponse is the response that is sent to the forgotPassword endpoint.
 export interface ForgotPasswordResponse {
-
+    
 }
 
 // GetFeaturedRequest is the request that is sent to the getFeatured endpoint.
 export interface GetFeaturedRequest {
-
+    
 }
 
 // GetFeaturedResponse is the response that is sent to the getFeatured endpoint.
@@ -292,7 +293,7 @@ export interface SetUserProfileRequest {
 
 // SetUserProfileResponse is the response that is sent to the setUserProfile endpoint.
 export interface SetUserProfileResponse {
-
+    
 }
 
 // ResetPasswordRequest is the request that is sent to the resetPassword endpoint.
@@ -303,7 +304,7 @@ export interface ResetPasswordRequest {
 
 // ResetPasswordResponse is the response that is sent to the resetPassword endpoint.
 export interface ResetPasswordResponse {
-
+    
 }
 
 // CreateAssessmentRequest is the request that is sent to the createAssessment endpoint.
@@ -419,9 +420,19 @@ export interface FetchAssessmentsResponse {
     assessments: Assessment[];
 }
 
+// FetchStudentSubmissionRequest is the request that is sent to the fetchStudentSubmission endpoint.
+export interface FetchStudentSubmissionRequest {
+    studentId: string;
+}
+
+// FetchStudentSubmissionResponse is the response that is sent to the fetchStudentSubmission endpoint.
+export interface FetchStudentSubmissionResponse {
+    submission: Submission;
+}
+
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
 export interface FetchUserStatsRequest {
-
+    
 }
 
 // FetchUserStatsResponse is the response that is sent to the fetchUserStats endpoint.
@@ -431,7 +442,7 @@ export interface FetchUserStatsResponse {
 
 // FetchUserSevenDayActivityRequest is the request that is sent to the fetchUserSevenDayActivity endpoint.
 export interface FetchUserSevenDayActivityRequest {
-
+    
 }
 
 // FetchUserSevenDayActivityResponse is the response that is sent to the fetchUserSevenDayActivity endpoint.
@@ -464,7 +475,7 @@ export interface GetCoursesResponse {
 
 // GetUserCoursesRequest is the request that is sent to the getUserCourses endpoint.
 export interface GetUserCoursesRequest {
-
+    
 }
 
 // GetUserCoursesResponse is the response that is sent to the getUserCourses endpoint.
@@ -501,7 +512,7 @@ export interface LeaveCourseRequest {
 
 // LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
 export interface LeaveCourseResponse {
-
+    
 }
 
 // GetForumByCourseIDRequest is the request that is sent to the getForumByCourseID endpoint.
@@ -551,7 +562,7 @@ export interface DeleteThreadRequest {
 
 // DeleteThreadResponse is the response that is sent to the deleteThread endpoint.
 export interface DeleteThreadResponse {
-
+    
 }
 
 // UpsertPostRequest is the request that is sent to the upsertPost endpoint.
@@ -571,7 +582,7 @@ export interface DeletePostRequest {
 
 // DeletePostResponse is the response that is sent to the deletePost endpoint.
 export interface DeletePostResponse {
-
+    
 }
 
 // GetRoleInCourseRequest is the request that is sent to the getRoleInCourse endpoint.
@@ -602,7 +613,7 @@ export interface ToggleLikePostRequest {
 
 // ToggleLikePostResponse is the response that is sent to the toggleLikePost endpoint.
 export interface ToggleLikePostResponse {
-
+    
 }
 
 // IncrementThreadViewRequest is the request that is sent to the incrementThreadView endpoint.
@@ -612,12 +623,12 @@ export interface IncrementThreadViewRequest {
 
 // IncrementThreadViewResponse is the response that is sent to the incrementThreadView endpoint.
 export interface IncrementThreadViewResponse {
-
+    
 }
 
 // GetUserEventsRequest is the request that is sent to the getUserEvents endpoint.
 export interface GetUserEventsRequest {
-
+    
 }
 
 // GetUserEventsResponse is the response that is sent to the getUserEvents endpoint.
@@ -1116,6 +1127,28 @@ app.post('/api/fetchAssessments', async (req, res) => {
     }
 });
 
+// fetchStudentSubmission is the endpoint handler for the fetchStudentSubmission endpoint.
+// It wraps around the function at @/handlers/fetchStudentSubmission.
+app.post('/api/fetchStudentSubmission', async (req, res) => {
+    const request: FetchStudentSubmissionRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: FetchStudentSubmissionResponse = await fetchStudentSubmission(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request fetchStudentSubmission with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
 // fetchUserStats is the endpoint handler for the fetchUserStats endpoint.
 // It wraps around the function at @/handlers/fetchUserStats.
 app.post('/api/fetchUserStats', async (req, res) => {
@@ -1577,3 +1610,4 @@ app.post('/api/getCourseEvents', async (req, res) => {
         }
     }
 });
+

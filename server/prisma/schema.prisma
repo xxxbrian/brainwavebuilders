@@ -132,6 +132,7 @@ model Submission {
     feedback               String?
     assessment             Assessment @relation("assessmentSubmissions", fields: [assessmentID], references: [id])
     student                User       @relation("studentSubmissions", fields: [studentID], references: [id])
+    isMarked               Boolean    @default(false)
 }
 
 model Forum {

@@ -6,7 +6,6 @@ import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
-import { mockTime, mockEvents } from "@/utils/data";
 import { useCourse } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
@@ -119,16 +118,18 @@ export const CoursesPage: React.FC = ({}) => {
     dueDate: assessment.dueDate ?? "",
   });
 
-  const onClickAssignment = useCallback(
-    async (assessmentId: string) => {
-      router.push(`${pathName}/assignment/${assessmentId}`);
-    },
-    [router, pathName],
-  );
+const onClickAssignment = useCallback(
+  async (assessmentId: string) => {
+    const newPath = `${pathName}/assignment/${assessmentId}`;
+    router.push(newPath);
+  },
+  [router, pathName],
+);
 
   const onClickExam = useCallback(
     async (assessmentId: string) => {
-      router.push(`${pathName}/exam/${assessmentId}`);
+      const newPath = `${pathName}/exam/${assessmentId}`;
+      router.push(newPath);
     },
     [router, pathName],
   );

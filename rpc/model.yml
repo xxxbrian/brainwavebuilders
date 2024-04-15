@@ -284,6 +284,13 @@ endpoints:
       assessments: Assessment[]
     service: typescript
 
+  fetchStudentSubmission:
+    request:
+      studentId: string
+    response:
+      submission: Submission
+    service: typescript
+
   fetchUserStats:
     request:
     response:
