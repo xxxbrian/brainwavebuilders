@@ -227,7 +227,6 @@ endpoints:
   submitAnswers:
     request:
       assessmentId: string
-      studentId: string
       answers: json
     response:
       submission: Submission
@@ -236,7 +235,6 @@ endpoints:
   submitAssignment:
     request:
       assessmentId: string
-      studentId: string
       assignmentContent: json
     response:
       submission: Submission

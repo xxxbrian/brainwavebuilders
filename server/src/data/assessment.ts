@@ -66,6 +66,7 @@ export const createAssessment = async (
 
 export const submitAnswers = async (
   data: SubmitAnswersRequest,
+  userId: string,
 ): Promise<Submission> => {
   try {
     const assessment = await db.assessment.findUnique({
@@ -80,7 +81,7 @@ export const submitAnswers = async (
     const submission = await db.submission.create({
       data: {
         assessmentID: data.assessmentId,
-        studentID: data.studentId,
+        studentID: userId,
         answers: data.answers,
         submittedAt: new Date(),
         grade: 0,
@@ -120,6 +121,7 @@ export interface AssessmentDetails extends Assessment {
 
 export const submitAssignment = async (
   data: SubmitAssignmentRequest,
+  userId: string,
 ): Promise<Submission> => {
   try {
     const assessment = await db.assessment.findUnique({
@@ -135,7 +137,7 @@ export const submitAssignment = async (
     const submission = await db.submission.create({
       data: {
         assessmentID: data.assessmentId,
-        studentID: data.studentId,
+        studentID: userId,
         assignmentContent: JSON.stringify(data.assignmentContent),
         submittedAt: new Date(),
       },

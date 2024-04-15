@@ -2,6 +2,7 @@ import { SubmitAnswersRequest, SubmitAnswersResponse } from "@/apis";
 import { submitAnswers as submitAnswersData } from "@/data/assessment"; // Adjust path as necessary
 import { formatSubmission as formatSubmissionResponse } from "@/converts/assessment"; // A hypothetical function to format response
 import { APIError } from "@/apis";
+import { useCurrentUser } from "@/context/auth";
 
 // submitAnswers implements the submitAnswers endpoint.
 // This code has been automatically generated.
@@ -12,10 +13,10 @@ export const submitAnswers = async (
   ctx: any,
   request: SubmitAnswersRequest,
 ): Promise<SubmitAnswersResponse> => {
-  // TODO: Auth
+  let user = useCurrentUser(ctx);
 
   try {
-    const submission = await submitAnswersData(request);
+    const submission = await submitAnswersData(request, user?.id!);
 
     return { submission: formatSubmissionResponse(submission) };
   } catch (error) {

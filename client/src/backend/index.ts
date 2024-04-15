@@ -294,7 +294,6 @@ export interface CreateAssessmentResponse {
 // SubmitAnswersRequest is the request that is sent to the submitAnswers endpoint.
 export interface SubmitAnswersRequest {
     assessmentId: string;
-    studentId: string;
     answers: any;
 }
 
@@ -306,7 +305,6 @@ export interface SubmitAnswersResponse {
 // SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
 export interface SubmitAssignmentRequest {
     assessmentId: string;
-    studentId: string;
     assignmentContent: any;
 }
 
