@@ -1,4 +1,4 @@
-import { Forum, PostStats, Thread, ThreadStats } from "@/backend";
+import { Forum, PostStats, Thread, ThreadStats } from "../../backend";
 
 export interface ForumState {
   threads: Thread[];

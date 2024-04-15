@@ -1,5 +1,5 @@
-import { UserSevenDayActivity } from "@/backend";
-import { useBackend } from "@/hooks/useBackend";
+import { UserSevenDayActivity } from "../../backend";
+import { useBackend } from "../../hooks/useBackend";
 import React, { useEffect, useState } from "react";
 import { BarChart, Bar, XAxis, CartesianGrid, Tooltip } from "recharts";
 

@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useCallback } from "react";
-import { assignmentData } from "@/utils/data";
-import AssessmentHeader from "@/components/assessment/AssessmentHeader";
-import SubmissionsTable from "@/components/assessment/SubmissionsTable";
+import { assignmentData } from "../../../../../utils/data";
+import AssessmentHeader from "../../../../../components/assessment/AssessmentHeader";
+import SubmissionsTable from "../../../../../components/assessment/SubmissionsTable";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
 

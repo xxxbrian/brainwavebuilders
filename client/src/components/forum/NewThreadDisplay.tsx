@@ -1,4 +1,4 @@
-import { AdvancedEditor } from "@/components/editor/AdvancedEditor";
+import { AdvancedEditor } from "../editor/AdvancedEditor";
 import { Button, TextField } from "@radix-ui/themes";
 import { JSONContent } from "novel";
 import { useCallback, useEffect, useState } from "react";

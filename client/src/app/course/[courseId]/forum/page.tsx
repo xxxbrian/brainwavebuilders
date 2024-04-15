@@ -1,10 +1,10 @@
 "use client";
 
-import { useCourse } from "@/contexts/CourseContext";
+import { useCourse } from "../../../../contexts/CourseContext";
 import { useCallback, useEffect, useState } from "react";
-import { CenteredLoading } from "@/components/loading";
-import { useBackend } from "@/hooks/useBackend";
-import { StatefulForum } from "@/components/forum/Forum";
+import { CenteredLoading } from "../../../../components/loading";
+import { useBackend } from "../../../../hooks/useBackend";
+import { StatefulForum } from "../../../../components/forum/Forum";
 import { useRouter, useSearchParams } from "next/navigation";
 
 export const ForumPage: React.FC = () => {

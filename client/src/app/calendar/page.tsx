@@ -1,11 +1,18 @@
 "use client";
 
+// import {
+//   type Event,
+//   Calendar as CalendarComponent,
+// } from "@/components/calendar/Calendar";
+// import { PageFrame } from "@/components/structural/PageFrame";
+// import { useBackend } from "@/hooks/useBackend";
+
 import {
   type Event,
   Calendar as CalendarComponent,
-} from "@/components/calendar/Calendar";
-import { PageFrame } from "@/components/structural/PageFrame";
-import { useBackend } from "@/hooks/useBackend";
+} from "../../components/calendar/Calendar";
+import { PageFrame } from "../../components/structural/PageFrame";
+import { useBackend } from "../../hooks/useBackend";
 
 import React, { useEffect } from "react";
 

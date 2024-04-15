@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useCallback, useState } from "react";
-import AssessmentInfo from "@/components/assessment/AssessmentInfo";
-import QuestionComponent from "@/components/assessment/Question";
+import AssessmentInfo from "../../../../components/assessment/AssessmentInfo";
+import QuestionComponent from "../../../../components/assessment/Question";
 import { usePathname, useRouter } from "next/navigation";
 import { v4 as uuidv4 } from "uuid";
-import { useBackend } from "@/hooks/useBackend";
-import { useCourse } from "@/contexts/CourseContext";
+import { useBackend } from "../../../../hooks/useBackend";
+import { useCourse } from "../../../../contexts/CourseContext";
 import { IoIosArrowBack } from "react-icons/io";
-import { NewQuestion } from "@/backend";
+import { NewQuestion } from "../../../../backend";
 
 interface Question extends NewQuestion {
   id: string;

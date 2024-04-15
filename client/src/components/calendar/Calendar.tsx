@@ -1,8 +1,8 @@
 import React from "react";
-import { CalendarBoard } from "@/components/calendar/CalendarBoard";
-import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
-import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
-import { getBgColor, getSubjectColor } from "@/components/calendar/colorScheme";
+import { CalendarBoard } from "./CalendarBoard";
+import { CalendarBoardMini } from "./CalendarBoardMini";
+import { UpcomingEvents } from "./UpcomingEvents";
+import { getBgColor, getSubjectColor } from "./colorScheme";
 
 export type Event = {
   name: string;

@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import { CourseCard } from "./CourseCard";
-import { Course, CourseMembership } from "@/backend";
+import { Course, CourseMembership } from "../../backend";
 
 type CourseContainerProps = {
   courses: Course[];

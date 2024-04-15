@@ -1,11 +1,11 @@
 "use client";
 
-import { APIError, Course } from "@/backend";
-import { CenteredLoading } from "@/components/loading";
-import { PageFrame } from "@/components/structural/PageFrame";
-import { CourseContext } from "@/contexts/CourseContext";
-import { CourseRoleContext } from "@/contexts/CourseRoleContext";
-import { useBackend } from "@/hooks/useBackend";
+import { APIError, Course } from "../../../backend";
+import { CenteredLoading } from "../../../components/loading";
+import { PageFrame } from "../../../components/structural/PageFrame";
+import { CourseContext } from "../../../contexts/CourseContext";
+import { CourseRoleContext } from "../../../contexts/CourseRoleContext";
+import { useBackend } from "../../../hooks/useBackend";
 import { useEffect, useState } from "react";
 
 export default function ClassroomPageLayout({

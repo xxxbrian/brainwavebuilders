@@ -1,6 +1,6 @@
 "use client";
 
-import { Thread } from "@/backend";
+import { Thread } from "../../backend";
 import { useCallback } from "react";
 import { RiQuestionAnswerLine } from "react-icons/ri";
 import dayjs from "dayjs";

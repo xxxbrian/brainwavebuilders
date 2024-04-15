@@ -1,14 +1,14 @@
 "use client";
 
 import React, { useCallback, useEffect, useState } from "react";
-import { User, isAPIError } from "@/backend";
-import { useBackend } from "@/hooks/useBackend";
-import { PageFrame } from "@/components/structural/PageFrame";
+import { User, isAPIError } from "../../backend";
+import { useBackend } from "../../hooks/useBackend";
+import { PageFrame } from "../../components/structural/PageFrame";
 
 import { Text, Tabs, Switch } from "@radix-ui/themes";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
-import ErrorDialog from "@/components/ErrDialog";
+import ErrorDialog from "../../components/ErrDialog";
 
 type PasswordInputFormProps = {
   id: string;

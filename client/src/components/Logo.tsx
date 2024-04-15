@@ -1,5 +1,5 @@
-import logoWhite from "@/assets/logo-white.svg";
-import logoColor from "@/assets/logo-color.svg";
+import logoWhite from "../assets/logo-white.svg";
+import logoColor from "../assets/logo-color.svg";
 
 import { StaticImageData } from "next/image";
 

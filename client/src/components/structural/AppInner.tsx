@@ -1,13 +1,17 @@
 "use client";
 
 import { Theme } from "@radix-ui/themes";
-import { useAppearance } from "@/hooks/useAppearance";
-import { Session, SessionContext, createSession } from "@/hooks/useCurrentUser";
+import { useAppearance } from "../../hooks/useAppearance";
+import {
+  Session,
+  SessionContext,
+  createSession,
+} from "../../hooks/useCurrentUser";
 // import Login from "./login";
 import { PropsWithChildren, useEffect, useState } from "react";
-import { useBackend } from "@/hooks/useBackend";
-import { CenteredLoading } from "@/components/loading";
-import Login from "@/app/login/page";
+import { useBackend } from "../../hooks/useBackend";
+import { CenteredLoading } from "../../components/loading";
+import Login from "../../app/login/page";
 
 interface WrapperProps extends PropsWithChildren {
   session: Session | null;

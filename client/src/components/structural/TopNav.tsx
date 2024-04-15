@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useCallback } from "react";
 import { Logo } from "../Logo";
 import { AiOutlineMenu } from "react-icons/ai";
-import { User } from "@/backend";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { User } from "../../backend";
+import { useCurrentUser } from "../../hooks/useCurrentUser";
 import { useRouter } from "next/navigation";
 import { Avatar, DropdownMenu } from "@radix-ui/themes";
 import Cookies from "js-cookie";

@@ -1,4 +1,4 @@
-import { useBackend } from "@/hooks/useBackend";
+import { useBackend } from "../../hooks/useBackend";
 import { Button, Dialog, TextArea, TextField } from "@radix-ui/themes";
 import { useRouter } from "next/navigation";
 import React, { useCallback, useState } from "react";

@@ -3,7 +3,7 @@ import { Button, Dialog, TextArea, TextField } from "@radix-ui/themes";
 import React, { useCallback, useState, useMemo } from "react";
 import type { ChangeEvent } from "react";
 import { useRouter } from "next/navigation";
-import { useCourse } from "@/contexts/CourseContext";
+import { useCourse } from "../../contexts/CourseContext";
 
 interface CreateAssignmentProps {
   isOpen: boolean;
@@ -64,24 +64,35 @@ export const CreateAssignmentDialog: React.FC<CreateAssignmentProps> = ({
     setEndDate("");
   }, []);
 
-  const handleSubmit = useCallback(async (event: React.FormEvent) => {
-    event.preventDefault();
-    try {
-      const response = await backend.createAssessment({
-        title: assignmentName,
-        description: assignmentDescription,
-        courseId: courseId as string,
-        startDate: startDate,
-        dueDate: endDate,
-        type: "assignment",
-      });
-      setIsOpen(false);
-      onUpdateAssignments();
-      resetForm();
-    } catch (error) {
-      console.error("Failed to create assignment:", error);
-    }
-  }, [assignmentName, assignmentDescription, startDate, endDate, backend, setIsOpen, onUpdateAssignments]);
+  const handleSubmit = useCallback(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      try {
+        const response = await backend.createAssessment({
+          title: assignmentName,
+          description: assignmentDescription,
+          courseId: courseId as string,
+          startDate: startDate,
+          dueDate: endDate,
+          type: "assignment",
+        });
+        setIsOpen(false);
+        onUpdateAssignments();
+        resetForm();
+      } catch (error) {
+        console.error("Failed to create assignment:", error);
+      }
+    },
+    [
+      assignmentName,
+      assignmentDescription,
+      startDate,
+      endDate,
+      backend,
+      setIsOpen,
+      onUpdateAssignments,
+    ],
+  );
 
   const handleClose = useCallback(() => {
     setIsOpen(false);

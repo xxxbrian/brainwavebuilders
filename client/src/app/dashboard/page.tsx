@@ -8,16 +8,16 @@ import React, {
 } from "react";
 import { StatefulUserStatsDisplay } from "../../components/dashboard/Stats";
 import { StatefulUserSevenDayActivitiesDisplay } from "../../components/dashboard/Activity";
-import { PageFrame } from "@/components/structural/PageFrame";
-import { CreateCourseButton } from "@/components/dashboard/CreateCoursePopup";
-import { JoinCourseButton } from "@/components/dashboard/JoinCoursePopup";
+import { PageFrame } from "../../components/structural/PageFrame";
+import { CreateCourseButton } from "../../components/dashboard/CreateCoursePopup";
+import { JoinCourseButton } from "../../components/dashboard/JoinCoursePopup";
 import { Card, Heading } from "@radix-ui/themes";
-import { CoursesContainer } from "@/components/dashboard/Courses";
-import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
-import { Course } from "@/backend";
+import { CoursesContainer } from "../../components/dashboard/Courses";
+import { UpcomingEvents } from "../../components/calendar/UpcomingEvents";
+import { Course } from "../../backend";
 import { useRouter } from "next/navigation";
-import { useBackend } from "@/hooks/useBackend";
-import { type Event } from "@/components/calendar/Calendar";
+import { useBackend } from "../../hooks/useBackend";
+import { type Event } from "../../components/calendar/Calendar";
 
 interface DashboardItemProps extends PropsWithChildren {
   className?: string;

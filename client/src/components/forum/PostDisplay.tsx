@@ -1,4 +1,4 @@
-import { Post, PostStats, Thread, ThreadStats } from "@/backend";
+import { Post, PostStats, Thread, ThreadStats } from "../../backend";
 import AdvancedEditor from "../editor/AdvancedEditor";
 import { Avatar, IconButton } from "@radix-ui/themes";
 import dayjs from "dayjs";

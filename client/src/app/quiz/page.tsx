@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import Question from "@/components/quiz/Question";
-import { PageFrame } from "@/components/structural/PageFrame";
-import QuizHeader from "@/components/quiz/Header";
-import { quizData } from "@/utils/data";
+import Question from "../../components/quiz/Question";
+import { PageFrame } from "../../components/structural/PageFrame";
+import QuizHeader from "../../components/quiz/Header";
+import { quizData } from "../../utils/data";
 
 type Question = {
   id: string;

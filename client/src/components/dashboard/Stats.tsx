@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
-import blueLine from "@/assets/blue_line.png";
-import { UserStats } from "@/backend";
+import blueLine from "../../assets/blue_line.png";
+import { UserStats } from "../../backend";
 import { Card } from "@radix-ui/themes";
-import { useBackend } from "@/hooks/useBackend";
+import { useBackend } from "../../hooks/useBackend";
 
 // Define and export the StatsProps type
 export type StatsProps = {

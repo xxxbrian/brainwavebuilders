@@ -11,7 +11,7 @@ import { IoHome, IoCalendarOutline, IoSettingsOutline } from "react-icons/io5";
 import { BiTask, BiVideoRecording } from "react-icons/bi";
 import { TfiAnnouncement, TfiMedallAlt } from "react-icons/tfi";
 import Image from "next/image";
-import logoImg from "@/assets/logo-big.svg";
+import logoImg from "../../assets/logo-big.svg";
 import { usePathname, useRouter } from "next/navigation";
 
 interface NavItem {
@@ -116,7 +116,10 @@ export default function SideNav({
 
   const currentPage =
     navItems.find((item) =>
-      pathName.toLowerCase().includes(item.href.toLowerCase()),
+      pathName
+        .toString()
+        .toLowerCase()
+        .includes(item.href.toString().toLowerCase()),
     )?.key ?? "home";
 
   return (

@@ -1,19 +1,19 @@
 "use client";
 
-import { CalendarBoard } from "@/components/calendar/CalendarBoard";
-import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
+import { CalendarBoard } from "../../../components/calendar/CalendarBoard";
+import { StatefulInviteMembersForm } from "../../../components/course/InviteMembersForm";
 import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
 import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
-import { mockTime, mockEvents } from "@/utils/data";
-import { useCourse } from "@/contexts/CourseContext";
-import { useBackend } from "@/hooks/useBackend";
-import { Assessment } from "@/backend";
-import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
-import AssignmentsTable from "@/components/assessment/AssessmentsTable";
-import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
-import { type Event } from "@/components/calendar/Calendar";
+import { mockTime, mockEvents } from "../../../utils/data";
+import { useCourse } from "../../../contexts/CourseContext";
+import { useBackend } from "../../../hooks/useBackend";
+import { Assessment } from "../../../backend";
+import { CalendarBoardMini } from "../../../components/calendar/CalendarBoardMini";
+import AssignmentsTable from "../../../components/assessment/AssessmentsTable";
+import { CreateAssignmentDialog } from "../../../components/assessment/CreateAssignmentDialog";
+import { type Event } from "../../../components/calendar/Calendar";
 interface ApplicationProps {
   icon: React.ReactNode;
   title: string;

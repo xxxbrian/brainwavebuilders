@@ -3,9 +3,9 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
-import { examData } from "@/utils/data"; // get fake questions info
-import { examSubmission } from "@/utils/data"; // get fake submission info
-import { MarkQestion } from "@/components/assessment/MarkQuestion";
+import { examData } from "../../../../../../../utils/data"; // get fake questions info
+import { examSubmission } from "../../../../../../../utils/data"; // get fake submission info
+import { MarkQestion } from "../../../../../../../components/assessment/MarkQuestion";
 
 type Scores = Record<string, number>; // <Qid, score>
 

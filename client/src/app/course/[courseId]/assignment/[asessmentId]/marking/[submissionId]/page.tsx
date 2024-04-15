@@ -1,8 +1,8 @@
 "use client";
 
 import React, { useState, useCallback } from "react";
-import AdvancedEditor from "@/components/editor/AdvancedEditor";
-import { mockEditorContent } from "@/utils/data";
+import AdvancedEditor from "../../../../../../components/editor/AdvancedEditor";
+import { mockEditorContent } from "../../../../../../utils/data";
 import { Heading } from "@radix-ui/themes";
 import { TextArea } from "@radix-ui/themes";
 import { GoTriangleUp } from "react-icons/go";

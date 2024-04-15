@@ -1,4 +1,4 @@
-import { Post, PostStats, Thread, ThreadStats } from "@/backend";
+import { Post, PostStats, Thread, ThreadStats } from "../../backend";
 import { Button } from "@radix-ui/themes";
 import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
