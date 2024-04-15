@@ -27,9 +27,6 @@ export const MarkExamPage: React.FC = () => {
     setScores((prevScores) => ({ ...prevScores, [questionId]: score }));
   };
 
-  console.log(scores);
-  console.log(totalScore);
-
   const onClickBack = useCallback(() => {
     const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
     router.push(newPath);

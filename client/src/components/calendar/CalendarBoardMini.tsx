@@ -20,7 +20,6 @@ export const CalendarBoardMini: React.FC<CalendarProps> = ({
   function eventsInDay(day: Date) {
     const todayString = day.toISOString().split("T")[0]!;
     const todayEvents = events[todayString] ?? [];
-    console.log(todayEvents, todayString);
     return (
       <>
         {todayEvents.map((event, index) => (
