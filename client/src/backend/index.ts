@@ -131,6 +131,7 @@ export interface Post {
     createdBy?: User;
     deletedAt?: number;
     content: any;
+    isAnnouncement: boolean;
 }
 
 export interface Event {

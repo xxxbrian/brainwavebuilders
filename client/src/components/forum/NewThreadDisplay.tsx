@@ -1,5 +1,6 @@
 import { AdvancedEditor } from "@/components/editor/AdvancedEditor";
-import { Button, TextField } from "@radix-ui/themes";
+import { WithTeacherRole } from "@/contexts/CourseRoleContext";
+import { Button, Checkbox, TextField } from "@radix-ui/themes";
 import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
 
@@ -17,6 +18,11 @@ export const NewThreadDisplay: React.FC<Props> = ({
     type: "doc",
     content: [],
   });
+  const [isAnnouncement, setIsAnnouncement] = useState(false);
+
+  const onToggleIsAnnouncement = useCallback(() => {
+    setIsAnnouncement((prev) => !prev);
+  }, []);
 
   const onChangeTitle = useCallback(
     (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -46,6 +52,16 @@ export const NewThreadDisplay: React.FC<Props> = ({
         value={content}
         setValue={setContent}
       />
+
+      <WithTeacherRole>
+        <div
+          className="flex items-center space-x-2 select-none"
+          onClick={onToggleIsAnnouncement}
+        >
+          <Checkbox size="3" checked={isAnnouncement} />
+          <div>Send as an Announcement Thread</div>
+        </div>
+      </WithTeacherRole>
 
       <div className="flex justify-end space-x-2">
         <Button onClick={onClickCancel} variant="surface">
