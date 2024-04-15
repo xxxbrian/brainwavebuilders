@@ -92,7 +92,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
                         ?.lastName}`
                     : "Unknown Student"}
                 </Table.RowHeaderCell>
-                <Table.Cell>{formatDate(submission.submittedAt)}</Table.Cell>
+                {formatDate(submission.submittedAt)}
                 <Table.Cell>
                   {submission.grade !== undefined ? (
                     `${submission.grade}/100`
