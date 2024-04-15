@@ -253,22 +253,23 @@ export const fetchSubmission = async (
 
 export const fetchStudentSubmission = async (
   data: FetchStudentSubmissionRequest,
-): Promise<Submission> => {
+  user: User,
+): Promise<Submission[]> => {
   try {
-    const submission = await db.submission.findUnique({
-      where: { id: data.studentId },
+    const submissions = await db.submission.findMany({
+      where: { studentID: user.id },
     });
 
-    if (!submission) {
-      throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
+    if (!submissions.length) {
+      throw new APIError(
+        "No submissions found for this assessment",
+        "NO_SUBMISSIONS_FOUND",
+      );
     }
 
-    return submission;
+    return submissions;
   } catch (error) {
-    console.error(
-      "Failed to fetch submission with ID " + data.studentId + ":",
-      error,
-    );
+    console.error("Failed to fetch submission with ID " + user.id + ":", error);
     throw new APIError("Failed to fetch submission", "FETCH_FAILED");
   }
 };

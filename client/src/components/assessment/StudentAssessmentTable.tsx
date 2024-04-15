@@ -1,20 +1,23 @@
 import React, { useState, useEffect } from "react";
 import { Heading } from "@radix-ui/themes";
 import { Table } from "@radix-ui/themes";
+import { useBackend } from "@/hooks/useBackend";
+import { Submission } from "@/backend";
 
 interface AssignmentProps {
   id: string;
   name: string;
   startDate: string;
   dueDate: string;
+  totalPoints: number;
 }
 
-interface AssignmentWithStatusProps extends AssignmentProps {
-  isCompleted: boolean;
+interface AssignmentWithStatusAndSubmission extends AssignmentProps {
   status: "Not Start" | "In Progress" | "Completed";
+  submissionId?: string;
+  grade?: string;
 }
 
-// Define the prop types for the component
 interface AssignmentsTableProps {
   assignments: AssignmentProps[];
   type: string;
@@ -30,8 +33,9 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
   viewAssignmentResult,
 }) => {
   const [sortedAssignments, setSortedAssignments] = useState<
-    AssignmentWithStatusProps[]
+    AssignmentWithStatusAndSubmission[]
   >([]);
+  const backend = useBackend();
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Not submitted";
@@ -43,47 +47,58 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
   };
 
   useEffect(() => {
-    const now = new Date();
+    const fetchSubmissionsAndMapToAssignments = async () => {
+      try {
+        const submissionsResponse = await backend.fetchStudentSubmission({});
+        const submissionsMap: Record<string, Submission> =
+          submissionsResponse.submissions.reduce(
+            (acc: Record<string, Submission>, sub: Submission) => {
+              acc[sub.assessmentId] = sub;
+              return acc;
+            },
+            {},
+          );
 
-    const withStatusAndSorted = assignments
-      .map((assignment) => {
-        const start = new Date(assignment.startDate);
-        const due = new Date(assignment.dueDate);
-        let status: "Not Start" | "In Progress" | "Completed" = "In Progress";
+        const withSubmissions = assignments.map((assignment) => {
+          const submission = submissionsMap[assignment.id];
+          return {
+            ...assignment,
+            startDate: formatDate(assignment.startDate),
+            dueDate: formatDate(assignment.dueDate),
+            submissionId: submission?.id,
+            grade: submission?.isMarked
+              ? `${submission.grade}/${assignment.totalPoints}`
+              : "Not Graded",
+            status: determineStatus(assignment, new Date()),
+          };
+        });
 
-        if (now > due) {
-          status = "Completed";
-        } else if (now < start) {
-          status = "Not Start";
-        }
+        void setSortedAssignments(withSubmissions);
+      } catch (error) {
+        console.error("Failed to fetch submissions:", error);
+      }
+    };
 
-        return {
-          ...assignment,
-          status,
-          startDate: formatDate(assignment.startDate),
-          dueDate: formatDate(assignment.dueDate),
-        };
-      })
-      .sort((a, b) => {
-        const statusOrder = { "In Progress": 1, "Not Start": 2, Completed: 3 };
-        if (statusOrder[a.status] !== statusOrder[b.status]) {
-          return statusOrder[a.status] - statusOrder[b.status];
-        } else {
-          return new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime();
-        }
-      });
+    void fetchSubmissionsAndMapToAssignments();
+  }, [assignments, backend]);
 
-    setSortedAssignments(
-      withStatusAndSorted.map((assignment) => ({
-        ...assignment,
-        isCompleted: false, // or assign the appropriate value
-      })),
-    );
-  }, [assignments]);
+  const determineStatus = (
+    assignment: AssignmentProps,
+    currentDate: Date,
+  ): "Not Start" | "In Progress" | "Completed" => {
+    const start = new Date(assignment.startDate);
+    const due = new Date(assignment.dueDate);
+    if (currentDate > due) {
+      return "Completed";
+    } else if (currentDate < start) {
+      return "Not Start";
+    } else {
+      return "In Progress";
+    }
+  };
 
   const handleRowClick = (id: string, status: string) => {
     if (type === "Assignment" && status === "Completed") {
-      // TODO: You need to add a function to get real submission Id by using user Id and assignment Id
       viewAssignmentResult("fake_submission_id");
     } else if (type === "Assignment" && status !== "Not Start") {
       onClickAsessment(id);
@@ -92,7 +107,6 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
     }
   };
 
-  // TODO: Use Id to navigate assignment from table
   return (
     <div>
       <div className="flex justify-between p-2">
@@ -139,7 +153,7 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
                   {assignment.status}
                 </Table.Cell>
                 <Table.Cell>
-                  {/* TODO: Add Grade here, check isMarked, true: mark, false: "Not Marked" */}
+                  {assignment.grade ? assignment.grade : "Not Graded"}
                 </Table.Cell>
               </Table.Row>
             ))

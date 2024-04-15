@@ -71,6 +71,7 @@ export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
     answers: submission.answers,
     feedback: submission.feedback ?? undefined,
     grade: submission.grade ?? undefined,
+    isMarked: submission.isMarked,
   };
 };
 

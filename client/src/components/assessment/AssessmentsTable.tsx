@@ -78,7 +78,7 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
         }
       });
 
-    setSortedAssignments(
+    void setSortedAssignments(
       withStatusAndSorted.map((assignment) => ({
         ...assignment,
         isCompleted: false, // or assign the appropriate value
@@ -86,7 +86,6 @@ const AssessmentTable: React.FC<AssignmentsTableProps> = ({
     );
   }, [assignments]);
 
-  // TODO: Use Id to navigate assignment from table
   return (
     <div>
       <div className="flex justify-between p-2">

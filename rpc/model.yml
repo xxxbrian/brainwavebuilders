@@ -56,6 +56,7 @@ types:
     answers?: json
     feedback?: string
     grade?: int
+    isMarked: boolean
 
   Course:
     id: string
@@ -302,9 +303,8 @@ endpoints:
 
   fetchStudentSubmission:
     request:
-      studentId: string
     response:
-      submission: Submission
+      submissions: Submission[]
     service: typescript
 
   fetchUserStats:
