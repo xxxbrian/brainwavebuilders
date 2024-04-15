@@ -12,6 +12,7 @@ import {
   Thread,
   ThreadViews,
 } from "@prisma/client";
+import { CourseWithCreatedBy } from "./course";
 
 export const createForum = async (
   createdByID: string,
@@ -36,6 +37,23 @@ export const getForumByCourseID = async (
   const forum = await db.forum.findUnique({
     where: {
       courseID,
+    },
+    include: {
+      createdBy: true,
+    },
+  });
+
+  return forum;
+};
+
+export const getForumsByCourseIDs = async (
+  courseIDs: string[],
+): Promise<ForumWithCreatedBy[]> => {
+  const forum = await db.forum.findMany({
+    where: {
+      courseID: {
+        in: courseIDs,
+      },
     },
     include: {
       createdBy: true,
@@ -73,6 +91,25 @@ export const getCourseByForumID = async (
   });
 
   return forum?.course ?? null;
+};
+
+export const getCoursesByForumIDs = async (
+  forumID: string[],
+): Promise<CourseWithCreatedBy[]> => {
+  const forum = await db.forum.findMany({
+    where: {
+      id: { in: forumID },
+    },
+    include: {
+      course: {
+        include: {
+          createdBy: true,
+        },
+      },
+    },
+  });
+
+  return forum.map((f) => f.course);
 };
 
 export const getThreadsByForumID = async (
@@ -124,12 +161,14 @@ interface ThreadCreatable {
   forumID: string;
   title: string;
   createdByID: string;
+  isAnnouncement: boolean;
 }
 
 export const createThread = async ({
   createdByID,
   forumID,
   title,
+  isAnnouncement,
 }: ThreadCreatable): Promise<Thread> => {
   return await db.thread.create({
     data: {
@@ -139,6 +178,7 @@ export const createThread = async ({
       updatedAt: new Date(),
       createdByID,
       deletedAt: null,
+      isAnnouncement,
     },
   });
 };
@@ -341,4 +381,61 @@ export const toggleLikePost = async (
   });
 
   return true;
+};
+
+export const getAnnouncements = async (
+  forumIDs: string[],
+): Promise<ThreadWithPostsAndCounts[]> => {
+  const threads = await db.thread.findMany({
+    where: {
+      forumID: {
+        in: forumIDs,
+      },
+      isAnnouncement: true,
+    },
+    include: {
+      posts: {
+        include: {
+          createdBy: true,
+        },
+      },
+      createdBy: true,
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return threads;
+};
+
+export const mapThreadIDsToCourses = async (
+  threadIDs: string[],
+): Promise<Record<string, CourseWithCreatedBy>> => {
+  const threadToCourses: Record<string, CourseWithCreatedBy> = {};
+
+  const threads = await db.thread.findMany({
+    where: {
+      id: {
+        in: threadIDs,
+      },
+    },
+    include: {
+      forum: {
+        include: {
+          course: {
+            include: {
+              createdBy: true,
+            },
+          },
+        },
+      },
+    },
+  });
+
+  threads.forEach((t) => {
+    threadToCourses[t.id] = t.forum.course;
+  });
+
+  return threadToCourses;
 };

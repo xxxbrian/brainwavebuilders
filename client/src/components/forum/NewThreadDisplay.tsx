@@ -5,8 +5,16 @@ import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
 
 interface Props {
-  onClickCreateThreadAndPost: (title: string, content: JSONContent) => void;
+  onClickCreateThreadAndPost: (
+    title: string,
+    content: JSONContent,
+    attrs: ThreadAttributes,
+  ) => void;
   onClickCancel: () => void;
+}
+
+export interface ThreadAttributes {
+  isAnnouncement: boolean;
 }
 
 export const NewThreadDisplay: React.FC<Props> = ({
@@ -32,8 +40,8 @@ export const NewThreadDisplay: React.FC<Props> = ({
   );
 
   const onClickPost = useCallback(() => {
-    onClickCreatePost(title, content);
-  }, [onClickCreatePost, title, content]);
+    onClickCreatePost(title, content, { isAnnouncement });
+  }, [onClickCreatePost, title, content, isAnnouncement]);
 
   return (
     <div className="flex flex-col px-4 py-4 space-y-4">
@@ -59,7 +67,7 @@ export const NewThreadDisplay: React.FC<Props> = ({
           onClick={onToggleIsAnnouncement}
         >
           <Checkbox size="3" checked={isAnnouncement} />
-          <div>Send as an Announcement Thread</div>
+          <div>Send as an Announcement</div>
         </div>
       </WithTeacherRole>
 

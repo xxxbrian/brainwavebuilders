@@ -289,3 +289,11 @@ export const generalEmail: EmailGenerator<Props> = async ({
 `,
   ];
 };
+
+export const generalEmailWithSubject: EmailGenerator<
+  Props & { subject: string }
+> = async ({ content, name, senderName, title, subject }) => {
+  const [, html] = await generalEmail({ content, name, senderName, title });
+
+  return [subject, html];
+};

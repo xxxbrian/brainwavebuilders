@@ -1,5 +1,5 @@
 import { Post, PostStats, Thread, ThreadStats } from "@/backend";
-import { Button } from "@radix-ui/themes";
+import { Badge, Button } from "@radix-ui/themes";
 import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
 import { AdvancedEditor } from "../editor/AdvancedEditor";
@@ -44,7 +44,10 @@ export const ThreadDisplay: React.FC<Props> = ({
 
   return (
     <div className="flex flex-col px-4 py-4 space-y-4">
-      <div className="text-4xl mb-4">{thread.title}</div>
+      <div className="mb-4 flex items-center space-x-4">
+        <div className="text-4xl">{thread.title}</div>
+        {thread.isAnnouncement && <Badge size="3">Announcement</Badge>}
+      </div>
 
       {thread.posts.map((post, idx) => (
         <PostDisplay

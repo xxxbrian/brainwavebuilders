@@ -7,7 +7,7 @@ import { useBackend } from "@/hooks/useBackend";
 import { StatefulForum } from "@/components/forum/Forum";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export const ForumPage: React.FC = () => {
+const ForumPage: React.FC = () => {
   const course = useCourse();
 
   const [forumId, setForumId] = useState<string | null>(null);

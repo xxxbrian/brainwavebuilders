@@ -60,7 +60,7 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       ))}
       {flattenedAndLimitedEvents.length === 0 && (
         <div className="flex flex-col justify-center items-center h-full flex-1">
-          <p className="text-center text-gray-500 text-xs">
+          <p className="text-center text-gray-500 text-xs py-4">
             No upcoming events! Take a break, grab a coffee!
           </p>
         </div>

@@ -14,10 +14,11 @@ import { JoinCourseButton } from "@/components/dashboard/JoinCoursePopup";
 import { Card, Heading } from "@radix-ui/themes";
 import { CoursesContainer } from "@/components/dashboard/Courses";
 import { UpcomingEvents } from "@/components/calendar/UpcomingEvents";
-import { Course } from "@/backend";
+import { Course, CourseMembership } from "@/backend";
 import { useRouter } from "next/navigation";
 import { useBackend } from "@/hooks/useBackend";
 import { type Event } from "@/components/calendar/Calendar";
+import { StatefulAnnouncementsWidget } from "@/components/announcements/AnnouncementsWidget";
 
 interface DashboardItemProps extends PropsWithChildren {
   className?: string;
@@ -27,12 +28,10 @@ const DashboardItem: React.FC<DashboardItemProps> = ({
   className,
   children,
 }) => {
-  return <div className={`m-4 ${className}`}>{children}</div>;
+  return <div className={`p-4 ${className}`}>{children}</div>;
 };
 
 export const Dashboard: React.FC = () => {
-  // Example data for stats
-
   const dashboardButtons = (
     <>
       <CreateCourseButton />
@@ -51,12 +50,17 @@ export const Dashboard: React.FC = () => {
 
   const [courses, setCourses] = useState<Course[]>([]);
 
+  const [courseMemberships, setCourseMemberships] = useState<
+    CourseMembership[]
+  >([]);
+
   const backend = useBackend();
 
   useEffect(() => {
     const inner = async () => {
-      const { courses } = await backend.getUserCourses({});
+      const { courses, memberships } = await backend.getUserCourses({});
       setCourses(courses);
+      setCourseMemberships(memberships);
     };
 
     void inner();
@@ -75,15 +79,19 @@ export const Dashboard: React.FC = () => {
   return (
     <PageFrame title="Dashboard" right={dashboardButtons} standardWidth>
       <div className="flex flex-col space-y-12">
-        <div className="flex flex-wrap">
-          <DashboardItem className="flex flex-col m-4">
+        <div className="flex flex-wrap flex-col lg:flex-row">
+          {/* <DashboardItem className="flex flex-col m-4">
             <Heading>Activity</Heading>
             <div className="flex flex-col space-x-4 w-fit object-center justify-center items-center">
               <StatefulUserStatsDisplay className="mx-auto" />
               <StatefulUserSevenDayActivitiesDisplay />
             </div>
+          </DashboardItem> */}
+          <DashboardItem className="flex flex-col flex-1 space-y-4">
+            <Heading>Announcements</Heading>
+            <StatefulAnnouncementsWidget className="w-full" />
           </DashboardItem>
-          <DashboardItem className="flex-1 flex flex-col flex-shrink-0 m-4 space-y-4">
+          <DashboardItem className="flex-1 flex flex-col flex-shrink-0 space-y-4 h-fit min-h-64">
             <Heading>Key Dates</Heading>
             <Card className="h-full">
               <UpcomingEvents
@@ -114,6 +122,7 @@ export const Dashboard: React.FC = () => {
           <CoursesContainer
             courses={courses}
             onClickCourse={onClickOpenCourse}
+            courseMemberships={courseMemberships}
           />
         </DashboardItem>
       </div>

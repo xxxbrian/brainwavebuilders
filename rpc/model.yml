@@ -437,3 +437,11 @@ endpoints:
     response:
       events: Record<string, Event[]>
     service: typescript
+
+  getAnnouncements:
+    request:
+      courseIDs?: string[]
+    response:
+      threads: Thread[]
+      threadToCourse: Record<string, Course>
+    service: typescript

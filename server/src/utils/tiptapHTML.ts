@@ -8,6 +8,7 @@ import { Link } from "@tiptap/extension-link";
 import { HorizontalRule } from "@tiptap/extension-horizontal-rule";
 import { Placeholder } from "@tiptap/extension-placeholder";
 import { StarterKit } from "@tiptap/starter-kit";
+import { TextStyle } from "@tiptap/extension-text-style";
 
 //You can overwrite the placeholder with your own configuration
 const placeholder = Placeholder;
@@ -93,6 +94,7 @@ export const defaultExtensions = [
   taskList,
   taskItem,
   horizontalRule,
+  TextStyle,
 ];
 
 export const generateHTMLFromTiptap = (doc: JSONContent) => {

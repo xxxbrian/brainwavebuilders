@@ -1,12 +1,5 @@
-import { Course, User } from "@/backend";
 import { type Event } from "@/components/calendar/Calendar";
 import { Assessment } from "@/backend";
-
-export const UserData: User = {
-  email: "lincoln@yyjlincoln.com",
-  firstName: "Lincoln",
-  lastName: "Yan",
-};
 
 export const quizData: Assessment = {
   id: "1",
@@ -100,16 +93,6 @@ export const AssessmentsData: Assessment[] = [
     submissions: [],
   },
 ];
-
-export const CourseData: Course = {
-  createdAt: new Date().getTime(),
-  createdBy: UserData,
-  description:
-    "Hello world. Hello world Hello world Hello world Hello world Hello world Hello world",
-  id: "1",
-  name: "COMP1522: Introduction to React",
-  code: "COMP1522",
-};
 
 export const mockTime = new Date("2024-03-01");
 export const mockEvents = () => {
