@@ -3,6 +3,7 @@ import { User as UserDB } from "@prisma/client";
 
 export const userDBToAPI = (user: UserDB): UserAPI => {
   return {
+    id: user.id,
     email: user.email,
     firstName: user.firstName,
     lastName: user.lastName,

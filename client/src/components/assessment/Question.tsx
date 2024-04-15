@@ -4,6 +4,7 @@ import { GoTriangleDown } from "react-icons/go";
 import { MdDeleteOutline } from "react-icons/md";
 
 type QuestionProps = {
+  id: string;
   title: string;
   type: string;
   options: string[];
@@ -18,6 +19,7 @@ type QuestionProps = {
 };
 
 const QuestionComponent: React.FC<QuestionProps> = ({
+  id,
   title,
   type,
   options,
@@ -92,7 +94,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
             <label key={index} className="flex items-center space-x-3">
               <input
                 type="radio"
-                name="mcq"
+                name={id}
                 checked={answer === option}
                 onChange={() => handleAnswerChange(option)}
                 className="form-radio h-5 w-5"

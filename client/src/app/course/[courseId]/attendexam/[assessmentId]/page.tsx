@@ -97,7 +97,7 @@ export const Quiz: React.FC = () => {
         {assessment.questions.map((question) => {
           return (
             <Question
-              key={question.id}
+              id={question.id}
               title={question.title}
               type={question.type}
               options={JSON.parse(String(question.options ?? "[]"))}

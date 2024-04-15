@@ -10,11 +10,12 @@ import { useCourse } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
 import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
-import AssignmentsTable from "@/components/assessment/AssessmentsTable";
+import AssessmentTable from "@/components/assessment/AssessmentsTable";
 import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
 import { type Event } from "@/components/calendar/Calendar";
 import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { WithStudentRole } from "@/contexts/CourseRoleContext";
+import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTable";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -107,11 +108,14 @@ export const CoursesPage: React.FC = ({}) => {
   };
 
   useEffect(() => {
-    fetchAssessments();
-  }, [backend, course.id]);
+    const inner = async () => {
+      await fetchAssessments();
+    };
+    void inner();
+  }, [backend, course.id, fetchAssessments]);
 
-  const handleUpdateAssignments = useCallback(() => {
-    fetchAssessments();
+  const handleUpdateAssignments = useCallback(async () => {
+    await fetchAssessments();
   }, [fetchAssessments]);
 
   const formatAssessmentProps = (assessment: Assessment): AssignmentProps => ({
@@ -121,13 +125,13 @@ export const CoursesPage: React.FC = ({}) => {
     dueDate: assessment.dueDate ?? "",
   });
 
-const onClickAssignment = useCallback(
-  async (assessmentId: string) => {
-    const newPath = `${pathName}/assignment/${assessmentId}`;
-    router.push(newPath);
-  },
-  [router, pathName],
-);
+  const onClickAssignment = useCallback(
+    async (assessmentId: string) => {
+      const newPath = `${pathName}/assignment/${assessmentId}`;
+      router.push(newPath);
+    },
+    [router, pathName],
+  );
 
   const onClickExam = useCallback(
     async (assessmentId: string) => {
@@ -151,6 +155,13 @@ const onClickAssignment = useCallback(
     [router, pathName],
   );
 
+  const viewAssignmentResult = useCallback(
+    (submissionId: string) => {
+      router.push(`${pathName}/assignmentresult/${submissionId}`);
+    },
+    [router, pathName],
+  );
+
   const onClickAddExam = useCallback(async () => {
     router.push(`${pathName}/createexam`);
   }, [pathName, router]);
@@ -160,7 +171,7 @@ const onClickAssignment = useCallback(
   }, []);
 
   return (
-    <div className="flex flex-col space-y-8 px-4">
+    <div className="flex flex-col space-y-8 px-4 py-4">
       <div
         className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-opacity-80"
         style={{
@@ -219,13 +230,13 @@ const onClickAssignment = useCallback(
         </div>
       </div>
       <WithTeacherRole>
-        <AssignmentsTable
+        <AssessmentTable
           assignments={assignmentsData}
           type="Assignment"
           onClickAddButton={onClickAddAssignment}
           onClickAsessment={onClickAssignment}
         />
-        <AssignmentsTable
+        <AssessmentTable
           assignments={examsData}
           type="Exam"
           onClickAddButton={onClickAddExam}
@@ -238,17 +249,17 @@ const onClickAssignment = useCallback(
         />
       </WithTeacherRole>
       <WithStudentRole>
-        <AssignmentsTable
+        <StudentAssesmentTable
           assignments={assignmentsData}
           type="Assignment"
-          onClickAddButton={onClickAddAssignment}
           onClickAsessment={onAttendAssignment}
+          viewAssignmentResult={viewAssignmentResult}
         />
-        <AssignmentsTable
+        <StudentAssesmentTable
           assignments={examsData}
           type="Exam"
-          onClickAddButton={onClickAddExam}
           onClickAsessment={onAttendExam}
+          viewAssignmentResult={viewAssignmentResult}
         />
         <CreateAssignmentDialog
           isOpen={isCreateAssignment}

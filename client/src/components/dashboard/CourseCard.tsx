@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Card, Text, Box, Badge } from "@radix-ui/themes";
+import { Card, Text, Box, Badge, Inset } from "@radix-ui/themes";
 import { Course } from "@/backend";
 import defaultCourseImg from "@/assets/UNSW.png";
 
@@ -21,55 +21,50 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   }, [course, onClick]);
 
   return (
-    <Card
-      className="
-      overflow-hidden
-      max-w-sm
-      shadow-md
-      transition-transform
-      ease-in-out
-      transform
-      cursor-pointer
-      bg-gray-300
-      w-[240px]
-      h-[294px]"
-      onClick={onClickInner}
-    >
-      {/* Content */}
-      <Box className="p-2">
-        <Badge>{role}</Badge>
+    <Box maxWidth="240px">
+      <Card
+        className="
+    overflow-hidden
+    max-w-sm
+    transform
+    cursor-pointer h-fit"
+        onClick={onClickInner}
+      >
         {/* Header Image */}
-        <img
-          src={imageURL ?? defaultCourseImg.src}
-          alt="Course"
-          className="rounded-lg object-cover"
-          style={{
-            width: "223px",
-            height: "133px",
-          }}
-        />
-        {/* Course Name and Description */}
-        <Box className="mt-3">
-          {/* Course Name */}
-          <div>
-            <Text trim="both" className="text-based font-bold ">
-              {name}
+        <Inset clip="padding-box" side="top" pb="current">
+          <img
+            src={imageURL ?? defaultCourseImg.src}
+            alt="Course"
+            className="object-cover"
+          />
+        </Inset>
+
+        {/* Content */}
+        <div className="pb-2">
+          {/* Course Name and Description */}
+          <Box className="mt-3">
+            {/* Course Name */}
+            <div>
+              <Text trim="both" className="text-based font-bold ">
+                {name}
+              </Text>
+            </div>
+            {/* Description */}
+            <div className="mt-3">
+              <Text trim="both" className="text-sm text-gray-600">
+                {description}
+              </Text>
+            </div>
+          </Box>
+          {/* Course Code */}
+          <Box className="mt-2">
+            <Text trim="both" className="text-xl font-medium text-gray-600">
+              {code}
             </Text>
-          </div>
-          {/* Description */}
-          <div className="mt-3">
-            <Text trim="both" className="text-sm text-gray-600">
-              {description}
-            </Text>
-          </div>
-        </Box>
-        {/* Course Code */}
-        <Box className="mt-2">
-          <Text trim="both" className="text-xl font-medium text-gray-600">
-            {code}
-          </Text>
-        </Box>
-      </Box>
-    </Card>
+          </Box>
+          <Badge>{role}</Badge>
+        </div>
+      </Card>
+    </Box>
   );
 };

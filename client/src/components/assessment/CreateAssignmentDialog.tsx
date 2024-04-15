@@ -2,7 +2,6 @@ import { useBackend } from "@/hooks/useBackend";
 import { Button, Dialog, TextArea, TextField } from "@radix-ui/themes";
 import React, { useCallback, useState, useMemo } from "react";
 import type { ChangeEvent } from "react";
-import { useRouter } from "next/navigation";
 import { useCourse } from "@/contexts/CourseContext";
 
 interface CreateAssignmentProps {
@@ -91,6 +90,8 @@ export const CreateAssignmentDialog: React.FC<CreateAssignmentProps> = ({
       backend,
       setIsOpen,
       onUpdateAssignments,
+      resetForm,
+      courseId,
     ],
   );
 
@@ -98,8 +99,6 @@ export const CreateAssignmentDialog: React.FC<CreateAssignmentProps> = ({
     setIsOpen(false);
     resetForm();
   }, [setIsOpen, resetForm]);
-
-  console.log(startDate);
 
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>

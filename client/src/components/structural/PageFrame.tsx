@@ -19,13 +19,15 @@ import SideNav from "./SideNav";
 //   return context;
 // };
 
-interface Props extends PropsWithChildren {
+export interface Props extends PropsWithChildren {
   title: string;
   className?: string;
   left?: React.ReactNode;
   right?: React.ReactNode;
   standardWidth?: boolean;
   padding?: boolean;
+  // Prevents overflow.
+  singlePageApplication?: boolean;
 }
 
 export const PageFrame: React.FC<Props> = ({
@@ -36,6 +38,7 @@ export const PageFrame: React.FC<Props> = ({
   right,
   standardWidth = true,
   padding = true,
+  singlePageApplication = false,
 }) => {
   const [isSideNavOpen, setIsSideNavOpen] = React.useState(false);
 
@@ -48,16 +51,24 @@ export const PageFrame: React.FC<Props> = ({
       <div className="flex relative h-screen overflow-hidden">
         <SideNav isOpen={isSideNavOpen} className="overflow-y-auto pt-28" />
 
-        <div className="flex flex-col space-x-4 relative flex-1 overflow-y-auto">
+        <div
+          className={`flex flex-col space-x-4 relative flex-1 ${
+            singlePageApplication ? "overflow-hidden" : "overflow-y-auto"
+          }`}
+        >
           <TopNav
             title={title}
             onClickMenu={toggleSideNav}
             isSideMenuActive={isSideNavOpen}
             left={left}
             right={right}
-            className="fixed left-0 right-0 z-40"
+            className="fixed left-0 right-0 z-40 h-20"
           />
-          <div className={`${padding ? "px-4" : ""} flex-1 pt-24`}>
+          <div
+            className={`${padding ? "px-4" : ""} flex-1 ${
+              singlePageApplication ? "h-screen pt-20" : "pt-20"
+            }`}
+          >
             {standardWidth ? (
               <div
                 className={`${standardWidth ? "py-10 max-w-7xl mx-auto" : ""}`}

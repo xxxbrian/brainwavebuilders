@@ -12,7 +12,7 @@ interface AssignmentProps {
 
 interface AssignmentWithStatusProps extends AssignmentProps {
   isCompleted: boolean;
-  status: "Not Start" | "In Progress" | "Completed";
+  status: "Not started" | "In Progress" | "Completed";
 }
 
 // Define the prop types for the component
@@ -24,7 +24,7 @@ interface AssignmentsTableProps {
 }
 
 // Component to display a table of assignments
-const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
+const AssessmentTable: React.FC<AssignmentsTableProps> = ({
   assignments,
   type,
   onClickAddButton,
@@ -51,12 +51,12 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
       .map((assignment) => {
         const start = new Date(assignment.startDate);
         const due = new Date(assignment.dueDate);
-        let status: "Not Start" | "In Progress" | "Completed" = "In Progress";
+        let status: "Not started" | "In Progress" | "Completed" = "In Progress";
 
         if (now > due) {
           status = "Completed";
         } else if (now < start) {
-          status = "Not Start";
+          status = "Not started";
         }
 
         return {
@@ -67,7 +67,11 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
         };
       })
       .sort((a, b) => {
-        const statusOrder = { "In Progress": 1, "Not Start": 2, Completed: 3 };
+        const statusOrder = {
+          "In Progress": 1,
+          "Not started": 2,
+          Completed: 3,
+        };
         if (statusOrder[a.status] !== statusOrder[b.status]) {
           return statusOrder[a.status] - statusOrder[b.status];
         } else {
@@ -104,32 +108,40 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
         </Table.Header>
 
         <Table.Body>
-          {sortedAssignments.map((assignment) => (
-            <Table.Row
-              key={assignment.id}
-              className="cursor-pointer"
-              onClick={() => onClickAsessment(assignment.id)}
-            >
-              <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
-              <Table.Cell>{assignment.startDate}</Table.Cell>
-              <Table.Cell>{assignment.dueDate}</Table.Cell>
-              <Table.Cell
-                className={`py-2 ${
-                  assignment.status === "Completed"
-                    ? "text-yellow-500"
-                    : assignment.status === "Not Start"
-                      ? "text-red-500"
-                      : "text-green-500"
-                }`}
+          {sortedAssignments.length > 0 ? (
+            sortedAssignments.map((assignment) => (
+              <Table.Row
+                key={assignment.id}
+                className="cursor-pointer"
+                onClick={() => onClickAsessment(assignment.id)}
               >
-                {assignment.status}
+                <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
+                <Table.Cell>{assignment.startDate}</Table.Cell>
+                <Table.Cell>{assignment.dueDate}</Table.Cell>
+                <Table.Cell
+                  className={`py-2 ${
+                    assignment.status === "Completed"
+                      ? "text-yellow-500"
+                      : assignment.status === "Not started"
+                        ? "text-red-500"
+                        : "text-green-500"
+                  }`}
+                >
+                  {assignment.status}
+                </Table.Cell>
+              </Table.Row>
+            ))
+          ) : (
+            <Table.Row>
+              <Table.Cell colSpan={4} className="text-center text-lg">
+                There is no {type}
               </Table.Cell>
             </Table.Row>
-          ))}
+          )}
         </Table.Body>
       </Table.Root>
     </div>
   );
 };
 
-export default AssignmentsTable;
+export default AssessmentTable;

@@ -124,6 +124,7 @@ export const CreateExamPage: React.FC = () => {
       />
       {questions.map((question, index) => (
         <QuestionComponent
+          id={question.id}
           key={question.id}
           title={question.title}
           type={question.type}

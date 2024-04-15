@@ -14,6 +14,9 @@ import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetails
 import { fetchAssessmentSubmissions } from "@/handlers/fetchAssessmentSubmissions";
 import { fetchAssessments } from "@/handlers/fetchAssessments";
 import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
+import { ping } from "@/handlers/ping";
+import { getAnnouncements } from "@/handlers/getAnnouncements";
 import { fetchSubmission } from "@/handlers/fetchSubmission";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
@@ -29,12 +32,11 @@ import { getThreads } from "@/handlers/getThreads";
 import { getUserCourses } from "@/handlers/getUserCourses";
 import { getUserEvents } from "@/handlers/getUserEvents";
 import { getUserInfo } from "@/handlers/getUserInfo";
-import { incrementThreadView } from "@/handlers/incrementThreadView";
 import { joinCourse } from "@/handlers/joinCourse";
+import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
 import { leaveCourse } from "@/handlers/leaveCourse";
 import { login } from "@/handlers/login";
 import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
-import { ping } from "@/handlers/ping";
 import { register } from "@/handlers/register";
 import { resetPassword } from "@/handlers/resetPassword";
 import { setUserProfile } from "@/handlers/setUserProfile";
@@ -50,6 +52,7 @@ import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
 //////////////////////////////
 
 export interface User {
+    id: string;
     email: string;
     firstName: string;
     lastName: string;
@@ -154,6 +157,7 @@ export interface Thread {
     deletedAt?: number;
     title: string;
     posts: Post[];
+    isAnnouncement: boolean;
 }
 
 export interface ThreadStats {
@@ -284,6 +288,16 @@ export interface GetUserInfoRequest {
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
     user: User;
+}
+
+// GetUserInfoByIDsRequest is the request that is sent to the getUserInfoByIDs endpoint.
+export interface GetUserInfoByIDsRequest {
+    ids: string[];
+}
+
+// GetUserInfoByIDsResponse is the response that is sent to the getUserInfoByIDs endpoint.
+export interface GetUserInfoByIDsResponse {
+    users: Record<string, User>;
 }
 
 // SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
@@ -644,6 +658,17 @@ export interface GetCourseEventsResponse {
     events: Record<string, Event[]>;
 }
 
+// GetAnnouncementsRequest is the request that is sent to the getAnnouncements endpoint.
+export interface GetAnnouncementsRequest {
+    courseIDs?: string[];
+}
+
+// GetAnnouncementsResponse is the response that is sent to the getAnnouncements endpoint.
+export interface GetAnnouncementsResponse {
+    threads: Thread[];
+    threadToCourse: Record<string, Course>;
+}
+
 
 //////////////////////////////
 // API Errors
@@ -856,6 +881,28 @@ app.post('/api/getUserInfo', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getUserInfo with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getUserInfoByIDs is the endpoint handler for the getUserInfoByIDs endpoint.
+// It wraps around the function at @/handlers/getUserInfoByIDs.
+app.post('/api/getUserInfoByIDs', async (req, res) => {
+    const request: GetUserInfoByIDsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetUserInfoByIDsResponse = await getUserInfoByIDs(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getUserInfoByIDs with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
@@ -1604,6 +1651,28 @@ app.post('/api/getCourseEvents', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getCourseEvents with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getAnnouncements is the endpoint handler for the getAnnouncements endpoint.
+// It wraps around the function at @/handlers/getAnnouncements.
+app.post('/api/getAnnouncements', async (req, res) => {
+    const request: GetAnnouncementsRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetAnnouncementsResponse = await getAnnouncements(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getAnnouncements with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
