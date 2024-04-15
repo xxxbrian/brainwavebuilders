@@ -29,6 +29,7 @@ types:
     type: string
     questions: Question[]
     submissions: Submission[]
+    totalPoints?: int
 
   Question:
     id: string

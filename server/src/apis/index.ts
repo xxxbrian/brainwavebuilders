@@ -30,13 +30,14 @@ import { getThreads } from "@/handlers/getThreads";
 import { getUserCourses } from "@/handlers/getUserCourses";
 import { getUserEvents } from "@/handlers/getUserEvents";
 import { getUserInfo } from "@/handlers/getUserInfo";
-import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { ping } from "@/handlers/ping";
-import { joinCourse } from "@/handlers/joinCourse";
+import { getUserInfoByID } from "@/handlers/getUserInfoByID";
 import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
+import { joinCourse } from "@/handlers/joinCourse";
 import { leaveCourse } from "@/handlers/leaveCourse";
 import { login } from "@/handlers/login";
 import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
+import { ping } from "@/handlers/ping";
 import { register } from "@/handlers/register";
 import { resetPassword } from "@/handlers/resetPassword";
 import { setUserProfile } from "@/handlers/setUserProfile";
@@ -47,8 +48,6 @@ import { upsertPost } from "@/handlers/upsertPost";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
-import { getUserInfoByID } from "@/handlers/getUserInfoByID";
-
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -86,6 +85,7 @@ export interface Assessment {
     type: string;
     questions: Question[];
     submissions: Submission[];
+    totalPoints?: number;
 }
 
 export interface Question {

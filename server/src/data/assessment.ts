@@ -31,15 +31,18 @@ export const createAssessment = async (
           title: data.title,
           description: data.description,
           courseID: data.courseId,
-          startDate: data.startDate ? new Date(data.startDate) : null,
-          dueDate: data.dueDate ? new Date(data.dueDate) : null,
+          startDate: data.startDate
+            ? new Date(data.startDate + "+10:00")
+            : null,
+          dueDate: data.dueDate ? new Date(data.dueDate + "+10:00") : null,
           type: data.type,
         },
       });
 
-      // Create questions if they are included in the request
+      let totalPoints = 0;
+
       if (data.questions && data.questions.length > 0) {
-        await Promise.all(
+        const questions = await Promise.all(
           data.questions.map((question) =>
             transactionalDb.question.create({
               data: {
@@ -53,9 +56,15 @@ export const createAssessment = async (
             }),
           ),
         );
+        totalPoints = questions.reduce((acc, curr) => acc + curr.points, 0);
+
+        await transactionalDb.assessment.update({
+          where: { id: createdAssessment.id },
+          data: { totalPoints: totalPoints },
+        });
       }
 
-      return createdAssessment;
+      return { ...createdAssessment, totalPoints };
     });
 
     return assessment;

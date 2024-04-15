@@ -38,6 +38,7 @@ export interface Assessment {
     type: string;
     questions: Question[];
     submissions: Submission[];
+    totalPoints?: number;
 }
 
 export interface Question {

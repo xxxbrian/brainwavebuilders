@@ -33,6 +33,7 @@ export const formatAssessment = (
       : undefined,
     dueDate: assessment.dueDate ? assessment.dueDate.toISOString() : undefined,
     type: assessment.type,
+    totalPoints: assessment.totalPoints ?? undefined,
     questions,
     submissions,
   };
