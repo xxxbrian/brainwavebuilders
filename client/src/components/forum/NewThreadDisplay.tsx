@@ -1,7 +1,7 @@
 import { AdvancedEditor } from "@/components/editor/AdvancedEditor";
 import { Button, TextField } from "@radix-ui/themes";
 import { JSONContent } from "novel";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 
 interface Props {
   onClickCreateThreadAndPost: (title: string, content: JSONContent) => void;

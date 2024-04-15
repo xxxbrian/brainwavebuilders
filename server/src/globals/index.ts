@@ -19,3 +19,12 @@ app.use(cookieParser());
 app.use(authenticator(kPublicAPIs));
 
 export const db = new PrismaClient();
+
+export const getEnvOr = (key: string, defaultValue: string) => {
+  return process.env[key] || defaultValue;
+};
+
+export const FRONTEND_ADDRESS = getEnvOr(
+  "FRONTEND_ADDRESS",
+  "http://localhost:3900",
+);
