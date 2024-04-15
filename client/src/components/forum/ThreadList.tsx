@@ -38,6 +38,9 @@ export const ThreadCard: React.FC<CardProps> = ({
       } space-y-2`}
       onClick={onClickInner}
     >
+      {thread.isAnnouncement && (
+        <div className="text-xs uppercase text-red-800">Announcement</div>
+      )}
       <div className="flex space-x-3 items-center">
         <RiQuestionAnswerLine />
         <div className="text-wrap">{thread.title}</div>
