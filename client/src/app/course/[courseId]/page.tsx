@@ -173,6 +173,10 @@ export const CoursesPage: React.FC = ({}) => {
     setIsCreateAssignment(true);
   }, []);
 
+  const onClickManageMembers = useCallback(() => {
+    router.push(`${pathName}/members`);
+  }, [pathName, router]);
+
   return (
     <div className="flex flex-col space-y-8 px-4 py-4">
       <div
@@ -215,6 +219,12 @@ export const CoursesPage: React.FC = ({}) => {
                   title="Invite Member"
                 />
               </StatefulInviteMembersForm>
+
+              <ApplicationIcon
+                icon={<MdOutlinePersonAddAlt1 />}
+                title="Manage Members"
+                onClick={onClickManageMembers}
+              />
             </div>
           </div>
         </div>

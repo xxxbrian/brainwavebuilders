@@ -457,3 +457,11 @@ endpoints:
       threads: Thread[]
       threadToCourse: Record<string, Course>
     service: typescript
+
+  getCourseMembers:
+    request:
+      courseID: string
+    response:
+      users: User[]
+      memberships: CourseMembership[]
+    service: typescript

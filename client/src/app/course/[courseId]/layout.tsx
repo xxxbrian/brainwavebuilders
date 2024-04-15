@@ -31,6 +31,14 @@ const mapApplicationState: (course: Course, url: string) => ApplicationState = (
       },
     },
     {
+      regex: /\/members$/g,
+      frameProps: {
+        title: `Members - ${course.name}`,
+        standardWidth: true,
+        padding: true,
+      },
+    },
+    {
       regex: /.*/g,
       frameProps: {
         title: course.name,

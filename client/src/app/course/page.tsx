@@ -6,7 +6,6 @@ import { CreateCourseButton } from "@/components/dashboard/CreateCoursePopup";
 import { JoinCourseButton } from "@/components/dashboard/JoinCoursePopup";
 import { CenteredLoading } from "@/components/loading";
 import { PageFrame } from "@/components/structural/PageFrame";
-import { CourseContext } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { useRouter } from "next/navigation";
 import { useCallback, useEffect, useState } from "react";
