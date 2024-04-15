@@ -31,10 +31,8 @@ export const createAssessment = async (
           title: data.title,
           description: data.description,
           courseID: data.courseId,
-          startDate: data.startDate
-            ? new Date(data.startDate + "+10:00")
-            : null,
-          dueDate: data.dueDate ? new Date(data.dueDate + "+10:00") : null,
+          startDate: data.startDate ? new Date(data.startDate) : null,
+          dueDate: data.dueDate ? new Date(data.dueDate) : null,
           type: data.type,
         },
       });
