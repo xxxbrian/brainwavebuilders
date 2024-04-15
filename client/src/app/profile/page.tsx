@@ -9,6 +9,7 @@ import { Text, Tabs, Switch } from "@radix-ui/themes";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
 import ErrorDialog from "@/components/ErrDialog";
+import { useResetSession } from "@/hooks/useCurrentUser";
 
 type PasswordInputFormProps = {
   id: string;
@@ -144,6 +145,8 @@ export const Profile: React.FC = () => {
     });
   }, []);
 
+  const resetSession = useResetSession();
+
   const onClickProfileSave = useCallback(async () => {
     try {
       if (!userInfo) return;
@@ -151,6 +154,9 @@ export const Profile: React.FC = () => {
       await backend.setUserProfile({
         user: userInfo,
       });
+
+      // Reset session to update user info in the top nav
+      resetSession?.();
     } catch (e) {
       if (isAPIError(e)) {
         console.error(e);

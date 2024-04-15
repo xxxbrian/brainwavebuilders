@@ -4,20 +4,20 @@ import { Theme } from "@radix-ui/themes";
 import { useAppearance } from "@/hooks/useAppearance";
 import { Session, SessionContext, createSession } from "@/hooks/useCurrentUser";
 // import Login from "./login";
-import { PropsWithChildren, useEffect, useState } from "react";
+import { PropsWithChildren, useCallback, useEffect, useState } from "react";
 import { useBackend } from "@/hooks/useBackend";
 import { CenteredLoading } from "@/components/loading";
 import Login from "@/app/login/page";
 
 interface WrapperProps extends PropsWithChildren {
-  session: Session | null;
+  sessionAndReset: [Session, () => void] | null;
 }
 
-const AppWrapper: React.FC<WrapperProps> = ({ children, session }) => {
+const AppWrapper: React.FC<WrapperProps> = ({ children, sessionAndReset }) => {
   const appearance = useAppearance();
 
   return (
-    <SessionContext.Provider value={session}>
+    <SessionContext.Provider value={sessionAndReset}>
       <Theme appearance={appearance} accentColor="orange">
         <div className="w-screen h-screen">{children}</div>
       </Theme>
@@ -29,23 +29,39 @@ const AppInner: React.FC<PropsWithChildren> = ({ children }) => {
   const [session, setSession] = useState<Session | null>(null);
   const [isLoadingSession, setIsLoadingSession] = useState(true);
 
+  const [sessionAndReset, setSessionAndReset] = useState<
+    [Session, () => void] | null
+  >(null);
+
   const backend = useBackend();
 
-  useEffect(() => {
+  const loadSession = useCallback(async () => {
     setIsLoadingSession(true);
-
-    const inner = async () => {
-      const session = await createSession(backend);
-      setSession(session);
-      setIsLoadingSession(false);
-    };
-
-    void inner();
+    const session = await createSession(backend);
+    setSession(session);
+    setIsLoadingSession(false);
   }, [backend]);
+
+  useEffect(() => {
+    if (session) {
+      setSessionAndReset([
+        session,
+        () => {
+          void loadSession();
+        },
+      ]);
+    } else {
+      setSessionAndReset(null);
+    }
+  }, [loadSession, session]);
+
+  useEffect(() => {
+    void loadSession();
+  }, [backend, loadSession]);
 
   if (isLoadingSession) {
     return (
-      <AppWrapper session={session}>
+      <AppWrapper sessionAndReset={sessionAndReset}>
         <CenteredLoading />
       </AppWrapper>
     );
@@ -53,13 +69,13 @@ const AppInner: React.FC<PropsWithChildren> = ({ children }) => {
 
   if (!session && !isLoadingSession) {
     return (
-      <AppWrapper session={session}>
+      <AppWrapper sessionAndReset={sessionAndReset}>
         <Login />
       </AppWrapper>
     );
   }
 
-  return <AppWrapper session={session}>{children}</AppWrapper>;
+  return <AppWrapper sessionAndReset={sessionAndReset}>{children}</AppWrapper>;
 };
 
 export default AppInner;
