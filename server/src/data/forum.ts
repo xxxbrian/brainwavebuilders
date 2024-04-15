@@ -4,7 +4,14 @@ import {
   ThreadWithPostsAndCounts,
 } from "@/converts/forum";
 import { db } from "@/globals";
-import { Forum, Post, PostLikes, Thread, ThreadViews } from "@prisma/client";
+import {
+  Course,
+  Forum,
+  Post,
+  PostLikes,
+  Thread,
+  ThreadViews,
+} from "@prisma/client";
 
 export const createForum = async (
   createdByID: string,
@@ -51,6 +58,21 @@ export const getForumByID = async (
   });
 
   return forum;
+};
+
+export const getCourseByForumID = async (
+  forumID: string,
+): Promise<Course | null> => {
+  const forum = await db.forum.findUnique({
+    where: {
+      id: forumID,
+    },
+    include: {
+      course: true,
+    },
+  });
+
+  return forum?.course ?? null;
 };
 
 export const getThreadsByForumID = async (

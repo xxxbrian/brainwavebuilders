@@ -1,14 +1,27 @@
 import { User } from "@prisma/client";
 import { db } from "@/globals";
 import { makeID } from "./utils";
-import { sendEmail } from "./mailer";
+import { sendEmailFromTemplate } from "./mailer";
 import { APIError } from "@/apis";
 import bcrypt from "bcrypt";
+import { registrationEmail } from "@/mailerTemplates/registration";
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
   const user = await db.user.findUnique({
     where: {
       email,
+    },
+  });
+
+  return user;
+};
+
+export const getUsersByIDs = async (ids: string[]): Promise<User[]> => {
+  const user = await db.user.findMany({
+    where: {
+      id: {
+        in: ids,
+      },
     },
   });
 
@@ -28,21 +41,9 @@ export const isCanResetPassword = async (email: string): Promise<boolean> => {
   return true;
 };
 
-export const generateAndSendOTP = async (
-  email: string,
-  generateHtml: (code: string) => string,
-): Promise<string> => {
-  const subject = "Verify your email address";
+export const generateAndSendOTP = async (email: string): Promise<string> => {
   const code = makeID(6);
 
-  // const html = `
-  //     <h1>Verify your email address</h1>
-  //     <p>Enter the following code to verify your email address:</p>
-  //     <h2>${code}</h2>
-  //     `;
-  const html = generateHtml(code);
-  console.log("Sending email to", email);
-  await sendEmail(email, subject, html);
   await db.emailVerification.create({
     data: {
       email,
@@ -51,6 +52,12 @@ export const generateAndSendOTP = async (
       expiresAt: new Date(Date.now() + 1000 * 60 * 10),
     },
   });
+
+  await sendEmailFromTemplate(email, registrationEmail, {
+    code: code,
+    email: email,
+  });
+
   return code;
 };
 

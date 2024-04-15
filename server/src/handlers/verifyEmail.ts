@@ -1,4 +1,4 @@
-import { VerifyEmailRequest, VerifyEmailResponse } from "@/apis";
+import { APIError, VerifyEmailRequest, VerifyEmailResponse } from "@/apis";
 import { generateAndSendOTP, isEmailTaken } from "@/data/auth";
 
 // verifyEmail implements the verifyEmail endpoint.
@@ -10,12 +10,11 @@ export const verifyEmail = async (
   request: VerifyEmailRequest,
 ): Promise<VerifyEmailResponse> => {
   let { email } = request;
-  await isEmailTaken(email);
-  const generateHtml = (code: string) => `
-        <h1>Verify your email address</h1>
-        <p>Enter the following code to verify your email address:</p>
-        <h2>${code}</h2>
-        `;
-  await generateAndSendOTP(email, generateHtml);
+
+  if (await isEmailTaken(email)) {
+    throw new APIError("Email is already taken");
+  }
+
+  await generateAndSendOTP(email);
   return {};
 };
