@@ -21,7 +21,8 @@ const Question: React.FC<QuestionProps> = ({
   return (
     <div className="flex flex-col p-4 border-2 border-blue-500 space-y-3 rounded-xl">
       <div className="text-md font-medium mb-2">{title}</div>
-      {type === "SAQ" ? (
+
+      {type === "short_answer" ? (
         <textarea
           className="p-2 border border-blue-300 rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Your answer here"

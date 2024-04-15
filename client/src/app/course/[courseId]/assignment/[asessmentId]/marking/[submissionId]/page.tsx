@@ -1,21 +1,47 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import AdvancedEditor from "@/components/editor/AdvancedEditor";
-import { mockEditorContent } from "@/utils/data";
 import { Heading } from "@radix-ui/themes";
 import { TextArea } from "@radix-ui/themes";
 import { GoTriangleUp } from "react-icons/go";
 import { GoTriangleDown } from "react-icons/go";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
+import { useBackend } from "@/hooks/useBackend";
+import { Submission } from "@/backend";
 
 export const MarkAssignmentPage: React.FC = () => {
   const [feedback, setFeedback] = useState("");
   const [mark, setMark] = useState(0);
+  const [submission, setSubmission] = useState<Submission | null>(null);
+  const backend = useBackend();
+  const router = useRouter();
+  const pathName = usePathname();
+  const pathSegments = pathName.split("/");
+  const submissionId = pathSegments[pathSegments.length - 1];
 
-  // TODO: Need a fetch submissionById function here to get real submission
-  // You can get the assessment Id on router
+  useEffect(() => {
+    const fetchSubmissionData = async () => {
+      if (submissionId) {
+        try {
+          const data = await backend.fetchSubmission({ submissionId });
+          setSubmission({
+            ...data.submission,
+            assignmentContent: JSON.parse(
+              data.submission.assignmentContent || "{}",
+            ),
+          });
+          setFeedback(data.submission.feedback || "");
+          setMark(data.submission.grade || 0);
+        } catch (error) {
+          console.error("Failed to fetch submission data:", error);
+        }
+      }
+    };
+
+    fetchSubmissionData();
+  }, [submissionId, backend]);
 
   const handleMarkChange = (newMark: number) => {
     if (newMark >= 0) {
@@ -23,20 +49,28 @@ export const MarkAssignmentPage: React.FC = () => {
     }
   };
 
-  const router = useRouter();
-
-  const pathName = usePathname();
-
   const onClickBack = useCallback(() => {
     const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
     router.push(newPath);
   }, [pathName, router]);
 
   const onClickSave = useCallback(async () => {
-    // TODO: Send mark and feedback to backend
-    const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
-    router.push(newPath);
-  }, [pathName, router]);
+    if (submissionId && mark !== null && feedback !== null) {
+      try {
+        await backend.assignmentGradeSubmission({
+          submissionId,
+          grades: mark,
+          feedback,
+        });
+        alert("Feedback and marks saved successfully!");
+        onClickBack();
+      } catch (error) {
+        console.error("Failed to save marks and feedback:", error);
+      }
+    }
+  }, [submissionId, mark, feedback, backend, onClickBack]);
+
+  if (!submission) return <div>Loading submission...</div>;
 
   return (
     <div className="flex flex-col p-8 m-auto max-w-[1200px] space-y-4">
@@ -48,7 +82,10 @@ export const MarkAssignmentPage: React.FC = () => {
       </div>
       <div className="flex flex-wrap">
         <div className="w-2/3 border-2 p-2 rounded-l-md border-r-0">
-          <AdvancedEditor value={mockEditorContent} isEditable={false} />
+          <AdvancedEditor
+            value={submission.assignmentContent}
+            isEditable={false}
+          />
         </div>
         <div className="w-1/3 border-2 rounded-r-md flex flex-col space-y-4 p-2">
           <Heading color="indigo" className="p-2">
@@ -67,14 +104,14 @@ export const MarkAssignmentPage: React.FC = () => {
             <div className="flex flex-col h-full">
               <button
                 type="button"
-                onClick={() => handleMarkChange(mark + 1)}
+                onClick={() => handleMarkChange((mark || 0) + 1)}
                 className="p-1 text-blue-700 h-2/5 text-lg"
               >
                 <GoTriangleUp />
               </button>
               <button
                 type="button"
-                onClick={() => handleMarkChange(mark - 1)}
+                onClick={() => handleMarkChange((mark || 0) - 1)}
                 className="p-1 text-blue-700 h-1/2 text-lg"
               >
                 <GoTriangleDown />

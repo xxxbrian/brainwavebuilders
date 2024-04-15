@@ -127,14 +127,16 @@ export const CoursesPage: React.FC = ({}) => {
 
   const onClickAssignment = useCallback(
     async (assessmentId: string) => {
-      router.push(`${pathName}/assignment/${assessmentId}`);
+      const newPath = `${pathName}/assignment/${assessmentId}`;
+      router.push(newPath);
     },
     [router, pathName],
   );
 
   const onClickExam = useCallback(
     async (assessmentId: string) => {
-      router.push(`${pathName}/exam/${assessmentId}`);
+      const newPath = `${pathName}/exam/${assessmentId}`;
+      router.push(newPath);
     },
     [router, pathName],
   );

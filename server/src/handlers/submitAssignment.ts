@@ -2,6 +2,7 @@ import { SubmitAssignmentRequest, SubmitAssignmentResponse } from "@/apis";
 import { submitAssignment as submitAssignmentData } from "@/data/assessment";
 import { formatSubmission as formatSubmissionResponse } from "@/converts/assessment";
 import { APIError } from "@/apis";
+import { useCurrentUser } from "@/context/auth";
 
 // submitAssignment implements the submitAssignment endpoint.
 // This code has been automatically generated.
@@ -11,10 +12,9 @@ export const submitAssignment = async (
   ctx: any,
   request: SubmitAssignmentRequest,
 ): Promise<SubmitAssignmentResponse> => {
-  // TODO: Auth
-
   try {
-    const submission = await submitAssignmentData(request);
+    const user = useCurrentUser(ctx)!;
+    const submission = await submitAssignmentData(request, user);
 
     return { submission: formatSubmissionResponse(submission) };
   } catch (error) {

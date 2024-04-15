@@ -1,5 +1,5 @@
 import { db } from "@/globals";
-import { Assessment, Submission, Question } from "@prisma/client";
+import { Assessment, Submission, Question, User } from "@prisma/client";
 import { APIError } from "@/apis";
 import {
   CreateAssessmentRequest,
@@ -11,6 +11,7 @@ import {
   FetchAssessmentsRequest,
   ManualGradeSubmissionRequest,
   AssignmentGradeSubmissionRequest,
+  FetchStudentSubmissionRequest,
 } from "@/apis";
 import { hasCourse } from "./course";
 
@@ -66,8 +67,14 @@ export const createAssessment = async (
   }
 };
 
+interface StudentAnswer {
+  questionId: string;
+  answer: string;
+}
+
 export const submitAnswers = async (
   data: SubmitAnswersRequest,
+  user: User,
 ): Promise<Submission> => {
   try {
     const assessment = await db.assessment.findUnique({
@@ -82,20 +89,23 @@ export const submitAnswers = async (
     const submission = await db.submission.create({
       data: {
         assessmentID: data.assessmentId,
-        studentID: data.studentId,
-        answers: data.answers,
+        studentID: user.id,
+        answers: JSON.stringify(data.answers),
         submittedAt: new Date(),
         grade: 0,
       },
     });
 
-    const studentAnswers = JSON.parse(data.answers);
+    const studentAnswers: StudentAnswer[] = data.answers;
     let totalScore = 0;
 
     assessment.questions.forEach((question) => {
-      if (question.type === "MCQ") {
+      const studentAnswerEntry = studentAnswers.find(
+        (sa) => sa.questionId === question.id,
+      );
+      if (question.type === "MCQ" && studentAnswerEntry) {
+        const studentAnswer = studentAnswerEntry.answer;
         const correctAnswer = question.answer;
-        const studentAnswer = studentAnswers[question.id];
 
         if (studentAnswer === correctAnswer) {
           totalScore += question.points;
@@ -122,6 +132,7 @@ export interface AssessmentDetails extends Assessment {
 
 export const submitAssignment = async (
   data: SubmitAssignmentRequest,
+  user: User,
 ): Promise<Submission> => {
   try {
     const assessment = await db.assessment.findUnique({
@@ -137,7 +148,7 @@ export const submitAssignment = async (
     const submission = await db.submission.create({
       data: {
         assessmentID: data.assessmentId,
-        studentID: data.studentId,
+        studentID: user.id,
         assignmentContent: JSON.stringify(data.assignmentContent),
         submittedAt: new Date(),
       },
@@ -207,10 +218,48 @@ export const fetchSubmission = async (
       throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
     }
 
+    if (
+      submission.assignmentContent &&
+      typeof submission.assignmentContent === "string"
+    ) {
+      try {
+        submission.assignmentContent = JSON.parse(submission.assignmentContent);
+      } catch (e) {
+        console.error(
+          "Failed to parse assignmentContent for submission with ID " +
+            data.submissionId +
+            ":",
+          e,
+        );
+      }
+    }
+
     return submission;
   } catch (error) {
     console.error(
       "Failed to fetch submission with ID " + data.submissionId + ":",
+      error,
+    );
+    throw new APIError("Failed to fetch submission", "FETCH_FAILED");
+  }
+};
+
+export const fetchStudentSubmission = async (
+  data: FetchStudentSubmissionRequest,
+): Promise<Submission> => {
+  try {
+    const submission = await db.submission.findUnique({
+      where: { id: data.studentId },
+    });
+
+    if (!submission) {
+      throw new APIError("Submission not found", "SUBMISSION_NOT_FOUND");
+    }
+
+    return submission;
+  } catch (error) {
+    console.error(
+      "Failed to fetch submission with ID " + data.studentId + ":",
       error,
     );
     throw new APIError("Failed to fetch submission", "FETCH_FAILED");
@@ -258,6 +307,7 @@ export const manualGradeSubmission = async (
     where: { id: submissionId },
     data: {
       grade: newTotalGrade,
+      isMarked: true,
     },
   });
 
@@ -283,6 +333,7 @@ export const assignmentGradeSubmission = async (
       data: {
         grade: grades,
         feedback: feedback,
+        isMarked: true,
       },
     });
 

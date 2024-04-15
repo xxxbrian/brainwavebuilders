@@ -2,13 +2,7 @@ import React from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
-
-interface Submission {
-  id: string;
-  studentName: string;
-  submittedAt: string;
-  grade?: number;
-}
+import { Assessment, Submission } from "@/backend";
 
 interface SubmissionsTableProps {
   submissions: Submission[];
@@ -19,7 +13,8 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   submissions,
   onClickMark,
 }) => {
-  const formatDate = (dateString: string) => {
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "Not submitted";
     const date = new Date(dateString);
     const year = date.getFullYear().toString();
     const month = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -48,9 +43,9 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
             submissions.map((submission) => (
               <Table.Row key={submission.id}>
                 <Table.RowHeaderCell>
-                  {submission.studentName}
+                  {submission.studentId}
                 </Table.RowHeaderCell>
-                <Table.Cell>{formatDate(submission.submittedAt)}</Table.Cell>
+                {formatDate(submission.submittedAt)}
                 <Table.Cell>
                   {submission.grade !== undefined ? (
                     `${submission.grade}/100`

@@ -294,7 +294,6 @@ export interface CreateAssessmentResponse {
 // SubmitAnswersRequest is the request that is sent to the submitAnswers endpoint.
 export interface SubmitAnswersRequest {
     assessmentId: string;
-    studentId: string;
     answers: any;
 }
 
@@ -306,7 +305,6 @@ export interface SubmitAnswersResponse {
 // SubmitAssignmentRequest is the request that is sent to the submitAssignment endpoint.
 export interface SubmitAssignmentRequest {
     assessmentId: string;
-    studentId: string;
     assignmentContent: any;
 }
 
@@ -386,6 +384,16 @@ export interface FetchAssessmentsRequest {
 // FetchAssessmentsResponse is the response that is sent to the fetchAssessments endpoint.
 export interface FetchAssessmentsResponse {
     assessments: Assessment[];
+}
+
+// FetchStudentSubmissionRequest is the request that is sent to the fetchStudentSubmission endpoint.
+export interface FetchStudentSubmissionRequest {
+    studentId: string;
+}
+
+// FetchStudentSubmissionResponse is the response that is sent to the fetchStudentSubmission endpoint.
+export interface FetchStudentSubmissionResponse {
+    submission: Submission;
 }
 
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.
@@ -1273,6 +1281,35 @@ export class BrainwavesClient {
         }
 
         return json as FetchAssessmentsResponse;
+    }
+
+
+
+    async fetchStudentSubmission(request: FetchStudentSubmissionRequest): Promise<FetchStudentSubmissionResponse> {
+        const response = await fetch(`${this.base_url}/fetchStudentSubmission`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as FetchStudentSubmissionResponse;
     }
 
 

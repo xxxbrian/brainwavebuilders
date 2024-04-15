@@ -1,27 +1,42 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import Question from "@/components/quiz/Question";
 import QuizHeader from "@/components/quiz/Header";
-import { quizData } from "@/utils/data";
 import { usePathname, useRouter } from "next/navigation";
 import { IoIosArrowBack } from "react-icons/io";
-
-type Question = {
-  id: string;
-  questionTitle: string;
-  questionType: string;
-  questionOptions: string[];
-  questionAnswer: string;
-  questionMark: number;
-};
+import { useBackend } from "@/hooks/useBackend";
+import { Assessment, Submission } from "@/backend";
 
 export const Quiz: React.FC = () => {
   const router = useRouter();
+  const backend = useBackend();
 
   const pathName = usePathname();
+  const pathSegments = pathName.split("/");
+  const assessmentId = pathSegments[pathSegments.length - 1];
 
+  const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [answers, setAnswers] = useState<Record<string, string>>({});
+
+  useEffect(() => {
+    if (assessmentId) {
+      const fetchAssessment = async () => {
+        if (assessmentId) {
+          try {
+            const response = await backend.fetchAssessmentDetailsStudent({
+              assessmentId,
+            });
+            setAssessment(response.assessment);
+          } catch (error) {
+            console.error("Failed to fetch assessment details:", error);
+          }
+        }
+      };
+
+      fetchAssessment();
+    }
+  }, [assessmentId, backend]);
 
   const onSelectAnswer = (questionId: string, selectedAnswer: string) => {
     setAnswers((prevAnswers) => ({
@@ -31,34 +46,38 @@ export const Quiz: React.FC = () => {
   };
 
   const submitAnswersToBackend = useCallback(async () => {
-    const answersArray = Object.entries(answers).map(
-      ([questionId, answer]) => ({
-        questionId,
-        answer,
-      }),
-    ); // Combine questions with its answer for you to send to backend
+    if (assessmentId) {
+      try {
+        const answersPayload = Object.entries(answers).map(
+          ([questionId, answer]) => ({
+            questionId,
+            answer,
+          }),
+        );
 
-    // Answer struct should be
-    // [
-    //   {
-    //     "questionId": "question1",
-    //     "answer": "Paris"
-    //   },
-    //   {
-    //     "questionId": "question2",
-    //     "answer": "It's a process by which plants use sunlight to synthesize foods..."
-    //   }
-    // ]
+        console.log("Submitting answers to backend:", answersPayload);
 
-    const newPath = pathName.replace(/\/attendexam\/[^\/]+/, "");
-    router.push(newPath);
-    //TODO: send answer and to backend
-  }, [pathName, router, answers]);
+        await backend.submitAnswers({
+          assessmentId,
+          answers: answersPayload,
+        });
+        const newPath = pathName.replace(/\/attendexam\/[^\/]+$/, "");
+        router.push(newPath);
+      } catch (error) {
+        console.error("Failed to submit answers:", error);
+        alert("Failed to submit answers, please try again!");
+      }
+    } else {
+      alert("No assessment ID provided");
+    }
+  }, [answers, backend, assessmentId, pathName, router]);
 
   const onClickBack = useCallback(() => {
     const newPath = pathName.replace(/\/attendexam\/[^\/]+/, "");
     router.push(newPath);
   }, [pathName, router]);
+
+  if (!assessment) return <div>Loading assessment details...</div>;
 
   return (
     <div>
@@ -70,24 +89,25 @@ export const Quiz: React.FC = () => {
           <span className="cursor-pointer">Back</span>
         </div>
         <QuizHeader
-          title={quizData.title}
-          description={quizData.description}
-          endDate={quizData.dueDate ?? ""}
+          title={assessment.title}
+          description={assessment.description || "No description available"}
+          endDate={assessment.dueDate || "Due date not set"}
           onSubmit={submitAnswersToBackend}
         />
-        {quizData.questions.map((question) => (
-          <Question
-            key={question.id}
-            id={question.id}
-            title={question.title}
-            type={question.type}
-            options={JSON.parse(String(question.options ?? "[]"))}
-            mark={question.points}
-            onSelectAnswer={(selectedAnswer) =>
-              onSelectAnswer(question.id, selectedAnswer)
-            }
-          />
-        ))}
+        {assessment.questions.map((question) => {
+          return (
+            <Question
+              id={question.id}
+              title={question.title}
+              type={question.type}
+              options={JSON.parse(String(question.options ?? "[]"))}
+              mark={question.points}
+              onSelectAnswer={(selectedAnswer) =>
+                onSelectAnswer(question.id, selectedAnswer)
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );
