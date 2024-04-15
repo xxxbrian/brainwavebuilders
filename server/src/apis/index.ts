@@ -657,6 +657,7 @@ export interface GetAnnouncementsRequest {
 // GetAnnouncementsResponse is the response that is sent to the getAnnouncements endpoint.
 export interface GetAnnouncementsResponse {
     threads: Thread[];
+    threadToCourse: Record<string, Course>;
 }
 
 

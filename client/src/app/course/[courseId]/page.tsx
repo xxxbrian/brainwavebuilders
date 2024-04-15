@@ -158,7 +158,7 @@ export const CoursesPage: React.FC = ({}) => {
   }, []);
 
   return (
-    <div className="flex flex-col space-y-8 px-4">
+    <div className="flex flex-col space-y-8 px-4 py-4">
       <div
         className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-opacity-80"
         style={{

@@ -443,4 +443,5 @@ endpoints:
       courseIDs?: string[]
     response:
       threads: Thread[]
+      threadToCourse: Record<string, Course>
     service: typescript

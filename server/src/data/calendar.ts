@@ -43,7 +43,7 @@ export const fetchAllAssessmentsEventByCourse = async (
       events[key] = [];
     }
     events[key]?.push({
-      name: assessment.title,
+      name: `${assessment.title} is due (${course.name})`,
       time: formatTime(assessment.dueDate),
       type: assessment.type,
     });
