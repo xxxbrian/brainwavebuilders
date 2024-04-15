@@ -1,4 +1,3 @@
-import { Flex } from "@radix-ui/themes";
 import React, { useState, useEffect } from "react";
 import { TimeUpDialog } from "./TimeUpDiaog";
 
@@ -53,21 +52,21 @@ const QuizHeader: React.FC<QuizInfoProps> = ({
   }, [endDate, onSubmit]);
 
   return (
-    <div className="flex justify-between items-center p-4 bg-blue-100 rounded-2xl border-2 border-blue-500">
+    <div className="flex justify-between items-center p-4 rounded-lg border-2 border-blue-500">
       <div className="space-y-2 max-w-[70%]">
         <h1 className="text-4xl font-bold text-[#004E89]">{title}</h1>
         <p>{description}</p>
       </div>
-      <div className="space-y-2">
+      <div className="space-y-3">
         <p className="font-semibold">Time Left: {timeLeft}</p>
-        <Flex className="justify-end">
+        <div className="flex flex-wrap justify-end">
           <button
-            className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90"
+            className="bg-orange-500 text-white px-6 py-2 rounded-md hover:bg-opacity-90 font-bold"
             onClick={onSubmit}
           >
-            End Quiz
+            submit
           </button>
-        </Flex>
+        </div>
       </div>
       <TimeUpDialog isOpen={isTimeUp} setIsOpen={setIsTimeUp} />
     </div>
