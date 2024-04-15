@@ -7,6 +7,10 @@ interface Props {
   senderName: string;
 }
 
+// NOTES from Lincoln:
+// This template has been derived from my open-source project: NowAskMe
+// https://github.com/yyjlincoln/NowAskMe-Server
+
 export const generalEmail: EmailGenerator<Props> = async ({
   title,
   name,
