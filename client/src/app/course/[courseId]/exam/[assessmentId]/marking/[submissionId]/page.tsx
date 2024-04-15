@@ -15,82 +15,78 @@ export const MarkExamPage: React.FC = () => {
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [scores, setScores] = useState<Scores>({});
   const [totalScore, setTotalScore] = useState<number>(0);
-  const pathName = usePathname();
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
+
   const router = useRouter();
   const backend = useBackend();
-
-  const pathSegments = pathName.split('/');
+  const pathName = usePathname();
+  const pathSegments = pathName.split("/");
   const submissionId = pathSegments[pathSegments.length - 1];
   const assessmentId = pathSegments[pathSegments.length - 3];
 
-
   useEffect(() => {
-    const fetchDetailsAndSubmission = async () => {
-      if (assessmentId) {
+    if (assessmentId && submissionId) {
+      const fetchDetailsAndSubmission = async () => {
+        setLoading(true);
         try {
-          const response = await backend.fetchAssessmentDetailsTeacher({ assessmentId });
-          setAssessment(response.assessment);
-        } catch (error) {
-          console.error('Failed to fetch assessment details:', error);
+          const [assessmentResponse, submissionResponse] = await Promise.all([
+            backend.fetchAssessmentDetailsTeacher({ assessmentId }),
+            backend.fetchSubmission({ submissionId }),
+          ]);
+          setAssessment(assessmentResponse.assessment);
+          setSubmission(submissionResponse.submission);
+        } catch (err) {
+          console.error("Failed to fetch data:", err);
+          setError("Failed to load data");
+        } finally {
+          setLoading(false);
         }
-      }
-      if (submissionId) {
-        try {
-          const { submission } = await backend.fetchSubmission({ submissionId });
-          setSubmission(submission);
-        } catch (error) {
-          console.error("Failed to fetch submission:", error);
-        }
-      }
-    };
+      };
 
-    fetchDetailsAndSubmission();
+      if (assessmentId && submissionId) {
+        fetchDetailsAndSubmission();
+      }
+    }
   }, [submissionId, assessmentId, backend]);
 
   useEffect(() => {
-    const newTotalScore = Object.values(scores).reduce(
-      (sum, score) => sum + (score || 0),
-      0,
-    );
-    setTotalScore(newTotalScore);
+    setTotalScore(Object.values(scores).reduce((sum, score) => sum + score, 0));
   }, [scores]);
 
-  const handleScoreChange = (questionId: string, score: number) => {
-    setScores((prevScores) => ({ ...prevScores, [questionId]: score }));
-  };
-
-  console.log(scores);
-  console.log(totalScore);
+  const handleScoreChange = useCallback((questionId: string, score: number) => {
+    setScores((prev) => ({ ...prev, [questionId]: score }));
+  }, []);
 
   const onClickBack = useCallback(() => {
-    const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
-    router.push(newPath);
+    router.push(pathName.replace(/\/marking\/[^\/]+$/, ""));
   }, [pathName, router]);
 
   const onClickSave = useCallback(async () => {
-    if (submissionId) {
-      try {
-        await backend.manualGradeSubmission({
-          submissionId,
-          saqGrades: totalScore
-        });
-        alert('Total SAQ scores successfully saved!');
-        const newPath = pathName.replace(/\/marking\/[^\/]+/, "");
-        router.push(newPath);
-      } catch (error) {
-        console.error("Failed to save total SAQ scores:", error);
-      }
+    if (!submissionId || totalScore === null) return;
+    try {
+      await backend.manualGradeSubmission({
+        submissionId,
+        saqGrades: totalScore,
+      });
+      alert("Total SAQ scores successfully saved!");
+      onClickBack();
+    } catch (error) {
+      console.error("Failed to save total SAQ scores:", error);
+      alert("Failed to save scores. Please try again.");
     }
-  }, [backend, submissionId, totalScore, router, pathName]);
+  }, [backend, submissionId, totalScore, onClickBack]);
 
-  if (!assessment || !submission) return <div>Loading...</div>;
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
+  if (!assessment || !submission) return <div>No data available.</div>;
 
   const saqQuestions = assessment.questions
-    .filter((question) => question.type === "SAQ")
+    .filter((q) => q.type === "short_answer")
     .map((question) => ({
       ...question,
       studentAnswer: submission.answers[question.id],
-      sampleAnswer: question.answer,
+      sampleAnswer: question.answer || "No sample answer provided",
     }));
 
   return (
@@ -107,7 +103,7 @@ export const MarkExamPage: React.FC = () => {
           title={question.title}
           points={question.points}
           studentAnswer={question.studentAnswer}
-          sampleAnswer={question.sampleAnswer || "No sample answer provided"}
+          sampleAnswer={question.sampleAnswer}
           onScoreChange={(score) => handleScoreChange(question.id, score)}
         />
       ))}

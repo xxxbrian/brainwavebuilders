@@ -34,6 +34,14 @@ export const quizData: Assessment = {
       points: 10,
       // No options or correct answer provided for SAQ
     },
+    {
+      assessmentId: "1",
+      id: "question3",
+      title: "Which city is the capital of France?",
+      type: "MCQ",
+      options: JSON.stringify(["Paris", "Berlin", "Rome"]),
+      points: 5,
+    },
   ],
   submissions: [],
 };

@@ -2,7 +2,6 @@
 
 import React, { useState, useCallback, useEffect } from "react";
 import AdvancedEditor from "@/components/editor/AdvancedEditor";
-import { mockEditorContent } from "@/utils/data";
 import { Heading } from "@radix-ui/themes";
 import { TextArea } from "@radix-ui/themes";
 import { GoTriangleUp } from "react-icons/go";
@@ -19,7 +18,7 @@ export const MarkAssignmentPage: React.FC = () => {
   const backend = useBackend();
   const router = useRouter();
   const pathName = usePathname();
-  const pathSegments = pathName.split('/');
+  const pathSegments = pathName.split("/");
   const submissionId = pathSegments[pathSegments.length - 1];
 
   useEffect(() => {
@@ -27,7 +26,12 @@ export const MarkAssignmentPage: React.FC = () => {
       if (submissionId) {
         try {
           const data = await backend.fetchSubmission({ submissionId });
-          setSubmission(data.submission);
+          setSubmission({
+            ...data.submission,
+            assignmentContent: JSON.parse(
+              data.submission.assignmentContent || "{}",
+            ),
+          });
           setFeedback(data.submission.feedback || "");
           setMark(data.submission.grade || 0);
         } catch (error) {
@@ -53,7 +57,11 @@ export const MarkAssignmentPage: React.FC = () => {
   const onClickSave = useCallback(async () => {
     if (submissionId && mark !== null && feedback !== null) {
       try {
-        await backend.assignmentGradeSubmission({ submissionId, grades: mark, feedback });
+        await backend.assignmentGradeSubmission({
+          submissionId,
+          grades: mark,
+          feedback,
+        });
         alert("Feedback and marks saved successfully!");
         onClickBack();
       } catch (error) {
@@ -74,7 +82,10 @@ export const MarkAssignmentPage: React.FC = () => {
       </div>
       <div className="flex flex-wrap">
         <div className="w-2/3 border-2 p-2 rounded-l-md border-r-0">
-          <AdvancedEditor value={mockEditorContent} isEditable={false} />
+          <AdvancedEditor
+            value={submission.assignmentContent}
+            isEditable={false}
+          />
         </div>
         <div className="w-1/3 border-2 rounded-r-md flex flex-col space-y-4 p-2">
           <Heading color="indigo" className="p-2">

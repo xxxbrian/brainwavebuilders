@@ -1,34 +1,72 @@
 "use client";
 
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState, useEffect } from "react";
 import QuizHeader from "@/components/quiz/Header";
-import { quizData } from "@/utils/data";
 import { usePathname, useRouter } from "next/navigation";
 import { JSONContent } from "novel";
 import AdvancedEditor from "@/components/editor/AdvancedEditor";
 import { IoIosArrowBack } from "react-icons/io";
+import { useBackend } from "@/hooks/useBackend";
+import { Assessment, Submission } from "@/backend";
 
 export const Assignment: React.FC = () => {
   const router = useRouter();
+  const backend = useBackend();
 
   const pathName = usePathname();
+  const pathSegments = pathName.split("/");
+  const assessmentId = pathSegments[pathSegments.length - 1];
 
+  const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [content, setContent] = useState<JSONContent>({
     type: "doc",
     content: [],
   });
-  // This content is used to record assignment content. Send this to backend
 
-  const submitAnswersToBackend = useCallback(async () => {
-    const newPath = pathName.replace(/\/attendassignment\/[^\/]+/, "");
-    router.push(newPath);
-    //TODO: send assignment
-  }, [pathName, router]);
+  useEffect(() => {
+    if (assessmentId) {
+      const fetchAssessment = async () => {
+        if (assessmentId) {
+          try {
+            const response = await backend.fetchAssessmentDetailsStudent({
+              assessmentId,
+            });
+            setAssessment(response.assessment);
+          } catch (error) {
+            console.error("Failed to fetch assessment details:", error);
+          }
+        }
+      };
+
+      fetchAssessment();
+    }
+  }, [assessmentId, backend]);
+
+  const submitAssignmentToBackend = useCallback(async () => {
+    if (assessmentId) {
+      try {
+        await backend.submitAssignment({
+          assessmentId,
+          assignmentContent: JSON.stringify(content),
+        });
+        alert("Assignment submitted successfully!");
+        const newPath = pathName.replace(/\/attendassignment\/[^\/]+/, "");
+        router.push(newPath);
+      } catch (error) {
+        console.error("Failed to submit assignment:", error);
+        alert("Failed to submit assignment, please try again!");
+      }
+    } else {
+      alert("No assignment ID provided");
+    }
+  }, [assessmentId, content, backend, pathName, router]);
 
   const onClickBack = useCallback(() => {
     const newPath = pathName.replace(/\/attendassignment\/[^\/]+/, "");
     router.push(newPath);
   }, [pathName, router]);
+
+  if (!assessment) return <div>Loading assessment details...</div>;
 
   return (
     <div>
@@ -40,10 +78,10 @@ export const Assignment: React.FC = () => {
           <span className="cursor-pointer">Back</span>
         </div>
         <QuizHeader
-          title={quizData.title}
-          description={quizData.description}
-          endDate={quizData.dueDate ?? ""}
-          onSubmit={submitAnswersToBackend}
+          title={assessment.title}
+          description={assessment.description || "No description available"}
+          endDate={assessment.dueDate || "Due date not set"}
+          onSubmit={submitAssignmentToBackend}
         />
         <AdvancedEditor
           className="border rounded-md overflow-y-auto overflow-x-hidden border-gray-300 p-12 px-8 sm:px-12"
