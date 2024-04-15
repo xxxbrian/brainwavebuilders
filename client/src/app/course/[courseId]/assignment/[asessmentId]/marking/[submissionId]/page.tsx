@@ -29,18 +29,18 @@ export const MarkAssignmentPage: React.FC = () => {
           setSubmission({
             ...data.submission,
             assignmentContent: JSON.parse(
-              data.submission.assignmentContent || "{}",
+              data.submission.assignmentContent ?? "{}",
             ),
           });
-          setFeedback(data.submission.feedback || "");
-          setMark(data.submission.grade || 0);
+          setFeedback(data.submission.feedback ?? "");
+          setMark(data.submission.grade ?? 0);
         } catch (error) {
           console.error("Failed to fetch submission data:", error);
         }
       }
     };
 
-    fetchSubmissionData();
+    void fetchSubmissionData();
   }, [submissionId, backend]);
 
   const handleMarkChange = (newMark: number) => {

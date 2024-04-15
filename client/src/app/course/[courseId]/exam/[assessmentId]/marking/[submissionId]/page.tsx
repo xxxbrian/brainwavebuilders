@@ -45,7 +45,7 @@ export const MarkExamPage: React.FC = () => {
       };
 
       if (assessmentId && submissionId) {
-        fetchDetailsAndSubmission();
+        void fetchDetailsAndSubmission();
       }
     }
   }, [submissionId, assessmentId, backend]);
@@ -86,7 +86,7 @@ export const MarkExamPage: React.FC = () => {
     .map((question) => ({
       ...question,
       studentAnswer: submission.answers[question.id],
-      sampleAnswer: question.answer || "No sample answer provided",
+      sampleAnswer: question.answer ?? "No sample answer provided",
     }));
 
   return (
