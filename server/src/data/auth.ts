@@ -5,6 +5,7 @@ import { sendEmailFromTemplate } from "./mailer";
 import { APIError } from "@/apis";
 import bcrypt from "bcrypt";
 import { registrationEmail } from "@/mailerTemplates/registration";
+import { forgotPasswordEmail } from "@/mailerTemplates/forgotPassword";
 
 export const getUserByEmail = async (email: string): Promise<User | null> => {
   const user = await db.user.findUnique({
@@ -56,6 +57,31 @@ export const generateAndSendOTP = async (email: string): Promise<string> => {
   await sendEmailFromTemplate(email, registrationEmail, {
     code: code,
     email: email,
+  });
+
+  return code;
+};
+
+export const generateAndSendForgotPasswordOTP = async (
+  email: string,
+): Promise<string> => {
+  const code = makeID(6);
+
+  await db.emailVerification.create({
+    data: {
+      email,
+      verification: code,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 1000 * 60 * 10),
+    },
+  });
+
+  const user = (await getUserByEmail(email))!;
+
+  await sendEmailFromTemplate(email, forgotPasswordEmail, {
+    code: code,
+    email: email,
+    firstName: user.firstName,
   });
 
   return code;
