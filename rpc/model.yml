@@ -191,6 +191,13 @@ endpoints:
       user: User
     service: typescript
 
+  getUserInfoByID:
+    request:
+      id: string
+    response:
+      user: User
+    service: typescript
+
   getUserInfoByIDs:
     request:
       ids: string[]

@@ -14,13 +14,11 @@ import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetails
 import { fetchAssessmentSubmissions } from "@/handlers/fetchAssessmentSubmissions";
 import { fetchAssessments } from "@/handlers/fetchAssessments";
 import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
-import { incrementThreadView } from "@/handlers/incrementThreadView";
-import { ping } from "@/handlers/ping";
-import { getAnnouncements } from "@/handlers/getAnnouncements";
 import { fetchSubmission } from "@/handlers/fetchSubmission";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { forgotPassword } from "@/handlers/forgotPassword";
+import { getAnnouncements } from "@/handlers/getAnnouncements";
 import { getCourseEvents } from "@/handlers/getCourseEvents";
 import { getCourses } from "@/handlers/getCourses";
 import { getFeatured } from "@/handlers/getFeatured";
@@ -32,11 +30,13 @@ import { getThreads } from "@/handlers/getThreads";
 import { getUserCourses } from "@/handlers/getUserCourses";
 import { getUserEvents } from "@/handlers/getUserEvents";
 import { getUserInfo } from "@/handlers/getUserInfo";
-import { joinCourse } from "@/handlers/joinCourse";
 import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
+import { incrementThreadView } from "@/handlers/incrementThreadView";
+import { joinCourse } from "@/handlers/joinCourse";
 import { leaveCourse } from "@/handlers/leaveCourse";
 import { login } from "@/handlers/login";
 import { manualGradeSubmission } from "@/handlers/manualGradeSubmission";
+import { ping } from "@/handlers/ping";
 import { register } from "@/handlers/register";
 import { resetPassword } from "@/handlers/resetPassword";
 import { setUserProfile } from "@/handlers/setUserProfile";
@@ -47,6 +47,7 @@ import { upsertPost } from "@/handlers/upsertPost";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { verifyForgotPassword } from "@/handlers/verifyForgotPassword";
+import { getUserInfoByID } from "@/handlers/getUserInfoByID";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -287,6 +288,16 @@ export interface GetUserInfoRequest {
 
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
+    user: User;
+}
+
+// GetUserInfoByIDRequest is the request that is sent to the getUserInfoByID endpoint.
+export interface GetUserInfoByIDRequest {
+    id: string;
+}
+
+// GetUserInfoByIDResponse is the response that is sent to the getUserInfoByID endpoint.
+export interface GetUserInfoByIDResponse {
     user: User;
 }
 
@@ -881,6 +892,28 @@ app.post('/api/getUserInfo', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request getUserInfo with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getUserInfoByID is the endpoint handler for the getUserInfoByID endpoint.
+// It wraps around the function at @/handlers/getUserInfoByID.
+app.post('/api/getUserInfoByID', async (req, res) => {
+    const request: GetUserInfoByIDRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetUserInfoByIDResponse = await getUserInfoByID(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getUserInfoByID with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

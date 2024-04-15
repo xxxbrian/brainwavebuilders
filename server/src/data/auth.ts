@@ -29,6 +29,16 @@ export const getUsersByIDs = async (ids: string[]): Promise<User[]> => {
   return user;
 };
 
+export const getUserInfoByID = async (id: string): Promise<User | null> => {
+  const user = await db.user.findUnique({
+    where: {
+      id: id,
+    },
+  });
+
+  return user;
+};
+
 export const isEmailTaken = async (email: string): Promise<boolean> => {
   const user = await getUserByEmail(email);
   return !!user;
