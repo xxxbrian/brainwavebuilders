@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Heading } from "@radix-ui/themes";
 import { Table } from "@radix-ui/themes";
+import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 
 interface AssignmentProps {
   id: string;
@@ -87,7 +88,9 @@ const AssignmentsTable: React.FC<AssignmentsTableProps> = ({
     <div>
       <div className="flex justify-between p-2">
         <Heading color="indigo">{type}</Heading>
-        <button onClick={onClickAddButton}>+</button>
+        <WithTeacherRole>
+          <button onClick={onClickAddButton}>+</button>
+        </WithTeacherRole>
       </div>
 
       <Table.Root variant="surface">

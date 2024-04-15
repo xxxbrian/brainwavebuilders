@@ -13,6 +13,9 @@ import { CalendarBoardMini } from "@/components/calendar/CalendarBoardMini";
 import AssignmentsTable from "@/components/assessment/AssessmentsTable";
 import { CreateAssignmentDialog } from "@/components/assessment/CreateAssignmentDialog";
 import { type Event } from "@/components/calendar/Calendar";
+import { WithTeacherRole } from "@/contexts/CourseRoleContext";
+import { WithStudentRole } from "@/contexts/CourseRoleContext";
+
 interface ApplicationProps {
   icon: React.ReactNode;
   title: string;
@@ -134,6 +137,20 @@ const onClickAssignment = useCallback(
     [router, pathName],
   );
 
+  const onAttendExam = useCallback(
+    async (assessmentId: string) => {
+      router.push(`${pathName}/attendexam/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
+  const onAttendAssignment = useCallback(
+    async (assessmentId: string) => {
+      router.push(`${pathName}/attendassignment/${assessmentId}`);
+    },
+    [router, pathName],
+  );
+
   const onClickAddExam = useCallback(async () => {
     router.push(`${pathName}/createexam`);
   }, [pathName, router]);
@@ -201,23 +218,44 @@ const onClickAssignment = useCallback(
           />
         </div>
       </div>
-      <AssignmentsTable
-        assignments={assignmentsData}
-        type="Assignment"
-        onClickAddButton={onClickAddAssignment}
-        onClickAsessment={onClickAssignment}
-      />
-      <AssignmentsTable
-        assignments={examsData}
-        type="Exam"
-        onClickAddButton={onClickAddExam}
-        onClickAsessment={onClickExam}
-      />
-      <CreateAssignmentDialog
-        isOpen={isCreateAssignment}
-        setIsOpen={setIsCreateAssignment}
-        onUpdateAssignments={handleUpdateAssignments}
-      />
+      <WithTeacherRole>
+        <AssignmentsTable
+          assignments={assignmentsData}
+          type="Assignment"
+          onClickAddButton={onClickAddAssignment}
+          onClickAsessment={onClickAssignment}
+        />
+        <AssignmentsTable
+          assignments={examsData}
+          type="Exam"
+          onClickAddButton={onClickAddExam}
+          onClickAsessment={onClickExam}
+        />
+        <CreateAssignmentDialog
+          isOpen={isCreateAssignment}
+          setIsOpen={setIsCreateAssignment}
+          onUpdateAssignments={handleUpdateAssignments}
+        />
+      </WithTeacherRole>
+      <WithStudentRole>
+        <AssignmentsTable
+          assignments={assignmentsData}
+          type="Assignment"
+          onClickAddButton={onClickAddAssignment}
+          onClickAsessment={onAttendAssignment}
+        />
+        <AssignmentsTable
+          assignments={examsData}
+          type="Exam"
+          onClickAddButton={onClickAddExam}
+          onClickAsessment={onAttendExam}
+        />
+        <CreateAssignmentDialog
+          isOpen={isCreateAssignment}
+          setIsOpen={setIsCreateAssignment}
+          onUpdateAssignments={handleUpdateAssignments}
+        />
+      </WithStudentRole>
     </div>
   );
 };
