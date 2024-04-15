@@ -2,16 +2,18 @@ import { APIError, UpsertPostRequest, UpsertPostResponse } from "@/apis";
 import { useCurrentUser } from "@/context/auth";
 import { postWithCreatedByDBToAPI } from "@/converts/forum";
 import { getUsersByIDs } from "@/data/auth";
-import { getCourseByID } from "@/data/course";
+import { getCourseByID, getCourseMemberships } from "@/data/course";
 import {
   createPost,
   getCourseByForumID,
+  getForumByID,
   getPostByID,
   getThreadByID,
   updatePost,
 } from "@/data/forum";
 import { sendEmailFromTemplate } from "@/data/mailer";
 import { canCreatePostInThread, canModifyPost } from "@/data/permissions";
+import { forumAnnouncementEmail } from "@/mailerTemplates/forumAnnouncement";
 import { threadReplyEmail } from "@/mailerTemplates/forumThreadReply";
 import { Post } from "@prisma/client";
 
@@ -59,6 +61,33 @@ export const upsertPost = async (
 
 export const notifyPostUpdate = async (post: Post) => {
   const thread = (await getThreadByID(post.threadID))!;
+
+  if (thread.isAnnouncement && thread.posts.length === 1) {
+    const forum = (await getForumByID(thread.forumID))!;
+
+    // First post - thread content.
+    const course = (await getCourseByForumID(forum.id))!;
+    const users = await getCourseMemberships(course.id);
+
+    const resolvedUsers = await getUsersByIDs(users.map((u) => u.userID));
+
+    const recipients = resolvedUsers.filter((u) => u.id !== post.createdByID);
+    const sender = resolvedUsers.find((u) => u.id === post.createdByID)!;
+
+    recipients.forEach(async (user) => {
+      console.log(`Notifying user ${user.email} about announcement.`);
+      await sendEmailFromTemplate(user.email, forumAnnouncementEmail, {
+        course: course,
+        post: post,
+        thread: thread,
+        recipient: user,
+        sender: sender,
+        title: thread.title,
+      });
+    });
+
+    return;
+  }
 
   const users = new Set([thread.createdByID]);
 

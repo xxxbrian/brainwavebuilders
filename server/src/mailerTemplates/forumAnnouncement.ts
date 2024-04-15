@@ -1,31 +1,42 @@
-import { Course, User } from "@prisma/client";
-import { generalEmail } from "./general";
+import { Course, Post, Thread, User } from "@prisma/client";
+import { generalEmail, generalEmailWithSubject } from "./general";
 import { EmailGenerator } from "@/data/mailer";
+import { FRONTEND_ADDRESS } from "@/globals";
+import { generateHTMLFromTiptap } from "@/utils/tiptapHTML";
+import { JSONContent } from "@tiptap/core";
 
-interface AnnouncementEmail {
+interface ForumAnnouncement {
   title: string;
   course: Course;
   sender: User;
   recipient: User;
-  content: string;
+
+  thread: Thread;
+  post: Post;
 }
 
-export const announcementEmail: EmailGenerator<AnnouncementEmail> = async ({
-  course,
-  title,
-  recipient,
-  sender,
-  content,
-}) => {
-  return generalEmail({
-    title: `[${course.code}] ${title}`,
+export const forumAnnouncementEmail: EmailGenerator<
+  ForumAnnouncement
+> = async ({ course, title, recipient, sender, post, thread }) => {
+  return generalEmailWithSubject({
+    subject: `[${course.code ?? course.name}] ${thread.title}`,
+    title: `${thread.title}`,
     name: recipient.firstName,
-    content: `Your teacher <b>${sender.firstName} ${sender.lastName}</b> has posted a new announcement in ${course.name}:
+    content: `<b>${sender.firstName} ${
+      sender.lastName
+    }</b> has posted an announcement in <b>${course.name}</b>:
 
-<pre>
-  ${content}
-</pre>
-    `,
+  ${
+    post.content
+      ? generateHTMLFromTiptap(post.content as JSONContent)
+      : "(no preview is available)"
+  }
+
+You can view this announcement <a href="${FRONTEND_ADDRESS}/course/${
+      course.id
+    }/forum?thread=${thread.id}">here</a>.
+
+You cannot unsubscribe to this email as it is an announcement, unless you quit the course.`,
     senderName: "BrainWaveBuilder",
   });
 };

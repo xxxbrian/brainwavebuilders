@@ -131,6 +131,7 @@ export const createThread = async ({
   createdByID,
   forumID,
   title,
+  isAnnouncement,
 }: ThreadCreatable): Promise<Thread> => {
   return await db.thread.create({
     data: {
@@ -140,6 +141,7 @@ export const createThread = async ({
       updatedAt: new Date(),
       createdByID,
       deletedAt: null,
+      isAnnouncement,
     },
   });
 };
