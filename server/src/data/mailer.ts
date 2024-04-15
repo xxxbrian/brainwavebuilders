@@ -19,6 +19,7 @@ export const sendEmail = async (
   form.append("html", html);
 
   const domain_name = "brainwave.quick.to";
+
   try {
     const resp = await fetch(
       `https://api.mailgun.net/v3/${domain_name}/messages`,
@@ -34,6 +35,7 @@ export const sendEmail = async (
         body: form,
       },
     );
+
     if (!resp.ok) {
       throw new APIError("Failed to send email");
     }
@@ -46,4 +48,18 @@ export const sendEmail = async (
       );
     }
   }
+};
+
+// An EmailGenerator returns the subject and html content of an email.
+export type EmailGenerator<T extends Record<string, any>> = (
+  params: T,
+) => Promise<[string, string]>;
+
+export const sendEmailFromTemplate = async <T extends Record<string, any>>(
+  address: string,
+  generator: EmailGenerator<T>,
+  params: T,
+): Promise<void> => {
+  const [subject, html] = await generator(params);
+  await sendEmail(address, subject, html);
 };

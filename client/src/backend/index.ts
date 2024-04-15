@@ -6,6 +6,7 @@
 //////////////////////////////
 
 export interface User {
+    id: string;
     email: string;
     firstName: string;
     lastName: string;
@@ -110,6 +111,7 @@ export interface Thread {
     deletedAt?: number;
     title: string;
     posts: Post[];
+    isAnnouncement: boolean;
 }
 
 export interface ThreadStats {
@@ -240,6 +242,16 @@ export interface GetUserInfoRequest {
 // GetUserInfoResponse is the response that is sent to the getUserInfo endpoint.
 export interface GetUserInfoResponse {
     user: User;
+}
+
+// GetUserInfoByIDsRequest is the request that is sent to the getUserInfoByIDs endpoint.
+export interface GetUserInfoByIDsRequest {
+    ids: string[];
+}
+
+// GetUserInfoByIDsResponse is the response that is sent to the getUserInfoByIDs endpoint.
+export interface GetUserInfoByIDsResponse {
+    users: Record<string, User>;
 }
 
 // SetUserProfileRequest is the request that is sent to the setUserProfile endpoint.
@@ -873,6 +885,35 @@ export class BrainwavesClient {
         }
 
         return json as GetUserInfoResponse;
+    }
+
+
+
+    async getUserInfoByIDs(request: GetUserInfoByIDsRequest): Promise<GetUserInfoByIDsResponse> {
+        const response = await fetch(`${this.base_url}/getUserInfoByIDs`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetUserInfoByIDsResponse;
     }
 
 

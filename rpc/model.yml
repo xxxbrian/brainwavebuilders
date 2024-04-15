@@ -1,5 +1,6 @@
 types:
   User:
+    id: string
     email: string
     firstName: string
     lastName: string
@@ -96,6 +97,8 @@ types:
 
     posts: Post[]
 
+    isAnnouncement: boolean
+
   ThreadStats:
     threadID: string
     views: int
@@ -186,6 +189,13 @@ endpoints:
       email?: string
     response:
       user: User
+    service: typescript
+
+  getUserInfoByIDs:
+    request:
+      ids: string[]
+    response:
+      users: Record<string, User>
     service: typescript
 
   setUserProfile:

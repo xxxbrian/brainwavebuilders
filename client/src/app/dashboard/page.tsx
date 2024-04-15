@@ -84,7 +84,7 @@ export const Dashboard: React.FC = () => {
             </div>
           </DashboardItem>
           <DashboardItem className="flex-1 flex flex-col flex-shrink-0 m-4 space-y-4">
-            <Heading>TODO List</Heading>
+            <Heading>Key Dates</Heading>
             <Card className="h-full">
               <UpcomingEvents
                 today={new Date()}

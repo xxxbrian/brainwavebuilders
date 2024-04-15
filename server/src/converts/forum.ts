@@ -50,6 +50,7 @@ export const threadWithPostsDBToAPI = (
     deletedAt: thread.deletedAt?.getTime(),
     title: thread.title,
     posts: thread.posts.map((post) => postWithCreatedByDBToAPI(post)),
+    isAnnouncement: thread.isAnnouncement,
   };
 };
 
