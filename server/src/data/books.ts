@@ -13,6 +13,25 @@ export type CourseBookWithCourseAndTree = Prisma.CourseBookGetPayload<{
   };
 }>;
 
+export const getBookByID = async (
+  bookID: string,
+): Promise<CourseBookWithCourseAndTree | null> => {
+  return db.courseBook.findUnique({
+    where: {
+      id: bookID,
+    },
+    include: {
+      course: {
+        include: {
+          createdBy: true,
+        },
+      },
+      parent: true,
+      children: true,
+    },
+  });
+};
+
 export const getBookByIDs = async (
   bookIDs: string[],
 ): Promise<CourseBookWithCourseAndTree[]> => {
@@ -94,6 +113,65 @@ export const getBooksByCourseID = async (
   return db.courseBook.findMany({
     where: {
       courseID,
+    },
+    include: {
+      course: {
+        include: {
+          createdBy: true,
+        },
+      },
+      parent: true,
+      children: true,
+    },
+  });
+};
+
+export const createBook = async ({
+  courseID,
+  title,
+  parentID,
+  content,
+}: {
+  courseID: string;
+  parentID?: string;
+  title: string;
+  content: string;
+}): Promise<CourseBookWithCourseAndTree> => {
+  return db.courseBook.create({
+    data: {
+      courseID,
+      title,
+      parentID,
+      content,
+    },
+    include: {
+      course: {
+        include: {
+          createdBy: true,
+        },
+      },
+      parent: true,
+      children: true,
+    },
+  });
+};
+
+export const updateBook = async ({
+  id,
+  title,
+  content,
+}: {
+  id: string;
+  title: string;
+  content: string;
+}): Promise<CourseBookWithCourseAndTree> => {
+  return db.courseBook.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      content,
     },
     include: {
       course: {
