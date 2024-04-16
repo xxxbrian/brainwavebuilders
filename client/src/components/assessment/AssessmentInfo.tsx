@@ -63,7 +63,8 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
         <input
           id="title"
           type="text"
-          placeholder="Assessment Title"
+          placeholder="Exam/quiz Title"
+          required
           value={title}
           onChange={handleTitleChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:border-2"
@@ -75,7 +76,8 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
         </label>
         <textarea
           id="description"
-          placeholder="Description"
+          placeholder="Enter description of the exam/quiz"
+          required
           value={description}
           onChange={handleDescriptionChange}
           className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:border-blue-500 focus:border-2"
@@ -94,6 +96,7 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
             value={startDate}
             onChange={handleStartDateChange}
             min={minStartDate}
+            required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:border-2"
           />
         </div>
@@ -107,6 +110,7 @@ const AssessmentInfo: React.FC<AssessmentInfoProps> = ({
             value={endDate}
             onChange={handleEndDateChange}
             min={startDate}
+            required
             className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 focus:border-2"
           />
         </div>
