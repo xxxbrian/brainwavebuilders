@@ -212,11 +212,16 @@ export interface DriveItem {
     name: string;
 }
 
-export interface DriveFolder {
-    parentFolderId: string;
+export interface DriveFolderInfo {
     id: string;
     name: string;
-    items: DriveFolder[] | DriveItem[];
+}
+
+export interface DriveFolder {
+    parentFolderId?: string;
+    id: string;
+    name: string;
+    items: (DriveFolderInfo | DriveItem)[];
 }
 
 //////////////////////////////

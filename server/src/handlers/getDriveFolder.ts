@@ -1,4 +1,5 @@
 import { GetDriveFolderRequest, GetDriveFolderResponse } from "@/apis";
+import { getDriveFolderByID } from "@/data/drive";
 
 // getDriveFolder implements the getDriveFolder endpoint.
 // This code has been automatically generated.
@@ -8,5 +9,7 @@ export const getDriveFolder = async (
   ctx: any,
   request: GetDriveFolderRequest,
 ): Promise<GetDriveFolderResponse> => {
-  throw new Error("Not implemented");
+  const { folderID } = request;
+  const folder = await getDriveFolderByID(folderID);
+  return { folder };
 };

@@ -140,11 +140,15 @@ types:
     url: string
     name: string
 
-  DriveFolder:
-    parentFolderId: string
+  DriveFolderInfo:
     id: string
     name: string
-    items: DriveItem[] | DriveFolder[]
+
+  DriveFolder:
+    parentFolderId?: string
+    id: string
+    name: string
+    items: Array<DriveItem | DriveFolderInfo>
 
 endpoints:
   ping:
