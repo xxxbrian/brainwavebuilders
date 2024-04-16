@@ -31,6 +31,15 @@ export const CreateFolderPopup: React.FC<CreateFolderProps> = ({
     resetForm();
   }, [setIsOpen, resetForm]);
 
+  const onSubmit = useCallback(
+    async (e: React.FormEvent<HTMLFormElement>) => {
+      e.preventDefault();
+      e.stopPropagation();
+      createNewFolder(folderName);
+    },
+    [folderName, createNewFolder],
+  );
+
   return (
     <Dialog.Root open={isOpen} onOpenChange={setIsOpen}>
       <Dialog.Content className="bg-white px-10 py-6 rounded-3xl shadow-lg">
@@ -38,7 +47,7 @@ export const CreateFolderPopup: React.FC<CreateFolderProps> = ({
           Create New Folder
           <button onClick={handleClose}>×</button>
         </Dialog.Title>
-        <form onSubmit={() => createNewFolder(folderName)}>
+        <form onSubmit={onSubmit}>
           <div className="mb-4">
             <label
               htmlFor="folderName"
