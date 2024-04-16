@@ -7,6 +7,9 @@ services:
       - "3900:80"
     volumes:
       - .dev/nginx/default.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - client
+      - backend
 
   client:
     image: node:20
