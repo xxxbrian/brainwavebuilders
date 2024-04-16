@@ -43,6 +43,14 @@ build-prod:
 run-prod: build-prod
 	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml up
 
+run-prod-up: build-prod
+	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml up -d
+
+run-prod-down:
+	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml down
+
+run-prod-update: run-prod-down run-prod-up
+
 # Builds additional stuff (namely local db) from local yml.
 run-local: build-local
 	env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml build && \
