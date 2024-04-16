@@ -28,5 +28,3 @@ jobs:
         uses: docker/setup-buildx-action@v3
       - name: Build prod
         run: make build-prod
-      - name: Push to Docker Hub
-        run: docker compose push
