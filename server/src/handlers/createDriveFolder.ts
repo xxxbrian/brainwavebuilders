@@ -10,6 +10,6 @@ export const createDriveFolder = async (
   request: CreateDriveFolderRequest,
 ): Promise<CreateDriveFolderResponse> => {
   const { newFolderName, parentFolderID } = request;
-  const folderID = await newDriveFolder(newFolderName, parentFolderID);
-  return { folderID };
+  const folderInfo = await newDriveFolder(newFolderName, parentFolderID);
+  return { folderInfo };
 };

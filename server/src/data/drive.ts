@@ -5,14 +5,17 @@ import { DriveFolder } from "@/apis";
 export const newDriveFolder = async (
   name: string,
   parentFolderID: string,
-): Promise<string> => {
+): Promise<DriveFolderInfo> => {
   const folder = await db.folder.create({
     data: {
       name,
       parentID: parentFolderID,
     },
   });
-  return folder.id;
+  return {
+    id: folder.id,
+    name: folder.name,
+  };
 };
 
 export const addDriveFile = async (
