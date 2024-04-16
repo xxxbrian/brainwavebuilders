@@ -229,7 +229,21 @@ const DriveFolderPage: React.FC = () => {
           <ContextMenu.Separator />
           <ContextMenu.Item>Refresh</ContextMenu.Item>
           <ContextMenu.Separator />
-          <ContextMenu.Item>Back</ContextMenu.Item>
+          <ContextMenu.Item
+            onClick={() => {
+              if (folder?.parentFolderId) {
+                const newPath = pathName.replace(
+                  /\/[^\/]+$/,
+                  "/" + folder?.parentFolderId,
+                );
+                void router.push(newPath);
+                console.log("Navigate to folder", folder?.parentFolderId);
+              }
+            }}
+            disabled={!folder?.parentFolderId}
+          >
+            Back
+          </ContextMenu.Item>
         </ContextMenu.Content>
         <CreateFolderPopup
           isOpen={isCreateFolderPopup}
