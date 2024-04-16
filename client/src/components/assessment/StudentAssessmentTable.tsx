@@ -95,7 +95,7 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
       return "Completed";
     } else if (currentDate < start) {
       return "Not Start";
-    } else if (submissionId) {
+    } else if (submissionId!) {
       return "Completed";
     } else {
       return "In Progress";
