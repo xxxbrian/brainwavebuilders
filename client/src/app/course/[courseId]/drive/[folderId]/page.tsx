@@ -146,6 +146,9 @@ const DriveFolderPage: React.FC = () => {
                     <div>
                       <DriveCard
                         content={item}
+                        previewImg={
+                          isFolder(item) ? undefined : (item as DriveItem).url
+                        }
                         onClick={
                           isFolder(item)
                             ? (item: DriveFolderInfo) => {

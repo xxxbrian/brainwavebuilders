@@ -1,11 +1,13 @@
 import React, { useCallback } from "react";
 import { Card, Text, Box, Badge, Inset, Strong } from "@radix-ui/themes";
-import defaultCourseImg from "@/assets/unsw.png";
+import defaultFolder from "@/assets/folder_icon.png";
+import defaultFile from "@/assets/file_icon.png";
 import { DriveFolderInfo } from "@/backend";
 import { DriveItem } from "@/backend";
 
 export type DriveCardProps = {
   content: DriveFolderInfo | DriveItem;
+  previewImg?: string;
   onClick?: (content: DriveFolderInfo | DriveItem) => void;
 };
 
@@ -21,7 +23,11 @@ function getContentType(content: DriveFolderInfo | DriveItem): string {
   }
 }
 
-export const DriveCard: React.FC<DriveCardProps> = ({ content, onClick }) => {
+export const DriveCard: React.FC<DriveCardProps> = ({
+  content,
+  previewImg,
+  onClick,
+}) => {
   const { name } = content;
 
   const contentType = getContentType(content);
@@ -45,9 +51,20 @@ export const DriveCard: React.FC<DriveCardProps> = ({ content, onClick }) => {
         {/* Header Image */}
         <Inset clip="padding-box" side="top" pb="current">
           <img
-            src={defaultCourseImg.src}
-            alt="Folder"
-            className="object-cover"
+            src={previewImg ?? defaultFolder.src}
+            alt={name}
+            className={
+              contentType === "Folder"
+                ? "max-h-28 object-contain w-full"
+                : "max-h-28 object-cover w-full"
+            }
+            onError={(e) => {
+              const target = e.target as HTMLImageElement;
+              target.onerror = null; // reduce infinite loop
+              target.src = defaultFile.src; // set default image
+              target.style.objectFit = "contain";
+              target.style.width = "100%";
+            }}
           />
         </Inset>
 
