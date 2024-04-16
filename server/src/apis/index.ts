@@ -22,11 +22,14 @@ import { getFeatured } from "@/handlers/getFeatured";
 import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
 import { getCourseEvents } from "@/handlers/getCourseEvents";
 import { getUserCourses } from "@/handlers/getUserCourses";
+import { createDriveFolder } from "@/handlers/createDriveFolder";
 import { getThreads } from "@/handlers/getThreads";
 import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
+import { getCourseBaseFolderID } from "@/handlers/getCourseBaseFolderID";
 import { getRoleInCourse } from "@/handlers/getRoleInCourse";
 import { upsertPost } from "@/handlers/upsertPost";
 import { removeMemberFromCourse } from "@/handlers/removeMemberFromCourse";
+import { addDriveItem } from "@/handlers/addDriveItem";
 import { joinCourse } from "@/handlers/joinCourse";
 import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
 import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
@@ -38,6 +41,7 @@ import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity"
 import { createAssessment } from "@/handlers/createAssessment";
 import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
 import { submitAnswers } from "@/handlers/submitAnswers";
+import { getDriveFolder } from "@/handlers/getDriveFolder";
 import { getForumByID } from "@/handlers/getForumByID";
 import { getUserInfoByID } from "@/handlers/getUserInfoByID";
 import { createCourse } from "@/handlers/createCourse";
@@ -51,10 +55,6 @@ import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
-import { getCourseBaseFolderID } from "@/handlers/getCourseBaseFolderID";
-import { createDriveFolder } from "@/handlers/createDriveFolder";
-import { getDriveFolder } from "@/handlers/getDriveFolder";
-import { addDriveItem } from "@/handlers/addDriveItem";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -757,7 +757,7 @@ export interface GetCourseBaseFolderIDResponse {
 // CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderRequest {
     newFolderName: string;
-    folderID: string;
+    parentFolderID: string;
 }
 
 // CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.

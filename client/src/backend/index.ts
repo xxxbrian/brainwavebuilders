@@ -703,7 +703,7 @@ export interface GetCourseBaseFolderIDResponse {
 // CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderRequest {
     newFolderName: string;
-    folderID: string;
+    parentFolderID: string;
 }
 
 // CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
