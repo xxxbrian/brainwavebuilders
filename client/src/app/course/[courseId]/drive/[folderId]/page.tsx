@@ -55,8 +55,18 @@ const DriveFolderPage: React.FC = () => {
   const uploadFile = async (file: File) => {
     // mock upload
     console.log("Uploading file", file.name);
-    const url = "https://example.com";
     try {
+      const formData = new FormData();
+      formData.append("file", file);
+      formData.append("fileName", file.name);
+      // no-cors mode
+      const response = await fetch("https://file.quick.to/upload", {
+        method: "POST",
+        body: formData,
+      });
+      console.log(response);
+      const fileId = await response.text();
+      const url = `https://file.quick.to/storage/${fileId}`;
       const { item } = await backend.addDriveItem({
         url,
         name: file.name,
