@@ -58,3 +58,13 @@ Made Retro B report
 Tracked the progress of all team members
 Hosted weekly meeting
 Allocated all user stories and tasks for the team
+
+Week 9:
+designed password reset email
+implemented password change at the profile page level
+added user dropout menu
+added log-out functionality
+implemented calendar backend and connected it with frontend
+worked on the overview section and functionalities section of project report
+Tracked the progress of all team members
+Hosted weekly meeting
