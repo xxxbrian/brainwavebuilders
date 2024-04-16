@@ -135,6 +135,17 @@ types:
     classType: string
     classLink: string
 
+  DriveItem:
+    id: string
+    url: string
+    name: string
+
+  DriveFolder:
+    parentFolderId: string
+    id: string
+    name: string
+    items: DriveItem[] | DriveFolder[]
+
 endpoints:
   ping:
     request:
@@ -487,4 +498,34 @@ endpoints:
     request:
       scheduleClass: ScheduleClass
     response:
+    service: typescript
+
+  getCourseBaseFolderID:
+    request:
+      courseID: string
+    response:
+      folderID: string
+    service: typescript
+
+  createDriveFolder:
+    request:
+      newFolderName: string
+      folderID: string
+    response:
+    service: typescript
+
+  getDriveFolder:
+    request:
+      folderID: string
+    response:
+      folder: DriveFolder
+    service: typescript
+
+  addDriveItem:
+    request:
+      url: string
+      name: string
+      folderID: string
+    response:
+      item: DriveItem
     service: typescript

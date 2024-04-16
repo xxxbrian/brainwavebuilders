@@ -51,6 +51,10 @@ import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
+import { getCourseBaseFolderID } from "@/handlers/getCourseBaseFolderID";
+import { createDriveFolder } from "@/handlers/createDriveFolder";
+import { getDriveFolder } from "@/handlers/getDriveFolder";
+import { addDriveItem } from "@/handlers/addDriveItem";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -201,6 +205,19 @@ export interface ScheduleClass {
     startDate: string;
     classType: string;
     classLink: string;
+}
+
+export interface DriveItem {
+    id: string;
+    url: string;
+    name: string;
+}
+
+export interface DriveFolder {
+    parentFolderId: string;
+    id: string;
+    name: string;
+    items: DriveFolder[] | DriveItem[];
 }
 
 //////////////////////////////
@@ -725,6 +742,49 @@ export interface AddScheduleClassRequest {
 // AddScheduleClassResponse is the response that is sent to the addScheduleClass endpoint.
 export interface AddScheduleClassResponse {
 
+}
+
+// GetCourseBaseFolderIDRequest is the request that is sent to the getCourseBaseFolderID endpoint.
+export interface GetCourseBaseFolderIDRequest {
+    courseID: string;
+}
+
+// GetCourseBaseFolderIDResponse is the response that is sent to the getCourseBaseFolderID endpoint.
+export interface GetCourseBaseFolderIDResponse {
+    folderID: string;
+}
+
+// CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
+export interface CreateDriveFolderRequest {
+    newFolderName: string;
+    folderID: string;
+}
+
+// CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
+export interface CreateDriveFolderResponse {
+
+}
+
+// GetDriveFolderRequest is the request that is sent to the getDriveFolder endpoint.
+export interface GetDriveFolderRequest {
+    folderID: string;
+}
+
+// GetDriveFolderResponse is the response that is sent to the getDriveFolder endpoint.
+export interface GetDriveFolderResponse {
+    folder: DriveFolder;
+}
+
+// AddDriveItemRequest is the request that is sent to the addDriveItem endpoint.
+export interface AddDriveItemRequest {
+    url: string;
+    name: string;
+    folderID: string;
+}
+
+// AddDriveItemResponse is the response that is sent to the addDriveItem endpoint.
+export interface AddDriveItemResponse {
+    item: DriveItem;
 }
 
 
@@ -1819,6 +1879,94 @@ app.post('/api/addScheduleClass', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request addScheduleClass with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getCourseBaseFolderID is the endpoint handler for the getCourseBaseFolderID endpoint.
+// It wraps around the function at @/handlers/getCourseBaseFolderID.
+app.post('/api/getCourseBaseFolderID', async (req, res) => {
+    const request: GetCourseBaseFolderIDRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetCourseBaseFolderIDResponse = await getCourseBaseFolderID(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getCourseBaseFolderID with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createDriveFolder is the endpoint handler for the createDriveFolder endpoint.
+// It wraps around the function at @/handlers/createDriveFolder.
+app.post('/api/createDriveFolder', async (req, res) => {
+    const request: CreateDriveFolderRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: CreateDriveFolderResponse = await createDriveFolder(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createDriveFolder with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getDriveFolder is the endpoint handler for the getDriveFolder endpoint.
+// It wraps around the function at @/handlers/getDriveFolder.
+app.post('/api/getDriveFolder', async (req, res) => {
+    const request: GetDriveFolderRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetDriveFolderResponse = await getDriveFolder(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getDriveFolder with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// addDriveItem is the endpoint handler for the addDriveItem endpoint.
+// It wraps around the function at @/handlers/addDriveItem.
+app.post('/api/addDriveItem', async (req, res) => {
+    const request: AddDriveItemRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: AddDriveItemResponse = await addDriveItem(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request addDriveItem with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
