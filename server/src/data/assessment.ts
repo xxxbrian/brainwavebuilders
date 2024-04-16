@@ -98,7 +98,7 @@ export const submitAnswers = async (
         assessmentID: data.assessmentId,
         studentID: user.id,
         answers: JSON.stringify(data.answers),
-        submittedAt: new Date(),
+        submittedAt: new Date(new Date().getTime() + 10 * 60 * 60 * 1000),
         grade: 0,
         isMarked: false,
       },
