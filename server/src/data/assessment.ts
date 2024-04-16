@@ -98,15 +98,21 @@ export const submitAnswers = async (
         assessmentID: data.assessmentId,
         studentID: user.id,
         answers: JSON.stringify(data.answers),
-        submittedAt: new Date(new Date().getTime() + 10 * 60 * 60 * 1000),
+        submittedAt: new Date(),
         grade: 0,
+        isMarked: false,
       },
     });
 
     const studentAnswers: StudentAnswer[] = data.answers;
     let totalScore = 0;
+    let hasShortAnswer = false;
 
     assessment.questions.forEach((question) => {
+      if (question.type === "short_answer") {
+        hasShortAnswer = true;
+      }
+
       const studentAnswerEntry = studentAnswers.find(
         (sa) => sa.questionId === question.id,
       );
@@ -120,15 +126,13 @@ export const submitAnswers = async (
       }
     });
 
-    if (assessment.questions.some((e) => e.type !== "short_answer")) {
-      const isMarked = true;
-    }
+    const isMarked = !hasShortAnswer;
 
     const updatedSubmission = await db.submission.update({
       where: { id: submission.id },
       data: {
         grade: totalScore,
-        isMarked: true,
+        isMarked: isMarked,
       },
     });
 
