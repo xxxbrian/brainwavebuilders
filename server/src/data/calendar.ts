@@ -15,7 +15,7 @@ function formatTime(date: Date): string {
   return `${hours}:${minutesStr} ${ampm}`;
 }
 
-export const fetchAllAssessmentsEventByCourse = async (
+export const fetchAllEventByCourse = async (
   courseId: string,
 ): Promise<Record<string, Event[]>> => {
   const course = await db.course.findUnique({
@@ -28,13 +28,40 @@ export const fetchAllAssessmentsEventByCourse = async (
     throw new APIError("Course not found", "COURSE_NOT_FOUND");
   }
 
+  const events: Record<string, Event[]> = {};
+
+  const classes = await db.scheduleClass.findMany({
+    where: {
+      courseID: courseId,
+    },
+    include: {
+      course: {
+        select: {
+          name: true, // Only include the name field from the Course model
+        },
+      },
+    },
+  });
+
+  for (const scheduleClass of classes) {
+    const key = scheduleClass.startDate.toISOString().split("T")[0]!;
+    if (!events[key]) {
+      events[key] = [];
+    }
+    events[key]?.push({
+      name: `${scheduleClass.course.name} ${scheduleClass.type} class`,
+      time: formatTime(scheduleClass.startDate),
+      type: scheduleClass.type,
+      url: scheduleClass.url,
+    });
+  }
+
   const assessments = await db.assessment.findMany({
     where: {
       courseID: courseId,
     },
   });
 
-  const events: Record<string, Event[]> = {};
   for (const assessment of assessments) {
     if (!assessment.dueDate) {
       continue;
@@ -47,12 +74,17 @@ export const fetchAllAssessmentsEventByCourse = async (
       name: `${assessment.title} is due (${course.name})`,
       time: formatTime(assessment.dueDate),
       type: assessment.type,
+      url:
+        assessment.type === "exam"
+          ? `/courses/${courseId}/exams/${assessment.id}`
+          : `/courses/${course.id}/assignment/${assessment.id}`,
     });
   }
+
   return events;
 };
 
-export const fetchAllAssessmentsEventByUser = async (
+export const fetchAllEventByUser = async (
   userId: string,
 ): Promise<Record<string, Event[]>> => {
   const courses = await db.courseMembers.findMany({
@@ -64,9 +96,7 @@ export const fetchAllAssessmentsEventByUser = async (
 
   const events: Record<string, Event[]> = {};
   for (const course of courses) {
-    const courseEvents = await fetchAllAssessmentsEventByCourse(
-      course.courseID,
-    );
+    const courseEvents = await fetchAllEventByCourse(course.courseID);
     for (const key in courseEvents) {
       if (!events[key]) {
         events[key] = [];

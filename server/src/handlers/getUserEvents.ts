@@ -1,6 +1,6 @@
 import { GetUserEventsRequest, GetUserEventsResponse } from "@/apis";
 import { useCurrentUser } from "@/context/auth";
-import { fetchAllAssessmentsEventByUser } from "@/data/calendar";
+import { fetchAllEventByUser } from "@/data/calendar";
 
 // getUserEvents implements the getUserEvents endpoint.
 // This code has been automatically generated.
@@ -11,7 +11,7 @@ export const getUserEvents = async (
   request: GetUserEventsRequest,
 ): Promise<GetUserEventsResponse> => {
   let user = useCurrentUser(ctx);
-  let events = await fetchAllAssessmentsEventByUser(user?.id!);
+  let events = await fetchAllEventByUser(user?.id!);
   return {
     events,
   };

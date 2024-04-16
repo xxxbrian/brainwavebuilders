@@ -141,6 +141,7 @@ export interface Event {
     name: string;
     time: string;
     type: string;
+    url: string;
 }
 
 export interface ScheduleClass {

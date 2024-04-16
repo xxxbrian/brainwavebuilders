@@ -125,6 +125,7 @@ types:
     name: string
     time: string
     type: string
+    url: string
 
   ScheduleClass:
     courseID: string
