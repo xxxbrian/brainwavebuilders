@@ -66,6 +66,7 @@ model Course {
     courseMembers     CourseMembers[]     @relation("CourseMemberCourse")
     forums            Forum[]             @relation("courseForums")
     schedule          ScheduleClass[]     @relation("ScheduleClass")
+    book              CourseBook[]
 }
 
 model ScheduleClass {
@@ -133,17 +134,17 @@ model Question {
 }
 
 model Submission {
-    id                     String     @id @default(uuid())
-    assessmentID           String
-    studentID              String
-    submittedAt            DateTime?
-    assignmentContent      Json?
-    answers                Json? // For exam submissions: student's answers
-    grade                  Int?
-    feedback               String?
-    assessment             Assessment @relation("assessmentSubmissions", fields: [assessmentID], references: [id])
-    student                User       @relation("studentSubmissions", fields: [studentID], references: [id])
-    isMarked               Boolean    @default(false)
+    id                String     @id @default(uuid())
+    assessmentID      String
+    studentID         String
+    submittedAt       DateTime?
+    assignmentContent Json?
+    answers           Json? // For exam submissions: student's answers
+    grade             Int?
+    feedback          String?
+    assessment        Assessment @relation("assessmentSubmissions", fields: [assessmentID], references: [id])
+    student           User       @relation("studentSubmissions", fields: [studentID], references: [id])
+    isMarked          Boolean    @default(false)
 }
 
 model Forum {
@@ -204,4 +205,17 @@ model PostLikes {
     @@id([postID, userID])
     @@unique([postID, userID])
     @@index([postID, userID])
+}
+
+model CourseBook {
+    id        String       @id @default(uuid())
+    title     String
+    parentID  String?
+    content   Json?
+    courseID  String
+    course    Course       @relation(fields: [courseID], references: [id])
+    parent    CourseBook?  @relation("CourseBookChildren", fields: [parentID], references: [id], onDelete: Cascade, onUpdate: Cascade)
+    children  CourseBook[] @relation("CourseBookChildren")
+    createdAt DateTime     @default(now())
+    updatedAt DateTime     @updatedAt
 }

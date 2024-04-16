@@ -17,6 +17,7 @@ import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { WithStudentRole } from "@/contexts/CourseRoleContext";
 import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTable";
 import { ScheduleCourseForm } from "@/components/course/ScheduleCourseForm";
+import { BiBook } from "react-icons/bi";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -180,6 +181,10 @@ const CoursesPage: React.FC = ({}) => {
     router.push(`${pathName}/members`);
   }, [pathName, router]);
 
+  const onClickCourseBooks = useCallback(() => {
+    router.push(`${pathName}/books`);
+  }, [pathName, router]);
+
   return (
     <div className="flex flex-col space-y-8 px-4 py-4">
       <div
@@ -226,6 +231,11 @@ const CoursesPage: React.FC = ({}) => {
                   onClick={onClickManageMembers}
                 />
               </WithTeacherRole>
+              <ApplicationIcon
+                icon={<BiBook />}
+                title="Course Books"
+                onClick={onClickCourseBooks}
+              />
             </div>
           </div>
         </div>
