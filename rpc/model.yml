@@ -135,6 +135,21 @@ types:
     classType: string
     classLink: string
 
+  DriveItem:
+    id: string
+    url: string
+    name: string
+
+  DriveFolderInfo:
+    id: string
+    name: string
+
+  DriveFolder:
+    parentFolderId?: string
+    id: string
+    name: string
+    items: Array<DriveItem | DriveFolderInfo>
+
   CourseBook:
     id: string
     title: string
@@ -497,6 +512,30 @@ endpoints:
     request:
       scheduleClass: ScheduleClass
     response:
+    service: typescript
+
+  createDriveFolder:
+    request:
+      newFolderName: string
+      parentFolderID: string
+    response:
+      folderInfo: DriveFolderInfo
+    service: typescript
+
+  getDriveFolder:
+    request:
+      folderID: string
+    response:
+      folder: DriveFolder
+    service: typescript
+
+  addDriveItem:
+    request:
+      url: string
+      name: string
+      folderID: string
+    response:
+      item: DriveItem
     service: typescript
 
   getCourseBook:

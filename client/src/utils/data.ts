@@ -1,5 +1,6 @@
 import { type Event } from "@/components/calendar/Calendar";
 import { Assessment } from "@/backend";
+import { DriveItem } from "@/backend";
 
 export const quizData: Assessment = {
   id: "1",
@@ -167,4 +168,10 @@ export const examSubmission = {
     question3: "test",
   },
   grade: 0,
+};
+
+export const fakeDriveItem: DriveItem = {
+  id: "1",
+  url: "https://example.com/file1",
+  name: "Example File 1",
 };

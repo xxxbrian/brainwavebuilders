@@ -83,6 +83,14 @@ export const createCourse = async ({
     },
   });
 
+  // create drive folder for course
+  await db.folder.create({
+    data: {
+      name: course.name,
+      id: course.id,
+    },
+  });
+
   return course;
 };
 

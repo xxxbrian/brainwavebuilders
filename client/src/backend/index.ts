@@ -153,6 +153,24 @@ export interface ScheduleClass {
     classLink: string;
 }
 
+export interface DriveItem {
+    id: string;
+    url: string;
+    name: string;
+}
+
+export interface DriveFolderInfo {
+    id: string;
+    name: string;
+}
+
+export interface DriveFolder {
+    parentFolderId?: string;
+    id: string;
+    name: string;
+    items: (DriveFolderInfo | DriveItem)[];
+}
+
 export interface CourseBook {
     id: string;
     title: string;
@@ -686,6 +704,39 @@ export interface AddScheduleClassRequest {
 // AddScheduleClassResponse is the response that is sent to the addScheduleClass endpoint.
 export interface AddScheduleClassResponse {
 
+}
+
+// CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
+export interface CreateDriveFolderRequest {
+    newFolderName: string;
+    parentFolderID: string;
+}
+
+// CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
+export interface CreateDriveFolderResponse {
+    folderInfo: DriveFolderInfo;
+}
+
+// GetDriveFolderRequest is the request that is sent to the getDriveFolder endpoint.
+export interface GetDriveFolderRequest {
+    folderID: string;
+}
+
+// GetDriveFolderResponse is the response that is sent to the getDriveFolder endpoint.
+export interface GetDriveFolderResponse {
+    folder: DriveFolder;
+}
+
+// AddDriveItemRequest is the request that is sent to the addDriveItem endpoint.
+export interface AddDriveItemRequest {
+    url: string;
+    name: string;
+    folderID: string;
+}
+
+// AddDriveItemResponse is the response that is sent to the addDriveItem endpoint.
+export interface AddDriveItemResponse {
+    item: DriveItem;
 }
 
 // GetCourseBookRequest is the request that is sent to the getCourseBook endpoint.
@@ -2184,6 +2235,93 @@ export class BrainwavesClient {
         }
 
         return json as AddScheduleClassResponse;
+    }
+
+
+
+    async createDriveFolder(request: CreateDriveFolderRequest): Promise<CreateDriveFolderResponse> {
+        const response = await fetch(`${this.base_url}/createDriveFolder`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as CreateDriveFolderResponse;
+    }
+
+
+
+    async getDriveFolder(request: GetDriveFolderRequest): Promise<GetDriveFolderResponse> {
+        const response = await fetch(`${this.base_url}/getDriveFolder`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetDriveFolderResponse;
+    }
+
+
+
+    async addDriveItem(request: AddDriveItemRequest): Promise<AddDriveItemResponse> {
+        const response = await fetch(`${this.base_url}/addDriveItem`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as AddDriveItemResponse;
     }
 
 

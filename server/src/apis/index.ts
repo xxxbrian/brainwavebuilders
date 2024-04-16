@@ -12,11 +12,13 @@ import { forgotPassword } from "@/handlers/forgotPassword";
 import { createBook } from "@/handlers/createBook";
 import { addScheduleClass } from "@/handlers/addScheduleClass";
 import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { updateBook } from "@/handlers/updateBook";
 import { login } from "@/handlers/login";
 import { fetchAssessments } from "@/handlers/fetchAssessments";
 import { resetPassword } from "@/handlers/resetPassword";
 import { toggleLikePost } from "@/handlers/toggleLikePost";
 import { getCourses } from "@/handlers/getCourses";
+import { deleteBook } from "@/handlers/deleteBook";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
@@ -24,11 +26,13 @@ import { getCourseBook } from "@/handlers/getCourseBook";
 import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
 import { getCourseEvents } from "@/handlers/getCourseEvents";
 import { getUserCourses } from "@/handlers/getUserCourses";
+import { createDriveFolder } from "@/handlers/createDriveFolder";
 import { getThreads } from "@/handlers/getThreads";
 import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
 import { getRoleInCourse } from "@/handlers/getRoleInCourse";
 import { upsertPost } from "@/handlers/upsertPost";
 import { removeMemberFromCourse } from "@/handlers/removeMemberFromCourse";
+import { addDriveItem } from "@/handlers/addDriveItem";
 import { joinCourse } from "@/handlers/joinCourse";
 import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
 import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
@@ -41,6 +45,7 @@ import { createAssessment } from "@/handlers/createAssessment";
 import { getBooksByCourse } from "@/handlers/getBooksByCourse";
 import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
 import { submitAnswers } from "@/handlers/submitAnswers";
+import { getDriveFolder } from "@/handlers/getDriveFolder";
 import { getForumByID } from "@/handlers/getForumByID";
 import { getUserInfoByID } from "@/handlers/getUserInfoByID";
 import { createCourse } from "@/handlers/createCourse";
@@ -54,8 +59,6 @@ import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
-import { updateBook } from "@/handlers/updateBook";
-import { deleteBook } from "@/handlers/deleteBook";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -206,6 +209,24 @@ export interface ScheduleClass {
     startDate: string;
     classType: string;
     classLink: string;
+}
+
+export interface DriveItem {
+    id: string;
+    url: string;
+    name: string;
+}
+
+export interface DriveFolderInfo {
+    id: string;
+    name: string;
+}
+
+export interface DriveFolder {
+    parentFolderId?: string;
+    id: string;
+    name: string;
+    items: (DriveFolderInfo | DriveItem)[];
 }
 
 export interface CourseBook {
@@ -741,6 +762,39 @@ export interface AddScheduleClassRequest {
 // AddScheduleClassResponse is the response that is sent to the addScheduleClass endpoint.
 export interface AddScheduleClassResponse {
 
+}
+
+// CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
+export interface CreateDriveFolderRequest {
+    newFolderName: string;
+    parentFolderID: string;
+}
+
+// CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
+export interface CreateDriveFolderResponse {
+    folderInfo: DriveFolderInfo;
+}
+
+// GetDriveFolderRequest is the request that is sent to the getDriveFolder endpoint.
+export interface GetDriveFolderRequest {
+    folderID: string;
+}
+
+// GetDriveFolderResponse is the response that is sent to the getDriveFolder endpoint.
+export interface GetDriveFolderResponse {
+    folder: DriveFolder;
+}
+
+// AddDriveItemRequest is the request that is sent to the addDriveItem endpoint.
+export interface AddDriveItemRequest {
+    url: string;
+    name: string;
+    folderID: string;
+}
+
+// AddDriveItemResponse is the response that is sent to the addDriveItem endpoint.
+export interface AddDriveItemResponse {
+    item: DriveItem;
 }
 
 // GetCourseBookRequest is the request that is sent to the getCourseBook endpoint.
@@ -1890,6 +1944,72 @@ app.post('/api/addScheduleClass', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request addScheduleClass with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createDriveFolder is the endpoint handler for the createDriveFolder endpoint.
+// It wraps around the function at @/handlers/createDriveFolder.
+app.post('/api/createDriveFolder', async (req, res) => {
+    const request: CreateDriveFolderRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: CreateDriveFolderResponse = await createDriveFolder(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createDriveFolder with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getDriveFolder is the endpoint handler for the getDriveFolder endpoint.
+// It wraps around the function at @/handlers/getDriveFolder.
+app.post('/api/getDriveFolder', async (req, res) => {
+    const request: GetDriveFolderRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetDriveFolderResponse = await getDriveFolder(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getDriveFolder with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// addDriveItem is the endpoint handler for the addDriveItem endpoint.
+// It wraps around the function at @/handlers/addDriveItem.
+app.post('/api/addDriveItem', async (req, res) => {
+    const request: AddDriveItemRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: AddDriveItemResponse = await addDriveItem(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request addDriveItem with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
