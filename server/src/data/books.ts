@@ -1,5 +1,5 @@
 import { db } from "@/globals";
-import { CourseBook, Prisma } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 
 export type CourseBookWithCourseAndTree = Prisma.CourseBookGetPayload<{
   include: {
@@ -50,6 +50,9 @@ export const getBookByIDs = async (
       parent: true,
       children: true,
     },
+    orderBy: {
+      createdAt: "asc",
+    },
   });
 };
 
@@ -70,6 +73,9 @@ export const getBookByParentIDs = async (
       },
       parent: true,
       children: true,
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
 };
@@ -95,6 +101,9 @@ export const getBookByChildIDs = async (
       },
       parent: true,
       children: true,
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
 };
@@ -123,6 +132,9 @@ export const getBooksByCourseID = async (
       },
       parent: true,
       children: true,
+    },
+    orderBy: {
+      createdAt: "asc",
     },
   });
 };
