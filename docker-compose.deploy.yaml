@@ -1,9 +1,9 @@
 services:
   nginx:
-    image: brainwaves-nginx:latest
+    image: ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-nginx:latest
 
   backend:
-    image: brainwaves-backend:latest
+    image: ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-backend:latest
 
   client:
-    image: brainwaves-client:latest
+    image: ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-client:latest
