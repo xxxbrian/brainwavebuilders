@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
@@ -35,24 +35,19 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
     return `${year}-${month}-${day}-${hours}:${minutes}`;
   };
 
-  const fetchAssessmentDetails = useCallback(async () => {
-    const pathSegments = pathName.split("/");
-    const assessmentId = pathSegments[pathSegments.length - 1];
-    if (assessmentId) {
+  useEffect(() => {
+    const fetchAssessmentDetails = async () => {
       try {
         const details = await backend.fetchAssessmentDetailsTeacher({
           assessmentId: assessment.id,
         });
         setAssessmentDetails(details.assessment);
-        console.log("Assessment Details:", details.assessment); // Logging the assessment details
+        console.log("Assessment Details:", details.assessment);
       } catch (error) {
         console.error("Failed to fetch assessment details:", error);
       }
-    }
-  }, [backend, pathName]);
+    };
 
-  useEffect(() => {
-    void fetchAssessmentDetails();
     const fetchStudentDetails = async () => {
       const studentInfoPromises = submissions.map((submission) =>
         backend
@@ -84,7 +79,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
 
     void fetchAssessmentDetails();
     void fetchStudentDetails();
-  }, [submissions, backend, fetchAssessmentDetails]);
+  }, [submissions, backend, setAssessmentDetails, assessment.id]);
 
   if (!submissions || !assessmentDetails)
     return <div>Loading assessment details...</div>;

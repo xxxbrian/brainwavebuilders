@@ -70,11 +70,22 @@ const CreateExamPage: React.FC = () => {
       if (
         !question.title.trim() ||
         !question.type.trim() ||
-        question.options.some((option: string) => !option.trim()) ||
         !question.answer?.trim()
       ) {
         setErrorMessage(
           "All fields within a question must be filled out properly.",
+        );
+        setIsDialogOpen(true);
+        return;
+      }
+
+      // specifically check the options if the type is 'MCQ'
+      if (
+        question.type.trim() === "MCQ" &&
+        question.options.some((option: string) => !option.trim())
+      ) {
+        setErrorMessage(
+          "All options must be filled out properly for SAQ type questions.",
         );
         setIsDialogOpen(true);
         return;
