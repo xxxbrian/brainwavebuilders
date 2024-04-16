@@ -113,6 +113,7 @@ export const getBooksByCourseID = async (
   return db.courseBook.findMany({
     where: {
       courseID,
+      parentID: null,
     },
     include: {
       course: {
