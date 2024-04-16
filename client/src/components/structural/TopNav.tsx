@@ -19,7 +19,7 @@ interface Props extends PropsWithChildren {
 const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
   const router = useRouter();
 
-  const onClickUserAvator = useCallback(() => {
+  const onClickUserAvatar = useCallback(() => {
     router.push("/profile");
   }, [router]);
 
@@ -38,15 +38,15 @@ const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
         </div>
       </DropdownMenu.Trigger>
       <DropdownMenu.Content variant="soft" size="2">
-        <DropdownMenu.Item>
-          <div onClick={onClickUserAvator}>Profile</div>
+        <DropdownMenu.Item onClick={onClickUserAvatar}>
+          <div>Profile</div>
         </DropdownMenu.Item>
         <DropdownMenu.Separator />
         <DropdownMenu.Item>Invite Friends</DropdownMenu.Item>
         <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item color="red">
-          <div onClick={onClickLogOut}>Log out</div>
+        <DropdownMenu.Item color="red" onClick={onClickLogOut}>
+          <div>Log out</div>
         </DropdownMenu.Item>
       </DropdownMenu.Content>
     </DropdownMenu.Root>
