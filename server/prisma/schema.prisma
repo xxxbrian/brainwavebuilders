@@ -222,6 +222,7 @@ model Files {
     url       String
     folderId  String
     folder    Folder   @relation("folderFiles", fields: [folderId], references: [id])
+}
 
 model CourseBook {
     id        String       @id @default(uuid())
