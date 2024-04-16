@@ -7,4 +7,4 @@ RUN yarn build
 WORKDIR /app/server/dist
 COPY .dev/build/server.entrypoint.sh ./entrypoint.sh
 
-ENTRYPOINT [ "bash", "-c", "entrypoint.sh" ]
+ENTRYPOINT [ "bash", "-c", "./entrypoint.sh" ]
