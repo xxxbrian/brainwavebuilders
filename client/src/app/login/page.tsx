@@ -23,7 +23,7 @@ const kEmailError =
 
 const kAccountNotFoundError = "Account not found. Please check your email.";
 
-export const Login: React.FC<Props> = () => {
+const Login: React.FC<Props> = () => {
   const user = useCurrentUser();
   const router = useRouter();
 

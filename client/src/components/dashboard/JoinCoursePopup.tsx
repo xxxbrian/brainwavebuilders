@@ -95,7 +95,9 @@ export const JoinCourseButton: React.FC = () => {
                 value={code[index]}
                 onChange={(e) => handleChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                ref={(el) => (inputsRef.current[index] = el)}
+                ref={(el) => {
+                  inputsRef.current[index] = el;
+                }}
               />
             ))}
           </div>

@@ -23,7 +23,7 @@ interface ApplicationProps {
   onClick?: (title: string) => void;
 }
 
-export const ApplicationIcon: React.FC<ApplicationProps> = ({
+const ApplicationIcon: React.FC<ApplicationProps> = ({
   icon,
   title,
   onClick,
@@ -45,7 +45,7 @@ export const ApplicationIcon: React.FC<ApplicationProps> = ({
   );
 };
 
-export const CoursesPage: React.FC = ({}) => {
+const CoursesPage: React.FC = ({}) => {
   const router = useRouter();
 
   const course = useCourse();
