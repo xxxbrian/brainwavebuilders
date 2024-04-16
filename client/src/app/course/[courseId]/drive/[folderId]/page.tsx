@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef } from "react";
 import { ContextMenu, Button, IconButton, Text } from "@radix-ui/themes";
 import { MdDriveFolderUpload } from "react-icons/md";
 import { MdArrowBackIos } from "react-icons/md";
@@ -11,7 +11,12 @@ import { DriveItem, DriveFolderInfo, DriveFolder } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import { useParams } from "next/navigation";
 
-type DriveItems = (DriveItem | DriveFolderInfo)[];
+type DriveDirEnt = DriveItem | DriveFolderInfo;
+type DriveItems = DriveDirEnt[];
+
+const isFolder = (dirent: DriveDirEnt): boolean => {
+  return !Object.prototype.hasOwnProperty.call(dirent, "url");
+};
 
 const DriveFolderPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -54,6 +59,11 @@ const DriveFolderPage: React.FC = () => {
       console.error(error);
     }
   };
+
+  const download = useCallback(async (url: string) => {
+    // let browser handle download
+    window.open(url);
+  }, []);
 
   return (
     <div className="flex flex-col space-y-10 p-10 h-full">
@@ -99,10 +109,34 @@ const DriveFolderPage: React.FC = () => {
             <div className="grid grid-cols-5 gap-10">
               {items.map((item, index) => (
                 <ContextMenu.Root key={index}>
-                  <DriveCard content={item} />
+                  <ContextMenu.Trigger>
+                    <div>
+                      <DriveCard
+                        content={item}
+                        onClick={
+                          isFolder(item)
+                            ? (item: DriveFolderInfo) => {
+                                // navigate to folder
+                                console.log("Navigate to folder", item.id);
+                              }
+                            : undefined
+                        }
+                      />
+                    </div>
+                  </ContextMenu.Trigger>
                   <ContextMenu.Content size="2">
-                    <ContextMenu.Item>Open</ContextMenu.Item>
-                    <ContextMenu.Item>Download</ContextMenu.Item>
+                    <ContextMenu.Item disabled={!isFolder(item)}>
+                      Open
+                    </ContextMenu.Item>
+                    <ContextMenu.Item
+                      disabled={isFolder(item)}
+                      onClick={async () => {
+                        if (isFolder(item)) return;
+                        await download((item as DriveItem).url);
+                      }}
+                    >
+                      Download
+                    </ContextMenu.Item>
                     <ContextMenu.Separator />
                     <ContextMenu.Item>Copy Link</ContextMenu.Item>
                     <ContextMenu.Separator />
