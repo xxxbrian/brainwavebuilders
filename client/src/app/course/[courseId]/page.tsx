@@ -6,6 +6,7 @@ import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
 import { MdSchedule, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { FaFileUpload } from "react-icons/fa";
 import { useCourse } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
@@ -17,6 +18,7 @@ import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { WithStudentRole } from "@/contexts/CourseRoleContext";
 import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTable";
 import { ScheduleCourseForm } from "@/components/course/ScheduleCourseForm";
+import App from "next/app";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -76,6 +78,10 @@ const CoursesPage: React.FC = ({}) => {
   const onClickForum = useCallback(async () => {
     router.push(`${pathName}/forum`);
   }, [pathName, router]);
+
+  const onClickDrive = useCallback(async () => {
+    router.push(`${pathName}/drive/${course.id}`);
+  }, [pathName, router, course.id]);
 
   interface AssignmentProps {
     id: string;
@@ -226,6 +232,12 @@ const CoursesPage: React.FC = ({}) => {
                   onClick={onClickManageMembers}
                 />
               </WithTeacherRole>
+
+              <ApplicationIcon
+                icon={<FaFileUpload />}
+                title="File Drive"
+                onClick={onClickDrive}
+              />
             </div>
           </div>
         </div>
