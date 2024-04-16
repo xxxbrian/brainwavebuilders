@@ -1,0 +1,9 @@
+services:
+  nginx:
+    image: brainwaves-nginx:latest
+
+  backend:
+    image: brainwaves-backend:latest
+
+  client:
+    image: brainwaves-client:latest
