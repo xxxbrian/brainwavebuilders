@@ -63,6 +63,12 @@ export const TopNav = ({
 }: Props) => {
   const user = useCurrentUser();
 
+  const router = useRouter();
+
+  const onClickLogo = useCallback(() => {
+    void router.push("/");
+  }, [router]);
+
   return (
     <div
       className={`border-b py-4 text-center left-0 top-0 w-full backdrop-blur-md bg-white bg-opacity-80 flex px-4 items-center ${className}`}
@@ -79,7 +85,11 @@ export const TopNav = ({
               <AiOutlineMenu className="text-2xl" stroke="2" />
             </div>
           )}
-          <Logo size="xs"></Logo>
+          <Logo
+            size="xs"
+            onClick={onClickLogo}
+            className="cursor-pointer hover:bg-gray-100 rounded-md"
+          ></Logo>
         </div>
         {left}
       </div>
