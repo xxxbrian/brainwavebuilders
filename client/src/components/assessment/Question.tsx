@@ -66,6 +66,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
           id="title"
           type="text"
           value={title}
+          required
           onChange={handleTitleChange}
           placeholder="Question Title"
           className="p-2 border flex-grow mr-4 border-blue-300 rounded-md focus:outline-none focus:border-blue-500"
@@ -85,6 +86,7 @@ const QuestionComponent: React.FC<QuestionProps> = ({
           className="p-2 border border-blue-300 rounded-md focus:outline-none focus:border-blue-500"
           placeholder="Sample Answer"
           value={answer}
+          required
           onChange={(e) => handleAnswerChange(e.target.value)}
           rows={3}
         />
@@ -97,12 +99,14 @@ const QuestionComponent: React.FC<QuestionProps> = ({
                 name={id}
                 checked={answer === option}
                 onChange={() => handleAnswerChange(option)}
+                required
                 className="form-radio h-5 w-5"
               />
               <input
                 type="text"
                 value={option}
                 onChange={(e) => handleOptionChange(index, e.target.value)}
+                required
                 className="p-2 border-b border-blue-300 focus:outline-none focus:border-blue-500 flex-grow"
                 placeholder={`MCQ option ${index + 1}`}
               />
