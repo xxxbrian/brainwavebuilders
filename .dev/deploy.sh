@@ -3,5 +3,5 @@
 set -ex
 
 cd $(dirname $0)/../
-docker compose -f docker-compose.deploy.yaml pull
-docker compose -f docker-compose.deploy.yaml up -d
+env $(cat .dev/secrets/production.env) docker compose -f docker-compose.deploy.yaml pull
+env $(cat .dev/secrets/production.env) docker compose -f docker-compose.deploy.yaml up -d
