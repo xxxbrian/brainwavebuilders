@@ -751,7 +751,7 @@ export interface CreateDriveFolderRequest {
 
 // CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderResponse {
-    folder: DriveFolder;
+    folderID: string;
 }
 
 // GetDriveFolderRequest is the request that is sent to the getDriveFolder endpoint.

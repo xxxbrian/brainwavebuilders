@@ -1,4 +1,5 @@
 import { CreateDriveFolderRequest, CreateDriveFolderResponse } from "@/apis";
+import { newDriveFolder } from "@/data/drive";
 
 // createDriveFolder implements the createDriveFolder endpoint.
 // This code has been automatically generated.
@@ -8,5 +9,7 @@ export const createDriveFolder = async (
   ctx: any,
   request: CreateDriveFolderRequest,
 ): Promise<CreateDriveFolderResponse> => {
-  throw new Error("Not implemented");
+  const { newFolderName, parentFolderID } = request;
+  const folderID = await newDriveFolder(newFolderName, parentFolderID);
+  return { folderID };
 };

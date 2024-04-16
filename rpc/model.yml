@@ -505,7 +505,7 @@ endpoints:
       newFolderName: string
       parentFolderID: string
     response:
-      folder: DriveFolder
+      folderID: string
     service: typescript
 
   getDriveFolder:
