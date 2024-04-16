@@ -177,7 +177,17 @@ const DriveFolderPage: React.FC = () => {
                     </div>
                   </ContextMenu.Trigger>
                   <ContextMenu.Content size="2">
-                    <ContextMenu.Item disabled={!isFolder(item)}>
+                    <ContextMenu.Item
+                      disabled={!isFolder(item)}
+                      onClick={() => {
+                        const newPath = pathName.replace(
+                          /\/[^\/]+$/,
+                          "/" + item.id,
+                        );
+                        void router.push(newPath);
+                        console.log("Navigate to folder", item.id);
+                      }}
+                    >
                       Open
                     </ContextMenu.Item>
                     <ContextMenu.Item
@@ -210,7 +220,7 @@ const DriveFolderPage: React.FC = () => {
               <MdFolderOpen width={24} height={24} />
             </div>
           </ContextMenu.Item>
-          <ContextMenu.Item>
+          <ContextMenu.Item onClick={handleUploadClick}>
             <div className="flex flex-row space-x-4 items-center">
               <Text>Upload File</Text>
               <MdOutlineInsertDriveFile width={24} height={24} />
