@@ -1,5 +1,4 @@
 import "@/styles/globals.css";
-import "@/styles/prosemirror.css";
 import "@radix-ui/themes/styles.css";
 
 import AppInner from "@/components/structural/AppInner";

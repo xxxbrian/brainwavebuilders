@@ -1,4 +1,6 @@
 "use client";
+
+import "@/styles/prosemirror.css";
 import React, { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import deepEqual from "deep-equal";
