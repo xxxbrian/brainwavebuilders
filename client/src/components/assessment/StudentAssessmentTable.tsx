@@ -51,20 +51,21 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
       let submissionsMap: Record<string, Submission> = {};
 
       try {
-        const submissionsResponse = await backend.fetchStudentSubmission({});
-        submissionsMap = submissionsResponse.submissions.reduce(
+        const { submissions } = await backend.fetchStudentSubmission({});
+        submissionsMap = submissions.reduce(
           (acc: Record<string, Submission>, sub: Submission) => {
             acc[sub.assessmentId] = sub;
             return acc;
           },
-          {},
+          {} as Record<string, Submission>,
         );
       } catch (error) {
         console.error("Failed to fetch submissions:", error);
       }
 
       const withSubmissions = assignments.map((assignment) => {
-        const submission = submissionsMap[assignment.id];
+        const submission = submissionsMap[assignment.id]!;
+
         return {
           ...assignment,
           startDate: formatDate(assignment.startDate),

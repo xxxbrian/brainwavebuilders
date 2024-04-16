@@ -8,7 +8,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment, Submission } from "@/backend";
 
-export const AssignmentSubmissionOverviewPage: React.FC = () => {
+const AssignmentSubmissionOverviewPage: React.FC = () => {
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [submissions, setSubmissions] = useState<Submission[]>([]);
   const backend = useBackend();
@@ -69,7 +69,11 @@ export const AssignmentSubmissionOverviewPage: React.FC = () => {
         startDate={assessment.startDate ?? "Start date not set"}
         endDate={assessment.dueDate ?? "Due date not set"}
       />
-      <SubmissionsTable submissions={submissions} onClickMark={onClickMark} />
+      <SubmissionsTable
+        submissions={submissions}
+        onClickMark={onClickMark}
+        assessment={assessment}
+      />
     </div>
   );
 };

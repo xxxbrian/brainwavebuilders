@@ -1,7 +1,7 @@
 import React, { useCallback } from "react";
 import { Card, Text, Box, Badge, Inset } from "@radix-ui/themes";
 import { Course } from "@/backend";
-import defaultCourseImg from "@/assets/UNSW.png";
+import defaultCourseImg from "@/assets/unsw.png";
 
 export type CourseCardProps = {
   course: Course;

@@ -11,7 +11,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useBackend } from "@/hooks/useBackend";
 import { Submission } from "@/backend";
 
-export const MarkAssignmentPage: React.FC = () => {
+const MarkAssignmentPage: React.FC = () => {
   const [feedback, setFeedback] = useState("");
   const [mark, setMark] = useState(0);
   const [submission, setSubmission] = useState<Submission | null>(null);

@@ -50,7 +50,7 @@ const PasswordInputForm = ({
   );
 };
 
-export const Profile: React.FC = () => {
+const Profile: React.FC = () => {
   const mockPreferences = {
     onClickPreferencesSave: async () => {},
     lang: "",

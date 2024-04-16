@@ -8,7 +8,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
 
-export const Quiz: React.FC = () => {
+const Quiz: React.FC = () => {
   const router = useRouter();
   const backend = useBackend();
 

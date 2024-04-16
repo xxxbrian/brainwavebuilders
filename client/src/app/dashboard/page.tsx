@@ -31,7 +31,7 @@ const DashboardItem: React.FC<DashboardItemProps> = ({
   return <div className={`p-4 ${className}`}>{children}</div>;
 };
 
-export const Dashboard: React.FC = () => {
+const Dashboard: React.FC = () => {
   const dashboardButtons = (
     <>
       <CreateCourseButton />

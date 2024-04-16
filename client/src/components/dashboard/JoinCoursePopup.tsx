@@ -78,7 +78,7 @@ export const JoinCourseButton: React.FC = () => {
         <form
           onSubmit={(e: FormEvent) => {
             e.preventDefault();
-            handleSubmit(code.join(""));
+            void handleSubmit(code.join(""));
           }}
           className="mt-4"
         >
@@ -95,7 +95,9 @@ export const JoinCourseButton: React.FC = () => {
                 value={code[index]}
                 onChange={(e) => handleChange(e, index)}
                 onKeyDown={(e) => handleKeyDown(e, index)}
-                ref={(el) => (inputsRef.current[index] = el)}
+                ref={(el) => {
+                  inputsRef.current[index] = el;
+                }}
               />
             ))}
           </div>

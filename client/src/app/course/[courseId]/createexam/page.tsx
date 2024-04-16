@@ -15,7 +15,7 @@ interface Question extends NewQuestion {
   id: string;
 }
 
-export const CreateExamPage: React.FC = () => {
+const CreateExamPage: React.FC = () => {
   const router = useRouter();
 
   const backend = useBackend();

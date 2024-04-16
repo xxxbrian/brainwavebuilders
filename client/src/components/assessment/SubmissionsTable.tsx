@@ -4,16 +4,17 @@ import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
 import { Submission, User, Assessment } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
-import { usePathname } from "next/navigation";
 
 interface SubmissionsTableProps {
   submissions: Submission[];
   onClickMark: (submissionId: string) => void;
+  assessment: Assessment;
 }
 
 const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   submissions,
   onClickMark,
+  assessment,
 }) => {
   const backend = useBackend();
   const [studentDetails, setStudentDetails] = useState<
@@ -22,7 +23,6 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   const [assessmentDetails, setAssessmentDetails] = useState<Assessment | null>(
     null,
   );
-  const pathName = usePathname();
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Not submitted";
@@ -41,7 +41,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
     if (assessmentId) {
       try {
         const details = await backend.fetchAssessmentDetailsTeacher({
-          assessmentId,
+          assessmentId: assessment.id,
         });
         setAssessmentDetails(details.assessment);
         console.log("Assessment Details:", details.assessment); // Logging the assessment details
@@ -79,9 +79,10 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
         {},
       );
 
-      void setStudentDetails(detailsMap);
+      setStudentDetails(detailsMap);
     };
 
+    void fetchAssessmentDetails();
     void fetchStudentDetails();
   }, [submissions, backend, fetchAssessmentDetails]);
 

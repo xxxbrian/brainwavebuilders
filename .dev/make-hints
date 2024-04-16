@@ -1,0 +1,7 @@
+hints:
+- If you want to work on the project, do `make up` then stop with `make down`.
+- If you want to run an optimised build of the project, do `make run-local`.
+- If you want to run a production build of the project, do `make run-prod`.
+    This requires explicit environmental variable setup.
+    Check out local.env for the secrets required, then provide them before running `make`.
+    Alternatively, secrets are read programmatically through .dev/secrets/production.env.

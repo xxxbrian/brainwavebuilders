@@ -10,7 +10,7 @@ import { Assessment } from "@/backend";
 
 type Scores = Record<string, number>; // <Qid, score>
 
-export const MarkExamPage: React.FC = () => {
+const MarkExamPage: React.FC = () => {
   const [submission, setSubmission] = useState<Submission | null>(null);
   const [assessment, setAssessment] = useState<Assessment | null>(null);
   const [scores, setScores] = useState<Scores>({});

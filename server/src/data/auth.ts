@@ -3,7 +3,7 @@ import { db } from "@/globals";
 import { makeID } from "./utils";
 import { sendEmailFromTemplate } from "./mailer";
 import { APIError } from "@/apis";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { registrationEmail } from "@/mailerTemplates/registration";
 import { forgotPasswordEmail } from "@/mailerTemplates/forgotPassword";
 
