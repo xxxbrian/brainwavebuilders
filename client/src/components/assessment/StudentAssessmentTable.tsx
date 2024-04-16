@@ -74,7 +74,7 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
           grade: submission?.isMarked
             ? `${submission.grade}/${assignment.totalPoints}`
             : "Not Graded",
-          status: determineStatus(assignment, new Date(), submission.id),
+          status: determineStatus(assignment, new Date(), submission?.id!),
         };
       });
 
@@ -95,7 +95,7 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
       return "Completed";
     } else if (currentDate < start) {
       return "Not Start";
-    } else if (submissionId) {
+    } else if (submissionId!) {
       return "Completed";
     } else {
       return "In Progress";
