@@ -103,7 +103,19 @@ const DriveFolderPage: React.FC = () => {
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row space-x-4 items-center">
           {folder?.parentFolderId && (
-            <IconButton radius="full" variant="soft" size="3">
+            <IconButton
+              radius="full"
+              variant="soft"
+              size="3"
+              onClick={() => {
+                const newPath = pathName.replace(
+                  /\/[^\/]+$/,
+                  "/" + folder?.parentFolderId,
+                );
+                void router.push(newPath);
+                console.log("Navigate to folder", folder?.parentFolderId);
+              }}
+            >
               <div className="pl-2">
                 <MdArrowBackIos />
               </div>
