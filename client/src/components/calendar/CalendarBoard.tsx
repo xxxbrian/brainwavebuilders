@@ -2,6 +2,7 @@ import React from "react";
 import { getBgColor, getSubjectColor } from "./colorScheme";
 import { type Event, type CalendarProps } from "./Calendar";
 import { Tooltip } from "@radix-ui/themes";
+import Link from "next/link";
 
 export const CalendarBoard: React.FC<CalendarProps> = ({
   today,
@@ -44,26 +45,28 @@ export const CalendarBoard: React.FC<CalendarProps> = ({
               }
               side="top"
             >
-              <div
-                className={`m-1 flex items-center gap-x-1 py-3 px-2 bg-${getBgColor(
-                  event.type,
-                )} rounded`}
-              >
+              <Link href={event.url}>
                 <div
-                  className={`lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-${getSubjectColor(
+                  className={`m-1 flex items-center gap-x-1 py-3 px-2 bg-${getBgColor(
                     event.type,
-                  )} rounded-full lg:mt-[1px] mt-[-16px]`}
-                />
-                <div tabIndex={0} className="ml-1 flex-grow min-w-0">
-                  <p
-                    className={`truncate max-w-full text-xs font-medium leading-normal text-${getSubjectColor(
+                  )} rounded`}
+                >
+                  <div
+                    className={`lg:w-2 lg:h-2 min-w-[8px] min-h-[8px] bg-${getSubjectColor(
                       event.type,
-                    )}`}
-                  >
-                    {event.name} {event.time}
-                  </p>
+                    )} rounded-full lg:mt-[1px] mt-[-16px]`}
+                  />
+                  <div tabIndex={0} className="ml-1 flex-grow min-w-0">
+                    <p
+                      className={`truncate max-w-full text-xs font-medium leading-normal text-${getSubjectColor(
+                        event.type,
+                      )}`}
+                    >
+                      {event.name} {event.time}
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </Link>
             </Tooltip>
           </div>
         ))}
