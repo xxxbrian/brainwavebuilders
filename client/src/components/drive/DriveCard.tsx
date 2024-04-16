@@ -31,7 +31,7 @@ export const DriveCard: React.FC<DriveCardProps> = ({ content, onClick }) => {
   }, [content, onClick]);
 
   return (
-    <Box maxWidth="240px" height="250px">
+    <Box width="200px" height="250px">
       <Card
         size="2"
         className="

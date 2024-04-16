@@ -129,7 +129,7 @@ const DriveFolderPage: React.FC = () => {
       <ContextMenu.Root>
         <ContextMenu.Trigger>
           <div className="h-full bg-gray-200 rounded-3xl p-10">
-            <div className="grid grid-cols-5 gap-10">
+            <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-10">
               {items.map((item, index) => (
                 <ContextMenu.Root key={index}>
                   <ContextMenu.Trigger>
