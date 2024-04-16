@@ -21,10 +21,22 @@ app.use(authenticator(kPublicAPIs));
 export const db = new PrismaClient();
 
 export const getEnvOr = (key: string, defaultValue: string) => {
-  return process.env[key] || defaultValue;
+  return process.env[key] ?? defaultValue;
+};
+
+export const mustGetEnv = (key: string) => {
+  const value = process.env[key];
+
+  if (value === undefined) {
+    throw new Error(`Missing required environment variable ${key}.`);
+  }
+
+  return value;
 };
 
 export const FRONTEND_ADDRESS = getEnvOr(
   "FRONTEND_ADDRESS",
   "http://localhost:3900",
 );
+
+export const SK_MAILGUN_API_KEY = getEnvOr("SK_MAILGUN_API_KEY", "");

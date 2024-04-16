@@ -1,4 +1,5 @@
 import { APIError } from "@/apis";
+import { SK_MAILGUN_API_KEY } from "@/globals";
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
@@ -27,10 +28,7 @@ export const sendEmail = async (
         method: "POST",
         headers: {
           Authorization:
-            `Basic ` +
-            Buffer.from(
-              `api:a9582656f7f026de6773bad23b4d568b-b02bcf9f-1b784054`,
-            ).toString("base64"),
+            `Basic ` + Buffer.from(SK_MAILGUN_API_KEY).toString("base64"),
         },
         body: form,
       },
