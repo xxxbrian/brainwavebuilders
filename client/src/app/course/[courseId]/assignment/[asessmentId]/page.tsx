@@ -69,7 +69,11 @@ const AssignmentSubmissionOverviewPage: React.FC = () => {
         startDate={assessment.startDate ?? "Start date not set"}
         endDate={assessment.dueDate ?? "Due date not set"}
       />
-      <SubmissionsTable submissions={submissions} onClickMark={onClickMark} />
+      <SubmissionsTable
+        submissions={submissions}
+        onClickMark={onClickMark}
+        assessment={assessment}
+      />
     </div>
   );
 };

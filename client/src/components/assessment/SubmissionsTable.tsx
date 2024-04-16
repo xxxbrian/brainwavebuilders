@@ -4,16 +4,17 @@ import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
 import { Submission, User, Assessment } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
-import { usePathname } from "next/navigation";
 
 interface SubmissionsTableProps {
   submissions: Submission[];
   onClickMark: (submissionId: string) => void;
+  assessment: Assessment;
 }
 
 const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   submissions,
   onClickMark,
+  assessment,
 }) => {
   const backend = useBackend();
   const [studentDetails, setStudentDetails] = useState<
@@ -22,7 +23,6 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
   const [assessmentDetails, setAssessmentDetails] = useState<Assessment | null>(
     null,
   );
-  const pathName = usePathname();
 
   const formatDate = (dateString?: string) => {
     if (!dateString) return "Not submitted";
@@ -35,24 +35,19 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
     return `${year}-${month}-${day}-${hours}:${minutes}`;
   };
 
-  const fetchAssessmentDetails = async () => {
-    const pathSegments = pathName.split("/");
-    const assessmentId = pathSegments[pathSegments.length - 1];
-    if (assessmentId) {
+  useEffect(() => {
+    const fetchAssessmentDetails = async () => {
       try {
         const details = await backend.fetchAssessmentDetailsTeacher({
-          assessmentId,
+          assessmentId: assessment.id,
         });
         setAssessmentDetails(details.assessment);
         console.log("Assessment Details:", details.assessment); // Logging the assessment details
       } catch (error) {
         console.error("Failed to fetch assessment details:", error);
       }
-    }
-  };
+    };
 
-  useEffect(() => {
-    fetchAssessmentDetails();
     const fetchStudentDetails = async () => {
       const studentInfoPromises = submissions.map((submission) =>
         backend
@@ -79,11 +74,12 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
         {},
       );
 
-      void setStudentDetails(detailsMap);
+      setStudentDetails(detailsMap);
     };
 
+    void fetchAssessmentDetails();
     void fetchStudentDetails();
-  }, [submissions, backend]);
+  }, [submissions, backend, setAssessmentDetails, assessment.id]);
 
   if (!submissions || !assessmentDetails)
     return <div>Loading assessment details...</div>;
