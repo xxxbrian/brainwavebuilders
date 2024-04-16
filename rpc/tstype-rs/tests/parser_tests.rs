@@ -34,10 +34,10 @@ fn test_parse_basic_with_invalid_characters() {
 
 #[test]
 fn test_parse_basic_with_spacial_characters() {
-    let text = "Map";
+    let text = "Record";
     let result = parse(text);
     assert!(result.is_some());
-    assert_eq!(result.unwrap(), TsType::Basic("Map".to_string()));
+    assert_eq!(result.unwrap(), TsType::Basic("Record".to_string()));
     let text = "Array";
     let result = parse(text);
     assert!(result.is_some());
@@ -108,6 +108,20 @@ fn test_parse_array_suffix_with_recursive() {
         TsType::Array(Box::new(TsType::Array(Box::new(TsType::Basic(
             "User".to_string()
         )))))
+    );
+}
+
+#[test]
+fn test_parse_array_suffix_with_union_inside() {
+    let text = "(User | string)[]";
+    let result = parse(text);
+    assert!(result.is_some());
+    assert_eq!(
+        result.unwrap(),
+        TsType::Array(Box::new(TsType::Union(vec![
+            TsType::Basic("User".to_string()),
+            TsType::Basic("string".to_string())
+        ])))
     );
 }
 
@@ -186,6 +200,20 @@ fn test_parse_array_generic_with_recursive_s_array() {
 }
 
 #[test]
+fn test_parse_array_generic_with_union_inside() {
+    let text = "Array<User | string>";
+    let result = parse(text);
+    assert!(result.is_some());
+    assert_eq!(
+        result.unwrap(),
+        TsType::Array(Box::new(TsType::Union(vec![
+            TsType::Basic("User".to_string()),
+            TsType::Basic("string".to_string())
+        ])))
+    );
+}
+
+#[test]
 fn test_parse_map_generic() {
     let text = "Record<string, User>";
     let result = parse(text);
@@ -229,14 +257,14 @@ fn test_parse_map_generic_with_invalid_characters_inside() {
 
 #[test]
 fn test_parse_map_generic_with_invalid_characters_outside() {
-    let text = "Map!<string,User>";
+    let text = "Record!<string,User>";
     let result = parse(text);
     assert!(result.is_none());
 }
 
 #[test]
 fn test_parse_map_generic_with_wrong_characters() {
-    let text = "Map[string, User>";
+    let text = "Record[string, User>";
     let result = parse(text);
     assert!(result.is_none());
 }

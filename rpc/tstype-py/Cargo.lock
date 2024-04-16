@@ -300,7 +300,7 @@ checksum = "e1fc403891a21bcfb7c37834ba66a547a8f402146eba7265b5a6d88059c9ff2f"
 
 [[package]]
 name = "tstype-py"
-version = "0.1.4"
+version = "0.1.5"
 dependencies = [
  "pyo3",
  "serde",
@@ -310,8 +310,8 @@ dependencies = [
 
 [[package]]
 name = "tstype-rs"
-version = "0.1.4"
-source = "git+https://github.com/xxxbrian/tstype-rs#e3215c93c5dd8d0a4c651fbfdcbe39224b2f6c52"
+version = "0.1.5"
+source = "git+https://github.com/xxxbrian/tstype-rs#c22647d027b4a1a5d21684ddecebfd7e8c9188e0"
 dependencies = [
  "regex",
  "serde",
