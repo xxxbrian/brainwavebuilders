@@ -33,12 +33,6 @@ const BookPage: React.FC = () => {
     setChildren(books);
   }, [backend, course.id]);
 
-  useEffect(() => {
-    if (course === null) return;
-
-    void fetchAllBooksFromCourse();
-  }, [backend, course, fetchAllBooksFromCourse]);
-
   const fetchBook = useCallback(
     async (bookId: string) => {
       const { books } = await backend.getCourseBook({
