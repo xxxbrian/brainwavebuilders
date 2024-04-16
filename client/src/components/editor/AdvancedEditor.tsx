@@ -1,5 +1,4 @@
 "use client";
-import { mockEditorContent } from "@/utils/data";
 import React, { useEffect, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import deepEqual from "deep-equal";

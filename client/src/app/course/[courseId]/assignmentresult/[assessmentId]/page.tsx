@@ -2,7 +2,6 @@
 
 import React, { useCallback, useState, useEffect } from "react";
 import AdvancedEditor from "@/components/editor/AdvancedEditor";
-import { mockEditorContent } from "@/utils/data";
 import { Heading } from "@radix-ui/themes";
 import { TextArea } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";

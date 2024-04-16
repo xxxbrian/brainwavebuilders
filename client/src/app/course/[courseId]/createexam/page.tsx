@@ -82,6 +82,7 @@ const CreateExamPage: React.FC = () => {
       // specifically check the options if the type is 'MCQ'
       if (
         question.type.trim() === "MCQ" &&
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         question.options.some((option: string) => !option.trim())
       ) {
         setErrorMessage(
