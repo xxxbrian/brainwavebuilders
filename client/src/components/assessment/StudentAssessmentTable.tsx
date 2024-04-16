@@ -73,19 +73,20 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
           grade: submission?.isMarked
             ? `${submission.grade}/${assignment.totalPoints}`
             : "Not Graded",
-          status: determineStatus(assignment, new Date()),
+          status: determineStatus(assignment, new Date(), submission?.id!),
         };
       });
 
       setSortedAssignments(withSubmissions);
     };
 
-    fetchSubmissionsAndMapToAssignments();
+    void fetchSubmissionsAndMapToAssignments();
   }, [assignments, backend]);
 
   const determineStatus = (
     assignment: AssignmentProps,
     currentDate: Date,
+    submissionId: string,
   ): "Not Start" | "In Progress" | "Completed" => {
     const start = new Date(assignment.startDate);
     const due = new Date(assignment.dueDate);
@@ -93,15 +94,27 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
       return "Completed";
     } else if (currentDate < start) {
       return "Not Start";
+    } else if (submissionId!) {
+      return "Completed";
     } else {
       return "In Progress";
     }
   };
 
-  const handleRowClick = (id: string, status: string) => {
-    if (type === "Assignment" && status !== "Not Start") {
+  const handleRowClick = (
+    id: string,
+    status: string,
+    submissionId?: string,
+  ) => {
+    if (type === "Assignment" && status === "Completed" && submissionId) {
+      viewAssignmentResult(submissionId);
+    } else if (
+      type === "Assignment" &&
+      status !== "Not Start" &&
+      !submissionId
+    ) {
       onClickAsessment(id);
-    } else if (type === "Exam" && status === "In Progress") {
+    } else if (type === "Exam" && status === "In Progress" && !submissionId) {
       onClickAsessment(id);
     }
   };
@@ -135,7 +148,13 @@ const StudentAssesmentTable: React.FC<AssignmentsTableProps> = ({
                     ? "cursor-pointer"
                     : ""
                 }`}
-                onClick={() => handleRowClick(assignment.id, assignment.status)}
+                onClick={() =>
+                  handleRowClick(
+                    assignment.id,
+                    assignment.status,
+                    assignment.submissionId,
+                  )
+                }
               >
                 <Table.RowHeaderCell>{assignment.name}</Table.RowHeaderCell>
                 <Table.Cell>{assignment.startDate}</Table.Cell>
