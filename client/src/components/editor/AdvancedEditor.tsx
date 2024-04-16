@@ -56,6 +56,10 @@ export const AdvancedEditor: React.FC<Props> = ({
     editor.commands.setContent(value ?? {});
   }, [editor, value]);
 
+  useEffect(() => {
+    editor?.setEditable(isEditable);
+  }, [editor, isEditable]);
+
   return (
     <div className={`relative w-full ${className ?? ""}`}>
       <EditorRoot>

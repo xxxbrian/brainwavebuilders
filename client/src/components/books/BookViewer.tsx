@@ -2,20 +2,48 @@ import { Course, CourseBook } from "@/backend";
 import AdvancedEditor from "../editor/AdvancedEditor";
 import { Button, Card } from "@radix-ui/themes";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { BiBook } from "react-icons/bi";
+import { BiBook, BiEdit, BiPencil } from "react-icons/bi";
 import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { CreateBookForm } from "./CreateBookForm";
+import { useCallback } from "react";
+import { JSONContent } from "novel";
 
 interface BookViewProps {
-  book: CourseBook;
+  isEditing: boolean;
+  value: JSONContent | null;
+  onChange: (value: JSONContent | null) => void;
 }
 
-export const BookView: React.FC<BookViewProps> = ({ book }) => {
+export const BookView: React.FC<BookViewProps> = ({
+  isEditing,
+  onChange,
+  value,
+}) => {
+  if (!value) {
+    if (isEditing) {
+      return (
+        <div className="flex justify-center items-center h-96">
+          <Button onClick={() => onChange({})}>Add Content</Button>
+        </div>
+      );
+    }
+
+    return <></>;
+  }
+
   return (
-    <AdvancedEditor
-      className="min-h-60 border border-muted rounded-md px-4 py-2"
-      value={book.content}
-    />
+    <div className="flex flex-col items-center space-y-4">
+      <AdvancedEditor
+        className="min-h-60 border border-muted rounded-md px-4 py-2"
+        value={value}
+        isEditable={isEditing}
+        setValue={onChange}
+      />
+
+      {isEditing && (
+        <Button onClick={() => onChange(null)}>Remove Content</Button>
+      )}
+    </div>
   );
 };
 
@@ -25,7 +53,33 @@ export const BookList: React.FC<{
   parent?: CourseBook;
   onClickBook: (book: CourseBook | null) => void;
   course: Course;
-}> = ({ books, current, parent, onClickBook, course }) => {
+
+  onClickEdit: (book: CourseBook) => void;
+  onClickSave: (book: CourseBook) => void;
+  isEditing: boolean;
+
+  onRefresh: () => void;
+}> = ({
+  books,
+  current,
+  parent,
+  onClickBook,
+  course,
+  onClickEdit,
+  onClickSave,
+  isEditing,
+  onRefresh,
+}) => {
+  const onClickEditInner = useCallback(() => {
+    if (!current) return;
+    onClickEdit?.(current);
+  }, [current, onClickEdit]);
+
+  const onClickSaveInner = useCallback(() => {
+    if (!current) return;
+    onClickSave?.(current);
+  }, [current, onClickSave]);
+
   return (
     <div className="flex flex-col space-y-4">
       <div className="flex items-center justify-between">
@@ -57,21 +111,38 @@ export const BookList: React.FC<{
 
         <div>
           <WithTeacherRole>
-            <div>
+            <div className="flex space-x-2">
               <CreateBookForm
                 course={course}
                 parent={current}
-                onCreated={onClickBook}
+                onCreated={onRefresh}
               >
-                <Button variant="surface">Create a new page</Button>
+                <Button variant="surface">New Subpage</Button>
               </CreateBookForm>
+
+              {current && (
+                <>
+                  {isEditing ? (
+                    <Button onClick={onClickSaveInner}>
+                      <BiPencil />
+                      Save
+                    </Button>
+                  ) : (
+                    <Button onClick={onClickEditInner}>
+                      <BiPencil />
+                      Edit Page
+                    </Button>
+                  )}
+                </>
+              )}
             </div>
           </WithTeacherRole>
         </div>
       </div>
 
-      <div className="font-bold text-xl">
-        {current?.title ?? "Course Books"}
+      <div className="font-bold text-xl items-center flex space-x-1">
+        <BiBook />
+        <div>{current?.title ?? "Course Books"}</div>
       </div>
 
       {books.length > 0 && (

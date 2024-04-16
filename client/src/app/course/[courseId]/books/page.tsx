@@ -6,12 +6,13 @@ import { CenteredLoading } from "@/components/loading";
 import { useBackend } from "@/hooks/useBackend";
 import { StatefulForum } from "@/components/forum/Forum";
 import { useRouter, useSearchParams } from "next/navigation";
-import { CourseBook } from "@/backend";
+import { Course, CourseBook } from "@/backend";
 import { BookList, BookView } from "@/components/books/BookViewer";
 import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { CreateBookForm } from "@/components/books/CreateBookForm";
 import { Button } from "@radix-ui/themes";
 import deepEqual from "deep-equal";
+import { JSONContent } from "novel";
 
 const BookPage: React.FC = () => {
   const course = useCourse();
@@ -38,16 +39,10 @@ const BookPage: React.FC = () => {
     void fetchAllBooksFromCourse();
   }, [backend, course, fetchAllBooksFromCourse]);
 
-  useEffect(() => {
-    const inner = async () => {
-      if (activeBookId === null) {
-        setCurrentBook(null);
-        await fetchAllBooksFromCourse();
-        return;
-      }
-
+  const fetchBook = useCallback(
+    async (bookId: string) => {
       const { books } = await backend.getCourseBook({
-        bookIDs: [activeBookId],
+        bookIDs: [bookId],
       });
 
       if (books.length === 0) {
@@ -57,10 +52,22 @@ const BookPage: React.FC = () => {
 
       setCurrentBook(books[0]!);
       setChildren(books[0]!.children ?? []);
-    };
+    },
+    [backend],
+  );
 
-    void inner();
-  }, [activeBookId, backend, fetchAllBooksFromCourse]);
+  const refresh = useCallback(() => {
+    if (activeBookId === null) {
+      setCurrentBook(null);
+      void fetchAllBooksFromCourse();
+      return;
+    }
+    void fetchBook(activeBookId);
+  }, [activeBookId, fetchAllBooksFromCourse, fetchBook]);
+
+  useEffect(() => {
+    void refresh();
+  }, [refresh]);
 
   const router = useRouter();
 
@@ -73,6 +80,31 @@ const BookPage: React.FC = () => {
     [course.id, router],
   );
 
+  const [isEditing, setIsEditing] = useState(false);
+  const [content, setContent] = useState<JSONContent | null>(null);
+
+  useEffect(() => {
+    setContent(currentBook?.content ?? null);
+  }, [currentBook?.content]);
+
+  const onClickEdit = useCallback(() => {
+    setIsEditing(true);
+  }, []);
+
+  const onClickSave = useCallback(
+    async (book: CourseBook) => {
+      await backend.updateBook({
+        id: book.id,
+        title: book.title,
+        content,
+      });
+
+      setIsEditing(false);
+      void fetchBook(book.id);
+    },
+    [backend, content, fetchBook],
+  );
+
   if (children === null) return <CenteredLoading />;
 
   return (
@@ -83,10 +115,21 @@ const BookPage: React.FC = () => {
         parent={currentBook?.parent}
         onClickBook={onChangeActiveThreadId}
         course={course}
+        isEditing={isEditing}
+        onClickEdit={onClickEdit}
+        onClickSave={onClickSave}
+        onRefresh={refresh}
       />
 
-      {currentBook?.content && !deepEqual(currentBook.content, {}) && (
-        <BookView book={currentBook}></BookView>
+      <BookView
+        value={content}
+        onChange={setContent}
+        isEditing={isEditing}
+        key={currentBook?.id}
+      />
+
+      {children.length === 0 && !content && (
+        <div className="text-gray-500 text-lg">No resources are available.</div>
       )}
     </div>
   );
