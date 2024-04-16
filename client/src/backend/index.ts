@@ -38,6 +38,7 @@ export interface Assessment {
     type: string;
     questions: Question[];
     submissions: Submission[];
+    totalPoints?: number;
 }
 
 export interface Question {
@@ -67,6 +68,7 @@ export interface Submission {
     answers?: any;
     feedback?: string;
     grade?: number;
+    isMarked: boolean;
 }
 
 export interface Course {
@@ -398,12 +400,12 @@ export interface FetchAssessmentsResponse {
 
 // FetchStudentSubmissionRequest is the request that is sent to the fetchStudentSubmission endpoint.
 export interface FetchStudentSubmissionRequest {
-    studentId: string;
+
 }
 
 // FetchStudentSubmissionResponse is the response that is sent to the fetchStudentSubmission endpoint.
 export interface FetchStudentSubmissionResponse {
-    submission: Submission;
+    submissions: Submission[];
 }
 
 // FetchUserStatsRequest is the request that is sent to the fetchUserStats endpoint.

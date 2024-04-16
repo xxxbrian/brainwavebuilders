@@ -81,6 +81,7 @@ export const CoursesPage: React.FC = ({}) => {
     name: string;
     startDate: string;
     dueDate: string;
+    totalPoints: number;
   }
 
   const [isCreateAssignment, setIsCreateAssignment] = useState(false);
@@ -94,6 +95,7 @@ export const CoursesPage: React.FC = ({}) => {
       name: assessment.title,
       startDate: assessment.startDate ?? "",
       dueDate: assessment.dueDate ?? "",
+      totalPoints: assessment.totalPoints ?? 100,
     }),
     [],
   );

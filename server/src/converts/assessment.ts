@@ -33,6 +33,7 @@ export const formatAssessment = (
       : undefined,
     dueDate: assessment.dueDate ? assessment.dueDate.toISOString() : undefined,
     type: assessment.type,
+    totalPoints: assessment.totalPoints ?? undefined,
     questions,
     submissions,
   };
@@ -70,6 +71,7 @@ export const formatSubmission = (submission: SubmissionDB): SubmissionAPI => {
     answers: submission.answers,
     feedback: submission.feedback ?? undefined,
     grade: submission.grade ?? undefined,
+    isMarked: submission.isMarked,
   };
 };
 

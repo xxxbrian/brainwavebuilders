@@ -108,6 +108,7 @@ model Assessment {
     submissions Submission[] @relation("assessmentSubmissions")
     createdAt   DateTime     @default(now())
     updatedAt   DateTime     @updatedAt
+    totalPoints Int?         @default(100)
 }
 
 model Question {

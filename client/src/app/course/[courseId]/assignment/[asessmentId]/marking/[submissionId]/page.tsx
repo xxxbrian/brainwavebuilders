@@ -62,7 +62,6 @@ export const MarkAssignmentPage: React.FC = () => {
           grades: mark,
           feedback,
         });
-        alert("Feedback and marks saved successfully!");
         onClickBack();
       } catch (error) {
         console.error("Failed to save marks and feedback:", error);
