@@ -120,9 +120,16 @@ export const submitAnswers = async (
       }
     });
 
+    if (assessment.questions.some((e) => e.type !== "short_answer")) {
+      const isMarked = true;
+    }
+
     const updatedSubmission = await db.submission.update({
       where: { id: submission.id },
-      data: { grade: totalScore },
+      data: {
+        grade: totalScore,
+        isMarked: true,
+      },
     });
 
     return updatedSubmission;
