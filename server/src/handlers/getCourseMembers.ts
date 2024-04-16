@@ -1,4 +1,8 @@
-import { GetCourseMembersRequest, GetCourseMembersResponse } from "@/apis";
+import {
+  APIError,
+  GetCourseMembersRequest,
+  GetCourseMembersResponse,
+} from "@/apis";
 import { useCurrentUser } from "@/context/auth";
 import { courseMembershipDBToAPI } from "@/converts/course";
 import { userDBToAPI } from "@/converts/user";
@@ -17,7 +21,7 @@ export const getCourseMembers = async (
   const user = useCurrentUser(ctx)!;
 
   if (!(await hasTeacherRoleInCourse(user, courseID))) {
-    throw new Error("No permission to view course members");
+    throw new APIError("No permission to view course members");
   }
 
   const memberships = await getCourseMemberships(courseID);

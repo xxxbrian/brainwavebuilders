@@ -79,6 +79,7 @@ types:
     userId: string
     courseId: string
     role: string
+    createdAt: int
 
   Forum:
     id: string
@@ -369,6 +370,13 @@ endpoints:
   leaveCourse:
     request:
       courseId: string
+    response:
+    service: typescript
+
+  removeMemberFromCourse:
+    request:
+      userID: string
+      courseID: string
     response:
     service: typescript
 

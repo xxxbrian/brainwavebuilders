@@ -180,6 +180,9 @@ export const getCourseMemberships = async (
     where: {
       courseID: courseID,
     },
+    orderBy: {
+      createdAt: "desc",
+    },
   });
 
   return memberships;

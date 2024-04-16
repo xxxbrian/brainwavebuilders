@@ -1,4 +1,8 @@
-import { SetUserProfileRequest, SetUserProfileResponse } from "@/apis";
+import {
+  APIError,
+  SetUserProfileRequest,
+  SetUserProfileResponse,
+} from "@/apis";
 import { useCurrentUser } from "@/context/auth";
 import { getUserByToken } from "@/data/auth";
 import { updateUserProfile } from "@/data/profile";
@@ -15,7 +19,7 @@ export const setUserProfile = async (
 
   let { user } = request;
   if (askUser!.email !== user.email) {
-    throw new Error("No permission to update other user's profile");
+    throw new APIError("No permission to update other user's profile");
   }
   await updateUserProfile(user);
   return {};

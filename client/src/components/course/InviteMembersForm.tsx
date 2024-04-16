@@ -34,6 +34,11 @@ export const StatefulInviteMembersForm: React.FC<Props> = ({
     }
   }, [backend, course.id, role]);
 
+  const onClickBack = useCallback(() => {
+    setInvitationCode(null);
+    setError(null);
+  }, []);
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>{children}</Dialog.Trigger>
@@ -52,12 +57,20 @@ export const StatefulInviteMembersForm: React.FC<Props> = ({
             <div>Please use the following code to join the classroom.</div>
             <div className="text-5xl">{invitationCode}</div>
           </div>
+          <div className="flex justify-end space-x-2">
+            <Button variant="surface" onClick={onClickBack}>
+              Back
+            </Button>
+            <Dialog.Close>
+              <Button>Done</Button>
+            </Dialog.Close>
+          </div>
         </Dialog.Content>
       ) : (
         <Dialog.Content maxWidth="450px">
           <Dialog.Title>Invite members to {course.name}</Dialog.Title>
-          <div className="flex space-x-2 items-center">
-            <div>Role</div>
+          <div className="flex space-x-2 items-center py-6 justify-center">
+            <div>They should be a </div>
             <Select.Root
               defaultValue="STUDENT"
               value={role}
@@ -69,6 +82,7 @@ export const StatefulInviteMembersForm: React.FC<Props> = ({
                 <Select.Item value="TEACHER">Teacher</Select.Item>
               </Select.Content>
             </Select.Root>
+            <div>in {course.name}</div>
           </div>
           <div className="flex justify-end">
             <Button onClick={onClickInvite}>Invite</Button>

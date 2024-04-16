@@ -204,9 +204,14 @@ const CoursesPage: React.FC = ({}) => {
           <Heading size={"5"}>Course Applications</Heading>
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
-              <ScheduleCourseForm course={course}>
-                <ApplicationIcon icon={<MdSchedule />} title="Schedule Class" />
-              </ScheduleCourseForm>
+              <WithTeacherRole>
+                <ScheduleCourseForm course={course}>
+                  <ApplicationIcon
+                    icon={<MdSchedule />}
+                    title="Schedule Class"
+                  />
+                </ScheduleCourseForm>
+              </WithTeacherRole>
 
               <ApplicationIcon
                 icon={<MdForum />}
@@ -214,18 +219,13 @@ const CoursesPage: React.FC = ({}) => {
                 onClick={onClickForum}
               />
 
-              <StatefulInviteMembersForm course={course}>
+              <WithTeacherRole>
                 <ApplicationIcon
                   icon={<MdOutlinePersonAddAlt1 />}
-                  title="Invite Member"
+                  title="Manage Members"
+                  onClick={onClickManageMembers}
                 />
-              </StatefulInviteMembersForm>
-
-              <ApplicationIcon
-                icon={<MdOutlinePersonAddAlt1 />}
-                title="Manage Members"
-                onClick={onClickManageMembers}
-              />
+              </WithTeacherRole>
             </div>
           </div>
         </div>

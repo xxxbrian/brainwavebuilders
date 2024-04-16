@@ -25,5 +25,6 @@ export const courseMembershipDBToAPI = (
     courseId: membership.courseID,
     role: membership.role,
     userId: membership.userID,
+    createdAt: membership.createdAt.getTime(),
   };
 };

@@ -95,6 +95,7 @@ export interface CourseMembership {
     userId: string;
     courseId: string;
     role: string;
+    createdAt: number;
 }
 
 export interface Forum {
@@ -499,6 +500,17 @@ export interface LeaveCourseRequest {
 
 // LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
 export interface LeaveCourseResponse {
+
+}
+
+// RemoveMemberFromCourseRequest is the request that is sent to the removeMemberFromCourse endpoint.
+export interface RemoveMemberFromCourseRequest {
+    userID: string;
+    courseID: string;
+}
+
+// RemoveMemberFromCourseResponse is the response that is sent to the removeMemberFromCourse endpoint.
+export interface RemoveMemberFromCourseResponse {
 
 }
 
@@ -1613,6 +1625,35 @@ export class BrainwavesClient {
         }
 
         return json as LeaveCourseResponse;
+    }
+
+
+
+    async removeMemberFromCourse(request: RemoveMemberFromCourseRequest): Promise<RemoveMemberFromCourseResponse> {
+        const response = await fetch(`${this.base_url}/removeMemberFromCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as RemoveMemberFromCourseResponse;
     }
 
 

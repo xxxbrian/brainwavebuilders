@@ -26,6 +26,7 @@ import { getThreads } from "@/handlers/getThreads";
 import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
 import { getRoleInCourse } from "@/handlers/getRoleInCourse";
 import { upsertPost } from "@/handlers/upsertPost";
+import { removeMemberFromCourse } from "@/handlers/removeMemberFromCourse";
 import { joinCourse } from "@/handlers/joinCourse";
 import { getUserInfoByIDs } from "@/handlers/getUserInfoByIDs";
 import { fetchStudentSubmission } from "@/handlers/fetchStudentSubmission";
@@ -144,6 +145,7 @@ export interface CourseMembership {
     userId: string;
     courseId: string;
     role: string;
+    createdAt: number;
 }
 
 export interface Forum {
@@ -548,6 +550,17 @@ export interface LeaveCourseRequest {
 
 // LeaveCourseResponse is the response that is sent to the leaveCourse endpoint.
 export interface LeaveCourseResponse {
+
+}
+
+// RemoveMemberFromCourseRequest is the request that is sent to the removeMemberFromCourse endpoint.
+export interface RemoveMemberFromCourseRequest {
+    userID: string;
+    courseID: string;
+}
+
+// RemoveMemberFromCourseResponse is the response that is sent to the removeMemberFromCourse endpoint.
+export interface RemoveMemberFromCourseResponse {
 
 }
 
@@ -1432,6 +1445,28 @@ app.post('/api/leaveCourse', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request leaveCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// removeMemberFromCourse is the endpoint handler for the removeMemberFromCourse endpoint.
+// It wraps around the function at @/handlers/removeMemberFromCourse.
+app.post('/api/removeMemberFromCourse', async (req, res) => {
+    const request: RemoveMemberFromCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: RemoveMemberFromCourseResponse = await removeMemberFromCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request removeMemberFromCourse with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
