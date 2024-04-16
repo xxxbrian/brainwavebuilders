@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { FaRegPenToSquare } from "react-icons/fa6";
 import { Table } from "@radix-ui/themes";
 import { Heading } from "@radix-ui/themes";
@@ -35,7 +35,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
     return `${year}-${month}-${day}-${hours}:${minutes}`;
   };
 
-  const fetchAssessmentDetails = async () => {
+  const fetchAssessmentDetails = useCallback(async () => {
     const pathSegments = pathName.split("/");
     const assessmentId = pathSegments[pathSegments.length - 1];
     if (assessmentId) {
@@ -49,10 +49,10 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
         console.error("Failed to fetch assessment details:", error);
       }
     }
-  };
+  }, [backend, pathName]);
 
   useEffect(() => {
-    fetchAssessmentDetails();
+    void fetchAssessmentDetails();
     const fetchStudentDetails = async () => {
       const studentInfoPromises = submissions.map((submission) =>
         backend
@@ -83,7 +83,7 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
     };
 
     void fetchStudentDetails();
-  }, [submissions, backend]);
+  }, [submissions, backend, fetchAssessmentDetails]);
 
   if (!submissions || !assessmentDetails)
     return <div>Loading assessment details...</div>;
@@ -125,11 +125,17 @@ const SubmissionsTable: React.FC<SubmissionsTableProps> = ({
                     <span className="text-red-500">Not marked yet</span>
                   )}
                 </Table.Cell>
-                <Table.Cell
-                  className="cursor-pointer"
-                  onClick={() => onClickMark(submission.id)}
-                >
-                  <FaRegPenToSquare />
+                <Table.Cell>
+                  {submission.isMarked ? (
+                    <span className="text-green-500">Marked</span>
+                  ) : (
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => onClickMark(submission.id)}
+                    >
+                      <FaRegPenToSquare />
+                    </div>
+                  )}
                 </Table.Cell>
               </Table.Row>
             ))
