@@ -73,7 +73,7 @@ export const TopNav = ({
     <div
       className={`border-b py-4 text-center left-0 top-0 w-full backdrop-blur-md bg-white bg-opacity-80 flex px-4 items-center ${className}`}
     >
-      <div className="w-1/4 flex space-x-4 items-center px-4">
+      <div className="w-1/3 min-w-fit flex space-x-4 items-center px-4 flex-shrink-0">
         <div className="space-x-6 flex items-center">
           {onClickMenu && (
             <div
@@ -94,7 +94,7 @@ export const TopNav = ({
         {left}
       </div>
       <div className="font-bold flex-1">{title}</div>
-      <div className="w-1/4 flex space-x-4 justify-end">
+      <div className="w-1/3 min-w-fit flex space-x-4 justify-end">
         {right}
         <div className="flex-shrink-0">
           {user ? (

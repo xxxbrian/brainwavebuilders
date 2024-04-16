@@ -67,11 +67,11 @@ const CourseMembersPage = () => {
 
   return (
     <div className="flex flex-col space-y-8">
-      <div className="flex justify-end">
+      <div className="flex justify-end w-fit">
         <StatefulInviteMembersForm course={course}>
           <Button className="flex-1 w-fit">
             <MdPersonAdd />
-            Invite Member
+            Invite Members
           </Button>
         </StatefulInviteMembersForm>
       </div>

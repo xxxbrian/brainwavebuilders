@@ -75,7 +75,7 @@ export const ThreadList: React.FC<ListProps> = ({
       } flex flex-col space-y-4`}
     >
       {onClickNewThread && (
-        <div className="px-2 w-full flex flex-col">
+        <div className="px-2 w-full flex">
           <Button
             variant="surface"
             className="flex-1"

@@ -6,10 +6,12 @@ import { PageFrame } from "@/components/structural/PageFrame";
 import { CourseContext } from "@/contexts/CourseContext";
 import { CourseRoleContext } from "@/contexts/CourseRoleContext";
 import { useBackend } from "@/hooks/useBackend";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { Props as FrameProps } from "@/components/structural/PageFrame";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { Button } from "@radix-ui/themes";
+import { IoArrowBackSharp } from "react-icons/io5";
 
 interface ApplicationState {
   regex: RegExp;
@@ -62,6 +64,12 @@ export default function ClassroomPageLayout({
   const [error, setError] = useState<string | null>(null);
   const [course, setCourse] = useState<Course | null>(null);
   const [role, setRole] = useState<string | null>(null);
+
+  const router = useRouter();
+
+  const onClickNavigateToCourse = useCallback(() => {
+    void router.push(`/course/${courseId}`);
+  }, [courseId, router]);
 
   const backend = useBackend();
 
@@ -130,12 +138,25 @@ export default function ClassroomPageLayout({
     );
   }
 
+  const left = (
+    <>
+      {pathName !== `/course/${courseId}` && (
+        <Button variant="soft" onClick={onClickNavigateToCourse}>
+          <IoArrowBackSharp />
+          <div className="hidden md:block">Back to course page</div>
+        </Button>
+      )}
+    </>
+  );
+
   const state = mapApplicationState(course, pathName);
 
   return (
     <CourseContext.Provider value={course}>
       <CourseRoleContext.Provider value={role ?? ""}>
-        <PageFrame {...state.frameProps}>{children}</PageFrame>
+        <PageFrame left={left} {...state.frameProps}>
+          {children}
+        </PageFrame>
       </CourseRoleContext.Provider>
     </CourseContext.Provider>
   );
