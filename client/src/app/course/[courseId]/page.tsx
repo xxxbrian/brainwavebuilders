@@ -5,7 +5,7 @@ import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm
 import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
-import { MdAssignment, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
+import { MdSchedule, MdForum, MdOutlinePersonAddAlt1 } from "react-icons/md";
 import { useCourse } from "@/contexts/CourseContext";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
@@ -16,6 +16,7 @@ import { type Event } from "@/components/calendar/Calendar";
 import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { WithStudentRole } from "@/contexts/CourseRoleContext";
 import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTable";
+import { ScheduleCourseForm } from "@/components/course/ScheduleCourseForm";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -203,11 +204,9 @@ const CoursesPage: React.FC = ({}) => {
           <Heading size={"5"}>Course Applications</Heading>
           <div className="flex flex-wrap">
             <div className="flex flex-wrap">
-              <ApplicationIcon
-                icon={<MdAssignment />}
-                title="Assignments"
-                onClick={onClickAssignments}
-              />
+              <ScheduleCourseForm course={course}>
+                <ApplicationIcon icon={<MdSchedule />} title="Schedule Class" />
+              </ScheduleCourseForm>
 
               <ApplicationIcon
                 icon={<MdForum />}

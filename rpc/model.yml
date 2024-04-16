@@ -125,6 +125,13 @@ types:
     name: string
     time: string
     type: string
+    url: string
+
+  ScheduleClass:
+    courseID: string
+    startDate: string
+    classType: string
+    classLink: string
 
 endpoints:
   ping:
@@ -465,4 +472,10 @@ endpoints:
     response:
       users: User[]
       memberships: CourseMembership[]
+    service: typescript
+
+  addScheduleClass:
+    request:
+      scheduleClass: ScheduleClass
+    response:
     service: typescript

@@ -2,6 +2,7 @@ import React from "react";
 
 import { CalendarProps } from "./Calendar";
 import { getBgColor, getSubjectColor } from "./colorScheme";
+import Link from "next/link";
 
 interface UpcomingEventsProps extends CalendarProps {
   showEventNumber?: number;
@@ -28,35 +29,34 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
       </p>
       <p className="text-xs text-gray-600">Don&apos;t Miss Scheduled Events</p>
       {flattenedAndLimitedEvents.map(({ date, event }, index) => (
-        <div
-          key={`${date}-${index}`}
-          className="px-4 py-4 mt-4 border border-gray-200 rounded-sm"
-        >
-          <div className="flex justify-between">
-            <div className="flex gap-x-2">
-              <div
-                className={`w-2 h-2 rounded-full mt-[2px] bg-${getSubjectColor(
+        <Link href={event.url} key={`${date}-${index}`}>
+          <div className="px-4 py-4 mt-4 border border-gray-200 rounded-sm hover:shadow-md">
+            <div className="flex justify-between">
+              <div className="flex gap-x-2">
+                <div
+                  className={`w-2 h-2 rounded-full mt-[2px] bg-${getSubjectColor(
+                    event.type,
+                  )}`}
+                />
+                <p className="text-xs font-medium leading-3 text-gray-800">
+                  {new Date(date).toLocaleDateString("en-GB", {
+                    day: "numeric",
+                    month: "short",
+                    year: "numeric",
+                  })}
+                </p>
+              </div>
+              <p
+                className={`p-1 text-xs font-medium leading-3 rounded-sm bg-${getBgColor(
                   event.type,
-                )}`}
-              />
-              <p className="text-xs font-medium leading-3 text-gray-800">
-                {new Date(date).toLocaleDateString("en-GB", {
-                  day: "numeric",
-                  month: "short",
-                  year: "numeric",
-                })}
+                )} text-${getSubjectColor(event.type)}`}
+              >
+                {event.time}
               </p>
             </div>
-            <p
-              className={`p-1 text-xs font-medium leading-3 rounded-sm bg-${getBgColor(
-                event.type,
-              )} text-${getSubjectColor(event.type)}`}
-            >
-              {event.time}
-            </p>
+            <p className="text-xs leading-3 text-gray-600">{event.name}</p>
           </div>
-          <p className="text-xs leading-3 text-gray-600">{event.name}</p>
-        </div>
+        </Link>
       ))}
       {flattenedAndLimitedEvents.length === 0 && (
         <div className="flex flex-col justify-center items-center h-full flex-1">
