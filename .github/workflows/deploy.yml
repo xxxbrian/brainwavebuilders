@@ -97,3 +97,8 @@ jobs:
             LPQJRLUafBgF6wDQrfJ0LMnZCEQlvnsAWe68utUDT76hFACSIpqTdkBPYxrZRVjvx7pQip
             SXDibwK+orDjMAAAASYnJhaW53YXZlc0BuZXV0cm9uAQ==
             -----END OPENSSH PRIVATE KEY-----
+
+permissions:
+  packages: write
+  contents: read
+  id-token: write
