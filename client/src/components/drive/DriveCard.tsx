@@ -1,19 +1,19 @@
 import React, { useCallback } from "react";
 import { Card, Text, Box, Badge, Inset } from "@radix-ui/themes";
 import defaultCourseImg from "@/assets/unsw.png";
-import { DriveFolder } from "@/backend";
+import { DriveFolderInfo } from "@/backend";
 import { DriveItem } from "@/backend";
 
 export type DriveCardProps = {
-  content: DriveFolder | DriveItem;
-  onClick?: (content: DriveFolder | DriveItem) => void;
+  content: DriveFolderInfo | DriveItem;
+  onClick?: (content: DriveFolderInfo | DriveItem) => void;
 };
 
 function isDriveItem(content: any): content is DriveItem {
   return "url" in content;
 }
 
-function getContentType(content: DriveFolder | DriveItem): string {
+function getContentType(content: DriveFolderInfo | DriveItem): string {
   if (isDriveItem(content)) {
     return "File";
   } else {

@@ -1,27 +1,58 @@
 "use client";
 
-import React, { useRef } from "react";
-import {
-  Inset,
-  Card,
-  ContextMenu,
-  Button,
-  IconButton,
-  Text,
-  Strong,
-} from "@radix-ui/themes";
+import React, { useEffect, useRef } from "react";
+import { ContextMenu, Button, IconButton, Text } from "@radix-ui/themes";
 import { MdDriveFolderUpload } from "react-icons/md";
 import { MdArrowBackIos } from "react-icons/md";
 import { MdFolderOpen } from "react-icons/md";
 import { MdOutlineInsertDriveFile } from "react-icons/md";
 import { DriveCard } from "@/components/drive/DriveCard";
-import { fakeDriveItem } from "@/utils/data";
+import { DriveItem, DriveFolderInfo, DriveFolder } from "@/backend";
+import { useBackend } from "@/hooks/useBackend";
+import { useParams } from "next/navigation";
+
+type DriveItems = (DriveItem | DriveFolderInfo)[];
 
 const DriveFolderPage: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleUploadClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const [items, setItems] = React.useState<DriveItems>([]);
+
+  const { folderId } = useParams<{ folderId: string }>();
+  const [folder, setFolder] = React.useState<DriveFolder | null>(null);
+
+  const backend = useBackend();
+
+  useEffect(() => {
+    const inner = async () => {
+      if (!folderId) return;
+      const { folder } = await backend.getDriveFolder({
+        folderID: folderId,
+      });
+      setFolder(folder);
+      setItems(folder.items);
+    };
+    void inner();
+  }, [folderId, backend]);
+
+  const uploadFile = async (file: File) => {
+    // mock upload
+    console.log("Uploading file", file.name);
+    const url = "https://example.com";
+    try {
+      const { item } = await backend.addDriveItem({
+        url,
+        name: file.name,
+        folderID: folderId,
+      });
+      setItems((prev) => [...prev, item]);
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
@@ -34,7 +65,7 @@ const DriveFolderPage: React.FC = () => {
             </div>
           </IconButton>
           <Text size="6" weight="bold">
-            Folder Name
+            {folder?.name ?? "Loading..."}
           </Text>
         </div>
         <Button
@@ -52,8 +83,10 @@ const DriveFolderPage: React.FC = () => {
         ref={fileInputRef}
         style={{ display: "none" }}
         onChange={(event) => {
-          // TODO Upload file here
-          console.log(event.target.files);
+          const files = event.target.files;
+          if (files) {
+            void uploadFile(files[0]!);
+          }
         }}
       />
       {/* Main Content */}
@@ -62,9 +95,9 @@ const DriveFolderPage: React.FC = () => {
         <ContextMenu.Trigger>
           <div className="h-full bg-gray-200 rounded-3xl p-10">
             <div className="grid grid-cols-5 gap-10">
-              {Array.from({ length: 1000 }).map((_, index) => (
+              {items.map((item, index) => (
                 <ContextMenu.Root key={index}>
-                  <DriveCard content={fakeDriveItem} />
+                  <DriveCard content={item} />
                   <ContextMenu.Content size="2">
                     <ContextMenu.Item>Open</ContextMenu.Item>
                     <ContextMenu.Item>Download</ContextMenu.Item>
