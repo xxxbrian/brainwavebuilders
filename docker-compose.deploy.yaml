@@ -1,6 +1,8 @@
 services:
   nginx:
     image: ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-nginx:latest
+    ports:
+      - "3900:80"
 
   backend:
     image: ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-backend:latest
