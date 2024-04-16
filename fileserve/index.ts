@@ -18,13 +18,31 @@ const server = Bun.serve({
   async fetch(req) {
     const url = new URL(req.url);
 
+    // helper function to add CORS headers to responses
+    const addCORSHeaders = (response: Response) => {
+      response.headers.set("Access-Control-Allow-Origin", "*");
+      response.headers.set(
+        "Access-Control-Allow-Methods",
+        "GET, POST, OPTIONS",
+      );
+      response.headers.set("Access-Control-Allow-Headers", "Content-Type");
+      return response;
+    };
+
+    // options preflight request
+    if (req.method === "OPTIONS") {
+      return addCORSHeaders(new Response(null, { status: 204 }));
+    }
+
     // return index.html for root path
     if (url.pathname === "/")
-      return new Response(Bun.file("index.html"), {
-        headers: {
-          "Content-Type": "text/html",
-        },
-      });
+      return addCORSHeaders(
+        new Response(Bun.file("index.html"), {
+          headers: {
+            "Content-Type": "text/html",
+          },
+        }),
+      );
 
     // parse formdata at /upload
     if (url.pathname === "/upload" && req.method === "POST") {
@@ -42,7 +60,7 @@ const server = Bun.serve({
       // write the file to the storage directory
       await Bun.write(`storage/${id}`, file);
       // return the id of the file
-      return new Response(id);
+      return addCORSHeaders(new Response(id));
     }
 
     // serve files from the uploads directory
@@ -51,18 +69,19 @@ const server = Bun.serve({
       const query = db.query("SELECT fileName FROM uploads WHERE uuid = $id");
       const fileName = (query.get({ $id: id }) as { fileName: string })
         .fileName;
-      console.log(fileName);
       if (!fileName) return new Response("Not Exists", { status: 404 });
       let file = Bun.file(`storage/${id}`);
       if (!file) {
         console.log("File Lost");
         return new Response("File Lost", { status: 404 });
       }
-      return new Response(Bun.file(`storage/${id}`), {
-        headers: {
-          "Content-Disposition": `attachment; filename="${fileName}"`,
-        },
-      });
+      return addCORSHeaders(
+        new Response(Bun.file(`storage/${id}`), {
+          headers: {
+            "Content-Disposition": `attachment; filename="${fileName}"`,
+          },
+        }),
+      );
     }
 
     return new Response("Not Found", { status: 404 });
