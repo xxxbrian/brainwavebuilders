@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useCallback, useEffect, useRef } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { ContextMenu, Button, IconButton, Text } from "@radix-ui/themes";
 import { MdDriveFolderUpload } from "react-icons/md";
 import { MdArrowBackIos } from "react-icons/md";
@@ -10,6 +10,8 @@ import { DriveCard } from "@/components/drive/DriveCard";
 import { DriveItem, DriveFolderInfo, DriveFolder } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import { useParams } from "next/navigation";
+import { CreateFolderPopup } from "@/components/drive/CreateFolderPopup";
+import { usePathname, useRouter } from "next/navigation";
 
 type DriveDirEnt = DriveItem | DriveFolderInfo;
 type DriveItems = DriveDirEnt[];
@@ -30,7 +32,13 @@ const DriveFolderPage: React.FC = () => {
   const { folderId } = useParams<{ folderId: string }>();
   const [folder, setFolder] = React.useState<DriveFolder | null>(null);
 
+  const [isCreateFolderPopup, setIsCreateFolderPopup] = useState(false);
+
   const backend = useBackend();
+
+  const router = useRouter();
+
+  const pathName = usePathname();
 
   useEffect(() => {
     const inner = async () => {
@@ -59,6 +67,21 @@ const DriveFolderPage: React.FC = () => {
       console.error(error);
     }
   };
+
+  const createNewFolder = useCallback(
+    async (name: string) => {
+      try {
+        const { folderInfo } = await backend.createDriveFolder({
+          newFolderName: name,
+          parentFolderID: folderId,
+        });
+        setItems((prev) => [...prev, folderInfo]);
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    [folderId, backend],
+  );
 
   const download = useCallback(async (url: string) => {
     // let browser handle download
@@ -116,7 +139,11 @@ const DriveFolderPage: React.FC = () => {
                         onClick={
                           isFolder(item)
                             ? (item: DriveFolderInfo) => {
-                                // navigate to folder
+                                const newPath = pathName.replace(
+                                  /\/[^\/]+$/,
+                                  "/" + item.id,
+                                );
+                                void router.push(newPath);
                                 console.log("Navigate to folder", item.id);
                               }
                             : undefined
@@ -148,7 +175,11 @@ const DriveFolderPage: React.FC = () => {
           </div>
         </ContextMenu.Trigger>
         <ContextMenu.Content size="2">
-          <ContextMenu.Item>
+          <ContextMenu.Item
+            onClick={() => {
+              setIsCreateFolderPopup(true);
+            }}
+          >
             <div className="flex flex-row space-x-4 items-center">
               <Text>New Folder</Text>
               <MdFolderOpen width={24} height={24} />
@@ -165,6 +196,11 @@ const DriveFolderPage: React.FC = () => {
           <ContextMenu.Separator />
           <ContextMenu.Item>Back</ContextMenu.Item>
         </ContextMenu.Content>
+        <CreateFolderPopup
+          isOpen={isCreateFolderPopup}
+          setIsOpen={setIsCreateFolderPopup}
+          createNewFolder={createNewFolder}
+        />
       </ContextMenu.Root>
     </div>
   );
