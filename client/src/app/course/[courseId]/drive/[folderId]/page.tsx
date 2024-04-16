@@ -59,11 +59,13 @@ const DriveFolderPage: React.FC = () => {
     <div className="flex flex-col space-y-10 p-10 h-full">
       <div className="flex flex-row justify-between items-center">
         <div className="flex flex-row space-x-4 items-center">
-          <IconButton radius="full" variant="soft" size="3">
-            <div className="pl-2">
-              <MdArrowBackIos />
-            </div>
-          </IconButton>
+          {folder?.parentFolderId && (
+            <IconButton radius="full" variant="soft" size="3">
+              <div className="pl-2">
+                <MdArrowBackIos />
+              </div>
+            </IconButton>
+          )}
           <Text size="6" weight="bold">
             {folder?.name ?? "Loading..."}
           </Text>
