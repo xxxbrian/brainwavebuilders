@@ -69,7 +69,6 @@ export const MarkExamPage: React.FC = () => {
         submissionId,
         saqGrades: totalScore,
       });
-      alert("Total SAQ scores successfully saved!");
       onClickBack();
     } catch (error) {
       console.error("Failed to save total SAQ scores:", error);

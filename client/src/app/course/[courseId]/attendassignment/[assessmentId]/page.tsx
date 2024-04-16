@@ -49,7 +49,6 @@ export const Assignment: React.FC = () => {
           assessmentId,
           assignmentContent: JSON.stringify(content),
         });
-        alert("Assignment submitted successfully!");
         const newPath = pathName.replace(/\/attendassignment\/[^\/]+/, "");
         router.push(newPath);
       } catch (error) {
