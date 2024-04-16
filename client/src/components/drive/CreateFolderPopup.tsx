@@ -36,8 +36,9 @@ export const CreateFolderPopup: React.FC<CreateFolderProps> = ({
       e.preventDefault();
       e.stopPropagation();
       createNewFolder(folderName);
+      handleClose();
     },
-    [folderName, createNewFolder],
+    [folderName, createNewFolder, handleClose],
   );
 
   return (
