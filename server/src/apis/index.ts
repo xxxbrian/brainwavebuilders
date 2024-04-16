@@ -141,6 +141,7 @@ export interface UserSevenDayActivity {
 }
 
 export interface CourseMembership {
+    userId: string;
     courseId: string;
     role: string;
 }

@@ -76,6 +76,7 @@ types:
     activities: int[]
 
   CourseMembership:
+    userId: string
     courseId: string
     role: string
 
