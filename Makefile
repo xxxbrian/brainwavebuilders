@@ -2,7 +2,9 @@
 
 all:
 	@echo error: please specify a target.
-	@echo hint: To run the project, do "make up".
+	@cat .dev/make-hints || false
+	@false
+
 
 up:
 	docker-compose up -d
