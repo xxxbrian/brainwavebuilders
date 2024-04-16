@@ -76,8 +76,8 @@ export const fetchAllEventByCourse = async (
       type: assessment.type,
       url:
         assessment.type === "exam"
-          ? `/courses/${courseId}/exams/${assessment.id}`
-          : `/courses/${course.id}/assignment/${assessment.id}`,
+          ? `/course/${courseId}/exam/${assessment.id}`
+          : `/course/${course.id}/assignment/${assessment.id}`,
     });
   }
 
