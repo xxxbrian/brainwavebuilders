@@ -14,3 +14,18 @@ export const newDriveFolder = async (
   });
   return folder.id;
 };
+
+export const addDriveFile = async (
+  url: string,
+  name: string,
+  folderID: string,
+): Promise<string> => {
+  const file = await db.files.create({
+    data: {
+      url,
+      name,
+      folderId: folderID,
+    },
+  });
+  return file.id;
+};
