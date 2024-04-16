@@ -1,7 +1,7 @@
-const BACKEND_URL = process.env.BACKEND_URL;
+const NEXT_PROXY_BACKEND_URL = process.env.NEXT_PROXY_BACKEND_URL;
 
-if (!BACKEND_URL) {
-  throw new Error("BACKEND_URL is not defined");
+if (process.env.NODE_ENV !== "production" && !NEXT_PROXY_BACKEND_URL) {
+  throw new Error("NEXT_PROXY_BACKEND_URL is not defined");
 }
 
 /**
@@ -23,10 +23,17 @@ const config = {
     defaultLocale: "en",
   },
   async rewrites() {
+    if (process.env.NODE_ENV === "production") {
+      console.warn(
+        "Suppressed NextJS rewrites as they are disabled in production.",
+      );
+      return [];
+    }
+
     return [
       {
         source: "/api/:path*",
-        destination: `http://${BACKEND_URL}/:path*`,
+        destination: `http://${NEXT_PROXY_BACKEND_URL}/:path*`,
       },
     ];
   },
