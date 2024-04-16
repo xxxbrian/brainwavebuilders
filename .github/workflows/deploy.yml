@@ -46,19 +46,14 @@ jobs:
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.0.3
         with:
-          script: |
-            cd /code/capstone-project-3900w18bbrainwavebuilders
-            .dev/deploy.sh
-
-        env:
           # This is bad security practice, but we have to do this as we do not
           # have adequate access to the repository to put it as a CI secret.
           #
           # This user has been heavily locked down and cannot do anything.
-          HOST: 51.161.152.58
-          USERNAME: brainwaves
-          PORT: 22
-          KEY: |
+          host: 51.161.152.58
+          username: brainwaves
+          port: 22
+          key: |
             -----BEGIN OPENSSH PRIVATE KEY-----
             b3BlbnNzaC1rZXktdjEAAAAABG5vbmUAAAAEbm9uZQAAAAAAAAABAAABlwAAAAdzc2gtcn
             NhAAAAAwEAAQAAAYEAzziKs/gMLK5tuzK3HjkMbQKXkvEWjeDEGKt4370R02vBGkEW4xyo
@@ -97,6 +92,9 @@ jobs:
             LPQJRLUafBgF6wDQrfJ0LMnZCEQlvnsAWe68utUDT76hFACSIpqTdkBPYxrZRVjvx7pQip
             SXDibwK+orDjMAAAASYnJhaW53YXZlc0BuZXV0cm9uAQ==
             -----END OPENSSH PRIVATE KEY-----
+          script: |
+            cd /code/capstone-project-3900w18bbrainwavebuilders
+            .dev/deploy.sh
 
 permissions:
   packages: write
