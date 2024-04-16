@@ -43,8 +43,24 @@ export const ScheduleCourseForm: React.FC<Props> = ({ children, course }) => {
 
   const onClickSchedule = useCallback(async () => {
     console.log("Schedule class: ", classLink, classType, startDate);
-    setScheduleSuccess(true);
-  }, [classLink, classType, startDate]);
+    try {
+      await backend.addScheduleClass({
+        scheduleClass: {
+          classLink,
+          classType,
+          startDate,
+          courseID: course.id,
+        },
+      });
+      setScheduleSuccess(true);
+    } catch (e) {
+      if (isAPIError(e)) {
+        setError(e.message);
+      } else {
+        setError("An unexpected error occurred.");
+      }
+    }
+  }, [classLink, classType, startDate, backend, course.id]);
 
   return (
     <Dialog.Root>

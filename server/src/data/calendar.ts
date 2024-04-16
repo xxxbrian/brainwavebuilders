@@ -1,7 +1,8 @@
 import { db } from "@/globals";
 import { Course, Assessment } from "@prisma/client";
 import { APIError } from "@/apis";
-import { Event } from "@/apis";
+import { Event, ScheduleClass } from "@/apis";
+import { getRoleInCourse } from "@/data/course";
 
 function formatTime(date: Date): string {
   let hours = date.getHours();
@@ -76,4 +77,28 @@ export const fetchAllAssessmentsEventByUser = async (
     }
   }
   return events;
+};
+
+export const createScheduleClass = async (
+  userId: string,
+  scheduleClass: ScheduleClass,
+): Promise<void> => {
+  const role = await getRoleInCourse(userId, scheduleClass.courseID);
+  if (role !== "TEACHER") {
+    throw new APIError(
+      "You are not authorized to add a schedule class to this course.",
+    );
+  }
+  db.scheduleClass
+    .create({
+      data: {
+        url: scheduleClass.classLink,
+        startDate: new Date(scheduleClass.startDate),
+        courseID: scheduleClass.courseID,
+        type: scheduleClass.classType,
+      },
+    })
+    .catch((error) => {
+      throw new APIError(error.message, "SCHEDULE_CLASS_CREATION_FAILED");
+    });
 };
