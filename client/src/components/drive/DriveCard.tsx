@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Card, Text, Box, Badge, Inset } from "@radix-ui/themes";
+import { Card, Text, Box, Badge, Inset, Strong } from "@radix-ui/themes";
 import defaultCourseImg from "@/assets/unsw.png";
 import { DriveFolderInfo } from "@/backend";
 import { DriveItem } from "@/backend";
@@ -31,36 +31,45 @@ export const DriveCard: React.FC<DriveCardProps> = ({ content, onClick }) => {
   }, [content, onClick]);
 
   return (
-    <Box maxWidth="240px">
+    <Box maxWidth="240px" height="250px">
       <Card
+        size="2"
         className="
-    overflow-hidden
-    max-w-sm
-    transform
-    cursor-pointer h-fit"
+          overflow-hidden
+          max-w-sm
+          transform
+          cursor-pointer
+          h-full"
         onClick={onClickInner}
       >
         {/* Header Image */}
         <Inset clip="padding-box" side="top" pb="current">
           <img
             src={defaultCourseImg.src}
-            alt="Course"
+            alt="Folder"
             className="object-cover"
           />
         </Inset>
 
         {/* Content */}
-        <div className="pb-2">
-          {/* Course Name and Description */}
-          <Box className="mt-3">
+        <div className="flex flex-col justify-between h-1/2">
+          <Box>
             {/* File/Folder Name */}
             <div>
-              <Text trim="both" className="text-based font-bold ">
-                {name}
+              <Text trim="both" as="p" size="3">
+                <Strong>{name}</Strong>
               </Text>
             </div>
           </Box>
-          <Badge>{contentType}</Badge>
+          {contentType === "File" ? (
+            <Badge size="1" color="blue" className="mt-4 w-fit">
+              {contentType}
+            </Badge>
+          ) : (
+            <Badge size="1" className="mt-4 w-fit">
+              {contentType}
+            </Badge>
+          )}
         </div>
       </Card>
     </Box>
