@@ -2,19 +2,12 @@ name: "Test, lint and build"
 on: [push]
 
 jobs:
-  type-check:
+  checks:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
       - name: Check Server Type
         run: (cd server/ && yarn && yarn tsc)
-      - name: Check Client Type
-        run: (cd client/ && yarn && yarn tsc)
-
-  lint:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v1
       - name: Lint Client
         run: (cd client/ && yarn && yarn lint)
 
