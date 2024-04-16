@@ -25,7 +25,6 @@ import { getUserCourses } from "@/handlers/getUserCourses";
 import { createDriveFolder } from "@/handlers/createDriveFolder";
 import { getThreads } from "@/handlers/getThreads";
 import { assignmentGradeSubmission } from "@/handlers/assignmentGradeSubmission";
-import { getCourseBaseFolderID } from "@/handlers/getCourseBaseFolderID";
 import { getRoleInCourse } from "@/handlers/getRoleInCourse";
 import { upsertPost } from "@/handlers/upsertPost";
 import { removeMemberFromCourse } from "@/handlers/removeMemberFromCourse";
@@ -744,16 +743,6 @@ export interface AddScheduleClassResponse {
 
 }
 
-// GetCourseBaseFolderIDRequest is the request that is sent to the getCourseBaseFolderID endpoint.
-export interface GetCourseBaseFolderIDRequest {
-    courseID: string;
-}
-
-// GetCourseBaseFolderIDResponse is the response that is sent to the getCourseBaseFolderID endpoint.
-export interface GetCourseBaseFolderIDResponse {
-    folderID: string;
-}
-
 // CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderRequest {
     newFolderName: string;
@@ -762,7 +751,7 @@ export interface CreateDriveFolderRequest {
 
 // CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderResponse {
-
+    folder: DriveFolder;
 }
 
 // GetDriveFolderRequest is the request that is sent to the getDriveFolder endpoint.
@@ -1879,28 +1868,6 @@ app.post('/api/addScheduleClass', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request addScheduleClass with arguments ${ JSON.stringify(request) }: `, e);
-            return;
-        }
-    }
-});
-
-// getCourseBaseFolderID is the endpoint handler for the getCourseBaseFolderID endpoint.
-// It wraps around the function at @/handlers/getCourseBaseFolderID.
-app.post('/api/getCourseBaseFolderID', async (req, res) => {
-    const request: GetCourseBaseFolderIDRequest = req.body;
-    try {
-        const ctx = { req, res };
-        const response: GetCourseBaseFolderIDResponse = await getCourseBaseFolderID(ctx, request);
-        res.json(response);
-    } catch (e) {
-        if (e instanceof APIError) {
-            res.status(400);
-            res.json({ message: e.message, code: e.code, _rpc_error: true });
-            return;
-        } else {
-            res.status(500);
-            res.json({ message: "Internal server error", _rpc_error: true });
-            console.error(`Error occurred while handling request getCourseBaseFolderID with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

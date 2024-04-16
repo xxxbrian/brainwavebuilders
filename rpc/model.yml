@@ -500,18 +500,12 @@ endpoints:
     response:
     service: typescript
 
-  getCourseBaseFolderID:
-    request:
-      courseID: string
-    response:
-      folderID: string
-    service: typescript
-
   createDriveFolder:
     request:
       newFolderName: string
-      folderID: string
+      parentFolderID: string
     response:
+      folder: DriveFolder
     service: typescript
 
   getDriveFolder:

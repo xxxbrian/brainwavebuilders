@@ -690,16 +690,6 @@ export interface AddScheduleClassResponse {
 
 }
 
-// GetCourseBaseFolderIDRequest is the request that is sent to the getCourseBaseFolderID endpoint.
-export interface GetCourseBaseFolderIDRequest {
-    courseID: string;
-}
-
-// GetCourseBaseFolderIDResponse is the response that is sent to the getCourseBaseFolderID endpoint.
-export interface GetCourseBaseFolderIDResponse {
-    folderID: string;
-}
-
 // CreateDriveFolderRequest is the request that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderRequest {
     newFolderName: string;
@@ -708,7 +698,7 @@ export interface CreateDriveFolderRequest {
 
 // CreateDriveFolderResponse is the response that is sent to the createDriveFolder endpoint.
 export interface CreateDriveFolderResponse {
-
+    folder: DriveFolder;
 }
 
 // GetDriveFolderRequest is the request that is sent to the getDriveFolder endpoint.
@@ -2174,35 +2164,6 @@ export class BrainwavesClient {
         }
 
         return json as AddScheduleClassResponse;
-    }
-
-
-
-    async getCourseBaseFolderID(request: GetCourseBaseFolderIDRequest): Promise<GetCourseBaseFolderIDResponse> {
-        const response = await fetch(`${this.base_url}/getCourseBaseFolderID`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(request)
-        });
-
-        const json = await response.json();
-
-        if (!response.ok) {
-            if (isAPIError(json)) {
-                switch (response.status) {
-                    case 400:
-                        throw new APIError(json.message, json.code);
-                    case 500:
-                        throw new Error(json.message);
-                }
-            }
-
-            throw new Error("RPC Request Failed.");
-        }
-
-        return json as GetCourseBaseFolderIDResponse;
     }
 
 
