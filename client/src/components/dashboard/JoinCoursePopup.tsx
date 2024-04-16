@@ -1,6 +1,6 @@
 import React, { useState, useRef } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Dialog } from "@radix-ui/themes";
+import { Button, Dialog } from "@radix-ui/themes";
 import { useBackend } from "@/hooks/useBackend";
 import { useRouter } from "next/navigation";
 
@@ -61,14 +61,14 @@ export const JoinCourseButton: React.FC = () => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <button className="bg-[#004E89] text-white rounded-xl hover:bg-opacity-90 px-4 py-2 flex-shrink-0">
-          Join Class
-        </button>
+        <Button variant="surface" size={"3"}>
+          Join Course
+        </Button>
       </Dialog.Trigger>
       <Dialog.Content>
         <Dialog.Title className="flex justify-between items-start">
           <span className="font-bold text-[40px] leading-[48px] tracking-normal text-blue-500">
-            Class Code
+            Invitation Code
           </span>
           {/* Close Button */}
           <Dialog.Close>

@@ -43,9 +43,9 @@ export const CreateCourseButton: React.FC = () => {
   return (
     <Dialog.Root>
       <Dialog.Trigger>
-        <button className="bg-gray-300 hover:text-white rounded-xl hover:bg-gray-400 px-4 py-2 flex-shrink-0">
+        <Button variant="solid" size={"3"}>
           Create Course
-        </button>
+        </Button>
       </Dialog.Trigger>
       <Dialog.Content className="bg-white px-10 py-6 rounded-3xl shadow-lg">
         <Dialog.Title className="flex justify-between items-start">
