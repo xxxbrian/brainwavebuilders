@@ -171,6 +171,17 @@ export interface DriveFolder {
     items: (DriveFolderInfo | DriveItem)[];
 }
 
+export interface CourseBook {
+    id: string;
+    title: string;
+    parentID?: string;
+    childrenIDs?: string[];
+    content?: any;
+    course?: Course;
+    parent?: CourseBook;
+    children?: CourseBook[];
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
@@ -726,6 +737,61 @@ export interface AddDriveItemRequest {
 // AddDriveItemResponse is the response that is sent to the addDriveItem endpoint.
 export interface AddDriveItemResponse {
     item: DriveItem;
+}
+
+// GetCourseBookRequest is the request that is sent to the getCourseBook endpoint.
+export interface GetCourseBookRequest {
+    bookIDs: string[];
+}
+
+// GetCourseBookResponse is the response that is sent to the getCourseBook endpoint.
+export interface GetCourseBookResponse {
+    books: CourseBook[];
+}
+
+// GetBooksByCourseRequest is the request that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseRequest {
+    courseID: string;
+}
+
+// GetBooksByCourseResponse is the response that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseResponse {
+    books: CourseBook[];
+}
+
+// CreateBookRequest is the request that is sent to the createBook endpoint.
+export interface CreateBookRequest {
+    title: string;
+    courseID: string;
+    parentID?: string;
+    content?: any;
+}
+
+// CreateBookResponse is the response that is sent to the createBook endpoint.
+export interface CreateBookResponse {
+    book: CourseBook;
+}
+
+// UpdateBookRequest is the request that is sent to the updateBook endpoint.
+export interface UpdateBookRequest {
+    id: string;
+    title: string;
+    content?: any;
+}
+
+// UpdateBookResponse is the response that is sent to the updateBook endpoint.
+export interface UpdateBookResponse {
+    book: CourseBook;
+}
+
+// DeleteBookRequest is the request that is sent to the deleteBook endpoint.
+export interface DeleteBookRequest {
+    id: string;
+}
+
+// DeleteBookResponse is the response that is sent to the deleteBook endpoint.
+export interface DeleteBookResponse {
+
 }
 
 
@@ -2256,6 +2322,151 @@ export class BrainwavesClient {
         }
 
         return json as AddDriveItemResponse;
+    }
+
+
+
+    async getCourseBook(request: GetCourseBookRequest): Promise<GetCourseBookResponse> {
+        const response = await fetch(`${this.base_url}/getCourseBook`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetCourseBookResponse;
+    }
+
+
+
+    async getBooksByCourse(request: GetBooksByCourseRequest): Promise<GetBooksByCourseResponse> {
+        const response = await fetch(`${this.base_url}/getBooksByCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetBooksByCourseResponse;
+    }
+
+
+
+    async createBook(request: CreateBookRequest): Promise<CreateBookResponse> {
+        const response = await fetch(`${this.base_url}/createBook`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as CreateBookResponse;
+    }
+
+
+
+    async updateBook(request: UpdateBookRequest): Promise<UpdateBookResponse> {
+        const response = await fetch(`${this.base_url}/updateBook`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as UpdateBookResponse;
+    }
+
+
+
+    async deleteBook(request: DeleteBookRequest): Promise<DeleteBookResponse> {
+        const response = await fetch(`${this.base_url}/deleteBook`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as DeleteBookResponse;
     }
 }
 

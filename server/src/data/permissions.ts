@@ -137,6 +137,15 @@ export const hasTeacherRoleInCourse = async (
   return role === CourseRole.TEACHER;
 };
 
+export const userInCourse = async (
+  user: User,
+  courseID: string,
+): Promise<boolean> => {
+  const role = await getRoleInCourse(user.id, courseID);
+
+  return !!role;
+};
+
 export const canPublishAnnouncement = async (
   user: User,
   forumID: string,

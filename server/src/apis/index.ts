@@ -9,16 +9,20 @@ import { getAnnouncements } from "@/handlers/getAnnouncements";
 import { fetchSubmission } from "@/handlers/fetchSubmission";
 import { submitAssignment } from "@/handlers/submitAssignment";
 import { forgotPassword } from "@/handlers/forgotPassword";
+import { createBook } from "@/handlers/createBook";
 import { addScheduleClass } from "@/handlers/addScheduleClass";
 import { getForumByCourseID } from "@/handlers/getForumByCourseID";
+import { updateBook } from "@/handlers/updateBook";
 import { login } from "@/handlers/login";
 import { fetchAssessments } from "@/handlers/fetchAssessments";
 import { resetPassword } from "@/handlers/resetPassword";
 import { toggleLikePost } from "@/handlers/toggleLikePost";
 import { getCourses } from "@/handlers/getCourses";
+import { deleteBook } from "@/handlers/deleteBook";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
+import { getCourseBook } from "@/handlers/getCourseBook";
 import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
 import { getCourseEvents } from "@/handlers/getCourseEvents";
 import { getUserCourses } from "@/handlers/getUserCourses";
@@ -38,6 +42,7 @@ import { setUserProfile } from "@/handlers/setUserProfile";
 import { getCourseMembers } from "@/handlers/getCourseMembers";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
+import { getBooksByCourse } from "@/handlers/getBooksByCourse";
 import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
 import { submitAnswers } from "@/handlers/submitAnswers";
 import { getDriveFolder } from "@/handlers/getDriveFolder";
@@ -222,6 +227,17 @@ export interface DriveFolder {
     id: string;
     name: string;
     items: (DriveFolderInfo | DriveItem)[];
+}
+
+export interface CourseBook {
+    id: string;
+    title: string;
+    parentID?: string;
+    childrenIDs?: string[];
+    content?: any;
+    course?: Course;
+    parent?: CourseBook;
+    children?: CourseBook[];
 }
 
 //////////////////////////////
@@ -779,6 +795,61 @@ export interface AddDriveItemRequest {
 // AddDriveItemResponse is the response that is sent to the addDriveItem endpoint.
 export interface AddDriveItemResponse {
     item: DriveItem;
+}
+
+// GetCourseBookRequest is the request that is sent to the getCourseBook endpoint.
+export interface GetCourseBookRequest {
+    bookIDs: string[];
+}
+
+// GetCourseBookResponse is the response that is sent to the getCourseBook endpoint.
+export interface GetCourseBookResponse {
+    books: CourseBook[];
+}
+
+// GetBooksByCourseRequest is the request that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseRequest {
+    courseID: string;
+}
+
+// GetBooksByCourseResponse is the response that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseResponse {
+    books: CourseBook[];
+}
+
+// CreateBookRequest is the request that is sent to the createBook endpoint.
+export interface CreateBookRequest {
+    title: string;
+    courseID: string;
+    parentID?: string;
+    content?: any;
+}
+
+// CreateBookResponse is the response that is sent to the createBook endpoint.
+export interface CreateBookResponse {
+    book: CourseBook;
+}
+
+// UpdateBookRequest is the request that is sent to the updateBook endpoint.
+export interface UpdateBookRequest {
+    id: string;
+    title: string;
+    content?: any;
+}
+
+// UpdateBookResponse is the response that is sent to the updateBook endpoint.
+export interface UpdateBookResponse {
+    book: CourseBook;
+}
+
+// DeleteBookRequest is the request that is sent to the deleteBook endpoint.
+export interface DeleteBookRequest {
+    id: string;
+}
+
+// DeleteBookResponse is the response that is sent to the deleteBook endpoint.
+export interface DeleteBookResponse {
+
 }
 
 
@@ -1939,6 +2010,116 @@ app.post('/api/addDriveItem', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request addDriveItem with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getCourseBook is the endpoint handler for the getCourseBook endpoint.
+// It wraps around the function at @/handlers/getCourseBook.
+app.post('/api/getCourseBook', async (req, res) => {
+    const request: GetCourseBookRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetCourseBookResponse = await getCourseBook(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getCourseBook with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getBooksByCourse is the endpoint handler for the getBooksByCourse endpoint.
+// It wraps around the function at @/handlers/getBooksByCourse.
+app.post('/api/getBooksByCourse', async (req, res) => {
+    const request: GetBooksByCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetBooksByCourseResponse = await getBooksByCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getBooksByCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// createBook is the endpoint handler for the createBook endpoint.
+// It wraps around the function at @/handlers/createBook.
+app.post('/api/createBook', async (req, res) => {
+    const request: CreateBookRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: CreateBookResponse = await createBook(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request createBook with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// updateBook is the endpoint handler for the updateBook endpoint.
+// It wraps around the function at @/handlers/updateBook.
+app.post('/api/updateBook', async (req, res) => {
+    const request: UpdateBookRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: UpdateBookResponse = await updateBook(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request updateBook with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// deleteBook is the endpoint handler for the deleteBook endpoint.
+// It wraps around the function at @/handlers/deleteBook.
+app.post('/api/deleteBook', async (req, res) => {
+    const request: DeleteBookRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: DeleteBookResponse = await deleteBook(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request deleteBook with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
