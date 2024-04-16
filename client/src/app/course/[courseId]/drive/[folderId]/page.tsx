@@ -1,5 +1,6 @@
 "use client";
 
+import React, { useRef } from "react";
 import {
   Inset,
   Card,
@@ -13,8 +14,16 @@ import { MdDriveFolderUpload } from "react-icons/md";
 import { MdArrowBackIos } from "react-icons/md";
 import { MdFolderOpen } from "react-icons/md";
 import { MdOutlineInsertDriveFile } from "react-icons/md";
+import { DriveCard } from "@/components/drive/DriveCard";
+import { fakeDriveItem } from "@/utils/data";
 
 const DriveFolderPage: React.FC = () => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <div className="flex flex-col space-y-10 p-10 h-full">
       <div className="flex flex-row justify-between items-center">
@@ -28,10 +37,25 @@ const DriveFolderPage: React.FC = () => {
             Folder Name
           </Text>
         </div>
-        <Button size="3">
+        <Button
+          color="indigo"
+          variant="soft"
+          size="3"
+          onClick={handleUploadClick}
+        >
           <MdDriveFolderUpload size={20} /> Upload
         </Button>
       </div>
+
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: "none" }}
+        onChange={(event) => {
+          // TODO Upload file here
+          console.log(event.target.files);
+        }}
+      />
       {/* Main Content */}
 
       <ContextMenu.Root>
@@ -40,28 +64,7 @@ const DriveFolderPage: React.FC = () => {
             <div className="grid grid-cols-5 gap-10">
               {Array.from({ length: 1000 }).map((_, index) => (
                 <ContextMenu.Root key={index}>
-                  <ContextMenu.Trigger>
-                    <Card size="2" className="hover:shadow-xl">
-                      <Inset clip="padding-box" side="top" pb="current">
-                        <img
-                          src="https://images.unsplash.com/photo-1617050318658-a9a3175e34cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=600&q=80"
-                          alt="Bold typography"
-                          style={{
-                            display: "block",
-                            objectFit: "cover",
-                            width: "100%",
-                            height: 140,
-                            backgroundColor: "var(--gray-5)",
-                          }}
-                        />
-                      </Inset>
-                      <Text as="p" size="3">
-                        <Strong>Typography</Strong> is the art and technique of
-                        arranging type to make written language legible,
-                        readable and appealing when displayed.
-                      </Text>
-                    </Card>
-                  </ContextMenu.Trigger>
+                  <DriveCard content={fakeDriveItem} />
                   <ContextMenu.Content size="2">
                     <ContextMenu.Item>Open</ContextMenu.Item>
                     <ContextMenu.Item>Download</ContextMenu.Item>
