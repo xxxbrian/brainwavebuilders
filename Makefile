@@ -7,13 +7,13 @@ all:
 
 
 up:
-	docker-compose up -d
+	docker compose up -d
 
 down:
-	docker-compose down --remove-orphans
+	docker compose down --remove-orphans
 
 destroy: clean
-	docker-compose down --volumes --remove-orphans
+	docker compose down --volumes --remove-orphans
 
 pre-commit:
 	pre-commit install
@@ -35,23 +35,23 @@ clean:
 
 # Production-ready Builds
 build-local:
-	env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml build
+	env $$(cat .dev/secrets/local.env) docker compose -f docker-compose.local.yaml build
 
 build-prod:
-	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml build
+	env $$(cat .dev/secrets/production.env) docker compose -f docker-compose.build.yaml build
 
 run-prod: build-prod
-	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml up
+	env $$(cat .dev/secrets/production.env) docker compose -f docker-compose.build.yaml up
 
 run-prod-up: build-prod
-	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml up -d
+	env $$(cat .dev/secrets/production.env) docker compose -f docker-compose.build.yaml up -d
 
 run-prod-down:
-	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml down
+	env $$(cat .dev/secrets/production.env) docker compose -f docker-compose.build.yaml down
 
 run-prod-update: run-prod-down run-prod-up
 
 # Builds additional stuff (namely local db) from local yml.
 run-local: build-local
-	env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml build && \
-    env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml up
+	env $$(cat .dev/secrets/local.env) docker compose -f docker-compose.local.yaml build && \
+    env $$(cat .dev/secrets/local.env) docker compose -f docker-compose.local.yaml up
