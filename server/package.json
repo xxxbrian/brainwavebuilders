@@ -39,6 +39,7 @@
     "start": "env NODE_ENV=development webpack",
     "build": "env NODE_ENV=production webpack",
     "dev": "prisma migrate dev && nodemon",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "migrate": "prisma migrate deploy"
   }
 }

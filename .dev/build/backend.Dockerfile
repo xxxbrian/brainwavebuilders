@@ -5,5 +5,6 @@ WORKDIR /app/server
 RUN yarn install
 RUN yarn build
 WORKDIR /app/server/dist
+COPY .dev/build/server.entrypoint.sh ./entrypoint.sh
 
-ENTRYPOINT [ "node", "--enable-source-maps", "server.js" ]
+ENTRYPOINT [ "bash", "-c", "entrypoint.sh" ]
