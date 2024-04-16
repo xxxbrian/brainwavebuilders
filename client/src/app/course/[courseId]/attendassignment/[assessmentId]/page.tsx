@@ -9,7 +9,7 @@ import { IoIosArrowBack } from "react-icons/io";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment, Submission } from "@/backend";
 
-export const Assignment: React.FC = () => {
+const Assignment: React.FC = () => {
   const router = useRouter();
   const backend = useBackend();
 
@@ -38,7 +38,7 @@ export const Assignment: React.FC = () => {
         }
       };
 
-      fetchAssessment();
+      void fetchAssessment();
     }
   }, [assessmentId, backend]);
 
@@ -78,8 +78,8 @@ export const Assignment: React.FC = () => {
         </div>
         <QuizHeader
           title={assessment.title}
-          description={assessment.description || "No description available"}
-          endDate={assessment.dueDate || "Due date not set"}
+          description={assessment.description ?? "No description available"}
+          endDate={assessment.dueDate ?? "Due date not set"}
           onSubmit={submitAssignmentToBackend}
         />
         <AdvancedEditor

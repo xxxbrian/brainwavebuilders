@@ -78,7 +78,7 @@ export const JoinCourseButton: React.FC = () => {
         <form
           onSubmit={(e: FormEvent) => {
             e.preventDefault();
-            handleSubmit(code.join(""));
+            void handleSubmit(code.join(""));
           }}
           className="mt-4"
         >

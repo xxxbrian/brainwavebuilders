@@ -19,7 +19,7 @@ const llama = new OpenAI({
 export async function POST(req: Request): Promise<Response> {
   const openai = new OpenAI({
     apiKey: process.env.OPENAI_API_KEY,
-    baseURL: process.env.OPENAI_BASE_URL || "https://api.openai.com/v1",
+    baseURL: process.env.OPENAI_BASE_URL ?? "https://api.openai.com/v1",
   });
   // Check if the OPENAI_API_KEY is set, if not return 400
   if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === "") {
@@ -53,7 +53,7 @@ export async function POST(req: Request): Promise<Response> {
     }
   }
 
-  let { prompt, option, command } = await req.json();
+  const { prompt, option, command } = await req.json();
   const messages = match(option)
     .with("continue", () => [
       {

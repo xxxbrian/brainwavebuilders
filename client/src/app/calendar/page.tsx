@@ -9,7 +9,7 @@ import { useBackend } from "@/hooks/useBackend";
 
 import React, { useEffect } from "react";
 
-export const Calendar: React.FC = () => {
+const Calendar: React.FC = () => {
   const [events, setEvents] = React.useState<Record<string, Event[]>>({});
 
   const backend = useBackend();
