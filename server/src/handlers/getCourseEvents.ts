@@ -1,5 +1,5 @@
 import { GetCourseEventsRequest, GetCourseEventsResponse } from "@/apis";
-import { fetchAllAssessmentsEventByCourse } from "@/data/calendar";
+import { fetchAllEventByCourse } from "@/data/calendar";
 
 // getCourseEvents implements the getCourseEvents endpoint.
 // This code has been automatically generated.
@@ -10,7 +10,7 @@ export const getCourseEvents = async (
   request: GetCourseEventsRequest,
 ): Promise<GetCourseEventsResponse> => {
   let { courseId } = request;
-  let events = await fetchAllAssessmentsEventByCourse(courseId);
+  let events = await fetchAllEventByCourse(courseId);
   return {
     events,
   };

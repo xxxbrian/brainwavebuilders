@@ -141,6 +141,14 @@ export interface Event {
     name: string;
     time: string;
     type: string;
+    url: string;
+}
+
+export interface ScheduleClass {
+    courseID: string;
+    startDate: string;
+    classType: string;
+    classLink: string;
 }
 
 //////////////////////////////
@@ -644,6 +652,16 @@ export interface GetCourseMembersRequest {
 export interface GetCourseMembersResponse {
     users: User[];
     memberships: CourseMembership[];
+}
+
+// AddScheduleClassRequest is the request that is sent to the addScheduleClass endpoint.
+export interface AddScheduleClassRequest {
+    scheduleClass: ScheduleClass;
+}
+
+// AddScheduleClassResponse is the response that is sent to the addScheduleClass endpoint.
+export interface AddScheduleClassResponse {
+
 }
 
 
@@ -2029,6 +2047,35 @@ export class BrainwavesClient {
         }
 
         return json as GetCourseMembersResponse;
+    }
+
+
+
+    async addScheduleClass(request: AddScheduleClassRequest): Promise<AddScheduleClassResponse> {
+        const response = await fetch(`${this.base_url}/addScheduleClass`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as AddScheduleClassResponse;
     }
 }
 

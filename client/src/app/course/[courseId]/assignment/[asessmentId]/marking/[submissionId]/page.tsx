@@ -44,7 +44,7 @@ const MarkAssignmentPage: React.FC = () => {
   }, [submissionId, backend]);
 
   const handleMarkChange = (newMark: number) => {
-    if (newMark >= 0) {
+    if (newMark >= 0 && newMark <= 100) {
       setMark(newMark);
     }
   };

@@ -9,6 +9,7 @@ import { useBackend } from "@/hooks/useBackend";
 import { useCourse } from "@/contexts/CourseContext";
 import { IoIosArrowBack } from "react-icons/io";
 import { NewQuestion } from "@/backend";
+import ErrorDialog from "@/components/ErrDialog";
 
 interface Question extends NewQuestion {
   id: string;
@@ -27,6 +28,9 @@ const CreateExamPage: React.FC = () => {
   const [description, setDescription] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startDate, setStartDate] = useState("");
+  // Error handler
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
 
   const [questions, setQuestions] = useState<Question[]>([
     {
@@ -40,7 +44,43 @@ const CreateExamPage: React.FC = () => {
   ]);
 
   const onClickSave = useCallback(async () => {
-    // TODO: Send exam info to backend
+    // Validation for empty fields in the exam information
+    if (
+      !title.trim() ||
+      !description.trim() ||
+      !startDate.trim() ||
+      !endDate.trim()
+    ) {
+      setErrorMessage(
+        "Title, description, start date, and end date must not be empty.",
+      );
+      setIsDialogOpen(true);
+      return;
+    }
+
+    // Validation to ensure there is at least one question
+    if (questions.length === 0) {
+      setErrorMessage("There must be at least one question in the exam.");
+      setIsDialogOpen(true);
+      return;
+    }
+
+    // Validation for each question
+    for (const question of questions) {
+      if (
+        !question.title.trim() ||
+        !question.type.trim() ||
+        question.options.some((option: string) => !option.trim()) ||
+        !question.answer?.trim()
+      ) {
+        setErrorMessage(
+          "All fields within a question must be filled out properly.",
+        );
+        setIsDialogOpen(true);
+        return;
+      }
+    }
+
     const preparedQuestions = questions.map(
       ({ id, title, type, options, answer, points }) => ({
         title,
@@ -163,6 +203,11 @@ const CreateExamPage: React.FC = () => {
       >
         +
       </button>
+      <ErrorDialog
+        isOpen={isDialogOpen}
+        setIsOpen={setIsDialogOpen}
+        errorMessage={errorMessage}
+      />
     </div>
   );
 };

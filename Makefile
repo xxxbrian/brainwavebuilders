@@ -2,7 +2,9 @@
 
 all:
 	@echo error: please specify a target.
-	@echo hint: To run the project, do "make up".
+	@cat .dev/make-hints || false
+	@false
+
 
 up:
 	docker-compose up -d
@@ -30,3 +32,18 @@ update-endpoints:
 clean:
 	rm -rf client/node_modules
 	rm -rf server/node_modules
+
+# Production-ready Builds
+build-local:
+	env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml build
+
+build-prod:
+	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml build
+
+run-prod: build-prod
+	env $$(cat .dev/secrets/production.env) docker-compose -f docker-compose.build.yaml up
+
+# Builds additional stuff (namely local db) from local yml.
+run-local: build-local
+	env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml build && \
+    env $$(cat .dev/secrets/local.env) docker-compose -f docker-compose.local.yaml up

@@ -29,7 +29,7 @@ export const authenticator = (
   publicEndpoints: string[] = [],
 ): RequestHandler => {
   const mw: RequestHandler = async (req, res, next) => {
-    console.log(req.path);
+    console.log("Requesting", req.path);
     if (publicEndpoints.includes(req.path)) {
       next();
       return;

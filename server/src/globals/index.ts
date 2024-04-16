@@ -40,3 +40,5 @@ export const FRONTEND_ADDRESS = getEnvOr(
 );
 
 export const SK_MAILGUN_API_KEY = getEnvOr("SK_MAILGUN_API_KEY", "");
+
+export const DATABASE_URL = mustGetEnv("DATABASE_URL");

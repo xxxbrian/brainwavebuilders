@@ -65,6 +65,16 @@ model Course {
     courseInvitations CourseInvitations[] @relation("CourseInvitations")
     courseMembers     CourseMembers[]     @relation("CourseMemberCourse")
     forums            Forum[]             @relation("courseForums")
+    schedule          ScheduleClass[]     @relation("ScheduleClass")
+}
+
+model ScheduleClass {
+    id        String   @id @default(uuid())
+    url       String
+    startDate DateTime
+    courseID  String
+    course    Course   @relation("ScheduleClass", fields: [courseID], references: [id])
+    type      String   @default("lecture") // assuming default is "lecture", and it can be either "lecture" or "tutorial"
 }
 
 model CourseInvitations {
