@@ -153,6 +153,17 @@ export interface ScheduleClass {
     classLink: string;
 }
 
+export interface CourseBook {
+    id: string;
+    title: string;
+    parentID?: string;
+    childrenIDs?: string[];
+    content?: any;
+    course?: Course;
+    parent?: CourseBook;
+    children?: CourseBook[];
+}
+
 //////////////////////////////
 // Endpoint Requests/Responses
 //////////////////////////////
@@ -675,6 +686,26 @@ export interface AddScheduleClassRequest {
 // AddScheduleClassResponse is the response that is sent to the addScheduleClass endpoint.
 export interface AddScheduleClassResponse {
 
+}
+
+// GetCourseBookRequest is the request that is sent to the getCourseBook endpoint.
+export interface GetCourseBookRequest {
+    bookIDs: string[];
+}
+
+// GetCourseBookResponse is the response that is sent to the getCourseBook endpoint.
+export interface GetCourseBookResponse {
+    books: CourseBook[];
+}
+
+// GetBooksByCourseRequest is the request that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseRequest {
+    courseID: string;
+}
+
+// GetBooksByCourseResponse is the response that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseResponse {
+    books: CourseBook[];
 }
 
 
@@ -2118,6 +2149,64 @@ export class BrainwavesClient {
         }
 
         return json as AddScheduleClassResponse;
+    }
+
+
+
+    async getCourseBook(request: GetCourseBookRequest): Promise<GetCourseBookResponse> {
+        const response = await fetch(`${this.base_url}/getCourseBook`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetCourseBookResponse;
+    }
+
+
+
+    async getBooksByCourse(request: GetBooksByCourseRequest): Promise<GetBooksByCourseResponse> {
+        const response = await fetch(`${this.base_url}/getBooksByCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        throw new APIError(json.message, json.code);
+                    case 500:
+                        throw new Error(json.message);
+                }
+            }
+
+            throw new Error("RPC Request Failed.");
+        }
+
+        return json as GetBooksByCourseResponse;
     }
 }
 

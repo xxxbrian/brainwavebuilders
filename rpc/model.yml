@@ -135,6 +135,16 @@ types:
     classType: string
     classLink: string
 
+  CourseBook:
+    id: string
+    title: string
+    parentID?: string
+    childrenIDs?: string[]
+    content?: json
+    course?: Course
+    parent?: CourseBook
+    children?: CourseBook[]
+
 endpoints:
   ping:
     request:
@@ -487,4 +497,18 @@ endpoints:
     request:
       scheduleClass: ScheduleClass
     response:
+    service: typescript
+
+  getCourseBook:
+    request:
+      bookIDs: string[]
+    response:
+      books: CourseBook[]
+    service: typescript
+
+  getBooksByCourse:
+    request:
+      courseID: string
+    response:
+      books: CourseBook[]
     service: typescript

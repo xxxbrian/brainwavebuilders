@@ -19,6 +19,7 @@ import { getCourses } from "@/handlers/getCourses";
 import { upsertThread } from "@/handlers/upsertThread";
 import { verifyEmail } from "@/handlers/verifyEmail";
 import { getFeatured } from "@/handlers/getFeatured";
+import { getCourseBook } from "@/handlers/getCourseBook";
 import { fetchAssessmentDetailsTeacher } from "@/handlers/fetchAssessmentDetailsTeacher";
 import { getCourseEvents } from "@/handlers/getCourseEvents";
 import { getUserCourses } from "@/handlers/getUserCourses";
@@ -36,6 +37,7 @@ import { setUserProfile } from "@/handlers/setUserProfile";
 import { getCourseMembers } from "@/handlers/getCourseMembers";
 import { fetchUserSevenDayActivity } from "@/handlers/fetchUserSevenDayActivity";
 import { createAssessment } from "@/handlers/createAssessment";
+import { getBooksByCourse } from "@/handlers/getBooksByCourse";
 import { fetchAssessmentDetailsStudent } from "@/handlers/fetchAssessmentDetailsStudent";
 import { submitAnswers } from "@/handlers/submitAnswers";
 import { getForumByID } from "@/handlers/getForumByID";
@@ -201,6 +203,17 @@ export interface ScheduleClass {
     startDate: string;
     classType: string;
     classLink: string;
+}
+
+export interface CourseBook {
+    id: string;
+    title: string;
+    parentID?: string;
+    childrenIDs?: string[];
+    content?: any;
+    course?: Course;
+    parent?: CourseBook;
+    children?: CourseBook[];
 }
 
 //////////////////////////////
@@ -725,6 +738,26 @@ export interface AddScheduleClassRequest {
 // AddScheduleClassResponse is the response that is sent to the addScheduleClass endpoint.
 export interface AddScheduleClassResponse {
 
+}
+
+// GetCourseBookRequest is the request that is sent to the getCourseBook endpoint.
+export interface GetCourseBookRequest {
+    bookIDs: string[];
+}
+
+// GetCourseBookResponse is the response that is sent to the getCourseBook endpoint.
+export interface GetCourseBookResponse {
+    books: CourseBook[];
+}
+
+// GetBooksByCourseRequest is the request that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseRequest {
+    courseID: string;
+}
+
+// GetBooksByCourseResponse is the response that is sent to the getBooksByCourse endpoint.
+export interface GetBooksByCourseResponse {
+    books: CourseBook[];
 }
 
 
@@ -1819,6 +1852,50 @@ app.post('/api/addScheduleClass', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request addScheduleClass with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getCourseBook is the endpoint handler for the getCourseBook endpoint.
+// It wraps around the function at @/handlers/getCourseBook.
+app.post('/api/getCourseBook', async (req, res) => {
+    const request: GetCourseBookRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetCourseBookResponse = await getCourseBook(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getCourseBook with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// getBooksByCourse is the endpoint handler for the getBooksByCourse endpoint.
+// It wraps around the function at @/handlers/getBooksByCourse.
+app.post('/api/getBooksByCourse', async (req, res) => {
+    const request: GetBooksByCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: GetBooksByCourseResponse = await getBooksByCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request getBooksByCourse with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }
