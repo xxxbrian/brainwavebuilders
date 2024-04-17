@@ -77,8 +77,37 @@ week7
 4. Build creating-exam page, implementing editing and adding questions
 
 ======================================================================
+
+week8
 - This week, I worked mainly on frontend refactor.
 1. Refactor navigation bar
 2. Refactor dashboard layout
 3. Refactor activiy and stats componets on dashboard. Use recharts to rebuild graph
 4. Add TODO list on dashboard
+
+======================================================================
+
+week9
+- This week, I worked mainly on frontend of assessment system, also did merging work with Sohee
+1. Assignment and exam listing for teacher side, allows teacher to create new assignmet and exam
+2. Submissions list, which alows teacher to see all submissions from students
+3. Marking assignment/exam page, marking assignment page allows teacher to mark student submission and write feedback;
+   marking exam page allows teacher to manually mark SAQ
+4. Assessment list for students side, allows student to see all assessments and the status of each assessment
+5. Attending assignment/exam pages, attending assignment page allows student to use advanced editor to write assignment;
+   attending exam page allows student to answer each question and auto submit answers
+6. View assignment result page, this page allows student to see the result of their assignment (after teacher marked)
+7. View exam results listing, this list allows student to see the result of each exam
+8. Help Sohee to merge backend and frontend working together
+
+======================================================================
+
+week10
+- This week, I worked mainly on debugging and UI imprvementy, also did drive card component and create folder popup for file drive system
+1. Improve courseCard UI, which allows long description for now
+2. Improve courses container UI, which arrange all courses neatly
+3. Imrpove all tables UI in assessment system, use Radix UI's Table component instead of using original table
+4. Drive card component
+5. Create folder popup window
+6. Fix the issue that teachr cannot see student's answer when marking SAQ questions
+7. Prepare for the final demo and write final report
