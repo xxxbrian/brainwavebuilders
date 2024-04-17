@@ -37,14 +37,14 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           <img
             src={imageURL ?? defaultCourseImg.src}
             alt="Course"
-            className="object-cover"
+            className="object-cover h-[130px] w-full"
           />
         </Inset>
 
         {/* Content */}
         <div className="flex flex-col justify-between h-1/2">
           {/* Course Name and Description */}
-          <Box className="mt-3">
+          <Box className="mt-2">
             {/* Course Name */}
             <div>
               <Text trim="both" size="2" className="font-bold line-clamp-1">
