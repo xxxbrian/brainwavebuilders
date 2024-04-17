@@ -32,12 +32,12 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
       - name: Push images
         run: |
-          docker tag brainwaves-nginx:latest ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-nginx:latest
-          docker tag brainwaves-client:latest ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-client:latest
-          docker tag brainwaves-backend:latest ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-backend:latest
-          docker push ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-nginx:latest
-          docker push ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-client:latest
-          docker push ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-backend:latest
+          docker tag brainwaves-nginx:latest ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-nginx:commit-${{ github.sha }}
+          docker tag brainwaves-client:latest ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-client:commit-${{ github.sha }}
+          docker tag brainwaves-backend:latest ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-backend:commit-${{ github.sha }}
+          docker push ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-nginx:commit-${{ github.sha }}
+          docker push ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-client:commit-${{ github.sha }}
+          docker push ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-backend:commit-${{ github.sha }}
 
 permissions:
   packages: write
