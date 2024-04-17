@@ -13,3 +13,6 @@ services:
 
   client:
     image: ghcr.io/unsw-cse-comp99-3900-24t1/brainwaves-client:latest
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL}

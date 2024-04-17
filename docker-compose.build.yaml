@@ -18,6 +18,9 @@ services:
       context: .
       dockerfile: .dev/build/client.Dockerfile
     image: brainwaves-client:latest
+    environment:
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+      OPENAI_BASE_URL: ${OPENAI_BASE_URL}
 
   backend:
     build:
