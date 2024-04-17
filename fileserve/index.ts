@@ -78,7 +78,9 @@ const server = Bun.serve({
       return addCORSHeaders(
         new Response(Bun.file(`storage/${id}`), {
           headers: {
-            "Content-Disposition": `attachment; filename="${fileName}"`,
+            "Content-Disposition": `attachment; filename="${encodeURIComponent(
+              fileName,
+            )}"`,
           },
         }),
       );
