@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import { ContextMenu, Button, IconButton, Text } from "@radix-ui/themes";
+import {
+  ContextMenu,
+  Button,
+  IconButton,
+  Text,
+  TextField,
+} from "@radix-ui/themes";
 import { MdDriveFolderUpload } from "react-icons/md";
 import { MdArrowBackIos } from "react-icons/md";
 import { MdFolderOpen } from "react-icons/md";
@@ -12,6 +18,7 @@ import { useBackend } from "@/hooks/useBackend";
 import { useParams } from "next/navigation";
 import { CreateFolderPopup } from "@/components/drive/CreateFolderPopup";
 import { usePathname, useRouter } from "next/navigation";
+import { MdSearch } from "react-icons/md";
 
 type DriveDirEnt = DriveItem | DriveFolderInfo;
 type DriveItems = DriveDirEnt[];
@@ -33,6 +40,10 @@ const DriveFolderPage: React.FC = () => {
   const [folder, setFolder] = React.useState<DriveFolder | null>(null);
 
   const [isCreateFolderPopup, setIsCreateFolderPopup] = useState(false);
+
+  const [search, setSearch] = useState("");
+
+  const [filteredItems, setFilteredItems] = useState<DriveItems>(items);
 
   const backend = useBackend();
 
@@ -98,6 +109,23 @@ const DriveFolderPage: React.FC = () => {
     window.open(url);
   }, []);
 
+  useEffect(() => {
+    setFilteredItems(
+      items.filter((item) => {
+        if (search === "") return true;
+        if (isFolder(item)) {
+          return (item as DriveFolderInfo).name
+            .toLowerCase()
+            .includes(search.toLowerCase());
+        } else {
+          return (item as DriveItem).name
+            .toLowerCase()
+            .includes(search.toLowerCase());
+        }
+      }),
+    );
+  }, [search, items]);
+
   return (
     <div className="flex flex-col space-y-10 p-10 h-full">
       <div className="flex flex-row justify-between items-center">
@@ -125,14 +153,27 @@ const DriveFolderPage: React.FC = () => {
             {folder?.name ?? "Loading..."}
           </Text>
         </div>
-        <Button
-          color="indigo"
-          variant="soft"
-          size="3"
-          onClick={handleUploadClick}
-        >
-          <MdDriveFolderUpload size={20} /> Upload
-        </Button>
+        <div className="flex flex-row space-x-6 items-center">
+          <TextField.Root
+            placeholder="Search the drive"
+            size="3"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          >
+            <TextField.Slot>
+              <MdSearch height="16" width="16" />
+            </TextField.Slot>
+          </TextField.Root>
+
+          <Button
+            color="indigo"
+            variant="soft"
+            size="3"
+            onClick={handleUploadClick}
+          >
+            <MdDriveFolderUpload size={20} /> Upload
+          </Button>
+        </div>
       </div>
 
       <input
@@ -152,7 +193,7 @@ const DriveFolderPage: React.FC = () => {
         <ContextMenu.Trigger>
           <div className="h-full bg-gray-200 rounded-3xl p-10">
             <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-6 gap-10">
-              {items.map((item, index) => (
+              {filteredItems.map((item, index) => (
                 <ContextMenu.Root key={index}>
                   <ContextMenu.Trigger>
                     <div>
