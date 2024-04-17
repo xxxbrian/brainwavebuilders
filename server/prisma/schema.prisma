@@ -56,7 +56,7 @@ model Course {
     id                String              @id @default(uuid())
     name              String
     code              String?
-    description       String?
+    description       String?             @db.LongText
     imageURL          String?
     createdAt         DateTime            @default(now())
     createdByID       String
