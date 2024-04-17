@@ -6,13 +6,21 @@ import {
   DialogClose,
 } from "@radix-ui/react-dialog";
 import { BsList, BsListTask } from "react-icons/bs";
-import { FaAngleLeft } from "react-icons/fa";
+import { FaAngleLeft, FaChalkboardTeacher } from "react-icons/fa";
 import { IoHome, IoCalendarOutline, IoSettingsOutline } from "react-icons/io5";
 import { BiTask, BiVideoRecording } from "react-icons/bi";
 import { TfiAnnouncement, TfiMedallAlt } from "react-icons/tfi";
 import Image from "next/image";
 import logoImg from "@/assets/logo-big.svg";
 import { usePathname, useRouter } from "next/navigation";
+import {
+  MdCalendarMonth,
+  MdClass,
+  MdLibraryBooks,
+  MdOutlineInsertChartOutlined,
+  MdOutlineSettings,
+  MdPerson3,
+} from "react-icons/md";
 
 interface NavItem {
   key: string;
@@ -22,32 +30,34 @@ interface NavItem {
 }
 
 const navItems = [
-  { key: "home", href: "/dashboard", Icon: IoHome, label: "Dashboard" },
+  {
+    key: "home",
+    href: "/dashboard",
+    Icon: MdOutlineInsertChartOutlined,
+    label: "Dashboard",
+  },
   {
     key: "calendar",
     href: "/calendar",
-    Icon: IoCalendarOutline,
+    Icon: MdCalendarMonth,
     label: "My Calendar",
   },
-  { key: "courses", href: "/course", Icon: BiTask, label: "My Courses" },
-  { key: "tasks", href: "/tasks", Icon: BsListTask, label: "Tasks" },
-  { key: "grades", href: "/grades", Icon: TfiMedallAlt, label: "My Grades" },
   {
-    key: "outline",
-    href: "/Course_Outlines",
-    Icon: BiTask,
-    label: "Course Outline",
+    key: "courses",
+    href: "/course",
+    Icon: FaChalkboardTeacher,
+    label: "My Courses",
   },
   {
-    key: "recordings",
-    href: "/Class_Recordings",
-    Icon: BiVideoRecording,
-    label: "Class/Recordings",
+    key: "outline",
+    href: "/books",
+    Icon: MdLibraryBooks,
+    label: "Course Books",
   },
   {
     key: "settings",
     href: "/profile",
-    Icon: IoSettingsOutline,
+    Icon: MdOutlineSettings,
     label: "Settings",
   },
 ];
