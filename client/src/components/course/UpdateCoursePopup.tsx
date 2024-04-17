@@ -1,6 +1,5 @@
 import { useBackend } from "@/hooks/useBackend";
 import { Button, Dialog } from "@radix-ui/themes";
-import { useRouter } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { CourseMetadata, CourseMetadataForm } from "./CourseMetadataForm";
 import { Course } from "@/backend";
@@ -10,9 +9,8 @@ export const UpdateCoursePopup: React.FC<{
 }> = ({ course }) => {
   const backend = useBackend();
 
-  const router = useRouter();
-
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   const [courseMetadata, setCourseMetadata] = useState<CourseMetadata>({
     code: course.code,
@@ -38,11 +36,14 @@ export const UpdateCoursePopup: React.FC<{
       id: course.id,
     });
 
-    router.refresh();
-  }, [backend, course, courseMetadata, router]);
+    setIsOpen(false);
+    setIsLoading(false);
+
+    window.location.reload();
+  }, [backend, course, courseMetadata]);
 
   return (
-    <Dialog.Root>
+    <Dialog.Root onOpenChange={setIsOpen} open={isOpen}>
       <Dialog.Trigger>
         <Button variant="solid" size={"3"}>
           Edit Course

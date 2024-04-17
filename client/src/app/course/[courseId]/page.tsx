@@ -193,35 +193,34 @@ const CoursesPage: React.FC = ({}) => {
     router.push(`${pathName}/books`);
   }, [pathName, router]);
 
-  const onClickUpdateCourseMetadata = useCallback(
-    async (courseMetadata: CourseMetadata) => {
-      await backend.updateCourse({ id: course.id, ...courseMetadata });
-      router.refresh();
-    },
-    [backend, course.id, router],
-  );
-
   return (
     <div className="flex flex-col space-y-8 px-4 py-4">
       <div
-        className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-cover bg-no-repeat relative -z-20 bg-center"
+        className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex min-h-60 justify-between text-white bg-cover bg-no-repeat relative -z-20 bg-center"
         style={{
           backgroundImage: course.imageURL ? `url(${course.imageURL})` : "",
         }}
       >
-        <div className="absolute w-full h-full top-0 left-0 bg-black bg-opacity-30 -z-10"></div>
-        {course.code && (
-          <Heading className="text-white" size={"4"}>
-            {course.code}
+        <div className="flex flex-col space-y-2 justify-end">
+          <div className="absolute w-full h-full top-0 left-0 bg-black bg-opacity-30 -z-10 pointer-events-none"></div>
+          {course.code && (
+            <Heading className="text-white" size={"4"}>
+              {course.code}
+            </Heading>
+          )}
+          <Heading className="text-white" size={"8"}>
+            {course.name}
           </Heading>
-        )}
-        <Heading className="text-white" size={"8"}>
-          {course.name}
-        </Heading>
 
-        <div>{course.description}</div>
+          <div>{course.description}</div>
+        </div>
       </div>
-      <UpdateCoursePopup course={course}></UpdateCoursePopup>
+      <div className="flex justify-end">
+        <div className="w-fit">
+          <UpdateCoursePopup course={course}></UpdateCoursePopup>
+        </div>
+      </div>
+
       <div className="flex space-x-4">
         <div className="flex flex-col space-y-4 w-1/3">
           <Heading size={"5"}>Course Applications</Heading>
