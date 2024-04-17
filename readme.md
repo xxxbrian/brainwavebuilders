@@ -1,6 +1,6 @@
 # README
 
-[![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)\
+[![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)
 
 ## Accessing the production copy of this code
 
