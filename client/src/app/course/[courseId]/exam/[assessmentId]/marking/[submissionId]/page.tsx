@@ -80,13 +80,38 @@ const MarkExamPage: React.FC = () => {
   if (error) return <div>Error: {error}</div>;
   if (!assessment || !submission) return <div>No data available.</div>;
 
+  function getStudentAnswer(
+    answers: { questionId: string; answer?: string }[],
+    qId: string,
+  ) {
+    console.log("qId", qId);
+    for (const answer of answers) {
+      if (!answer.questionId) {
+        continue;
+      }
+      console.log("answer", answer);
+      if (answer.questionId === qId) {
+        if (!answer.answer) {
+          continue;
+        }
+        return answer.answer;
+      }
+    }
+  }
+
   const saqQuestions = assessment.questions
     .filter((q) => q.type === "short_answer")
     .map((question) => ({
       ...question,
-      studentAnswer: submission.answers[question.id],
+      studentAnswer: getStudentAnswer(
+        JSON.parse(submission.answers),
+        question.id,
+      ),
       sampleAnswer: question.answer ?? "No sample answer provided",
     }));
+
+  console.log("Submission", submission.answers);
+  console.log("saqQuestion", saqQuestions);
 
   return (
     <div className="flex flex-col p-8 m-auto max-w-[1200px] space-y-4">
@@ -101,7 +126,7 @@ const MarkExamPage: React.FC = () => {
           key={question.id}
           title={question.title}
           points={question.points}
-          studentAnswer={question.studentAnswer}
+          studentAnswer={question.studentAnswer!}
           sampleAnswer={question.sampleAnswer}
           onScoreChange={(score) => handleScoreChange(question.id, score)}
         />
