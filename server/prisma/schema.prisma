@@ -208,20 +208,20 @@ model PostLikes {
 }
 
 model Folder {
-    id          String   @id @default(uuid())
-    name        String
-    parentID    String?
-    parent      Folder?  @relation("subFolders", fields: [parentID], references: [id])
-    subFolders  Folder[] @relation("subFolders")
-    files       Files[]  @relation("folderFiles")
+    id         String   @id @default(uuid())
+    name       String
+    parentID   String?
+    parent     Folder?  @relation("subFolders", fields: [parentID], references: [id])
+    subFolders Folder[] @relation("subFolders")
+    files      Files[]  @relation("folderFiles")
 }
 
 model Files {
-    id        String   @id @default(uuid())
-    name      String
-    url       String
-    folderId  String
-    folder    Folder   @relation("folderFiles", fields: [folderId], references: [id])
+    id       String @id @default(uuid())
+    name     String
+    url      String
+    folderId String
+    folder   Folder @relation("folderFiles", fields: [folderId], references: [id])
 }
 
 model CourseBook {

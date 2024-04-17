@@ -69,8 +69,8 @@ export const StatefulInviteMembersForm: React.FC<Props> = ({
       ) : (
         <Dialog.Content maxWidth="450px">
           <Dialog.Title>Invite members to {course.name}</Dialog.Title>
-          <div className="flex space-x-2 items-center py-6 justify-center">
-            <div>They should be a </div>
+          <div className="flex space-x-2 items-center py-6 justify-center flex-wrap">
+            <div className="flex-shrink-0">They should be a </div>
             <Select.Root
               defaultValue="STUDENT"
               value={role}
@@ -82,7 +82,7 @@ export const StatefulInviteMembersForm: React.FC<Props> = ({
                 <Select.Item value="TEACHER">Teacher</Select.Item>
               </Select.Content>
             </Select.Root>
-            <div>in {course.name}</div>
+            <div className="flex-shrink-0">in {course.name}</div>
           </div>
           <div className="flex justify-end">
             <Button onClick={onClickInvite}>Invite</Button>
