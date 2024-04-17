@@ -99,6 +99,16 @@ const BookPage: React.FC = () => {
     [backend, content, fetchBook],
   );
 
+  const onClickDelete = useCallback(
+    async (book: CourseBook) => {
+      await backend.deleteBook({
+        id: book.id,
+      });
+      onChangeActiveThreadId(book.parent ?? null);
+    },
+    [backend, onChangeActiveThreadId],
+  );
+
   if (children === null) return <CenteredLoading />;
 
   return (
@@ -113,6 +123,7 @@ const BookPage: React.FC = () => {
         onClickEdit={onClickEdit}
         onClickSave={onClickSave}
         onRefresh={refresh}
+        onClickDeletePage={onClickDelete}
       />
 
       <BookView

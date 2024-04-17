@@ -7,6 +7,7 @@ import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { CreateBookForm } from "./CreateBookForm";
 import { useCallback } from "react";
 import { JSONContent } from "novel";
+import { DeleteBookConfirmation } from "./DeleteBookConfirmation";
 
 interface BookViewProps {
   isEditing: boolean;
@@ -56,6 +57,7 @@ export const BookList: React.FC<{
 
   onClickEdit: (book: CourseBook) => void;
   onClickSave: (book: CourseBook) => void;
+  onClickDeletePage: (book: CourseBook) => void;
   isEditing: boolean;
 
   onRefresh: () => void;
@@ -69,6 +71,7 @@ export const BookList: React.FC<{
   onClickSave,
   isEditing,
   onRefresh,
+  onClickDeletePage,
 }) => {
   const onClickEditInner = useCallback(() => {
     if (!current) return;
@@ -79,6 +82,11 @@ export const BookList: React.FC<{
     if (!current) return;
     onClickSave?.(current);
   }, [current, onClickSave]);
+
+  const onClickDeletePageInner = useCallback(() => {
+    if (!current) return;
+    onClickDeletePage?.(current);
+  }, [current, onClickDeletePage]);
 
   return (
     <div className="flex flex-col space-y-4">
@@ -119,6 +127,15 @@ export const BookList: React.FC<{
               >
                 <Button variant="surface">New Subpage</Button>
               </CreateBookForm>
+
+              {current && (
+                <DeleteBookConfirmation
+                  book={current}
+                  onConfirm={onClickDeletePageInner}
+                >
+                  <Button variant="surface">Delete Page</Button>
+                </DeleteBookConfirmation>
+              )}
 
               {current && (
                 <>
