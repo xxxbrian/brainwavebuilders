@@ -200,7 +200,17 @@ const DriveFolderPage: React.FC = () => {
                       Download
                     </ContextMenu.Item>
                     <ContextMenu.Separator />
-                    <ContextMenu.Item>Copy Link</ContextMenu.Item>
+                    <ContextMenu.Item
+                      onClick={() => {
+                        if (isFolder(item)) return;
+                        void navigator.clipboard.writeText(
+                          (item as DriveItem).url,
+                        );
+                      }}
+                      disabled={isFolder(item)}
+                    >
+                      Copy Link
+                    </ContextMenu.Item>
                     <ContextMenu.Separator />
                     <ContextMenu.Item color="red">Delete</ContextMenu.Item>
                   </ContextMenu.Content>
