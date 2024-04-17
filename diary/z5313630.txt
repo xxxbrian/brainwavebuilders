@@ -87,3 +87,8 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
 - Successfully ran Demo B. Just have to work on Final Demo and Final Report.
 - New tasks have been delegated and I'll be continously working on Assessment features like giving feedback, getting results, editing exam etc.,
 - Need to start merging frontend with backend. Trying to get documentation done by Wednesday of Week 9.
+
+꘎♡━━ Week 9 ━━━♡꘎
+- Finished merging assessment frontend with backend! Was a bit of a challenge since I just started learning frontend and typescript this term. Really glad it was successfuly merged :)
+- Had to add new endpoints as I went since I realised we were missing some fetch functions. It's a good thing I worked on backend, as it helped with knowing how to quickly set up new endpoints and functions :D 
+- Will be helping out with project report next week! Very keen to get everything done and sorted. 
