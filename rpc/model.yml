@@ -11,9 +11,6 @@ types:
 
   Token: string
 
-  Error:
-    message: string
-
   Featured:
     background: string
     title: string

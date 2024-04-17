@@ -468,16 +468,24 @@ class ClientRequesterCompiler:
         const json = await response.json();
 
         if (!response.ok) {{
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {{
                 switch (response.status) {{
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }}
             }}
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {{
+                this.on_error(err);
+            }}
+
+            throw err;
         }}
 
         return json as {response_type_name};
@@ -496,10 +504,20 @@ class ClientRequesterCompiler:
 {self.tc.parse().strip()}
 
 export class {self.tc.to_big_camel_case(name)}Client {{
-    base_url: string;
-    constructor(base_url: string) {{
+    private base_url: string;
+    private on_error?: (e: Error) => void;
+
+    constructor(base_url: string, on_error?: (e: Error) => void) {{
         this.base_url = base_url;
+        this.on_error = on_error ?? ((e: Error) => {{
+            console.error('Error occurred during RPC request:', e);
+        }})
     }}
+
+    captured(on_error: (e: Error) => void) {{
+        return new {self.tc.to_big_camel_case(name)}Client(this.base_url, on_error);
+    }}
+
     {endpoints.strip()}
 }}
 

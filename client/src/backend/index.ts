@@ -18,10 +18,6 @@ export interface User {
 
 export type Token = string;
 
-export interface Error {
-    message: string;
-}
-
 export interface Featured {
     background: string;
     title: string;
@@ -814,10 +810,20 @@ export const isAPIError = (e: any): e is APIError => {
 }
 
 export class BrainwavesClient {
-    base_url: string;
-    constructor(base_url: string) {
+    private base_url: string;
+    private on_error?: (e: Error) => void;
+
+    constructor(base_url: string, on_error?: (e: Error) => void) {
         this.base_url = base_url;
+        this.on_error = on_error ?? ((e: Error) => {
+            console.error('Error occurred during RPC request:', e);
+        })
     }
+
+    captured(on_error: (e: Error) => void) {
+        return new BrainwavesClient(this.base_url, on_error);
+    }
+
     async ping(request: PingRequest): Promise<PingResponse> {
         const response = await fetch(`${this.base_url}/ping`, {
             method: 'POST',
@@ -830,16 +836,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as PingResponse;
@@ -859,16 +873,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as CheckEmailResponse;
@@ -888,16 +910,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as RegisterResponse;
@@ -917,16 +947,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as VerifyEmailResponse;
@@ -946,16 +984,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as LoginResponse;
@@ -975,16 +1021,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as VerifyForgotPasswordResponse;
@@ -1004,16 +1058,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as ForgotPasswordResponse;
@@ -1033,16 +1095,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetFeaturedResponse;
@@ -1062,16 +1132,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetUserInfoResponse;
@@ -1091,16 +1169,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetUserInfoByIDResponse;
@@ -1120,16 +1206,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetUserInfoByIDsResponse;
@@ -1149,16 +1243,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as SetUserProfileResponse;
@@ -1178,16 +1280,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as ResetPasswordResponse;
@@ -1207,16 +1317,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as CreateAssessmentResponse;
@@ -1236,16 +1354,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as SubmitAnswersResponse;
@@ -1265,16 +1391,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as SubmitAssignmentResponse;
@@ -1294,16 +1428,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as ManualGradeSubmissionResponse;
@@ -1323,16 +1465,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as AssignmentGradeSubmissionResponse;
@@ -1352,16 +1502,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchAssessmentDetailsTeacherResponse;
@@ -1381,16 +1539,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchAssessmentDetailsStudentResponse;
@@ -1410,16 +1576,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchAssessmentSubmissionsResponse;
@@ -1439,16 +1613,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchSubmissionResponse;
@@ -1468,16 +1650,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchAssessmentsResponse;
@@ -1497,16 +1687,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchStudentSubmissionResponse;
@@ -1526,16 +1724,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchUserStatsResponse;
@@ -1555,16 +1761,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as FetchUserSevenDayActivityResponse;
@@ -1584,16 +1798,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as CreateCourseResponse;
@@ -1613,16 +1835,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetCoursesResponse;
@@ -1642,16 +1872,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetUserCoursesResponse;
@@ -1671,16 +1909,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as CreateCourseInvitationResponse;
@@ -1700,16 +1946,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as JoinCourseResponse;
@@ -1729,16 +1983,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as LeaveCourseResponse;
@@ -1758,16 +2020,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as RemoveMemberFromCourseResponse;
@@ -1787,16 +2057,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetForumByCourseIDResponse;
@@ -1816,16 +2094,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetForumByIDResponse;
@@ -1845,16 +2131,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetThreadsResponse;
@@ -1874,16 +2168,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as UpsertThreadResponse;
@@ -1903,16 +2205,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as DeleteThreadResponse;
@@ -1932,16 +2242,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as UpsertPostResponse;
@@ -1961,16 +2279,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as DeletePostResponse;
@@ -1990,16 +2316,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetRoleInCourseResponse;
@@ -2019,16 +2353,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetThreadAndPostStatsResponse;
@@ -2048,16 +2390,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as ToggleLikePostResponse;
@@ -2077,16 +2427,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as IncrementThreadViewResponse;
@@ -2106,16 +2464,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetUserEventsResponse;
@@ -2135,16 +2501,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetCourseEventsResponse;
@@ -2164,16 +2538,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetAnnouncementsResponse;
@@ -2193,16 +2575,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetCourseMembersResponse;
@@ -2222,16 +2612,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as AddScheduleClassResponse;
@@ -2251,16 +2649,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as CreateDriveFolderResponse;
@@ -2280,16 +2686,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetDriveFolderResponse;
@@ -2309,16 +2723,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as AddDriveItemResponse;
@@ -2338,16 +2760,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetCourseBookResponse;
@@ -2367,16 +2797,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as GetBooksByCourseResponse;
@@ -2396,16 +2834,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as CreateBookResponse;
@@ -2425,16 +2871,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as UpdateBookResponse;
@@ -2454,16 +2908,24 @@ export class BrainwavesClient {
         const json = await response.json();
 
         if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
             if (isAPIError(json)) {
                 switch (response.status) {
                     case 400:
-                        throw new APIError(json.message, json.code);
+                        err = new APIError(json.message, json.code);
+                        break;
                     case 500:
-                        throw new Error(json.message);
+                        err = new Error(json.message);
+                        break;
                 }
             }
 
-            throw new Error("RPC Request Failed.");
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
         }
 
         return json as DeleteBookResponse;

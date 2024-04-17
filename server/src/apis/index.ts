@@ -76,10 +76,6 @@ export interface User {
 
 export type Token = string;
 
-export interface Error {
-    message: string;
-}
-
 export interface Featured {
     background: string;
     title: string;
