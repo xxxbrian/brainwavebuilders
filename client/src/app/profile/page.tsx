@@ -363,7 +363,7 @@ const Profile: React.FC = () => {
             <Tabs.List className="space-x-12">
               {[
                 { value: "editProfile", label: "Edit Profile" },
-                { value: "preferences", label: "Preferences" },
+                // { value: "preferences", label: "Preferences" },
                 { value: "security", label: "Security" },
               ].map((tab) => (
                 <Tabs.Trigger key={tab.value} value={tab.value}>
@@ -460,7 +460,7 @@ const Profile: React.FC = () => {
                   </form>
                 </div>
               </Tabs.Content>
-
+              {/*
               <Tabs.Content value="preferences" className="p-6 space-y-8">
                 <div className="w-full">
                   <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -511,19 +511,19 @@ const Profile: React.FC = () => {
                     </div>
                   </form>
                 </div>
-              </Tabs.Content>
+              </Tabs.Content> */}
 
               <Tabs.Content value="security" className="p-6 space-y-8">
                 <div className="w-full">
                   <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="flex items-center md:col-span-2">
+                    {/* <div className="flex items-center md:col-span-2">
                       {switchInputForm(
                         "auth",
                         "Enable or disable two factor authentication",
                         mockSecurity.twoFactorEnabled,
                         mockSecurity.onChangeTwoFactorEnabled,
                       )}
-                    </div>
+                    </div> */}
 
                     <div className="md:col-span-2 relative max-w-[600px]">
                       {/* {PasswordInputForm(

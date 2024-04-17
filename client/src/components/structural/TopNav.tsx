@@ -37,14 +37,14 @@ const UserDisplay: React.FC<{ user: User }> = ({ user }) => {
           <Avatar src={user.avatar} fallback={user.firstName[0] ?? "?"} />
         </div>
       </DropdownMenu.Trigger>
-      <DropdownMenu.Content variant="soft" size="2">
+      <DropdownMenu.Content variant="soft" size="2" className="min-w-28">
         <DropdownMenu.Item onClick={onClickUserAvatar}>
           <div>Profile</div>
         </DropdownMenu.Item>
         <DropdownMenu.Separator />
-        <DropdownMenu.Item>Invite Friends</DropdownMenu.Item>
+        {/* <DropdownMenu.Item>Invite Friends</DropdownMenu.Item>
         <DropdownMenu.Item>Add to favorites</DropdownMenu.Item>
-        <DropdownMenu.Separator />
+        <DropdownMenu.Separator /> */}
         <DropdownMenu.Item color="red" onClick={onClickLogOut}>
           <div>Log out</div>
         </DropdownMenu.Item>
