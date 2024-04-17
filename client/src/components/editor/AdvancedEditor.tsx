@@ -34,6 +34,7 @@ interface Props {
   value?: JSONContent;
   setValue?: (value: JSONContent) => void;
   isEditable?: boolean;
+  onEditorChange?: (editor: EditorInstance) => void;
 }
 
 export const AdvancedEditor: React.FC<Props> = ({
@@ -41,6 +42,7 @@ export const AdvancedEditor: React.FC<Props> = ({
   value,
   setValue,
   isEditable = true,
+  onEditorChange,
 }) => {
   const [openNode, setOpenNode] = useState(false);
   const [openColor, setOpenColor] = useState(false);
@@ -55,6 +57,12 @@ export const AdvancedEditor: React.FC<Props> = ({
 
     editor.commands.setContent(value ?? {});
   }, [editor, value]);
+
+  useEffect(() => {
+    if (!editor) return;
+
+    onEditorChange?.(editor);
+  }, [editor, onEditorChange]);
 
   useEffect(() => {
     editor?.setEditable(isEditable);

@@ -4,6 +4,7 @@ import { JSONContent } from "novel";
 import { useCallback, useState } from "react";
 import { AdvancedEditor } from "../editor/AdvancedEditor";
 import { PostDisplay } from "./PostDisplay";
+import { useCurrentUser } from "@/hooks/useCurrentUser";
 
 interface Props {
   onDeletePost: (post: Post) => void;
@@ -24,6 +25,7 @@ export const ThreadDisplay: React.FC<Props> = ({
   postStats,
   threadStats,
   onToggleLike,
+  onDeletePost,
 }) => {
   const [draftContent, setDraftContent] = useState<JSONContent>({
     type: "doc",
@@ -31,6 +33,8 @@ export const ThreadDisplay: React.FC<Props> = ({
   });
 
   const onClickPost = useCallback(() => {
+    if (!draftContent.content || draftContent.content.length === 0) return;
+
     onUpsertPost({
       content: draftContent,
       createdAt: 0,
@@ -41,6 +45,15 @@ export const ThreadDisplay: React.FC<Props> = ({
 
     setDraftContent({ type: "doc", content: [] });
   }, [draftContent, onUpsertPost, thread.id]);
+
+  const onDeletePostInner = useCallback(
+    (post: Post) => {
+      onDeletePost(post);
+    },
+    [onDeletePost],
+  );
+
+  const user = useCurrentUser();
 
   return (
     <div className="flex flex-col px-4 py-4 space-y-4">
@@ -57,6 +70,10 @@ export const ThreadDisplay: React.FC<Props> = ({
           postStats={postStats?.[post.id] ?? undefined}
           threadStats={threadStats}
           onClickLike={onToggleLike}
+          canDelete={post.createdBy?.id === user?.id}
+          canEdit={post.createdBy?.id === user?.id}
+          onClickDelete={onDeletePostInner}
+          onEditCommitted={onUpsertPost}
         />
       ))}
 
