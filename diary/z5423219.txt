@@ -125,3 +125,16 @@ Nothing else
 Cleaned up some things after the demo.
 Prepare for another (mental) sprint to get all features done for the final demo.
 More planning works.
+
+==
+# Week 9
+
+Finished forum, major clean up on pages.
+Guiding through everyone to finish the code in the final stretch.
+
+==
+# Week 10
+
+Final stretch, adding course books (materials) and deployment (local, prod)
+Clean up of everything.
+Prepare for the group report and presentation.
