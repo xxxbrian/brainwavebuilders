@@ -18,6 +18,17 @@ export const UpcomingEvents: React.FC<UpcomingEventsProps> = ({
     ([date]) => new Date(date) >= today,
   );
 
+  // sort events by date
+  upcomingEvents.sort(([date1], [date2]) => {
+    if (date1 < date2) {
+      return -1;
+    } else if (date1 > date2) {
+      return 1;
+    } else {
+      return 0;
+    }
+  });
+
   const flattenedAndLimitedEvents = upcomingEvents
     .flatMap(([date, events]) => events.map((event) => ({ date, event })))
     .slice(0, showEventNumber);
