@@ -1,62 +1,44 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useCallback } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Button, Dialog } from "@radix-ui/themes";
+import { Button, Callout, Dialog, Heading, TextField } from "@radix-ui/themes";
 import { useBackend } from "@/hooks/useBackend";
 import { useRouter } from "next/navigation";
+import { VscError } from "react-icons/vsc";
 
 export const JoinCourseButton: React.FC = () => {
-  const [code, setCode] = useState<string[]>(Array(6).fill(""));
+  const [code, setCode] = useState<string>("");
   const [isInvalid, setIsInvalid] = useState(false);
-  const inputsRef = useRef<(HTMLInputElement | null)[]>([]);
-
-  const handleChange = (
-    event: ChangeEvent<HTMLInputElement>,
-    index: number,
-  ) => {
-    setIsInvalid(false);
-    const { value } = event.target;
-    const newCode = [...code];
-
-    // Set fucused input value
-    newCode[index] = value;
-    setCode(newCode);
-
-    // If the current input box has a value and is not the last input box, jump to the next input box
-    if (value && index < 5) {
-      inputsRef.current[index + 1]?.focus();
-    }
-
-    // If input 6 numbers, submit code
-    if (index === 5 && newCode.every((digit) => digit !== "")) {
-      void handleSubmit(newCode.join(""));
-    }
-  };
-
-  const handleKeyDown = (event: React.KeyboardEvent, index: number) => {
-    // enable delete to jump to previous input box
-    if (event.key === "Backspace" && !code[index] && index > 0) {
-      // delete the value in previous input box
-      const newCode = [...code];
-      newCode[index - 1] = "";
-      setCode(newCode);
-      // move focus on next input box
-      inputsRef.current[index - 1]?.focus();
-    }
-  };
 
   const backend = useBackend();
   const router = useRouter();
 
-  const handleSubmit = async (finalCode: string) => {
-    console.log("Submitted code:", finalCode);
-    try {
-      const { course } = await backend.joinCourse({ code: finalCode });
-      console.log("Joined course:", course);
-      router.push(`/course/${course.id}`);
-    } catch {
-      setIsInvalid(true);
-    }
-  };
+  const handleSubmit = useCallback(
+    async (finalCode: string) => {
+      try {
+        const { course } = await backend.joinCourse({ code: finalCode });
+        console.log("Joined course:", course);
+        router.push(`/course/${course.id}`);
+      } catch {
+        setIsInvalid(true);
+      }
+    },
+    [backend, router],
+  );
+
+  const onChangeCode = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      if (value.length > 6) return;
+      if (value.length < 6) {
+        setIsInvalid(false);
+      }
+      setCode(value);
+      if (value.length === 6) {
+        void handleSubmit(value);
+      }
+    },
+    [handleSubmit],
+  );
 
   return (
     <Dialog.Root>
@@ -66,49 +48,34 @@ export const JoinCourseButton: React.FC = () => {
         </Button>
       </Dialog.Trigger>
       <Dialog.Content>
-        <Dialog.Title className="flex justify-between items-start">
-          <span className="font-bold text-[40px] leading-[48px] tracking-normal text-blue-500">
-            Invitation Code
-          </span>
-          {/* Close Button */}
-          <Dialog.Close>
-            <button>×</button>
-          </Dialog.Close>
-        </Dialog.Title>
+        <Dialog.Title>Join Course</Dialog.Title>
+        {isInvalid && (
+          <Callout.Root className="my-4" color="red">
+            <Callout.Icon>
+              <VscError color="red"></VscError>
+            </Callout.Icon>
+            <Callout.Text>
+              The code you have entered seems to be invalid.
+            </Callout.Text>
+          </Callout.Root>
+        )}
         <form
-          onSubmit={(e: FormEvent) => {
+          onSubmit={async (e: FormEvent) => {
             e.preventDefault();
-            void handleSubmit(code.join(""));
+            await handleSubmit(code);
           }}
           className="mt-4"
         >
           <p>Ask your teacher for the class code, then enter it here.</p>
           <div className="flex items-center space-x-2 my-4">
-            {code.map((value, index) => (
-              <input
-                key={index}
-                type="text"
-                inputMode="numeric"
-                maxLength={1}
-                className="border-2 border-gray-300 focus:border-blue-600 rounded-xl text-lg text-center focus:outline-none w-[57px] h-[91px]"
-                placeholder=""
-                value={code[index]}
-                onChange={(e) => handleChange(e, index)}
-                onKeyDown={(e) => handleKeyDown(e, index)}
-                ref={(el) => {
-                  inputsRef.current[index] = el;
-                }}
-              />
-            ))}
+            <TextField.Root
+              value={code}
+              onChange={onChangeCode}
+              className="text-3xl text-center w-full"
+              size={"3"}
+            ></TextField.Root>
           </div>
         </form>
-        <p
-          className={`text-sm mt-2 ${
-            isInvalid ? "text-red-500" : "text-transparent"
-          }`}
-        >
-          *Invalid code, please try again.
-        </p>
         <p className="font-bold mt-4">To sign in with a class code:</p>
         <ul className="list-disc pl-5 mb-4">
           <li>Use an authorized account</li>

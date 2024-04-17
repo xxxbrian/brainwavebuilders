@@ -28,6 +28,7 @@ export const CreateCourseButton: React.FC = () => {
 
   const handleSubmit = useCallback(
     async (e: React.FormEvent) => {
+      setIsLoading(true);
       e.preventDefault();
 
       const { course } = await backend.createCourse({
@@ -40,6 +41,8 @@ export const CreateCourseButton: React.FC = () => {
     [backend, courseDescription, courseName, router],
   );
 
+  const [isLoading, setIsLoading] = useState(false);
+
   return (
     <Dialog.Root>
       <Dialog.Trigger>
@@ -47,20 +50,11 @@ export const CreateCourseButton: React.FC = () => {
           Create Course
         </Button>
       </Dialog.Trigger>
-      <Dialog.Content className="bg-white px-10 py-6 rounded-3xl shadow-lg">
-        <Dialog.Title className="flex justify-between items-start">
-          Create Course
-          {/* Close Button */}
-          <Dialog.Close>
-            <button>×</button>
-          </Dialog.Close>
-        </Dialog.Title>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
-            <label
-              htmlFor="courseName"
-              className="block text-lg font-medium mt-2"
-            >
+      <Dialog.Content className="bg-white rounded-3xl shadow-lg">
+        <Dialog.Title>Create Course</Dialog.Title>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <div className="space-y-2">
+            <label htmlFor="courseName" className="block text-md font-medium">
               Course Name
             </label>
             <TextField.Root
@@ -70,10 +64,10 @@ export const CreateCourseButton: React.FC = () => {
               required
             />
           </div>
-          <div className="mb-4">
+          <div className="space-y-2">
             <label
               htmlFor="courseDescription"
-              className="block text-lg font-medium mt-2"
+              className="block text-md font-medium"
             >
               Course Description
             </label>
@@ -85,7 +79,12 @@ export const CreateCourseButton: React.FC = () => {
             />
           </div>
           <div className="flex justify-end mt-4">
-            <Button variant="solid" type="submit" size={"3"}>
+            <Button
+              variant="solid"
+              type="submit"
+              size={"3"}
+              disabled={isLoading}
+            >
               Create Course
             </Button>
           </div>
