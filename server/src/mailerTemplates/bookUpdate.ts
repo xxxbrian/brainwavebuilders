@@ -28,7 +28,7 @@ export const pageUpdateEmail: EmailGenerator<RegistrationProps> = async ({
 ${generateHTMLFromTiptap(book.content as JSONContent)}
 <hr>
 
-You can view the updated content <a href="${FRONTEND_ADDRESS}/courses/${
+You can view the updated content <a href="${FRONTEND_ADDRESS}/course/${
       course.id
     }/books?page=${book.id}">here</a>.
 
