@@ -84,12 +84,10 @@ const MarkExamPage: React.FC = () => {
     answers: { questionId: string; answer?: string }[],
     qId: string,
   ) {
-    console.log("qId", qId);
     for (const answer of answers) {
       if (!answer.questionId) {
         continue;
       }
-      console.log("answer", answer);
       if (answer.questionId === qId) {
         if (!answer.answer) {
           continue;
@@ -109,9 +107,6 @@ const MarkExamPage: React.FC = () => {
       ),
       sampleAnswer: question.answer ?? "No sample answer provided",
     }));
-
-  console.log("Submission", submission.answers);
-  console.log("saqQuestion", saqQuestions);
 
   return (
     <div className="flex flex-col p-8 m-auto max-w-[1200px] space-y-4">
