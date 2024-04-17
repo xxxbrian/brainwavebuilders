@@ -1,4 +1,5 @@
 import React from "react";
+import { Heading, Badge } from "@radix-ui/themes";
 
 interface AssessmentHeaderProps {
   title: string;
@@ -24,23 +25,26 @@ const AssessmentHeader: React.FC<AssessmentHeaderProps> = ({
   };
 
   return (
-    <div className="p-4 rounded-2xl border-2 border-blue-500">
-      <div className="mb-4">
-        <span className="text-md font-bold block mb-2">Title</span>
-        <div className="px-3 py-2 ">{title}</div>
+    <div className="px-6 py-4 rounded-lg bg-gray-50">
+      <div className="flex justify-center mb-4">
+        <Heading size="8" trim="both">
+          {title}
+        </Heading>
       </div>
-      <div className="mb-4">
-        <span className="text-md font-bold block mb-2">Description</span>
-        <div className="px-3 py-2 ">{description}</div>
+      <div className="mb-2">
+        <Heading trim="both">Description</Heading>
+        <div className="px-3 py-2">{description}</div>
       </div>
       <div className="flex justify-between">
         <div className="w-2/5">
-          <span className="text-md font-bold block mb-2">Start Date</span>
-          <div className="px-3 py-2 ">{formatDate(startDate)}</div>
+          <Heading trim="both">Start Date</Heading>
+          <Badge color="green" className="p-2 mt-2 rounded-md">
+            {formatDate(startDate)}
+          </Badge>
         </div>
         <div className="w-2/5">
-          <span className="text-md font-bold block mb-2">End Date</span>
-          <div className="px-3 py-2 ">{formatDate(endDate)}</div>
+          <Heading trim="both">End Date</Heading>
+          <Badge className="p-2 mt-2 rounded-md">{formatDate(endDate)}</Badge>
         </div>
       </div>
     </div>
