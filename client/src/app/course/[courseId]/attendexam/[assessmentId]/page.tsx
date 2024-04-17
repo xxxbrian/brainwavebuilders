@@ -4,7 +4,6 @@ import React, { useState, useCallback, useEffect } from "react";
 import Question from "@/components/quiz/Question";
 import QuizHeader from "@/components/quiz/Header";
 import { usePathname, useRouter } from "next/navigation";
-import { IoIosArrowBack } from "react-icons/io";
 import { useBackend } from "@/hooks/useBackend";
 import { Assessment } from "@/backend";
 
@@ -72,22 +71,11 @@ const Quiz: React.FC = () => {
     }
   }, [answers, backend, assessmentId, pathName, router]);
 
-  const onClickBack = useCallback(() => {
-    const newPath = pathName.replace(/\/attendexam\/[^\/]+/, "");
-    router.push(newPath);
-  }, [pathName, router]);
-
   if (!assessment) return <div>Loading assessment details...</div>;
 
   return (
     <div>
       <div className="flex flex-col space-y-4 pt-8 pl-8 pr-8 m-auto max-w-[1200px]">
-        <div className="flex items-center font-bold" onClick={onClickBack}>
-          <button className="text-xl" onClick={(e) => e.stopPropagation()}>
-            <IoIosArrowBack />
-          </button>
-          <span className="cursor-pointer">Back</span>
-        </div>
         <QuizHeader
           title={assessment.title}
           description={assessment.description ?? "No description available"}

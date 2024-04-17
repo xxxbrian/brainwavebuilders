@@ -294,10 +294,7 @@ export const fetchAssessments = async (
     });
 
     if (!assessments.length) {
-      throw new APIError(
-        "No assessments found for this course",
-        "NO_ASSESSMENTS_FOUND",
-      );
+      return [];
     }
 
     return assessments;
