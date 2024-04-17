@@ -59,6 +59,7 @@ import { fetchUserStats } from "@/handlers/fetchUserStats";
 import { getThreadAndPostStats } from "@/handlers/getThreadAndPostStats";
 import { deleteThread } from "@/handlers/deleteThread";
 import { checkEmail } from "@/handlers/checkEmail";
+import { updateCourse } from "@/handlers/updateCourse";
 //////////////////////////////
 // Types defined in the types file
 //////////////////////////////
@@ -531,6 +532,20 @@ export interface CreateCourseRequest {
 
 // CreateCourseResponse is the response that is sent to the createCourse endpoint.
 export interface CreateCourseResponse {
+    course: Course;
+}
+
+// UpdateCourseRequest is the request that is sent to the updateCourse endpoint.
+export interface UpdateCourseRequest {
+    id: string;
+    name: string;
+    description: string;
+    code?: string;
+    imageURL?: string;
+}
+
+// UpdateCourseResponse is the response that is sent to the updateCourse endpoint.
+export interface UpdateCourseResponse {
     course: Course;
 }
 
@@ -1456,6 +1471,28 @@ app.post('/api/createCourse', async (req, res) => {
             res.status(500);
             res.json({ message: "Internal server error", _rpc_error: true });
             console.error(`Error occurred while handling request createCourse with arguments ${ JSON.stringify(request) }: `, e);
+            return;
+        }
+    }
+});
+
+// updateCourse is the endpoint handler for the updateCourse endpoint.
+// It wraps around the function at @/handlers/updateCourse.
+app.post('/api/updateCourse', async (req, res) => {
+    const request: UpdateCourseRequest = req.body;
+    try {
+        const ctx = { req, res };
+        const response: UpdateCourseResponse = await updateCourse(ctx, request);
+        res.json(response);
+    } catch (e) {
+        if (e instanceof APIError) {
+            res.status(400);
+            res.json({ message: e.message, code: e.code, _rpc_error: true });
+            return;
+        } else {
+            res.status(500);
+            res.json({ message: "Internal server error", _rpc_error: true });
+            console.error(`Error occurred while handling request updateCourse with arguments ${ JSON.stringify(request) }: `, e);
             return;
         }
     }

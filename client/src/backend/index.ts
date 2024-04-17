@@ -476,6 +476,20 @@ export interface CreateCourseResponse {
     course: Course;
 }
 
+// UpdateCourseRequest is the request that is sent to the updateCourse endpoint.
+export interface UpdateCourseRequest {
+    id: string;
+    name: string;
+    description: string;
+    code?: string;
+    imageURL?: string;
+}
+
+// UpdateCourseResponse is the response that is sent to the updateCourse endpoint.
+export interface UpdateCourseResponse {
+    course: Course;
+}
+
 // GetCoursesRequest is the request that is sent to the getCourses endpoint.
 export interface GetCoursesRequest {
     courseIds: string[];
@@ -1819,6 +1833,43 @@ export class BrainwavesClient {
         }
 
         return json as CreateCourseResponse;
+    }
+
+
+
+    async updateCourse(request: UpdateCourseRequest): Promise<UpdateCourseResponse> {
+        const response = await fetch(`${this.base_url}/updateCourse`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(request)
+        });
+
+        const json = await response.json();
+
+        if (!response.ok) {
+            let err = new Error("RPC Request Failed.");
+
+            if (isAPIError(json)) {
+                switch (response.status) {
+                    case 400:
+                        err = new APIError(json.message, json.code);
+                        break;
+                    case 500:
+                        err = new Error(json.message);
+                        break;
+                }
+            }
+
+            if (this.on_error) {
+                this.on_error(err);
+            }
+
+            throw err;
+        }
+
+        return json as UpdateCourseResponse;
     }
 
 

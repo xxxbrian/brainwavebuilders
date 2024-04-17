@@ -360,6 +360,17 @@ endpoints:
       course: Course
     service: typescript
 
+  updateCourse:
+    request:
+      id: string
+      name: string
+      description: string
+      code?: string
+      imageURL?: string
+    response:
+      course: Course
+    service: typescript
+
   getCourses:
     request:
       courseIds: string[]

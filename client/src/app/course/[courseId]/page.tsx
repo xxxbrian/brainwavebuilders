@@ -20,6 +20,8 @@ import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTabl
 import { ScheduleCourseForm } from "@/components/course/ScheduleCourseForm";
 import App from "next/app";
 import { BiBook } from "react-icons/bi";
+import { CourseMetadata } from "@/components/course/CourseMetadataForm";
+import { UpdateCoursePopup } from "@/components/course/UpdateCoursePopup";
 
 interface ApplicationProps {
   icon: React.ReactNode;
@@ -191,14 +193,23 @@ const CoursesPage: React.FC = ({}) => {
     router.push(`${pathName}/books`);
   }, [pathName, router]);
 
+  const onClickUpdateCourseMetadata = useCallback(
+    async (courseMetadata: CourseMetadata) => {
+      await backend.updateCourse({ id: course.id, ...courseMetadata });
+      router.refresh();
+    },
+    [backend, course.id, router],
+  );
+
   return (
     <div className="flex flex-col space-y-8 px-4 py-4">
       <div
-        className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-opacity-80"
+        className="bg-orange-800 border border-gray-400 rounded-lg py-8 px-12 flex flex-col space-y-2 min-h-60 justify-end text-white bg-cover bg-no-repeat relative -z-20 bg-center"
         style={{
-          background: course.imageURL ? `url(${course.imageURL})` : "",
+          backgroundImage: course.imageURL ? `url(${course.imageURL})` : "",
         }}
       >
+        <div className="absolute w-full h-full top-0 left-0 bg-black bg-opacity-30 -z-10"></div>
         {course.code && (
           <Heading className="text-white" size={"4"}>
             {course.code}
@@ -210,6 +221,7 @@ const CoursesPage: React.FC = ({}) => {
 
         <div>{course.description}</div>
       </div>
+      <UpdateCoursePopup course={course}></UpdateCoursePopup>
       <div className="flex space-x-4">
         <div className="flex flex-col space-y-4 w-1/3">
           <Heading size={"5"}>Course Applications</Heading>

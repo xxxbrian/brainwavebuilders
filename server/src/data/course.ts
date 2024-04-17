@@ -49,6 +49,34 @@ export const getCourseByID = async (
   return course;
 };
 
+export const updateCourse = async ({
+  description,
+  id,
+  code,
+  imageURL,
+  name,
+}: {
+  description: string;
+  id: string;
+  name: string;
+  code?: string;
+  imageURL?: string;
+}) => {
+  const course = await db.course.update({
+    where: {
+      id: id,
+    },
+    data: {
+      description,
+      name,
+      code: code ?? null,
+      imageURL: imageURL ?? null,
+    },
+  });
+
+  return course;
+};
+
 export const hasCourse = async (id: string): Promise<boolean> => {
   const course = await getCourseByID(id);
   return course !== null;
