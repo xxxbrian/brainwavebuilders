@@ -129,7 +129,7 @@ export const Calendar: React.FC<CalendarProps> = ({ today, events }) => {
                 ),
               )}
             </div>
-            <UpcomingEvents today={today} events={events} />
+            <UpcomingEvents today={today} events={events} showEventNumber={5} />
           </div>
           {/* MAIN PART */}
           <CalendarBoard
