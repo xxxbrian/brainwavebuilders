@@ -1,23 +1,20 @@
 # README
 
-[![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)
+[![Worker Status](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml/badge.svg)](https://github.com/unsw-cse-comp99-3900-24t1/capstone-project-3900w18bbrainwavebuilders/actions/workflows/worker-status.yml)\
+
+## Accessing the production copy of this code
+
+This code has been deployed [here](https://brainwaves.yyjlincoln.app).
 
 ## Running the code locally
 
 If you are not intending to make any changes to this code, but just want to run the code locally, you may do so by:
 
 -   Installing [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/).
--   Run `docker compose up` (or `docker compose up -d` to run the code in daemon mode, then shut it down using `docker compose down`).
+-   Make sure you have `GNU Make` available.
+-   Run `make run-local`.
 
-If you have `make` installed locally, you may use:
-
-```sh
-# Launch the code in daemon mode.
-make up
-
-# Shut down all processes gracefully and exit.
-make down
-```
+Alternatively, you can access the production-ready images from this Github repository, then run it with [this docker compose file](/docker-compose.deploy.yaml).
 
 **Once running, the code should be available on [localhost:3900](http://localhost:3900).**
 
