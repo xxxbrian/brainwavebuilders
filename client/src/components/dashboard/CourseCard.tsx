@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Card, Text, Box, Badge, Inset } from "@radix-ui/themes";
+import { Card, Text, Box, Badge, Inset, Strong } from "@radix-ui/themes";
 import { Course } from "@/backend";
 import defaultCourseImg from "@/assets/unsw.png";
 
@@ -14,7 +14,7 @@ export const CourseCard: React.FC<CourseCardProps> = ({
   role,
   onClick,
 }) => {
-  const { code, description, imageURL, name } = course;
+  const { description, imageURL, name } = course;
 
   const onClickInner = useCallback(() => {
     onClick?.(course);
@@ -24,10 +24,12 @@ export const CourseCard: React.FC<CourseCardProps> = ({
     <Box maxWidth="240px">
       <Card
         className="
-    overflow-hidden
-    max-w-sm
-    transform
-    cursor-pointer h-fit"
+          overflow-hidden
+          max-w-sm
+          transform
+          cursor-pointer
+          w-[240px]
+          h-[280px]"
         onClick={onClickInner}
       >
         {/* Header Image */}
@@ -40,29 +42,31 @@ export const CourseCard: React.FC<CourseCardProps> = ({
         </Inset>
 
         {/* Content */}
-        <div className="pb-2">
+        <div className="flex flex-col justify-between h-1/2">
           {/* Course Name and Description */}
           <Box className="mt-3">
             {/* Course Name */}
             <div>
-              <Text trim="both" className="text-based font-bold ">
-                {name}
+              <Text trim="both" size="2" className="font-bold line-clamp-1">
+                <Strong>{name}</Strong>
               </Text>
             </div>
             {/* Description */}
             <div className="mt-3">
-              <Text trim="both" className="text-sm text-gray-600">
+              <Text
+                size="1"
+                trim="both"
+                className="text-sm text-gray-600 line-clamp-3"
+              >
                 {description}
               </Text>
             </div>
           </Box>
-          {/* Course Code */}
-          <Box className="mt-2">
-            <Text trim="both" className="text-xl font-medium text-gray-600">
-              {code}
-            </Text>
-          </Box>
-          {role && <Badge>{role}</Badge>}
+          {role && (
+            <Badge size="1" className="mt-4 w-fit">
+              {role}
+            </Badge>
+          )}
         </div>
       </Card>
     </Box>
