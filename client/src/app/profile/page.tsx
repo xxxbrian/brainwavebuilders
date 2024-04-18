@@ -4,6 +4,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { User, isAPIError } from "@/backend";
 import { useBackend } from "@/hooks/useBackend";
 import { PageFrame } from "@/components/structural/PageFrame";
+import { ChangePasswordDialog } from "@/components/profile/ChangePasswordPopup";
 
 import { Text, Tabs, Switch } from "@radix-ui/themes";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
@@ -51,34 +52,6 @@ const PasswordInputForm = ({
 };
 
 const Profile: React.FC = () => {
-  const mockPreferences = {
-    onClickPreferencesSave: async () => {},
-    lang: "",
-    onChangeLang: (lang: string) => {
-      console.log(lang);
-    },
-    timezone: "",
-    onChangeTimezone: (timezone: string) => {
-      console.log(timezone);
-    },
-    notifications: false,
-    onChangeNotifications: (notifications: boolean) => {
-      console.log(notifications);
-    },
-    recommendation: false,
-    onChangeRecommendation: (recommendation: boolean) => {
-      console.log(recommendation);
-    },
-  };
-
-  const mockSecurity = {
-    onClickSecuritySave: async () => {},
-    twoFactorEnabled: false,
-    onChangeTwoFactorEnabled: (twoFactorEnabled: boolean) => {
-      console.log(twoFactorEnabled);
-    },
-  };
-
   const backend = useBackend();
 
   const [userInfo, setUserInfo] = useState<null | User>(null);
@@ -162,11 +135,12 @@ const Profile: React.FC = () => {
         console.error(e);
       }
     }
-  }, [backend, userInfo]);
+  }, [backend, userInfo, resetSession]);
 
   const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [changePasswordDialog, setChangePassWordDialog] = useState(false);
 
   // const onChangePassword = useCallback((password: string) => {
   //   setCurrentPassword(password);
@@ -320,15 +294,6 @@ const Profile: React.FC = () => {
   };
 
   const onClickSecuritySave = async () => {
-    // If password not strong enough
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
-    if (!passwordRegex.test(newPassword)) {
-      setErrorMessage(
-        "Password must contain at least 1 uppercase letter, 1 lowercase letter,  1 number, and be at least 8 characters long.",
-      );
-      setIsDialogOpen(true);
-      return;
-    }
     // If newPassword != confirmed password
     if (newPassword !== confirmPassword) {
       setErrorMessage("New password and confirmation password do not match.");
@@ -347,6 +312,7 @@ const Profile: React.FC = () => {
         password: currentPassword,
         newPassword,
       });
+      setChangePassWordDialog(true);
     } catch (e) {
       if (isAPIError(e)) {
         setErrorMessage("Invalid password");
@@ -579,6 +545,10 @@ const Profile: React.FC = () => {
             isOpen={isDialogOpen}
             setIsOpen={setIsDialogOpen}
             errorMessage={errorMessage}
+          />
+          <ChangePasswordDialog
+            isOpen={changePasswordDialog}
+            setIsOpen={setChangePassWordDialog}
           />
         </>
       )}
