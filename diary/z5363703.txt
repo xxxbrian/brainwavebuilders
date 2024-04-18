@@ -68,3 +68,8 @@ implemented calendar backend and connected it with frontend
 worked on the overview section and functionalities section of project report
 Tracked the progress of all team members
 Hosted weekly meeting
+
+Week 10:
+Populated courses and accounts for the use of demo.
+Led demo rehearsal meetings.
+Completed the majority of the project report.
