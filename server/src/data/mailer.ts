@@ -3,7 +3,6 @@ import { SK_MAILGUN_API_KEY } from "@/globals";
 
 const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
 
-// TODO: Send from template
 export const sendEmail = async (
   address: string,
   subject: string,

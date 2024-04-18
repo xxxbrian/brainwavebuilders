@@ -6,9 +6,6 @@ import { updateCourse as updateCourseDB } from "@/data/course";
 import { courseWithCreatedByDBToAPI } from "@/converts/course";
 
 // updateCourse implements the updateCourse endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const updateCourse = async (
   ctx: any,
   { description, id, code, imageURL, name }: UpdateCourseRequest,

@@ -7,9 +7,6 @@ import { getUserInfoByID as getUserInfoByIDData } from "@/data/auth";
 import { userDBToAPI } from "@/converts/user";
 
 // getUserInfoByID implements the getUserInfoByID endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const getUserInfoByID = async (
   ctx: any,
   request: GetUserInfoByIDRequest,

@@ -3,7 +3,6 @@ import { useCurrentUser } from "@/context/auth";
 import { getUserCourseMembership } from "@/data/course";
 
 // fetchUserStats implements the fetchUserStats endpoint.
-// TODO: Implement this
 export const fetchUserStats = async (
   ctx: any,
   request: FetchUserStatsRequest,

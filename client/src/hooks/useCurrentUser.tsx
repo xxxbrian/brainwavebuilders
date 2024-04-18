@@ -43,7 +43,6 @@ export const createSession = async (
   }
 
   try {
-    // TODO: remove the requirement for providing the token.
     const { user } = await backend.getUserInfo({});
 
     return { user, token };

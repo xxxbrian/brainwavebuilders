@@ -4,9 +4,6 @@ import { getCourseByID } from "@/data/course";
 import { leaveCourse as leaveCourseDB } from "@/data/course";
 
 // leaveCourse implements the leaveCourse endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const leaveCourse = async (
   ctx: any,
   request: LeaveCourseRequest,

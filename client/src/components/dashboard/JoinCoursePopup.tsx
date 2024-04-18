@@ -82,7 +82,6 @@ export const JoinCourseButton: React.FC = () => {
           <li>Use a class code with 6 letters or numbers</li>
         </ul>
         <p>
-          {/* //TODO Please modify below link to real help center */}
           If you have trouble joining the class, go to the{" "}
           <a href="/help" className="text-blue-600 underline">
             Help Center article

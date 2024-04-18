@@ -5,9 +5,6 @@ import { getBookByIDs } from "@/data/books";
 import { hasTeacherRoleInCourse, userInCourse } from "@/data/permissions";
 
 // getCourseBook implements the getCourseBook endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const getCourseBook = async (
   ctx: any,
   { bookIDs }: GetCourseBookRequest,

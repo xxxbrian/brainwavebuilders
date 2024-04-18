@@ -5,9 +5,6 @@ import { createBook as createBookDB } from "@/data/books";
 import { hasTeacherRoleInCourse } from "@/data/permissions";
 
 // createBook implements the createBook endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const createBook = async (
   ctx: any,
   { courseID, title, content, parentID }: CreateBookRequest,

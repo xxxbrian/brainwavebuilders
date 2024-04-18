@@ -5,7 +5,7 @@ import { Command, CommandInput } from "@/components/editor/ui/command";
 import { useCompletion } from "ai/react";
 import { toast } from "sonner";
 import { useEditor } from "novel";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Markdown from "react-markdown";
 import AISelectorCommands from "./ai-selector-commands";
 import AICompletionCommands from "./ai-completion-command";
@@ -15,7 +15,6 @@ import { ArrowUp } from "lucide-react";
 import Magic from "../ui/icons/magic";
 import CrazySpinner from "../ui/icons/crazy-spinner";
 import { addAIHighlight } from "novel/extensions";
-//TODO: I think it makes more sense to create a custom Tiptap extension for this functionality https://tiptap.dev/docs/editor/ai/introduction
 
 interface AISelectorProps {
   open: boolean;

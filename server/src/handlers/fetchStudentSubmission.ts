@@ -8,9 +8,6 @@ import { formatSubmission } from "@/converts/assessment";
 import { useCurrentUser } from "@/context/auth";
 
 // fetchStudentSubmission implements the fetchStudentSubmission endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const fetchStudentSubmission = async (
   ctx: any,
   request: FetchStudentSubmissionRequest,

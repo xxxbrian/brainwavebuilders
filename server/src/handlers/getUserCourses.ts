@@ -11,9 +11,6 @@ import {
 import { getCoursesByIDs, getUserCourseMembership } from "@/data/course";
 
 // getUserCourses implements the getUserCourses endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const getUserCourses = async (
   ctx: any,
   request: GetUserCoursesRequest,

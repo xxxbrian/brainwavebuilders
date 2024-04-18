@@ -8,9 +8,6 @@ import { getUserByToken } from "@/data/auth";
 import { updateUserProfile } from "@/data/profile";
 
 // setUserProfile implements the setUserProfile endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const setUserProfile = async (
   ctx: any,
   request: SetUserProfileRequest,

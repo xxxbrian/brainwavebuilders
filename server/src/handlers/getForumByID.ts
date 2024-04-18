@@ -6,9 +6,6 @@ import { kForumNotFoundOrDeniedError } from "./getForumByCourseID";
 import { forumDBToAPIWithCreatedBy } from "@/converts/forum";
 
 // getForumByID implements the getForumByID endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const getForumByID = async (
   ctx: any,
   request: GetForumByIDRequest,

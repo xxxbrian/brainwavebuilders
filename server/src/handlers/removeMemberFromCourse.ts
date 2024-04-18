@@ -8,9 +8,6 @@ import { leaveCourse } from "@/data/course";
 import { hasTeacherRoleInCourse } from "@/data/permissions";
 
 // removeMemberFromCourse implements the removeMemberFromCourse endpoint.
-// This code has been automatically generated.
-// You can move this function to other files within the /app/server/src/handlers directory,
-// as long as the signature remains the same and the function is exported.
 export const removeMemberFromCourse = async (
   ctx: any,
   { userID, courseID }: RemoveMemberFromCourseRequest,
