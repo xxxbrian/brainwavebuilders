@@ -187,3 +187,16 @@ having difficulties with rendering whole pages in jsdom (just not actually rende
 need to help with presentation prep and report writing
 
 My contribution lately has been low, I will reflect this in my peer review so that the others are not brought down by it.
+
+========================================================================
+Week 10
+
+Helped out where possible working up to project demo on wednesday.
+
+Ran into more roadblocks with testing, not running properly against our tech stack. current progress can be seen in branch BW-116-Testing-Attempt4 but is not in main.
+
+Project demo wednesday, went in person to campus and met up as a group to rehearse and present. Went really well everyone did great!
+
+Worked on implementation challenges section of report to see out the term.
+
+fin.
