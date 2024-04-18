@@ -6,17 +6,39 @@
 
 This code has been deployed [here](https://brainwaves.yyjlincoln.app).
 
-## Running the code locally
+## Running the code locally without needing to make any changes
 
-If you are not intending to make any changes to this code, but just want to run the code locally, you may do so by:
+You can follow below instructions to run the code. Depending on individual computers, the build/startup process could take a long time. Please check the logs (which is automatically attached) for details.
 
--   Installing [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/).
--   Make sure you have `GNU Make` available.
--   Run `make run-local`.
+In general, the project will be binding to [localhost:3900](http://localhost:3900). However, this port binding could be changed in the env file, so please check out [.dev/secrets/local.env](.dev/secrets/local.env) or [.dev/secrets/production.env](.dev/secrets/production.env) depending on your environment.
 
-Alternatively, you can access the production-ready images from this Github repository, then run it with [this docker compose file](/docker-compose.deploy.yaml).
+### Linux or UNIX-like systems (for example, MacOS)
 
-**Once running, the code should be available on [localhost:3900](http://localhost:3900).**
+-   Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/).
+-   Make sure you have `GNU Make` available (you can test via `which make`).
+-   Run `make run-local` (with local credentials, starting a fresh mysql database with no users), or `make run-production` (connecting to the production database).
+
+### Other platforms
+
+-   Install [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/install/).
+-   Ensure all environmental variables listed in `.dev/secrets/local.env` (or `.dev/secrets/production.env` for production database configuration) are set.
+-   Build the image via `docker compose -f docker-compose.local.yaml build`
+-   Run the built images via `docker compose -f docker-compose.build.yaml up`
+
+### Using pre-built images
+
+Our CI is configured to automatically build, tag and push the latest stable version of the code. These images can be viewed from [here](https://github.com/orgs/unsw-cse-comp99-3900-24t1/packages?repo_name=capstone-project-3900w18bbrainwavebuilders).
+
+To access this prebuilt version (which is guaranteed to be the current version on `main`), you can use [this docker compose file](/docker-compose.deploy.yaml).
+
+To run pre-built images, ensure that the variables in [.dev/secrets/local.env](.dev/secrets/local.env) or [.dev/secrets/production.env](.dev/secrets/production.env) are available, then run:
+
+```sh
+docker compose -f docker-compose.deploy.yaml pull
+docker compose -f docker-compose.deploy.yaml up
+```
+
+**Once running, the code should be available on [localhost:3900](http://localhost:3900) (unless configured otherwise - check the .env file for BIND_PORT).**
 
 As this project is a website, it is meant for deployment on Unix-like machines. While it has been successfully ran on Windows, we are not testing the code actively on Windows. However, due to the nature of Docker and Docker Compose, any Windows machine that is capable of running Docker and Compose should be able to launch this code.
 
@@ -39,7 +61,7 @@ If you are on a Unix-like OS, you can optionally install Make. If you are on Win
 
 All project dependencies are setup automatically in the Docker for consistency.
 
-## Running the code
+## Running the code in development mode
 
 If you have docker installed already, you can run the code by (in the project root directory):
 
