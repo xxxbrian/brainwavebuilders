@@ -1,7 +1,6 @@
 import { Course, Thread } from "@/backend";
 import { Card } from "@radix-ui/themes";
-import AdvancedEditor from "../editor/AdvancedEditor";
-import { useCallback, useEffect, useReducer, useState } from "react";
+import { useCallback, useEffect, useReducer } from "react";
 import { initialState, reducer } from "./AnnouncementsWidget.reducer";
 import { useBackend } from "@/hooks/useBackend";
 import { useRouter } from "next/navigation";

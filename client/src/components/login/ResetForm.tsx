@@ -1,12 +1,4 @@
-import {
-  Box,
-  Button,
-  Card,
-  Flex,
-  Heading,
-  Text,
-  TextField,
-} from "@radix-ui/themes";
+import { Box, Button, Flex, Text, TextField } from "@radix-ui/themes";
 import React, { useCallback } from "react";
 
 interface Props {

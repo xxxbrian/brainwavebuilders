@@ -4,14 +4,9 @@ import { useCourse } from "@/contexts/CourseContext";
 import { useCallback, useEffect, useState } from "react";
 import { CenteredLoading } from "@/components/loading";
 import { useBackend } from "@/hooks/useBackend";
-import { StatefulForum } from "@/components/forum/Forum";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Course, CourseBook } from "@/backend";
+import { CourseBook } from "@/backend";
 import { BookList, BookView } from "@/components/books/BookViewer";
-import { WithTeacherRole } from "@/contexts/CourseRoleContext";
-import { CreateBookForm } from "@/components/books/CreateBookForm";
-import { Button } from "@radix-ui/themes";
-import deepEqual from "deep-equal";
 import { JSONContent } from "novel";
 
 const BookPage: React.FC = () => {

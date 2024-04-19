@@ -1,6 +1,6 @@
-import React, { useState, useRef, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import type { ChangeEvent, FormEvent } from "react";
-import { Button, Callout, Dialog, Heading, TextField } from "@radix-ui/themes";
+import { Button, Callout, Dialog, TextField } from "@radix-ui/themes";
 import { useBackend } from "@/hooks/useBackend";
 import { useRouter } from "next/navigation";
 import { VscError } from "react-icons/vsc";

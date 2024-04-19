@@ -2,7 +2,7 @@ import { Course, CourseBook } from "@/backend";
 import AdvancedEditor from "../editor/AdvancedEditor";
 import { Button, Card } from "@radix-ui/themes";
 import { IoArrowBackSharp } from "react-icons/io5";
-import { BiBook, BiEdit, BiPencil } from "react-icons/bi";
+import { BiBook, BiPencil } from "react-icons/bi";
 import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { CreateBookForm } from "./CreateBookForm";
 import { useCallback } from "react";

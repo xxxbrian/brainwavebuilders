@@ -1,7 +1,6 @@
 "use client";
 
 import { CalendarBoard } from "@/components/calendar/CalendarBoard";
-import { StatefulInviteMembersForm } from "@/components/course/InviteMembersForm";
 import { Heading } from "@radix-ui/themes";
 import { usePathname, useRouter } from "next/navigation";
 import { useCallback, useState, useEffect } from "react";
@@ -18,9 +17,7 @@ import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 import { WithStudentRole } from "@/contexts/CourseRoleContext";
 import StudentAssesmentTable from "@/components/assessment/StudentAssessmentTable";
 import { ScheduleCourseForm } from "@/components/course/ScheduleCourseForm";
-import App from "next/app";
 import { BiBook } from "react-icons/bi";
-import { CourseMetadata } from "@/components/course/CourseMetadataForm";
 import { UpdateCoursePopup } from "@/components/course/UpdateCoursePopup";
 
 interface ApplicationProps {
@@ -73,10 +70,6 @@ const CoursesPage: React.FC = ({}) => {
 
     void inner();
   }, [backend, course.id]);
-
-  const onClickAssignments = useCallback(async () => {
-    router.push(`${pathName}/assignments`);
-  }, [pathName, router]);
 
   const onClickForum = useCallback(async () => {
     router.push(`${pathName}/forum`);

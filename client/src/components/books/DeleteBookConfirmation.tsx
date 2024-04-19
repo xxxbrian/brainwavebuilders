@@ -1,6 +1,5 @@
-import { CourseBook, isAPIError } from "@/backend";
-import { useBackend } from "@/hooks/useBackend";
-import { Text, Button, Dialog, TextField } from "@radix-ui/themes";
+import { CourseBook } from "@/backend";
+import { Button, Dialog } from "@radix-ui/themes";
 import { PropsWithChildren, useCallback, useState } from "react";
 
 interface Props extends PropsWithChildren {

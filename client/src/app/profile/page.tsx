@@ -6,7 +6,7 @@ import { useBackend } from "@/hooks/useBackend";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { ChangePasswordDialog } from "@/components/profile/ChangePasswordPopup";
 
-import { Text, Tabs, Switch } from "@radix-ui/themes";
+import { Text, Tabs } from "@radix-ui/themes";
 import { IoEyeOutline, IoEyeOffOutline } from "react-icons/io5";
 import { IoMdPerson } from "react-icons/io";
 import ErrorDialog from "@/components/ErrDialog";
@@ -142,21 +142,6 @@ const Profile: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [changePasswordDialog, setChangePassWordDialog] = useState(false);
 
-  // const onChangePassword = useCallback((password: string) => {
-  //   setCurrentPassword(password);
-  // }, []);
-
-  // const onChangeNewPassword = useCallback((newPassword: string) => {
-  //   setNewPassword(newPassword);
-  // }, []);
-
-  // const onChangeConfirmPassword = useCallback((confirmPassword: string) => {
-  //   setConfirmPassword(confirmPassword);
-  // }, []);
-
-  ////////////////////////////////
-  // Component (this is a workaround, maybe steve can refactor this)
-
   // alert dialog
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -231,55 +216,6 @@ const Profile: React.FC = () => {
       </div>
     );
   };
-
-  const switchInputForm = (
-    id: string,
-    label: string,
-    checked: boolean,
-    onChange: (checked: boolean) => void,
-  ) => {
-    return (
-      <div className="flex items-center">
-        <Switch checked={checked} onCheckedChange={onChange} />
-        <label htmlFor={id} className="text-xl ml-2">
-          {label}
-        </label>
-      </div>
-    );
-  };
-
-  // const PasswordInputForm = (
-  //   id: string,
-  //   label: string,
-  //   value: string,
-  //   onChange: (value: string) => void,
-  // ) => {
-  //   // eslint-disable-next-line react-hooks/rules-of-hooks
-  //   const [showPassword, setShowPassword] = useState(false);
-
-  //   return (
-  //     <div className="relative">
-  //       <label htmlFor={id} className="block text-xl font-medium">
-  //         {label}
-  //       </label>
-  //       <input
-  //         type={showPassword ? "text" : "password"}
-  //         id={id}
-  //         name={id}
-  //         value={value}
-  //         onChange={(e) => onChange(e.target.value)}
-  //         className="mt-1 block w-full border-2 sm:text-xl border-gray-300 rounded-lg p-3 focus:outline-none focus:border-blue-500 focus:border-2"
-  //       />
-  //       <button
-  //         type="button"
-  //         onClick={() => setShowPassword(!showPassword)}
-  //         className="absolute right-3 top-11 text-3xl text-gray-400"
-  //       >
-  //         {showPassword ? <IoEyeOffOutline /> : <IoEyeOutline />}
-  //       </button>
-  //     </div>
-  //   );
-  // };
 
   const saveButton = (onClick: () => Promise<void>) => {
     return (
@@ -426,78 +362,11 @@ const Profile: React.FC = () => {
                   </form>
                 </div>
               </Tabs.Content>
-              {/*
-              <Tabs.Content value="preferences" className="p-6 space-y-8">
-                <div className="w-full">
-                  <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {selectInputForm(
-                      "lang",
-                      "Preferred language",
-                      mockPreferences.lang,
-                      mockPreferences.onChangeLang,
-                      [
-                        { value: "", label: "Select your preferred language" },
-                        { value: "English", label: "English" },
-                        { value: "Mandarin", label: "Mandarin" },
-                        { value: "Korean", label: "Korean" },
-                      ],
-                    )}
-                    {selectInputForm(
-                      "timezone",
-                      "Time Zone",
-                      mockPreferences.timezone,
-                      mockPreferences.onChangeTimezone,
-                      [
-                        { value: "", label: "Select Time Zone" },
-                        {
-                          value: "AEST",
-                          label: "Australian Eastern Standard Time (AEST)",
-                        },
-                      ],
-                    )}
-                    <div className="flex items-center md:col-span-2">
-                      {switchInputForm(
-                        "notification",
-                        "Receive notifications for announcements",
-                        mockPreferences.notifications,
-                        mockPreferences.onChangeNotifications,
-                      )}
-                    </div>
-                    <div className="flex items-center md:col-span-2">
-                      {switchInputForm(
-                        "recommendation",
-                        "Get recommendations for courses",
-                        mockPreferences.recommendation,
-                        mockPreferences.onChangeRecommendation,
-                      )}
-                    </div>
-
-                    <div className="md:col-span-2 flex justify-end">
-                      {saveButton(mockPreferences.onClickPreferencesSave)}
-                    </div>
-                  </form>
-                </div>
-              </Tabs.Content> */}
 
               <Tabs.Content value="security" className="p-6 space-y-8">
                 <div className="w-full">
                   <form className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* <div className="flex items-center md:col-span-2">
-                      {switchInputForm(
-                        "auth",
-                        "Enable or disable two factor authentication",
-                        mockSecurity.twoFactorEnabled,
-                        mockSecurity.onChangeTwoFactorEnabled,
-                      )}
-                    </div> */}
-
                     <div className="md:col-span-2 relative max-w-[600px]">
-                      {/* {PasswordInputForm(
-                    "current-password",
-                    "Current Password",
-                    currentPassword,
-                    setCurrentPassword,
-                  )} */}
                       <PasswordInputForm
                         id="current-password"
                         label="Current Password"
@@ -506,12 +375,6 @@ const Profile: React.FC = () => {
                       />
                     </div>
                     <div className="md:col-span-2 relative max-w-[600px]">
-                      {/* {PasswordInputForm(
-                    "new-password",
-                    "New Password",
-                    newPassword,
-                    setNewPassword,
-                  )} */}
                       <PasswordInputForm
                         id="new-password"
                         label="New Password"
@@ -520,12 +383,6 @@ const Profile: React.FC = () => {
                       />
                     </div>
                     <div className="md:col-span-2 relative max-w-[600px]">
-                      {/* {PasswordInputForm(
-                    "confirm-password",
-                    "Confirm your new password",
-                    confirmPassword,
-                    setConfirmPassword,
-                  )} */}
                       <PasswordInputForm
                         id="confirm-password"
                         label="Confirm your new password"

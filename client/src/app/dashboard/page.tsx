@@ -6,8 +6,6 @@ import React, {
   useEffect,
   useState,
 } from "react";
-import { StatefulUserStatsDisplay } from "../../components/dashboard/Stats";
-import { StatefulUserSevenDayActivitiesDisplay } from "../../components/dashboard/Activity";
 import { PageFrame } from "@/components/structural/PageFrame";
 import { CreateCourseButton } from "@/components/dashboard/CreateCoursePopup";
 import { JoinCourseButton } from "@/components/dashboard/JoinCoursePopup";

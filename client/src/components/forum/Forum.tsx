@@ -8,7 +8,7 @@ import {
   PostStats,
 } from "@/backend";
 import { ThreadList } from "./ThreadList";
-import { useCallback, useEffect, useReducer, useRef, useState } from "react";
+import { useCallback, useEffect, useReducer, useRef } from "react";
 import { CenteredLoading } from "../loading";
 import { useBackend } from "@/hooks/useBackend";
 import { initialState, reducer } from "./Forum.reducer";
