@@ -19,6 +19,7 @@ import { useParams } from "next/navigation";
 import { CreateFolderPopup } from "@/components/drive/CreateFolderPopup";
 import { usePathname, useRouter } from "next/navigation";
 import { MdSearch } from "react-icons/md";
+import { WithTeacherRole } from "@/contexts/CourseRoleContext";
 
 type DriveDirEnt = DriveItem | DriveFolderInfo;
 type DriveItems = DriveDirEnt[];
@@ -64,8 +65,6 @@ const DriveFolderPage: React.FC = () => {
   }, [folderId, backend]);
 
   const uploadFile = async (file: File) => {
-    // mock upload
-    console.log("Uploading file", file.name);
     try {
       const formData = new FormData();
       formData.append("file", file);
@@ -165,14 +164,16 @@ const DriveFolderPage: React.FC = () => {
             </TextField.Slot>
           </TextField.Root>
 
-          <Button
-            color="indigo"
-            variant="soft"
-            size="3"
-            onClick={handleUploadClick}
-          >
-            <MdDriveFolderUpload size={20} /> Upload
-          </Button>
+          <WithTeacherRole>
+            <Button
+              color="indigo"
+              variant="soft"
+              size="3"
+              onClick={handleUploadClick}
+            >
+              <MdDriveFolderUpload size={20} /> Upload
+            </Button>
+          </WithTeacherRole>
         </div>
       </div>
 
