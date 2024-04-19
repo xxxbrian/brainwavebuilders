@@ -110,3 +110,9 @@ Implemented an advanced editor component similar to Notion:
     - Enhanced with ChatGPT AI for refinement and generation.
 Implemented a file drive, both the front-end and back-end.
 Participation in Meetings.
+
+Week 10:
+Continued working on the file drive
+Fixed multiple bugs for previous features
+Final Presentation
+Work on technical part of the final report
