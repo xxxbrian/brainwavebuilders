@@ -89,6 +89,14 @@ We're aiming to have 1 whole team meeting (WTM) and 2 department meetings (DM) p
 - Need to start merging frontend with backend. Trying to get documentation done by Wednesday of Week 9.
 
 ꘎♡━━ Week 9 ━━━♡꘎
+- Finished backend of assessment! Added features like providing feedback, getting results, marking the assignment and exam. Also completely finished creation of exam and assignment and change its endpoint to not require assessmentId in Question. 
+- Added fetching features such as fetchAssessmentDetailsTeacher, fetchAssessmentDetailsStudent, fetchAssessmentSubmissions and fetchSubmission, fetchAssessments to make it easier to merge with frontend. 
+- Will hopefully finish merging frontend and backend before the Project demo next week.
+- Afterwards, will be helping with Project Report. 
+
+꘎♡━━ Week 10 ━━━♡꘎
 - Finished merging assessment frontend with backend! Was a bit of a challenge since I just started learning frontend and typescript this term. Really glad it was successfuly merged :)
 - Had to add new endpoints as I went since I realised we were missing some fetch functions. It's a good thing I worked on backend, as it helped with knowing how to quickly set up new endpoints and functions :D 
-- Will be helping out with project report next week! Very keen to get everything done and sorted. 
+- Fixed some errors and also improved the backend and frontend of Assessment i.e students can't submit once they submit an assessment, MCQ questions all marked automatically, students can immediately see results if exam is just MCQ etc., 
+- Final Demo went successfully as well! We did it in library room, which saved us time from having to switch over screens. It was also nice seeing everyone in person. 
+- Helped write the local development part of Final Report. 
